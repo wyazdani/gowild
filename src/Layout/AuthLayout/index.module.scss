@@ -1,0 +1,19 @@
+.authLayout{
+  position: relative;
+
+
+  .boxHolder{
+    padding: 50px 8%;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+
+  .rightCol{
+    width: 500px;
+  }
+
+}

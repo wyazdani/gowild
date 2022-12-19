@@ -1,0 +1,257 @@
+@import "~bootstrap/scss/bootstrap";
+@import "base";
+
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: $color-light-grey-11;
+  font-family: 'DM Sans', sans-serif;
+  background: #1D140C;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.progress{
+  height: 10px;
+  border-radius: 3px;
+  margin: 0 0 10px;
+
+  &.signUp{
+    background: #CEFFE2;
+
+    .progress-bar{
+        background: url(../Images/bgGreenbar.svg) no-repeat;
+        background-size: 110%;
+        background-position: -4px 0;
+    }
+  }
+
+  &.active{
+    background: #FADDD5;
+
+    .progress-bar{
+      background: url(../Images/activebar.png) no-repeat;
+      background-size: 110%;
+      background-position: -4px 0;
+    }
+  }
+  &.inactive{
+    background: rgba(243, 147, 175, 0.3);
+
+    .progress-bar{
+      background: url(../Images/inactivebar.png) no-repeat;
+      background-size: 110%;
+      background-position: -4px 0;
+    }
+  }
+}
+
+
+.nav-tabs{
+  li{
+    .nav-link{
+      color: rgba(37,33,59,0.5);
+      border: none;
+      border-bottom: 2px solid transparent;
+
+      &.active{
+        color: #25213B;
+        border-color: #FF7851;
+      }
+    }
+  }
+}
+
+table{
+
+  th{
+    background: #FF7851 !important;
+    color: #fff;
+
+    input[type="checkbox"],
+    .form-check-input{
+      border-color: #fff;
+      border-width: 1px;
+      background-color: transparent;
+
+      &:checked{
+        border-color: #fff;
+      }
+    }
+  }
+
+  th, td{
+    vertical-align: middle;
+    text-transform: capitalize;
+  }
+
+  td{
+    font-size: 14px;
+  }
+
+  .dropdown{
+
+
+    .dropdown-toggle{
+      background: none;
+      width: 30px;
+      height: 30px;
+      border: none;
+      color: #FF7851;
+      padding: 0;
+      font-size: 20px;
+
+      &:after{
+        display: none;
+      }
+    }
+
+    .dropdown-menu{
+      border: none;
+      box-shadow: 0 4px 5px -3px rgba(0,0,0,0.5);
+    }
+
+    .dropdown-item{
+      position: relative;
+      display: block;
+      padding: 8px 15px 8px 50px;
+      min-width: 200px;
+      color: #878787;
+      font-size: 14px;
+
+      &:hover{
+        background: #FFE4DC;
+        color: #000;
+      }
+
+      i{
+        width: 35px;
+        height: 20px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        position: absolute;
+        top: 10px;
+        left: 8px;
+      }
+    }
+
+
+  }
+}
+
+.react-bootstrap-table-pagination{
+  background: #FF7851 !important;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  color: #fff;
+  font-size: 14px;
+
+  > div{
+    width: auto;
+    max-width: inherit;
+
+    > span{
+      padding: 0 20px;
+    }
+  }
+
+  .dropdown{
+    > .dropdown-toggle{
+      height: auto;
+    }
+  }
+
+  .pagination{
+    margin: 0;
+
+    li{
+      &.active{
+        a{
+          background: rgba(255,255,255,0.2);
+        }
+      }
+    }
+
+    .page-link{
+      background: none;
+      color: #fff;
+      border: none;
+      font-size: 14px;
+
+      &:focus{
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+.modal{
+
+  .modal-content{
+    border-radius: 20px;
+  }
+
+  .modal-body{
+    padding: 100px 50px;
+  }
+
+
+}
+
+.item-center-between{
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bg-light-yellow{
+  background: #FEAC71;
+}
+
+.text-yellow{
+  color: #FFF500;
+}
+
+.img-box{
+  position: relative;
+
+  img{
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
+
+.flagBox{
+  width: 30px;
+  height: 30px;
+  margin: 0 15px;
+  opacity: 0;
+  visibility: hidden;
+
+  svg{
+    display: block;
+    width: 100%;
+    height: auto;
+
+    path{
+      fill: #FF7851 !important;
+    }
+  }
+}
+
+.table-hover {
+  tr:hover{
+      .flagBox{
+        opacity: 1;
+        visibility: visible;
+    }
+  }
+}
