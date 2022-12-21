@@ -50,7 +50,8 @@ const deleteMethod = async (endpoint, authentication=true, data=null, printConso
             }
         }
     }
-    return await axios.delete(endpoint,data, header)
+    console.log(header);
+    return await axios.delete(endpoint, header)
         .then((res) => {
             return res
         })

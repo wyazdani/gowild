@@ -1,9 +1,9 @@
 import {React, useState} from "react";
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import PhoneInput from 'react-phone-number-input';
-import classes from "../../treasureHuntRegistration/index.module.scss";
-import card1 from "../../../Images/card1.jpg";
-import card2 from "../../../Images/card2.jpg";
+import classes from "../../../treasureHuntRegistration/index.module.scss";
+import card1 from "../../../../Images/card1.jpg";
+import card2 from "../../../../Images/card2.jpg";
 
 
 

@@ -94,7 +94,7 @@ const Tables = (props) => {
                                { ...propss.baseProps }
                                bordered={ false }
                                hover
-                               //pagination={ paginationFactory()}
+                              // pagination={ paginationFactory}
                            />
                        </div>
                    )

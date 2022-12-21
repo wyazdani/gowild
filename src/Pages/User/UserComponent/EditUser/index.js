@@ -1,32 +1,32 @@
 import React, {useState} from 'react';
 import {Modal, Button, Row, Col, Form} from 'react-bootstrap';
 import classes from "../index.module.scss";
-import AuthService from "../../../services/auth.service";
-import {ENDPOINT} from "../../../config/constants";
+import AuthService from "../../../../services/auth.service";
+import {ENDPOINT} from "../../../../config/constants";
 import swal from "sweetalert";
 import { Formik } from 'formik';
 import { object, string } from 'yup';
 
-const EditSubAmdin = (props) => {
+const EditUser = (props) => {
 
     const schema = object().shape({
         firstName: string().required(),
         lastName: string().required(),
         email: string().required(),
-        userName: string().required(),
+        username: string().required(),
         location: string().required(),
         phoneNo: string().required(),
         birthDate: string().required(),
         password:  string().required(),
     });
-    console.log(props.editItem)
+    //console.log(props.editItem)
     const handleSubmit = async  (data) => {
-        ENDPOINT.sub_admin.edit_user.id = props.editItem;
-        return await AuthService.patchMethod(ENDPOINT.sub_admin.edit_user.url+ENDPOINT.sub_admin.edit_user.id, true,data)
+        ENDPOINT.admin_user.edit_user.id = props.editItem;
+        return await AuthService.patchMethod(ENDPOINT.admin_user.edit_user.url+ENDPOINT.admin_user.edit_user.id, true,data)
             .then((res) => {
                 //setContent(res.data);
                 //setIsLoader(true);
-                //console.log(res.data);
+                console.log(res.data);
             })
             .catch((err) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
@@ -52,7 +52,7 @@ const EditSubAmdin = (props) => {
                             firstName: props.editItem.firstName,
                             lastName: props.editItem.lastName,
                             email: props.editItem.email,
-                            userName: props.editItem.username,
+                            username: props.editItem.username,
                             location: props.editItem.location,
                             birthDate: props.editItem.birthDate,
                             phoneNo: props.editItem.phoneNo,
@@ -151,15 +151,14 @@ const EditSubAmdin = (props) => {
                                                     />
                                                 </Col>
                                                 <Col md={12} className={"mb-3"}>
-                                                    <Form.Label className={"text-orange mb-0"}>Username</Form.Label>
+                                                    <Form.Label className={"text-orange mb-0"}>User Name</Form.Label>
                                                     <Form.Control
                                                         type="text"
-                                                        name="userName"
-                                                        value={values.userName}
+                                                        name="username"
+                                                        value={values.username}
                                                         onChange={handleChange}
-                                                        placeholder="Enter Username"
-                                                        isValid={touched.userName && !errors.userName}
-
+                                                        placeholder="Enter username"
+                                                        isValid={touched.username && !errors.username}
                                                     />
                                                 </Col>
                                                 <Col md={12} className={"mb-3"}>
@@ -191,4 +190,4 @@ const EditSubAmdin = (props) => {
     )
 }
 
-export default EditSubAmdin;
+export default EditUser;

@@ -6,6 +6,8 @@ import ActiveTabData from "./Tabs/activeTabData";
 import InActiveTabData from "./Tabs/inActiveTabData";
 
 const SubAdmin = () => {
+
+
     return (
         <>
             <PageTitle title="Sub Admin" />

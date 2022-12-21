@@ -9,7 +9,20 @@ export const ENDPOINT = {
     forgetpassword: `${API_URL}/auth/forgot/password`,
     user_me: `${API_URL}/auth/me`,
     dashboard: `${API_URL}/dashboard/users-info`,
-    admin_user: `${API_URL}/admin/users`,
+
+
+    admin_user: {
+        listing: `${API_URL}/admin/users`,
+        delete: {
+            url:`${API_URL}/admin/`,
+            id:null,
+        },
+        add_user: `${API_URL}/admin`,
+        edit_user: {
+            url : `${API_URL}/admin/`,
+            id  : null
+        },
+    },
 
 
 
@@ -26,6 +39,11 @@ export const ENDPOINT = {
             url : `${API_URL}/sub-admin/`,
             id  : null
         },
+    },
+
+
+    admin_route :{
+        listing : `${API_URL}/admin/route`,
     }
 
 };

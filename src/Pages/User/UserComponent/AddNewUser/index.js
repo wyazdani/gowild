@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {Modal, Button, Row, Col, Form} from 'react-bootstrap';
 import classes from "../index.module.scss";
-import AuthService from "../../../services/auth.service";
-import {ENDPOINT} from "../../../config/constants";
+import AuthService from "../../../../services/auth.service";
+import {ENDPOINT} from "../../../../config/constants";
 import swal from "sweetalert";
 import { Formik } from 'formik';
 import { object, string } from 'yup';
 
-const AddSubAdmin = (props) => {
+const AddUser = (props) => {
 
     const schema = object().shape({
         firstName: string().required(),
@@ -187,4 +187,4 @@ const AddSubAdmin = (props) => {
     )
 }
 
-export default AddSubAdmin;
+export default AddUser;

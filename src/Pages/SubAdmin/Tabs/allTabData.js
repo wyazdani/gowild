@@ -25,27 +25,25 @@ const AllTabData = () => {
 
      const subAdminAllData = async () => {
          await AuthService.getMethod(ENDPOINT.sub_admin.listing, true,)
-             .then((res) => {
-                 setContent(res.data);
-                 setIsLoader(true);
-                 //console.log(res.data);
-             })
-             .catch((err) => {
-                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-             });
+         .then((res) => {
+             setContent(res.data);
+             setIsLoader(true);
+             //console.log(res.data);
+         })
+         .catch((err) => {
+             swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+         });
      };
 
     const deleteSubAdmin = async (id) => {
         ENDPOINT.sub_admin.delete.id = id;
-        await AuthService.deleteMethod(ENDPOINT.sub_admin.delete.url+ENDPOINT.sub_admin.delete.id, accessHeader(),)
-            .then((res) => {
-                setContent(res.data);
-                // setIsLoader(true);
-                //console.log(res.data);
-            })
-            .catch((err) => {
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-            });
+        await AuthService.deleteMethod(ENDPOINT.sub_admin.delete.url+ENDPOINT.sub_admin.delete.id, true)
+        .then((res) => {
+            console.log(res.data);
+        })
+        .catch((err) => {
+            swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+        });
     };
 
      useEffect(() => {
@@ -113,7 +111,11 @@ const AllTabData = () => {
                         content.filter((item) => {
                             return search.toLowerCase() === ''
                                 ? item
-                                : (item.name.toLowerCase().includes(search) || item.email.toLowerCase().includes(search));
+                                : (
+                                    item.firstName.toLowerCase().includes(search) ||
+                                    item.email.toLowerCase().includes(search) ||
+                                    item.lastName.toLowerCase().includes(search)
+                                )
                         })
                             .map((content) => (
                                 <tr>
@@ -121,10 +123,10 @@ const AllTabData = () => {
                                     <td>
                                         <div className={"d-flex"}>
                                             <div className={classes.userImg}>
-                                                <img src={content.picture} alt={content.name} />
+                                                <img src={content.picture} alt={content.firstName} />
                                             </div>
                                             <div className={classes.description}>
-                                                <h4 className={"font-16 mb-0"}>{content.name}</h4>
+                                                <h4 className={"font-16 mb-0"}>{content.firstName+" "+content.lastName}</h4>
                                                 <div className={"text-muted"}>{content.email}</div>
                                             </div>
                                         </div>

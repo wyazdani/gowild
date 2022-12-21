@@ -1,52 +1,15 @@
-import React from "react";
+import React, {useState} from "react";
 import {Table, Form, Dropdown} from "react-bootstrap";
 import  classes from "../../treasureHuntRegistration/index.module.scss";
 import userImg from "../../../Images/userImg.png";
 
 
-const DisableTabData = () => {
-    const alltabdata = [
-        {
-            name: "Miracle Septimus",
-            imageUrl: userImg,
-            email: "example@email.com",
-            status: true,
-            username: "Miracleist",
-            accountstatus: true,
-        },
-        {
-            name: "Miracle Septimus",
-            imageUrl: userImg,
-            email: "example@email.com",
-            status: false,
-            username: "Miracleist",
-            accountstatus: true,
-        },
-        {
-            name: "Miracle Septimus",
-            imageUrl: userImg,
-            email: "example@email.com",
-            status: true,
-            username: "Miracleist",
-            accountstatus: false,
-        },
-        {
-            name: "Miracle Septimus",
-            imageUrl: userImg,
-            email: "example@email.com",
-            status: false,
-            username: "Miracleist",
-            accountstatus: false,
-        },
-        {
-            name: "Miracle Septimus",
-            imageUrl: userImg,
-            email: "example@email.com",
-            status: true,
-            username: "Miracleist",
-            accountstatus: true,
-        },
-    ]
+const DisableTabData = (props) => {
+    const [modalShow, setModalShow] = useState(false);
+    const [modalShowView, setModalShowView] = useState(false);
+
+    const [search , setSearch] = useState("");
+
     return(
         <>
             <Table>
@@ -63,58 +26,61 @@ const DisableTabData = () => {
                 </tr>
                 </thead>
                 <tbody>
-                    {alltabdata.map((alltabdata) => (
-                        <tr>
-                            <td><Form.Check type="checkbox"/></td>
-                            <td>
-                                <div className={"d-flex"}>
-                                    <div className={classes.userImg}>
-                                        <img src={alltabdata.imageUrl} alt={alltabdata.name} />
+                {
+                    props.content.filter((item) => {
+                        return search.toLowerCase() === ''
+                            ? item
+                            : (
+                                item.email.toLowerCase().includes(search)
+                            )
+                    })
+                        .map((content) => (
+                            <tr>
+                                <td>
+                                    <div className={"d-flex"}>
+                                        <div className={classes.userImg}>
+                                            <img src={content.imageUrl} alt={content.name}/>
+                                        </div>
+                                        <div className={classes.description}>
+                                            <h4 className={"font-16 mb-0"}>{content.name}</h4>
+                                            <div className={"text-muted"}>{content.email}</div>
+                                        </div>
                                     </div>
-                                    <div className={classes.description}>
-                                        <h4 className={"font-16 mb-0"}>{alltabdata.name}</h4>
-                                        <div className={"text-muted"}>{alltabdata.email}</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                {alltabdata.status
-                                    ? <span class={`${classes.tag} ${classes.active}`}>Active</span>
-                                    : <span class={`${classes.tag} ${classes.inactive}`}>Disable</span>
-                                }
-                            </td>
-                            <td>{alltabdata.username}</td>
-                            <td>
-                                {alltabdata.accountstatus
-                                    ? <span class="text-success">Active</span>
-                                    : <span class="text-danger">InActive</span>
-                                }
-                            </td>
-                            <td>
-                                <Dropdown>
-                                    <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                        <i className={"far fa-ellipsis-v fa-fw"}></i>
-                                    </Dropdown.Toggle>
-
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item href="#/">
-                                            <i className={"fal fa-ban bg-warning text-white"}></i>
-                                            Disable User
-                                        </Dropdown.Item>
-                                        <Dropdown.Item href="#/">
-                                            <i className={"far fa-pen bg-dark text-white"}></i>
-                                            Edit User
-                                        </Dropdown.Item>
-                                        <Dropdown.Item href="#/">
-                                            <i className={"fal fa-trash bg-danger text-white"}></i>
-                                            Delete
-                                        </Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
+                                </td>
+                                <td>
+                                    {content.onlineStatus === true
+                                        ? <span className={`${classes.tag} ${classes.active}`}>Active</span>
+                                        : <span className={`${classes.tag} ${classes.inactive}`}>Inactive</span>
+                                    }
+                                </td>
+                                <td>{content.location}</td>
+                                <td>
+                                    {content.accountStatus === "active"
+                                        ? <span className="text-success">Active</span>
+                                        : <span className="text-danger">Disabled</span>
+                                    }
+                                </td>
+                                <td>
+                                    <Dropdown>
+                                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                            <i className={"far fa-ellipsis-v fa-fw"}></i>
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item href="#/">
+                                                <i className={"fal fa-ban bg-danger text-white"}></i>
+                                                Disable User
+                                            </Dropdown.Item>
+                                            <Dropdown.Item href="#/" onClick={() => setModalShowView(true)}>
+                                                <i className={"fal fa-user bg-dark text-white"}></i>
+                                                View Profile
+                                            </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </td>
+                            </tr>
+                        ))
+                }
+            </tbody>
             </Table>
         </>
     )
