@@ -63,7 +63,7 @@ const TreasureHuntEWaiver =(props) => {
                                 <Form.Group className={`${classes.formGroup} mb-3`}>
                                  {
                                     content.filter(item => {
-                                        return item.type === "huntEWaiver " ? true : false;
+                                        return item.type === "huntEWaiver" ? true : false;
                                     }).map((contents) => {
                                         return (
                                             <>

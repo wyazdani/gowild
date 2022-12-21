@@ -49,7 +49,7 @@ const EWavier = () => {
                             <Form.Group className={`${classes.formGroup} mb-3`}>
                             {
                                     content.filter(item => {
-                                        return item.type === "huntEWaiver" ? true : false;
+                                        return item.type === "eWaiver" ? true : false;
                                     }).map((contents) => {
                                         return (
                                             <>

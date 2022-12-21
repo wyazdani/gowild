@@ -10,6 +10,7 @@ import swal from 'sweetalert';
 const TermsAndConditions = () => {
 
     const [content, setContent] = useState([]);
+    const [tempCustomer, setTempCustomer] = useState([]);
     const [isLoader, setIsLoader] = useState(false);
 
 
@@ -17,6 +18,7 @@ const TermsAndConditions = () => {
         await AuthService.getMethod(ENDPOINT.admin_guidelines.terms_conditions)
             .then((res) => {
                 setContent(res.data.data);
+                setTempCustomer(res.data.data);
                 setIsLoader(true);
                 // console.log(res.data.data);
             })
@@ -24,6 +26,19 @@ const TermsAndConditions = () => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
             });
     };
+
+
+    const handleSubmit = async  (data) => {
+        return await AuthService.postMethod(ENDPOINT.admin_guidelines.terms_conditions, true,data)
+             .then((res) => {
+                 setContent(res.data.data);
+                 //setIsLoader(true);
+                 console.log(res.data);
+             })
+             .catch((err) => {
+                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+             });
+     }
 
 
     useEffect(() => {
@@ -53,20 +68,23 @@ const TermsAndConditions = () => {
                                 {
                                     content.filter(item => {
                                         return item.type === "termsAndConditions" ? true : false;
-                                    }).map((contents) => {
+                                    }).map((content) => {
                                         return (
                                             <>
-                                                <textarea>
-                                                    {contents.description}
+                                                <textarea 
+                                                value={content.description}
+                                                onChange={(e) => {
+                                                        setContent(e.target.value)
+                                                    }}>
+                                                  
                                                 </textarea>
                                             </>
                                         )
                                     })
-
                                 }
                             </Form.Group>
                             <Form.Group>
-                                <Button variant={"dark"}>Save</Button>
+                                <Button variant={"dark"} onClick={handleSubmit}> Save </Button>
                             </Form.Group>
                         </Form>
                     </div>
