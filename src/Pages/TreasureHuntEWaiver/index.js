@@ -33,6 +33,21 @@ const TreasureHuntEWaiver = (props) => {
 
     }, []);
 
+    // convert date format to month / day / year
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return [month, day, year].join('/');
+    }
+
 
     if (!isLoader) {
         return (
@@ -42,6 +57,7 @@ const TreasureHuntEWaiver = (props) => {
         );
     }
 
+    const DATE_OPTIONS = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
 
     return (
         <>
@@ -51,7 +67,7 @@ const TreasureHuntEWaiver = (props) => {
                     {
                         content.filter(item => {
                             return item.type === "huntEWaiver" ? true : false;
-                        }).map((contents) => {
+                        }).map((content) => {
                             return (
                                 <>
                                     <Col md={8}>
@@ -69,7 +85,7 @@ const TreasureHuntEWaiver = (props) => {
                                                 <Form.Group className={`${classes.formGroup} mb-3`}>
 
                                                     <textarea>
-                                                        {contents.description}
+                                                        {content.description}
                                                     </textarea>
 
                                                 </Form.Group>
@@ -80,25 +96,29 @@ const TreasureHuntEWaiver = (props) => {
                                         </div>
                                     </Col>
                                     <Col md={4}>
-                                    <div className={classes.logBox}>
-                                        <h4>April 23, 2022</h4>
-                                        <div className={"text-muted font-12"}>Update Logs</div>
-                                        <ul className={classes.logList}>
-                                            <li>
-                                                <div className={classes.box}>
-                                                    <time className={"d-block"}>{contents.updatedDate}</time>
-                                                    <div>Term &amp; Conditions - Updated!</div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className={classes.box}>
-                                                    <time className="d-block">{contents.createdDate}</time>
-                                                    <div>FAQ</div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </Col>
+                                        <div className={classes.logBox}>
+                                            <h4>  {(new Date()).toLocaleDateString('en-US', DATE_OPTIONS)} </h4>
+                                            <div className={"text-muted font-12"}>Update Logs</div>
+                                            <ul className={classes.logList}>
+                                                <li>
+                                                    <div className={classes.box}>
+                                                        <time className={"d-block"}>
+                                                            {(formatDate(content.updatedDate))}
+                                                        </time>
+                                                        <div>Term &amp; Conditions - Updated!</div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div className={classes.box}>
+                                                        <time className="d-block">
+                                                            {(formatDate(content.createdDate))}
+                                                        </time>
+                                                        <div>FAQ</div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </Col>
                                 </>
                             )
                         })
