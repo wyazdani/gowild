@@ -1,27 +1,90 @@
-import React from "react";
-import {Button, Col, Form, Row} from "react-bootstrap";
 import classes from "../index.module.scss";
+import React, { useState, useEffect } from 'react';
+import { Table, Form, Dropdown, Button, Row, Col } from "react-bootstrap";
+import { ENDPOINT, KEY } from "config/constants";
+import AuthService from "services/auth.service";
+import accessHeader from "services/headers/access-header";
+import swal from 'sweetalert';
+
 
 const TermsAndConditions = () => {
-    return(
+
+    const [content, setContent] = useState([]);
+    const [tempCustomer, setTempCustomer] = useState([]);
+    const [isLoader, setIsLoader] = useState(false);
+
+
+    const guidlinessTermsData = async () => {
+        await AuthService.getMethod(ENDPOINT.admin_guidelines.terms_conditions)
+            .then((res) => {
+                setContent(res.data.data);
+                setTempCustomer(res.data.data);
+                setIsLoader(true);
+                // console.log(res.data.data);
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+    };
+
+
+    const handleSubmit = async  (data) => {
+        return await AuthService.postMethod(ENDPOINT.admin_guidelines.terms_conditions, true,data)
+             .then((res) => {
+                 setContent(res.data.data);
+                 //setIsLoader(true);
+                 console.log(res.data);
+             })
+             .catch((err) => {
+                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+             });
+     }
+
+
+    useEffect(() => {
+        guidlinessTermsData();
+        setIsLoader(true);
+
+    }, []);
+
+
+    if (!isLoader) {
+        return (
+            <div className='loader'>
+                <h3>Loading...</h3>
+            </div>
+        );
+    }
+
+
+    return (
         <>
             <Row>
                 <Col md={8}>
                     <div className={classes.editSection}>
                         <Form>
                             <Form.Group className={`${classes.formGroup} mb-3`}>
-                                <textarea>
-                                    To all our valued Users
 
-                                    Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint deserunt ut voluptate aute id deserunt nisi. Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint deserunt ut voluptate aute id deserunt nisi.
-
-                                    Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint deserunt ut voluptate aute id deserunt nisi. Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint deserunt ut voluptate aute id deserunt nisi.
-
-                                    Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint deserunt ut voluptate aute id deserunt nisi. Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. testing.
-                                </textarea>
+                                {
+                                    content.filter(item => {
+                                        return item.type === "termsAndConditions" ? true : false;
+                                    }).map((content) => {
+                                        return (
+                                            <>
+                                                <textarea 
+                                                value={content.description}
+                                                onChange={(e) => {
+                                                        setContent(e.target.value)
+                                                    }}>
+                                                  
+                                                </textarea>
+                                            </>
+                                        )
+                                    })
+                                }
                             </Form.Group>
                             <Form.Group>
-                                <Button variant={"dark"}>Save</Button>
+                                <Button variant={"dark"} onClick={handleSubmit}> Save </Button>
                             </Form.Group>
                         </Form>
                     </div>
