@@ -22,6 +22,17 @@ export const ENDPOINT = {
             url : `${API_URL}/admin/`,
             id  : null
         },
+        reject: {
+            url : `${API_URL}/admin/`,
+            id  : null,
+            type: `/reject`
+
+        },
+        approve: {
+            url : `${API_URL}/admin/`,
+            id  : null,
+            type: `/approve`
+        }
     },
 
 
@@ -39,6 +50,7 @@ export const ENDPOINT = {
             url : `${API_URL}/sub-admin/`,
             id  : null
         },
+
     },
 
 

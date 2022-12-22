@@ -31,10 +31,10 @@ const Users = () => {
     };
 
     const deleteSubAdmin = async (id) => {
-         ENDPOINT.sub_admin.delete.id = id;
-         await AuthService.deleteMethod(ENDPOINT.sub_admin.delete.url+ENDPOINT.sub_admin.delete.id, true)
+         ENDPOINT.admin_user.delete.id = id;
+         await AuthService.deleteMethod(ENDPOINT.admin_user.delete.url+ENDPOINT.admin_user.delete.id, true)
              .then((res) => {
-                 console.log(res.data);
+                 //console.log(res.data);
              })
              .catch((err) => {
                  swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
