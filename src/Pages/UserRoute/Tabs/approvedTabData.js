@@ -1,134 +1,70 @@
 import {React, useState} from "react";
-import { Form, Dropdown, Button, Row, Col} from "react-bootstrap";
+import {Table,  Dropdown, Button, Row, Col, Form} from "react-bootstrap";
 import  classes from "../index.module.scss";
 import userImg from "../../../Images/userImg.png";
 import Tables from "../../../Components/Table";
+import cardimg from "Images/userImg.png";
+import AddNewCard from "Components/AddNewCard";
 
 
 const AllTabData = () => {
 
-    const columns = [
-
+    const alltabdata = [
         {
-            dataField: 'name',
-            text: 'Name',
-            formatter: function(cell,row){
-                return (
-                    <>
-                        <div className={"d-flex"}>
-                            <div className={classes.userImg}>
-                                <img src={row.imageUrl} alt={row.name} />
-                            </div>
-                            <div className={classes.description}>
-                                <h4 className={"font-16 mb-0"}>{row.name}</h4>
-                                <div className={"text-muted"}>{row.email}</div>
-                            </div>
-                        </div>
-                    </>
-                )
-            }
-        },
-
-        {
-            dataField: 'routename',
-            text: 'Route Name'
-        },
-        {
-            dataField: 'dateposted',
-            text: 'Date Posted'
-        },
-        {
-            dataField: 'eventDate',
-            text: 'Event Date'
-        },
-        {
-            dataField: 'status',
-            text: 'Status',
-            formatter: function(cell,row){
-                return (
-                    <>
-                        {   row.status === 'Approved' ? <span class="text-success">Approved</span>
-                            : row.status === 'Pending' ? <span class="text-orange">Pending</span>
-                                : <span class="text-danger">Rejected</span>
-                        }
-                    </>
-                )
-            }
-        },
-        {
-            dataField: 'action',
-            text: '',
-            formatter: function(cell,row){
-                return (
-                    <>
-                        <Dropdown>
-                            <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                <i className={"far fa-ellipsis-v fa-fw"}></i>
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu>
-                                { row.status === 'Approved'
-                                    ?   <Dropdown.Item href="#/">
-                                        <i className={"fal fa-ban bg-danger text-white"}></i>
-                                        Reject
-                                    </Dropdown.Item>
-                                    :   <Dropdown.Item href="#/">
-                                        <i className={"fal fa-check bg-success text-white"}></i>
-                                        Approve
-                                    </Dropdown.Item>
-                                }
-                                <Dropdown.Item href="#/" onClick={() => setModalShowView(true)}>
-                                    <i className={"fal fa-eye bg-dark text-white"}></i>
-                                    View
-                                </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </>
-                )
-            }
-        },
-    ];
-
-    const data = [
-        {
-            id: 1,
             name: "Miracle Septimus",
-            imageUrl: userImg,
-            email: "example@email.com",
-            dateposted: "11/20/2021",
+            email:"Example@Email.Com",
+            route_name: "Miracle Septimus",
+            imageUrl: cardimg,
+            status: "active",
             eventDate: "12/20/2021",
-            status: "Approved",
-            routename: "THRILL SEEKERS ATTRACTIONS IN HOUSTON",
-            accountstatus: true,
+            posted: '11/20/2021'
         },
         {
-            id: 2,
             name: "Miracle Septimus",
-            imageUrl: userImg,
-            email: "example@email.com",
-            dateposted: "11/20/2021",
+            email:"Example@Email.Com",
+             route_name: "Miracle Septimus",
+            imageUrl: cardimg,
+            status: "active",
             eventDate: "12/20/2021",
-            status: "Pending",
-            routename: "THRILL SEEKERS ATTRACTIONS IN HOUSTON",
-            accountstatus: true,
+            posted: '11/20/2021'
         },
         {
-            id: 3,
             name: "Miracle Septimus",
-            imageUrl: userImg,
-            email: "example@email.com",
-            dateposted: "11/20/2021",
+            email:"Example@Email.Com",
+             route_name: "Miracle Septimus",
+            imageUrl: cardimg,
+            status: "active",
             eventDate: "12/20/2021",
-            status: "Rejected",
-            routename: "THRILL SEEKERS ATTRACTIONS IN HOUSTON",
-            accountstatus: true,
+            posted: '11/20/2021'
         },
-    ];
-
-
-
-    const [modalShowView, setModalShowView] = useState(false);
-
+        {
+            name: "Miracle Septimus",
+            email:"Example@Email.Com",
+             route_name: "Miracle Septimus",
+            imageUrl: cardimg,
+            status: "active",
+            eventDate: "12/20/2021",
+            posted: '11/20/2021'
+        },
+        {
+            name: "Miracle Septimus",
+            email:"Example@Email.Com",
+             route_name: "Miracle Septimus",
+            imageUrl: cardimg,
+            status: "inActive",
+            eventDate: "12/20/2021",
+            posted: '11/20/2021'
+        },
+        {
+            name: "Miracle Septimus",
+            email:"Example@Email.Com",
+             route_name: "Miracle Septimus",
+            imageUrl: cardimg,
+            status: "inActive",
+            eventDate: "12/20/2021",
+            posted: '11/20/2021'
+        },
+    ]
 
     return(
         <>
@@ -147,12 +83,80 @@ const AllTabData = () => {
                             </div>
                         </Col>
                     </Row>
+
+
                 </Form>
             </div>
-            <Tables
-                data={data}
-                columns={columns}
-            />
+            <Table>
+                <thead>
+                <tr>
+                    <th>
+                        <Form.Check type="checkbox" />
+                    </th>
+                    <th>Name</th>
+                    <th>Route Name</th>
+                    <th>date posted</th>
+                    <th>Event Date</th>
+                    <th>status</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {alltabdata.map((alltabdata) => (
+                    <tr>
+                        <td><Form.Check type="checkbox"/></td>
+                        <td>
+                            <div className={"d-flex"}>
+                                <div className={classes.userImg}>
+                                    <img src={alltabdata.imageUrl} alt={alltabdata.name} />
+                                </div>
+                                <div className={classes.description}>
+                                    <h4 className={"font-16 mb-0"}>{alltabdata.name}</h4>
+                                    <div className={"text-muted"}>{alltabdata.email}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            {alltabdata.route_name}
+                        </td>
+                        <td>
+                            {alltabdata.posted}
+                        </td>
+                        <td>{alltabdata.eventDate}</td>
+                        <td>
+                            {alltabdata.status === "active"
+                                ? <span class="text-success">Approved</span>
+                                : <span class="text-danger">Pending</span>
+                            }
+                        </td>
+                        <td>
+                        <Dropdown>
+                            <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                <i className={"far fa-ellipsis-v fa-fw"}></i>
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                                { alltabdata.status === 'Approved'
+                                    ?   <Dropdown.Item href="#/">
+                                            <i className={"fal fa-ban bg-danger text-white"}></i>
+                                            Reject
+                                        </Dropdown.Item>
+                                    :   <Dropdown.Item href="#/">
+                                            <i className={"fal fa-check bg-success text-white"}></i>
+                                            Approve
+                                        </Dropdown.Item>
+                                }
+                                <Dropdown.Item href="users-route/view-route">
+                                    <i className={"fal fa-eye bg-dark text-white"}></i>
+                                    View
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        </td>
+                    </tr>
+                ))}
+                </tbody>
+            </Table>
 
         </>
     )
