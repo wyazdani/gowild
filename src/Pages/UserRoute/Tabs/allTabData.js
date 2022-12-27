@@ -12,66 +12,8 @@ import swal from 'sweetalert';
 
 const AllTabData = () => {
 
-    const alltabdata = [
-        {
-            name: "Miracle Septimus",
-            email: "Example@Email.Com",
-            route_name: "Miracle Septimus",
-            imageUrl: cardimg,
-            status: "active",
-            eventDate: "12/20/2021",
-            posted: '11/20/2021'
-        },
-        {
-            name: "Miracle Septimus",
-            email: "Example@Email.Com",
-            route_name: "Miracle Septimus",
-            imageUrl: cardimg,
-            status: "active",
-            eventDate: "12/20/2021",
-            posted: '11/20/2021'
-        },
-        {
-            name: "Miracle Septimus",
-            email: "Example@Email.Com",
-            route_name: "Miracle Septimus",
-            imageUrl: cardimg,
-            status: "active",
-            eventDate: "12/20/2021",
-            posted: '11/20/2021'
-        },
-        {
-            name: "Miracle Septimus",
-            email: "Example@Email.Com",
-            route_name: "Miracle Septimus",
-            imageUrl: cardimg,
-            status: "active",
-            eventDate: "12/20/2021",
-            posted: '11/20/2021'
-        },
-        {
-            name: "Miracle Septimus",
-            email: "Example@Email.Com",
-            route_name: "Miracle Septimus",
-            imageUrl: cardimg,
-            status: "inActive",
-            eventDate: "12/20/2021",
-            posted: '11/20/2021'
-        },
-        {
-            name: "Miracle Septimus",
-            email: "Example@Email.Com",
-            route_name: "Miracle Septimus",
-            imageUrl: cardimg,
-            status: "inActive",
-            eventDate: "12/20/2021",
-            posted: '11/20/2021'
-        },
-    ]
-
 
     const [content, setContent] = useState([]);
-    console.log("🚀 ~ file: allTabData.js:74 ~ AllTabData ~ content", content)
     const [isLoader, setIsLoader] = useState(false);
     const [addAdmin, setAddAdmin] = useState(false);
     const [search, setSearch] = useState("");
@@ -82,7 +24,7 @@ const AllTabData = () => {
             .then((res) => {
                 setContent(res.data.data);
                 setIsLoader(true);
-                console.log("response", res);
+                // console.log("response data", res.data.data);
             })
             .catch((err) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
@@ -92,7 +34,6 @@ const AllTabData = () => {
 
     useEffect(() => {
         userRouteAllData();
-        setIsLoader(true);
     }, []);
 
 
@@ -112,6 +53,15 @@ const AllTabData = () => {
         return [month, day, year].join('/');
     }
 
+
+
+    if (!isLoader) {
+        return (
+            <div className='loader'>
+                <h3>Loading...</h3>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -151,10 +101,9 @@ const AllTabData = () => {
                         return search.toLowerCase() === ''
                             ? item
                             : (
-                                item.user[0].firstName.toLowerCase().includes(search)
-                                || item.user[0].lastName.toLowerCase().includes(search)
-                                || item.user[0].email.toLowerCase().includes(search)
-
+                                item.user.firstName.toLowerCase().includes(search) ||
+                                item.user.lastName.toLowerCase().includes(search)  ||
+                                item.user.email.toLowerCase().includes(search) 
                             )
                     }).map((content) => (
                         <tr>
@@ -162,11 +111,11 @@ const AllTabData = () => {
                             <td>
                                 <div className={"d-flex"}>
                                     <div className={classes.userImg}>
-                                        <img src={content.user[0].picture} alt={content.user[0].firstName} />
+                                        <img src={content.user.picture} alt={content.user.firstName} />
                                     </div>
                                     <div className={classes.description}>
-                                        <h4 className={"font-16 mb-0"}>{content.user[0].firstName + " " + content.user[0].lastName}</h4>
-                                        <div className={"text-muted"}>{content.user[0].email}</div>
+                                        <h4 className={"font-16 mb-0"}>{content.user.firstName + " " + content.user.lastName}</h4>
+                                        <div className={"text-muted"}>{content.user.email}</div>
                                     </div>
                                 </div>
                             </td>
@@ -180,7 +129,7 @@ const AllTabData = () => {
                                 {(formatDate(content.createdDate))}
                             </td>
                             <td>
-                                {content.user[0].phoneVerified
+                                {content.user.status.statusName === "active"
                                     ? <span class="text-success">Approved</span>
                                     : <span class="text-danger">Pending</span>
                                 }
@@ -192,7 +141,7 @@ const AllTabData = () => {
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu>
-                                        {content.user[0].phoneVerified
+                                        {content.user.status.statusName === "active"
                                             ? <Dropdown.Item href="#/">
                                                 <i className={"fal fa-ban bg-danger text-white"}></i>
                                                 Reject
