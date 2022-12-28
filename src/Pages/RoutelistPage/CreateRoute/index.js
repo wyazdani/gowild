@@ -8,9 +8,13 @@ import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useNavigate} from "react-router-dom";
 // °
 
 const CreateRoute = () => {
+
+    const navigate = useNavigate();
+
     const [file, setFile] = useState([]);
     const [formData, setFormData] = useState({});
 
@@ -58,6 +62,7 @@ const CreateRoute = () => {
                     });
                 }
                 console.log(res);
+                navigate('/route-list');
                 setFormData("");
                 event.target.reset();
             })

@@ -13,12 +13,6 @@ import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
 // °
 
-// ,  {
-//     body: JSON.stringify({
-//         "email": formData.email,
-//         "password": formData.password,
-//     }),
-// })
 
 
 

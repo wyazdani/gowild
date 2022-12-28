@@ -65,5 +65,8 @@ export const ENDPOINT = {
     users_route :{
         listing : `${API_URL}/admin/route/users`,
     },
+    treasure_chests :{
+        listing : `${API_URL}/admin/treasure-chest`,
+    },
 
 };
