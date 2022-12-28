@@ -1,10 +1,72 @@
-import {React, useState} from "react";
+import { React, useState } from "react";
 import PageTitle from "../../../Components/Pagetitle";
-import {Button, Col, Form, Row} from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import map1 from "Images/map1.jpg";
+import { ENDPOINT, KEY } from "config/constants";
+import AuthService from "services/auth.service";
+import accessHeader from "services/headers/access-header";
+import swal from 'sweetalert';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+// °
 
 const CreateRoute = () => {
     const [file, setFile] = useState([]);
+    const [formData, setFormData] = useState({});
+
+
+    const handleChange = (event) => {
+        let value = event.target.value;
+        let name = event.target.name;
+        setFormData((prevalue) => {
+            return {
+                ...prevalue,   // Spread Operator               
+                [name]: value
+            }
+        })
+    }
+
+
+    const submitForm = async (event) => {
+        event.preventDefault();
+        const dataObj = {
+            "title": formData.title,
+            "description": formData.description,
+            "start": {
+                "latitude": formData.startLattitude,
+                "longitude": formData.startLongtitude
+            },
+            "saved": true,
+            "end": {
+                "latitude": formData.endLattitude,
+                "longitude": formData.endLongtitude
+            }
+        }
+
+        return await AuthService.postMethod(ENDPOINT.admin_route.listing, true, dataObj)
+            .then((res) => {
+                if (res.status === 200) {
+                    toast.success('Form data submitted successfully', {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                    });
+                }
+                console.log(res);
+                setFormData("");
+                event.target.reset();
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+
+    };
+
 
     function uploadSingleFile(e) {
         let ImagesArray = Object.entries(e.target.files).map((e) =>
@@ -25,7 +87,7 @@ const CreateRoute = () => {
         setFile(s);
         console.log(s);
     }
-    return(
+    return (
         <>
             <PageTitle title="Normal Route" />
             <section className={"section"}>
@@ -36,24 +98,54 @@ const CreateRoute = () => {
                             <p><i className={"fas fa-map-marker-alt text-danger mx-3"}></i> Finishing Point</p>
                             <p><i className={"fas fa-map-marker-alt text-yellow mx-3"}></i> Historical Event</p>
                         </div>
-                        <Form>
+                        <Form onSubmit={submitForm}>
                             <Form.Group>
                                 <Form.Label>Starting Point</Form.Label>
-                                <Form.Control type="text" className={"mb-3"} placeholder="Longtitude" />
-                                <Form.Control type="text" className={"mb-3"} placeholder="Lattitude" />
+                                <Form.Control type="text"
+                                    name="startLongtitude"
+                                    required
+                                    value={formData.startLongtitude}
+                                    onChange={handleChange}
+                                    className={"mb-3"} placeholder="Longtitude" />
+                                <Form.Control type="text"
+                                    name="startLattitude"
+                                    required
+                                    value={formData.startLattitude}
+                                    onChange={handleChange}
+                                    className={"mb-3"} placeholder="Lattitude" />
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label>End Point</Form.Label>
-                                <Form.Control type="text" className={"mb-3"} placeholder="Longtitude" />
-                                <Form.Control type="text" className={"mb-3"} placeholder="Lattitude" />
+                                <Form.Control type="text"
+                                    name="endLongtitude"
+                                    required
+                                    value={formData.endLongtitude}
+                                    onChange={handleChange}
+                                    className={"mb-3"} placeholder="Longtitude" />
+                                <Form.Control type="text"
+                                    name="endLattitude"
+                                    required
+                                    value={formData.endLattitude}
+                                    onChange={handleChange}
+                                    className={"mb-3"} placeholder="Lattitude" />
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label>Title</Form.Label>
-                                <Form.Control type="text" className={"mb-3"} placeholder="My Race Title" />
-                                <Form.Control as="textarea" className={"mb-3"} placeholder="Write something here ..." />
+                                <Form.Control type="text"
+                                    name="title"
+                                    required
+                                    value={formData.title}
+                                    onChange={handleChange}
+                                    className={"mb-3"} placeholder="My Race Title" />
+                                <Form.Control as="textarea" type="text"
+                                    name="description"
+                                    required
+                                    value={formData.description}
+                                    onChange={handleChange}
+                                    className={"mb-3"} placeholder="Write something here ..." />
                             </Form.Group>
                             <Form.Group>
-                                <Button className={"w-100"}>Save</Button>
+                                <Button type="submit" className={"w-100"}>Save</Button>
                             </Form.Group>
                         </Form>
                     </Col>
@@ -148,6 +240,19 @@ const CreateRoute = () => {
                         </Row>
                     </Col>
                 </Row>
+
+                <ToastContainer
+                    position="bottom-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="dark"
+                />
             </section>
         </>
     )

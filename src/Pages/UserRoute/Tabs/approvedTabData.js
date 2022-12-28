@@ -1,134 +1,65 @@
-import {React, useState} from "react";
-import { Form, Dropdown, Button, Row, Col} from "react-bootstrap";
-import  classes from "../index.module.scss";
-import userImg from "../../../Images/userImg.png";
-import Tables from "../../../Components/Table";
-
+import { React, useState, useEffect } from "react";
+import { Table, Dropdown, Button, Row, Col, Form } from "react-bootstrap";
+import classes from "../index.module.scss";
+import cardimg from "Images/userImg.png";
+import AddSubAdmin from "../../../Components/SubAdminComponent/AddNewSubAdmin";
+import { ENDPOINT, KEY } from "config/constants";
+import AuthService from "services/auth.service";
+import accessHeader from "services/headers/access-header";
+import swal from 'sweetalert';
 
 const AllTabData = () => {
 
-    const columns = [
 
-        {
-            dataField: 'name',
-            text: 'Name',
-            formatter: function(cell,row){
-                return (
-                    <>
-                        <div className={"d-flex"}>
-                            <div className={classes.userImg}>
-                                <img src={row.imageUrl} alt={row.name} />
-                            </div>
-                            <div className={classes.description}>
-                                <h4 className={"font-16 mb-0"}>{row.name}</h4>
-                                <div className={"text-muted"}>{row.email}</div>
-                            </div>
-                        </div>
-                    </>
-                )
-            }
-        },
+    const [content, setContent] = useState([]);
+    const [isLoader, setIsLoader] = useState(false);
+    const [addAdmin, setAddAdmin] = useState(false);
+    const [search, setSearch] = useState("");
 
-        {
-            dataField: 'routename',
-            text: 'Route Name'
-        },
-        {
-            dataField: 'dateposted',
-            text: 'Date Posted'
-        },
-        {
-            dataField: 'eventDate',
-            text: 'Event Date'
-        },
-        {
-            dataField: 'status',
-            text: 'Status',
-            formatter: function(cell,row){
-                return (
-                    <>
-                        {   row.status === 'Approved' ? <span class="text-success">Approved</span>
-                            : row.status === 'Pending' ? <span class="text-orange">Pending</span>
-                                : <span class="text-danger">Rejected</span>
-                        }
-                    </>
-                )
-            }
-        },
-        {
-            dataField: 'action',
-            text: '',
-            formatter: function(cell,row){
-                return (
-                    <>
-                        <Dropdown>
-                            <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                <i className={"far fa-ellipsis-v fa-fw"}></i>
-                            </Dropdown.Toggle>
 
-                            <Dropdown.Menu>
-                                { row.status === 'Approved'
-                                    ?   <Dropdown.Item href="#/">
-                                        <i className={"fal fa-ban bg-danger text-white"}></i>
-                                        Reject
-                                    </Dropdown.Item>
-                                    :   <Dropdown.Item href="#/">
-                                        <i className={"fal fa-check bg-success text-white"}></i>
-                                        Approve
-                                    </Dropdown.Item>
-                                }
-                                <Dropdown.Item href="#/" onClick={() => setModalShowView(true)}>
-                                    <i className={"fal fa-eye bg-dark text-white"}></i>
-                                    View
-                                </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </>
-                )
-            }
-        },
-    ];
+    const userRouteAllData = async () => {
+        await AuthService.getMethod(ENDPOINT.users_route.listing, true,)
+            .then((res) => {
+                setContent(res.data.data);
+                setIsLoader(true);
+                // console.log("response data", res.data.data);
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+    };
 
-    const data = [
-        {
-            id: 1,
-            name: "Miracle Septimus",
-            imageUrl: userImg,
-            email: "example@email.com",
-            dateposted: "11/20/2021",
-            eventDate: "12/20/2021",
-            status: "Approved",
-            routename: "THRILL SEEKERS ATTRACTIONS IN HOUSTON",
-            accountstatus: true,
-        },
-        {
-            id: 2,
-            name: "Miracle Septimus",
-            imageUrl: userImg,
-            email: "example@email.com",
-            dateposted: "11/20/2021",
-            eventDate: "12/20/2021",
-            status: "Pending",
-            routename: "THRILL SEEKERS ATTRACTIONS IN HOUSTON",
-            accountstatus: true,
-        },
-        {
-            id: 3,
-            name: "Miracle Septimus",
-            imageUrl: userImg,
-            email: "example@email.com",
-            dateposted: "11/20/2021",
-            eventDate: "12/20/2021",
-            status: "Rejected",
-            routename: "THRILL SEEKERS ATTRACTIONS IN HOUSTON",
-            accountstatus: true,
-        },
-    ];
+
+    useEffect(() => {
+        userRouteAllData();
+    }, []);
 
 
 
-    const [modalShowView, setModalShowView] = useState(false);
+    // convert date format to month / day / year
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
 
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return [month, day, year].join('/');
+    }
+
+
+
+    if (!isLoader) {
+        return (
+            <div className='loader'>
+                <h3>Loading...</h3>
+            </div>
+        );
+    }
 
     return(
         <>
@@ -142,18 +73,93 @@ const AllTabData = () => {
                                     Filter
                                 </Button>
                                 <Form.Group className={classes.searchForm}>
-                                    <Form.Control type="search" placeholder="Search Users by Name, Email or Date" />
+                                    <Form.Control type="search" placeholder="Search Users by Name or Email" onChange={(e) => setSearch(e.target.value)} />
                                 </Form.Group>
                             </div>
                         </Col>
                     </Row>
                 </Form>
             </div>
-            <Tables
-                data={data}
-                columns={columns}
-            />
+            <Table>
+                <thead>
+                    <tr>
+                        <th>
+                            <Form.Check type="checkbox" />
+                        </th>
+                        <th>Name</th>
+                        <th>Route Name</th>
+                        <th>date posted</th>
+                        <th>Event Date</th>
+                        <th>status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {content.filter((item) => {
+                        return search.toLowerCase() === ''
+                            ? item
+                            : (
+                                item.user.firstName.toLowerCase().includes(search) ||
+                                item.user.lastName.toLowerCase().includes(search)  ||
+                                item.user.email.toLowerCase().includes(search) 
+                            )
+                    }).map((content) => (
+                        <tr>
+                            <td><Form.Check type="checkbox" /></td>
+                            <td>
+                                <div className={"d-flex"}>
+                                    <div className={classes.userImg}>
+                                        <img src={content.user.picture} alt={content.user.firstName} />
+                                    </div>
+                                    <div className={classes.description}>
+                                        <h4 className={"font-16 mb-0"}>{content.user.firstName + " " + content.user.lastName}</h4>
+                                        <div className={"text-muted"}>{content.user.email}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {content.title}
+                            </td>
+                            <td>
+                                {(formatDate(content.updatedDate))}
+                            </td>
+                            <td>
+                                {(formatDate(content.createdDate))}
+                            </td>
+                            <td>
+                                {content.user.status.statusName === "active"
+                                    ? <span class="text-success">Approved</span>
+                                    : <span class="text-danger">Pending</span>
+                                }
+                            </td>
+                            <td>
+                                <Dropdown>
+                                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                        <i className={"far fa-ellipsis-v fa-fw"}></i>
+                                    </Dropdown.Toggle>
 
+                                    <Dropdown.Menu>
+                                        {content.user.status.statusName === "active"
+                                            ? <Dropdown.Item href="#/">
+                                                <i className={"fal fa-ban bg-danger text-white"}></i>
+                                                Reject
+                                            </Dropdown.Item>
+                                            : <Dropdown.Item href="#/">
+                                                <i className={"fal fa-check bg-success text-white"}></i>
+                                                Approve
+                                            </Dropdown.Item>
+                                        }
+                                        <Dropdown.Item href="users-route/view-route">
+                                            <i className={"fal fa-eye bg-dark text-white"}></i>
+                                            View
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
         </>
     )
 }

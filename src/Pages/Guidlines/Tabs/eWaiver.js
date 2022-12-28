@@ -31,6 +31,21 @@ const EWavier = () => {
 
     }, []);
 
+    // convert date format to month / day / year
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return [month, day, year].join('/');
+    }
+
 
     if (!isLoader) {
         return (
@@ -40,9 +55,11 @@ const EWavier = () => {
         );
     }
 
-    return(
+    const DATE_OPTIONS = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+
+    return (
         <>
-           <Row>
+            <Row>
                 {
                     content.filter(item => {
                         return item.type === "eWaiver" ? true : false;
@@ -66,18 +83,22 @@ const EWavier = () => {
                                 </Col>
                                 <Col md={4}>
                                     <div className={classes.logBox}>
-                                        <h4>April 23, 2022</h4>
+                                        <h4>  {(new Date()).toLocaleDateString('en-US', DATE_OPTIONS)} </h4>
                                         <div className={"text-muted font-12"}>Update Logs</div>
                                         <ul className={classes.logList}>
                                             <li>
                                                 <div className={classes.box}>
-                                                    <time className={"d-block"}>{content.updatedDate}</time>
+                                                    <time className={"d-block"}>
+                                                        {(formatDate(content.updatedDate))}
+                                                    </time>
                                                     <div>Term &amp; Conditions - Updated!</div>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className={classes.box}>
-                                                    <time className="d-block">{content.createdDate}</time>
+                                                    <time className="d-block">
+                                                        {(formatDate(content.createdDate))}
+                                                    </time>
                                                     <div>FAQ</div>
                                                 </div>
                                             </li>

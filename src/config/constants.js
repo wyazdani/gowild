@@ -62,4 +62,8 @@ export const ENDPOINT = {
         terms_conditions : `${API_URL}/admin-guidelines`,
     },
 
+    users_route :{
+        listing : `${API_URL}/admin/route/users`,
+    },
+
 };

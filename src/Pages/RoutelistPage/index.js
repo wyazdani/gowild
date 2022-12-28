@@ -1,60 +1,82 @@
-import {React} from "react";
+
 import PageTitle from "../../Components/Pagetitle";
-import {Button, Dropdown, Form, Table} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 import imgURL from "../../Images/routelist.png";
+import { React, useState, useEffect } from "react";
+import { Table, Dropdown, Button, Row, Col, Form } from "react-bootstrap";
+// import classes from "../index.module.scss";
+import cardimg from "Images/userImg.png";
+// import AddSubAdmin from "../../../Components/SubAdminComponent/AddNewSubAdmin";
+import { ENDPOINT, KEY } from "config/constants";
+import AuthService from "services/auth.service";
+import accessHeader from "services/headers/access-header";
+import swal from 'sweetalert';
+// °
+
+// ,  {
+//     body: JSON.stringify({
+//         "email": formData.email,
+//         "password": formData.password,
+//     }),
+// })
+
 
 
 const RouteList = () => {
+
     const navigate = useNavigate();
     const goToCreateRoute = () => {
         navigate('/route-list/create');
     };
 
-    const routeList = [
-        {
-            name: "First On The List",
-            imageUrl: imgURL,
-            dateCreated: "09.16.21",
-            startingPoint: "32.4832°/12.4233°",
-            endpoint: "65.5234°/12.4233°"
-        },
-        {
-            name: "First On The List",
-            imageUrl: imgURL,
-            dateCreated: "09.16.21",
-            startingPoint: "32.4832°/12.4233°",
-            endpoint: "65.5234°/12.4233°"
-        },
-        {
-            name: "First On The List",
-            imageUrl: imgURL,
-            dateCreated: "09.16.21",
-            startingPoint: "32.4832°/12.4233°",
-            endpoint: "65.5234°/12.4233°"
-        },
-        {
-            name: "First On The List",
-            imageUrl: imgURL,
-            dateCreated: "09.16.21",
-            startingPoint: "32.4832°/12.4233°",
-            endpoint: "65.5234°/12.4233°"
-        },
-        {
-            name: "First On The List",
-            imageUrl: imgURL,
-            dateCreated: "09.16.21",
-            startingPoint: "32.4832°/12.4233°",
-            endpoint: "65.5234°/12.4233°"
-        },
-        {
-            name: "First On The List",
-            imageUrl: imgURL,
-            dateCreated: "09.16.21",
-            startingPoint: "32.4832°/12.4233°",
-            endpoint: "65.5234°/12.4233°"
-        },
-    ]
+    const [content, setContent] = useState([]);
+    const [isLoader, setIsLoader] = useState(false);
+
+    const routeListData = async () => {
+        await AuthService.getMethod(ENDPOINT.users_route.listing, true,)
+            .then((res) => {
+                setContent(res.data.data);
+                setIsLoader(true);
+                // console.log("response data", res.data.data);
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+    };
+
+
+    useEffect(() => {
+        routeListData();
+    }, []);
+
+
+        // convert date format to month / day / year
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+    
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+    
+            return [month, day, year].join('/');
+        }
+
+
+
+    if (!isLoader) {
+        return (
+            <div className='loader'>
+                <h3>Loading...</h3>
+            </div>
+        );
+    }
+
+
+
     return(
         <>
             <PageTitle title="Normal Route" />
@@ -77,18 +99,18 @@ const RouteList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                    {routeList.map((routeList) => (
+                    {content.map((content) => (
                         <tr>
                             <td>
                                 <Form.Check type="checkbox" />
                             </td>
                             <td>
-                                <img src={routeList.imageUrl} alt={"img"} />
+                            <img src={content.user.picture} alt={content.user.firstName} />
                             </td>
-                            <td>{routeList.name}</td>
-                            <td>{routeList.dateCreated}</td>
-                            <td>{routeList.startingPoint}</td>
-                            <td>{routeList.endpoint}</td>
+                            <td>{content.user.firstName + " " + content.user.lastName}</td>
+                            <td>{(formatDate(content.createdDate))}</td>
+                            <td>{content.start.latitude} / {content.start.longitude}</td>
+                            <td>{content.end.latitude} / {content.end.longitude}</td>
                             <td>
                                 <Dropdown>
                                     <Dropdown.Toggle variant="success" id="dropdown-basic">
