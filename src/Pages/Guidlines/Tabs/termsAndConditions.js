@@ -12,7 +12,6 @@ const TermsAndConditions = () => {
     const [content, setContent] = useState([]);
     const [isLoader, setIsLoader] = useState(false);
 
-
     const guidlinessTermsData = async () => {
         await AuthService.getMethod(ENDPOINT.admin_guidelines.terms_conditions)
             .then((res) => {
@@ -31,8 +30,6 @@ const TermsAndConditions = () => {
         console.log(event.target.value);
     };
 
-
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         return await AuthService.postMethod(ENDPOINT.admin_guidelines.terms_conditions)
@@ -46,15 +43,11 @@ const TermsAndConditions = () => {
             });
     }
 
-
-
-
     useEffect(() => {
         guidlinessTermsData();
         setIsLoader(true);
 
     }, []);
-
 
     if (!isLoader) {
         return (
@@ -63,7 +56,6 @@ const TermsAndConditions = () => {
             </div>
         );
     }
-
 
     return (
         <>
@@ -94,7 +86,7 @@ const TermsAndConditions = () => {
                                 <Col md={4}>
                                     <div className={classes.logBox}>
                                         <h4> 
-                                        April 23, 2022 
+                                            April 23, 2022
                                         </h4>
                                         
                                         <div className={"text-muted font-12"}>Update Logs</div>
@@ -105,7 +97,6 @@ const TermsAndConditions = () => {
                                                     {content.updatedDate}
                                                     {/* <span>{ (new Date(content.updatedDate)).toLocaleDateString() }</span> */}
                                                     </time>
-                                                   
                                                     <div>Term &amp; Conditions - Updated!</div>
                                                 </div>
                                             </li>
