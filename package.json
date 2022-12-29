@@ -17,6 +17,7 @@
     "dotenv": "^16.0.3",
     "file-saver": "^2.0.5",
     "formik": "^2.2.9",
+    "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-bootstrap": "^2.6.0",
     "react-bootstrap-table-next": "^1.1.1",

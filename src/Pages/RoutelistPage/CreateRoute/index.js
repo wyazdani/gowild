@@ -37,13 +37,13 @@ const CreateRoute = () => {
             "title": formData.title,
             "description": formData.description,
             "start": {
-                "latitude": formData.startLattitude,
-                "longitude": formData.startLongtitude
+                "latitude": JSON.parse(formData.startLattitude),
+                "longitude": JSON.parse(formData.startLongtitude)
             },
             "saved": true,
             "end": {
-                "latitude": formData.endLattitude,
-                "longitude": formData.endLongtitude
+                "latitude": JSON.parse(formData.endLattitude),
+                "longitude": JSON.parse(formData.endLongtitude)
             }
         }
 

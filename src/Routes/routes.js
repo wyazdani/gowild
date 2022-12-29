@@ -20,6 +20,7 @@ import Support from "../Pages/Support";
 import Guidlines from "../Pages/Guidlines";
 import TreasureHuntEWaiver from "../Pages/TreasureHuntEWaiver";
 import CreateTreasure from "Pages/TreasureChest/CreateRoute";
+// import EditTreasure from "Pages/TreasureChest/EditRoute";
 
 const routes = [
   {
@@ -67,6 +68,11 @@ const routes = [
     component: CreateTreasure,
     layout: MainLayout,
   },
+  // {
+  //   path: "/treasure-list/edit",
+  //   component: EditTreasure,
+  //   layout: MainLayout,
+  // },
 
   {
     path: "/login",

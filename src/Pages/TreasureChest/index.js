@@ -6,28 +6,56 @@ import { ENDPOINT, KEY } from "config/constants";
 import AuthService from "services/auth.service";
 import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Routes, Route, useParams } from 'react-router-dom';
+import EditTreasure from './EditSubAdmin';
 
 
 
 const TreasureChestList = () => {
+    let { id } = useParams();
+
 
 
     const navigate = useNavigate();
     const goToCreateRoute = () => {
         navigate('/treasure-list/create');
     };
+    const goToEditRoute = () => {
+        navigate('/treasure-list/edit');
+        // history.push(`/edit-form?id=${id}`);
+    };
 
     const [content, setContent] = useState([]);
     const [isLoader, setIsLoader] = useState(false);
 
 
+    const [addAdmin, setAddAdmin] = useState(false);
+    const [editSubAdmin, setEditSubAdmin] = useState(false);
+    const [search, setSearch] = useState("");
+    const [editItem, setEditItem] = useState(null);
+
+
     const treasureChestsListData = async (data) => {
-        await AuthService.getMethod(ENDPOINT.treasure_chests.listing , data ,true)
+        await AuthService.getMethod(ENDPOINT.treasure_chests.listing, data, true)
             .then((res) => {
                 setContent(res.data.data);
                 setIsLoader(true);
                 console.log(res.data.data);
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+    };
+
+
+
+    const deleteTreasureChests = async (id) => {
+        ENDPOINT.treasure_chests.delete.id = id;
+        await AuthService.deleteMethod(ENDPOINT.treasure_chests.delete.url + ENDPOINT.treasure_chests.delete.id, true)
+            .then((res) => {
+                treasureChestsListData();
+                console.log(res.data);
             })
             .catch((err) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
@@ -65,71 +93,85 @@ const TreasureChestList = () => {
     }
 
 
-    const url = "https://api.gowild.appscorridor.com";
 
 
-    return(
+    return (
         <>
             <PageTitle title="Treasure Chests List" />
             <section className={"section"}>
-            <div className={"d-md-flex item-center-between mb-3"}>
+                <div className={"d-md-flex item-center-between mb-3"}>
                     <h4 className={"my-2"}>Treasure Chest Lists</h4>
                     <Button onClick={goToCreateRoute}>Create</Button>
                 </div>
                 <Table>
                     <thead>
-                    <tr>
-                        <th>
-                            <Form.Check type="checkbox" />
-                        </th>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Date Created</th>
-                        <th>Event Date</th>
-                        <th>Starting Point/Lat</th>
-                        <th>Starting Point/Long</th>
-                        <th></th>
-                    </tr>
+                        <tr>
+                            <th>
+                                <Form.Check type="checkbox" />
+                            </th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Date Created</th>
+                            <th>Event Date</th>
+                            <th>Starting Point/Lat</th>
+                            <th>Starting Point/Long</th>
+                            <th></th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {content.map((content) => (
-                        <tr>
-                            <td><Form.Check type="checkbox"/></td>
-                            <td>
-                                <img src={"https://api.gowild.appscorridor.com"+content.picture} width="100%" alt={"img"} />
-                            </td>
-                            <td>{content.title}</td>
-                            <td>{(formatDate(content.createdDate))}</td>
-                            <td> {(formatDate(content.eventDate))}</td>
-                            <td>{content.location.latitude}</td>
-                            <td>{content.location.longitude}</td>
-                            <td>
-                                <Dropdown>
-                                    <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                        <i className={"far fa-ellipsis-v fa-fw"}></i>
-                                    </Dropdown.Toggle>
+                        {content.map((content) => (
+                            <tr>
+                                <td><Form.Check type="checkbox" /></td>
+                                <td>
+                                    <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} />
+                                </td>
+                                <td>{content.title}</td>
+                                <td>{(formatDate(content.createdDate))}</td>
+                                <td> {(formatDate(content.eventDate))}</td>
+                                <td>{content.location.latitude}</td>
+                                <td>{content.location.longitude}</td>
+                                <td>
+                                    <Dropdown>
+                                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                            <i className={"far fa-ellipsis-v fa-fw"}></i>
+                                        </Dropdown.Toggle>
 
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item href="#/">
-                                            <i className={"fal fa-ban bg-warning text-white"}></i>
-                                            View
-                                        </Dropdown.Item>
-                                        <Dropdown.Item href="#/">
-                                            <i className={"far fa-pen bg-dark text-white"}></i>
-                                            Edit User
-                                        </Dropdown.Item>
-                                        <Dropdown.Item href="#/">
-                                            <i className={"fal fa-trash bg-danger text-white"}></i>
-                                            Delete
-                                        </Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </td>
-                        </tr>
-                    ))}
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item href="#/">
+                                                <i className={"fal fa-ban bg-warning text-white"}></i>
+                                                View
+                                            </Dropdown.Item>
+                                            <Dropdown.Item href="#/"
+                                                onClick={
+                                                    () => {
+                                                        setEditSubAdmin(true)
+                                                        setEditItem(content)
+                                                    }}
+
+                                            >
+                                                <i className={"far fa-pen bg-dark text-white"}></i>
+                                                Edit User
+                                            </Dropdown.Item>
+                                            <Dropdown.Item href="#/" onClick={() => {
+                                                deleteTreasureChests(content.id)
+                                            }}>
+                                                <i className={"fal fa-trash bg-danger text-white"}></i>
+                                                Delete
+                                            </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </Table>
             </section>
+
+            <EditTreasure
+                show={editSubAdmin}
+                onHide={() => setEditSubAdmin(false)}
+                editItem={editItem}
+            />
         </>
     )
 }

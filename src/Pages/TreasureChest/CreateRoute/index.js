@@ -39,10 +39,10 @@ const CreateTreasure = () => {
             "description": formData.description,
             "location": {
                 "latitude": JSON.parse(formData.latitude),
-                "longitude":  JSON.parse(formData.longitude) 
+                "longitude": JSON.parse(formData.longitude)
             },
             "eventDate": formData.date,
-            "eventTime": "string",
+            "eventTime": formData.time,
             "no_of_participants": formData.number
         }
 
@@ -93,6 +93,10 @@ const CreateTreasure = () => {
         setFile(s);
         console.log(s);
     }
+
+
+
+    
     return (
         <>
             <PageTitle title="Normal Route" />
@@ -163,10 +167,10 @@ const CreateTreasure = () => {
                                                 <Form.Group>
 
                                                     <Form.Control type="date"
-                                                    name="date"
-                                                    value={formData.date}
-                                                     onChange={handleChange}
-                                                     className={"mb-3"} />
+                                                        name="date"
+                                                        value={formData.date}
+                                                        onChange={handleChange}
+                                                        className={"mb-3"} />
                                                 </Form.Group>
                                             </Form.Group>
 
@@ -195,7 +199,12 @@ const CreateTreasure = () => {
                                         <Col md={3}>
                                             <Form.Group>
                                                 <Form.Label>Time</Form.Label>
-                                                <Form.Control type="number" className={"mb-3"} placeholder="00:00" />
+                                                <Form.Control type="time"
+                                                    name="time"
+                                                    required
+                                                    value={formData.time}
+                                                    onChange={handleChange}
+                                                    className={"mb-3"} placeholder="00:00" />
                                             </Form.Group>
                                         </Col>
                                         <Col md={3}>
@@ -203,10 +212,10 @@ const CreateTreasure = () => {
                                             <Form.Group>
                                                 <Form.Label>Number of participants</Form.Label>
                                                 <Form.Control type="number"
-                                                name="number"
-                                                value={formData.number}
-                                                     onChange={handleChange}
-                                                 className={"mb-3"} placeholder="200" />
+                                                    name="number"
+                                                    value={formData.number}
+                                                    onChange={handleChange}
+                                                    className={"mb-3"} placeholder="200" />
                                             </Form.Group>
                                         </Col>
                                     </Row>
