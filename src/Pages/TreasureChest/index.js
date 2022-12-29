@@ -8,7 +8,10 @@ import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
 import { useNavigate } from "react-router-dom";
 import { Routes, Route, useParams } from 'react-router-dom';
-import EditTreasure from './EditSubAdmin';
+import EditTreasure from './EditTreasureChests';
+import ViewRoute from 'Pages/UserRoute/viewRoute';
+import ViewTreasure from './ViewRoute';
+// import ViewTreasure from './ViewRoute/ViewRoute';
 
 
 
@@ -32,8 +35,10 @@ const TreasureChestList = () => {
 
     const [addAdmin, setAddAdmin] = useState(false);
     const [editSubAdmin, setEditSubAdmin] = useState(false);
+    const [viewTreasureChests, setViewTreasureChests] = useState(false);
     const [search, setSearch] = useState("");
     const [editItem, setEditItem] = useState(null);
+    const [viewItem, setViewItem] = useState(null);
 
 
     const treasureChestsListData = async (data) => {
@@ -137,10 +142,18 @@ const TreasureChestList = () => {
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu>
-                                            <Dropdown.Item href="#/">
+                                            <Dropdown.Item href="#/" 
+                                           onClick={
+                                                    () => {
+                                                        setViewTreasureChests(true)
+                                                        setViewItem(content)
+                                                    }}
+                                                    >
                                                 <i className={"fal fa-ban bg-warning text-white"}></i>
                                                 View
+                                                
                                             </Dropdown.Item>
+                                         
                                             <Dropdown.Item href="#/"
                                                 onClick={
                                                     () => {
@@ -165,13 +178,23 @@ const TreasureChestList = () => {
                         ))}
                     </tbody>
                 </Table>
+                
             </section>
+
+
+            <ViewTreasure
+                show={viewTreasureChests}
+                onHide={() => setViewTreasureChests(false)}
+                viewItem={viewItem}
+            />
 
             <EditTreasure
                 show={editSubAdmin}
                 onHide={() => setEditSubAdmin(false)}
                 editItem={editItem}
             />
+
+         
         </>
     )
 }
