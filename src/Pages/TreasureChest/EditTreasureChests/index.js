@@ -14,98 +14,98 @@ import moment from 'moment';
 const EditTreasure = (props) => {
 
 
-const navigate = useNavigate();
+    const navigate = useNavigate();
 
-const [file, setFile] = useState([]);
-const [formData, setFormData] = useState({})
-
-
-
-const schema = object().shape({
-title: string().required(),
-description: string().required(),
-latitude: string().required(),
-longitude: string().required(),
-date: string().required(),
-time: string().required(),
-number: string().required(),
-});
-console.log(props.editItem)
-
-
-const handleSubmit = async (data) => {
-const dataObj = {
-
-
-"title": props.editItem.title,
-"description": props.editItem.description,
-"location": {
-    "latitude": props.editItem.location.latitude,
-    "longitude": props.editItem.location.longitude,
-},
-"eventDate": props.editItem.eventDate,
-"eventTime": props.editItem.eventTime,
-"status": "pending",
-"no_of_participants": props.editItem.no_of_participants,
-"a_r": "augmented reality"
-}
-
-
-ENDPOINT.treasure_chests.edit_user.id = props.editItem;
-return await AuthService.patchMethod(ENDPOINT.treasure_chests.edit_user.url + ENDPOINT.treasure_chests.edit_user.id, true, data, dataObj)
-.then((res) => {
-    //setContent(res.data);
-    //setIsLoader(true);
-    console.log(res);
-})
-.catch((err) => {
-    swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-});
-
-}
-
-if (props.editItem === null) {
-return "";
-}
-
-
-function uploadSingleFile(e) {
-let ImagesArray = Object.entries(e.target.files).map((e) =>
-URL.createObjectURL(e[1])
-);
-console.log(ImagesArray);
-setFile([...file, ...ImagesArray]);
-console.log("file", file);
-}
-
-function upload(e) {
-e.preventDefault();
-console.log(file);
-}
-
-function deleteFile(e) {
-const s = file.filter((item, index) => index !== e);
-setFile(s);
-console.log(s);
-}
+    const [file, setFile] = useState([]);
+    const [formData, setFormData] = useState({})
 
 
 
-// convert date format to month / day / year
-function formatDate(date) {
+    const schema = object().shape({
+    title: string().required(),
+    description: string().required(),
+    latitude: string().required(),
+    longitude: string().required(),
+    date: string().required(),
+    time: string().required(),
+    number: string().required(),
+    });
+    console.log(props.editItem)
 
-var d = new Date(date),
-month = '' + (d.getMonth() + 1),
-day = '' + d.getDate(),
-year = d.getFullYear();
 
-if (month.length < 2)
-month = '0' + month;
-if (day.length < 2)
-day = '0' + day;
+    const handleSubmit = async (data) => {
+    const dataObj = {
 
-return [month, day, , year].join('/');
-}
+
+    "title": props.editItem.title,
+    "description": props.editItem.description,
+    "location": {
+        "latitude": props.editItem.location.latitude,
+        "longitude": props.editItem.location.longitude,
+    },
+    "eventDate": props.editItem.eventDate,
+    "eventTime": props.editItem.eventTime,
+    "status": "pending",
+    "no_of_participants": props.editItem.no_of_participants,
+    "a_r": "augmented reality"
+    }
+
+
+    ENDPOINT.treasure_chests.edit_user.id = props.editItem;
+    return await AuthService.patchMethod(ENDPOINT.treasure_chests.edit_user.url + ENDPOINT.treasure_chests.edit_user.id, true, data, dataObj)
+    .then((res) => {
+        //setContent(res.data);
+        //setIsLoader(true);
+        console.log(res);
+    })
+    .catch((err) => {
+        swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+    });
+
+    }
+
+    if (props.editItem === null) {
+    return "";
+    }
+
+
+    function uploadSingleFile(e) {
+    let ImagesArray = Object.entries(e.target.files).map((e) =>
+    URL.createObjectURL(e[1])
+    );
+    console.log(ImagesArray);
+    setFile([...file, ...ImagesArray]);
+    console.log("file", file);
+    }
+
+    function upload(e) {
+    e.preventDefault();
+    console.log(file);
+    }
+
+    function deleteFile(e) {
+    const s = file.filter((item, index) => index !== e);
+    setFile(s);
+    console.log(s);
+    }
+
+
+
+    // convert date format to month / day / year
+    function formatDate(date) {
+
+    var d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+
+    if (month.length < 2)
+    month = '0' + month;
+    if (day.length < 2)
+    day = '0' + day;
+
+    return [month, day, year].join('/');
+    }
 
 
 return (
@@ -222,7 +222,7 @@ return (
                                             </Col>
 
                                             <Col md={4}>
-                                                <Form.Label>upload Augmented Reality</Form.Label>
+                                                <Form.Label>Upload Augmented Reality</Form.Label>
                                                 <label className={"fileUpload v2"} htmlFor="upload-photo">
                                                     <Form.Control
                                                         type="file"

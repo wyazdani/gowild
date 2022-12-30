@@ -12,7 +12,8 @@ import rectangle from "Images/Rectangle.png";
 import moment from 'moment';
 
     const ViewTreasure = (props) => {
-
+        const [selectedFile, setSelectedFile] = useState(null);
+        const [error, setError] = useState(null);
 
     const [file, setFile] = useState([]);
 
@@ -25,13 +26,25 @@ import moment from 'moment';
 
 
     function uploadSingleFile(e) {
-    let ImagesArray = Object.entries(e.target.files).map((e) =>
-    URL.createObjectURL(e[1])
-    );
-    console.log(ImagesArray);
-    setFile([...file, ...ImagesArray]);
-    console.log("file", file);
+
+        let ImagesArray = Object.entries(e.target.files).map((e) =>
+        URL.createObjectURL(e[1])
+        );
+        console.log(ImagesArray);
+        setFile([...file, ...ImagesArray]);
+        console.log("file", file);
+
+        const filess = e.target.files[0];
+        const fileType = filess.type;
+        if (fileType !== 'image/jpeg' && fileType !== 'image/png' && fileType !== 'image/gif' && fileType !== 'image/jpg') {
+        setError('Invalid file type. Only jpg, jpeg, png, and gif are accepted.');
+        return;
+        }
+        setSelectedFile(filess);
+        setError(null);
     }
+
+
 
     function upload(e) {
     e.preventDefault();
@@ -57,10 +70,15 @@ import moment from 'moment';
     if (day.length < 2)
     day = '0' + day;
 
-    return [month, day, , year].join('/');
+    return [month, day, year].join('/');
     }
 
+       
+        
+   
 
+
+    
     return (
     <>
     <Modal
@@ -150,13 +168,15 @@ import moment from 'moment';
                                         </Col>
 
                                         <Col md={4}>
-                                            <Form.Label>upload Augmented Reality</Form.Label>
+                                            <Form.Label>Upload Augmented Reality</Form.Label>
+                                               <p className="text-danger"> {error}</p>
                                             <label className={"fileUpload v2"} htmlFor="upload-photo">
                                                 <Form.Control
                                                     type="file"
                                                     id={"upload-photo"}
                                                     disabled={file.length === 1}
                                                     className=""
+                                                    accept="image/jpeg, image/png, image/gif, image/jpg"
                                                     onChange={uploadSingleFile}
                                                 />
                                                 <span>Attach Images</span>

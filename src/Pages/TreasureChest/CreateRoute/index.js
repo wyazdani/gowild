@@ -31,6 +31,10 @@ const CreateTreasure = () => {
         })
     }
 
+    // if(value.type = "number"){
+    //    alert("hello 0 digit")
+    // }
+
 
     const submitForm = async (event) => {
         event.preventDefault();
@@ -95,7 +99,7 @@ const CreateTreasure = () => {
     }
 
 
-
+    
     
     return (
         <>
@@ -177,7 +181,7 @@ const CreateTreasure = () => {
                                         </Col>
 
                                         <Col md={4}>
-                                            <Form.Label>upload Augmented Reality</Form.Label>
+                                            <Form.Label>Upload Augmented Reality</Form.Label>
                                             <label className={"fileUpload v2"} htmlFor="upload-photo">
                                                 <Form.Control
                                                     type="file"
@@ -213,14 +217,14 @@ const CreateTreasure = () => {
                                                 <Form.Label>Number of participants</Form.Label>
                                                 <Form.Control type="number"
                                                     name="number"
+                                                    min="1"
+                                                    //  max="20"
                                                     value={formData.number}
                                                     onChange={handleChange}
                                                     className={"mb-3"} placeholder="200" />
                                             </Form.Group>
                                         </Col>
                                     </Row>
-
-
                                 </Col>
                                 <Col md={4}>
                                     <Row>

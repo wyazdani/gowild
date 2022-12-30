@@ -11,12 +11,18 @@ import { ENDPOINT, KEY } from "config/constants";
 import AuthService from "services/auth.service";
 import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
+import EditRouteList from "./EditRouteList";
 // °
 
 
 
 
 const RouteList = () => {
+
+    const [addAdmin, setAddAdmin] = useState(false);
+    const [editSubAdmin, setEditSubAdmin] = useState(false);
+    const [search , setSearch] = useState("");
+    const [editItem , setEditItem] = useState(null);
 
     const navigate = useNavigate();
     const goToCreateRoute = () => {
@@ -115,7 +121,12 @@ const RouteList = () => {
                                             <i className={"fal fa-eye  bg-light-yellow text-white"}></i>
                                             View
                                         </Dropdown.Item>
-                                        <Dropdown.Item href="#/">
+                                        <Dropdown.Item href="#/"  onClick={
+                                                    () => {
+                                                        setEditSubAdmin(true)
+                                                        setEditItem(content)
+                                                    }
+                                                }>
                                             <i className={"far fa-pen bg-dark text-white"}></i>
                                             Edit
                                         </Dropdown.Item>
@@ -132,6 +143,14 @@ const RouteList = () => {
                     </tbody>
                 </Table>
             </section>
+
+            <EditRouteList
+                show={editSubAdmin}
+                onHide={() => setEditSubAdmin(false)}
+                editItem={editItem}
+            />
+
+
         </>
     )
 }

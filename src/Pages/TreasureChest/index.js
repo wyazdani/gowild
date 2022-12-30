@@ -127,7 +127,7 @@ const TreasureChestList = () => {
                         {content.map((content) => (
                             <tr>
                                 <td><Form.Check type="checkbox" /></td>
-                                <td>
+                                <td style={{width:"10%"}}>
                                     <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} />
                                 </td>
                                 <td>{content.title}</td>

@@ -36,6 +36,9 @@ const DisableTabData = (props) => {
                     })
                         .map((content) => (
                             <tr>
+                               <td>
+                                    <Form.Check type="checkbox" />
+                                </td>
                                 <td>
                                     <div className={"d-flex"}>
                                         <div className={classes.userImg}>

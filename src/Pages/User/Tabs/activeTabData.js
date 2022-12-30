@@ -19,7 +19,7 @@ const ActiveTabData = (props) => {
             <Table>
                 <thead>
                 <tr>
-                    <th>
+                    <th colSpan={0}>
                         <Form.Check type="checkbox" />
                     </th>
                     <th>Name</th>
@@ -40,6 +40,9 @@ const ActiveTabData = (props) => {
                     })
                         .map((content) => (
                             <tr>
+                                <td>
+                                    <Form.Check type="checkbox" />
+                                </td>
                                 <td>
                                     <div className={"d-flex"}>
                                         <div className={classes.userImg}>

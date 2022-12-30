@@ -1,101 +1,148 @@
-import { React, useState } from "react";
-import PageTitle from "../../../Components/Pagetitle";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import React, { useState } from 'react';
+import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
+import AuthService from "../../../services/auth.service";
+import { ENDPOINT } from "../../../config/constants";
+import swal from "sweetalert";
+import { Formik } from 'formik';
+import { object, string } from 'yup';
+import { useNavigate } from "react-router-dom";
 import map1 from "Images/map1.jpg";
-import { ENDPOINT, KEY } from "config/constants";
-import AuthService from "services/auth.service";
-import accessHeader from "services/headers/access-header";
-import swal from 'sweetalert';
+import rectangle from "Images/Rectangle.png";
+import moment from 'moment';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {useNavigate} from "react-router-dom";
-// °
 
-const CreateRoute = () => {
+const EditRouteList = (props) => {
+
 
     const navigate = useNavigate();
 
     const [file, setFile] = useState([]);
-    const [formData, setFormData] = useState({});
+    const [values, setvalues] = useState({})
 
 
-    const handleChange = (event) => {
-        let value = event.target.value;
-        let name = event.target.name;
-        setFormData((prevalue) => {
-            return {
-                ...prevalue,   // Spread Operator               
-                [name]: value
-            }
-        })
+
+    const schema = object().shape({
+    title: string().required(),
+    description: string().required(),
+    latitude: string().required(),
+    longitude: string().required(),
+    date: string().required(),
+    time: string().required(),
+    number: string().required(),
+    });
+    console.log(props.editItem)
+
+
+    const handleSubmit = async (data) => {
+    const dataObj = {
+
+
+    "title": props.editItem.title,
+    "description": props.editItem.description,
+    "location": {
+        "latitude": props.editItem.location.latitude,
+        "longitude": props.editItem.location.longitude,
+    },
+    "eventDate": props.editItem.eventDate,
+    "eventTime": props.editItem.eventTime,
+    "status": "pending",
+    "no_of_participants": props.editItem.no_of_participants,
+    "a_r": "augmented reality"
     }
 
 
-    const submitForm = async (event) => {
-        event.preventDefault();
-        const dataObj = {
-            "title": formData.title,
-            "description": formData.description,
-            "start": {
-                "latitude": JSON.parse(formData.startLattitude),
-                "longitude": JSON.parse(formData.startLongtitude)
-            },
-            "saved": true,
-            "end": {
-                "latitude": JSON.parse(formData.endLattitude),
-                "longitude": JSON.parse(formData.endLongtitude)
-            }
-        }
+    ENDPOINT.treasure_chests.edit_user.id = props.editItem;
+    return await AuthService.patchMethod(ENDPOINT.treasure_chests.edit_user.url + ENDPOINT.treasure_chests.edit_user.id, true, data, dataObj)
+    .then((res) => {
+        //setContent(res.data);
+        //setIsLoader(true);
+        console.log(res);
+    })
+    .catch((err) => {
+        swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+    });
 
-        return await AuthService.postMethod(ENDPOINT.admin_route.listing, true, dataObj)
-            .then((res) => {
-                if (res.status === 200) {
-                    toast.success('Form data submitted successfully', {
-                        position: "bottom-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "dark",
-                    });
-                }
-                console.log(res);
-                navigate('/route-list');
-                setFormData("");
-                event.target.reset();
-            })
-            .catch((err) => {
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-            });
+    }
 
-    };
+    if (props.editItem === null) {
+    return "";
+    }
 
 
     function uploadSingleFile(e) {
-        let ImagesArray = Object.entries(e.target.files).map((e) =>
-            URL.createObjectURL(e[1])
-        );
-        console.log(ImagesArray);
-        setFile([...file, ...ImagesArray]);
-        console.log("file", file);
+    let ImagesArray = Object.entries(e.target.files).map((e) =>
+    URL.createObjectURL(e[1])
+    );
+    console.log(ImagesArray);
+    setFile([...file, ...ImagesArray]);
+    console.log("file", file);
     }
 
     function upload(e) {
-        e.preventDefault();
-        console.log(file);
+    e.preventDefault();
+    console.log(file);
     }
 
     function deleteFile(e) {
-        const s = file.filter((item, index) => index !== e);
-        setFile(s);
-        console.log(s);
+    const s = file.filter((item, index) => index !== e);
+    setFile(s);
+    console.log(s);
     }
-    return (
-        <>
-            <PageTitle title="Normal Route" />
-            <section className={"section"}>
+
+
+
+    // convert date format to month / day / year
+    function formatDate(date) {
+
+    var d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+
+    if (month.length < 2)
+    month = '0' + month;
+    if (day.length < 2)
+    day = '0' + day;
+
+    return [month, day, , year].join('/');
+    }
+
+
+return (
+  <>
+    <Modal
+        {...props}
+        size="xl"
+        aria-labelledby="contained-modal-title-vcenter"
+    >
+    <Button variant="close" onClick={props.onHide}><i className={"fal fa-times"}></i> </Button>
+    <Modal.Body>
+        <Formik
+            validationSchema={schema}
+            // onSubmit={handleSubmit}
+            initialValues={{
+                title: "",
+                description: "",
+                latitude: "",
+                longitude: "",
+                // longitude: props.editItem.location.longitude,
+                eventDate: "",
+                "eventTime": "",
+                "status": "pending",
+                "no_of_participants": "",
+                "a_r": "augmented reality"
+            }}
+        >
+            {({
+                handleSubmit,
+                handleChange,
+                values,
+                touched,
+                isValid,
+                errors,
+            }) => (
+                <section className={"section"}>
                 <Row>
                     <Col md={4}>
                         <div className={"py-3"}>
@@ -103,19 +150,22 @@ const CreateRoute = () => {
                             <p><i className={"fas fa-map-marker-alt text-danger mx-3"}></i> Finishing Point</p>
                             <p><i className={"fas fa-map-marker-alt text-yellow mx-3"}></i> Historical Event</p>
                         </div>
-                        <Form onSubmit={submitForm}>
+                        <Form 
+                        // onSubmit={submitForm}
+                        
+                        >
                             <Form.Group>
                                 <Form.Label>Starting Point</Form.Label>
                                 <Form.Control type="text"
                                     name="startLongtitude"
                                     required
-                                    value={formData.startLongtitude}
+                                    value={values.startLongtitude}
                                     onChange={handleChange}
                                     className={"mb-3"} placeholder="Longtitude" />
                                 <Form.Control type="text"
                                     name="startLattitude"
                                     required
-                                    value={formData.startLattitude}
+                                    value={values.startLattitude}
                                     onChange={handleChange}
                                     className={"mb-3"} placeholder="Lattitude" />
                             </Form.Group>
@@ -124,13 +174,13 @@ const CreateRoute = () => {
                                 <Form.Control type="text"
                                     name="endLongtitude"
                                     required
-                                    value={formData.endLongtitude}
+                                    value={values.endLongtitude}
                                     onChange={handleChange}
                                     className={"mb-3"} placeholder="Longtitude" />
                                 <Form.Control type="text"
                                     name="endLattitude"
                                     required
-                                    value={formData.endLattitude}
+                                    value={values.endLattitude}
                                     onChange={handleChange}
                                     className={"mb-3"} placeholder="Lattitude" />
                             </Form.Group>
@@ -167,13 +217,13 @@ const CreateRoute = () => {
                                 <Form.Control type="text"
                                     name="title"
                                     required
-                                    value={formData.title}
+                                    value={values.title}
                                     onChange={handleChange}
                                     className={"mb-3"} placeholder="My Race Title" />
                                 <Form.Control as="textarea" type="text"
                                     name="description"
                                     required
-                                    value={formData.description}
+                                    value={values.description}
                                     onChange={handleChange}
                                     className={"mb-3"} placeholder="Write something here ..." />
                             </Form.Group>
@@ -287,8 +337,13 @@ const CreateRoute = () => {
                     theme="dark"
                 />
             </section>
-        </>
-    )
+            )}
+        </Formik>
+
+    </Modal.Body>
+</Modal>
+</>
+)
 }
 
-export default CreateRoute;
+export default EditRouteList;
