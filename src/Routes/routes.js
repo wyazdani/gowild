@@ -9,6 +9,7 @@ import SubAdmin from "../Pages/SubAdmin";
 import CardsPage from "../Pages/Cards";
 import RouteList from "../Pages/RoutelistPage";
 import CreateRoute from "../Pages/RoutelistPage/CreateRoute";
+// import CreateRoute from "../Pages/RoutelistPage/CreateRoute";
 import TreasureChestList from "../Pages/TreasureChest";
 import Users from "../Pages/User";
 import UserRoute from "../Pages/UserRoute";
@@ -18,6 +19,8 @@ import Approved from "../Pages/treasureHuntRegistration/approved";
 import Support from "../Pages/Support";
 import Guidlines from "../Pages/Guidlines";
 import TreasureHuntEWaiver from "../Pages/TreasureHuntEWaiver";
+import CreateTreasure from "Pages/TreasureChest/CreateRoute";
+// import EditTreasure from "Pages/TreasureChest/EditRoute";
 
 const routes = [
   {
@@ -60,6 +63,17 @@ const routes = [
     component: CreateRoute,
     layout: MainLayout,
   },
+  {
+    path: "/treasure-list/create",
+    component: CreateTreasure,
+    layout: MainLayout,
+  },
+  // {
+  //   path: "/treasure-list/edit",
+  //   component: EditTreasure,
+  //   layout: MainLayout,
+  // },
+
   {
     path: "/login",
     layout: AuthLayout,

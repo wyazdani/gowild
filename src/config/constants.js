@@ -65,5 +65,16 @@ export const ENDPOINT = {
     users_route :{
         listing : `${API_URL}/admin/route/users`,
     },
+    treasure_chests :{
+        listing : `${API_URL}/admin/treasure-chest`,
+        delete: {
+            url:`${API_URL}/admin/treasure-chest/`,
+            id:null
+        },
+        edit_user: {
+            url : `${API_URL}/admin/treasure-chest/`,
+            id  : null
+        },
+    },
 
 };

@@ -8,9 +8,13 @@ import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useNavigate} from "react-router-dom";
 // °
 
 const CreateRoute = () => {
+
+    const navigate = useNavigate();
+
     const [file, setFile] = useState([]);
     const [formData, setFormData] = useState({});
 
@@ -33,13 +37,13 @@ const CreateRoute = () => {
             "title": formData.title,
             "description": formData.description,
             "start": {
-                "latitude": formData.startLattitude,
-                "longitude": formData.startLongtitude
+                "latitude": JSON.parse(formData.startLattitude),
+                "longitude": JSON.parse(formData.startLongtitude)
             },
             "saved": true,
             "end": {
-                "latitude": formData.endLattitude,
-                "longitude": formData.endLongtitude
+                "latitude": JSON.parse(formData.endLattitude),
+                "longitude": JSON.parse(formData.endLongtitude)
             }
         }
 
@@ -58,6 +62,7 @@ const CreateRoute = () => {
                     });
                 }
                 console.log(res);
+                navigate('/route-list');
                 setFormData("");
                 event.target.reset();
             })

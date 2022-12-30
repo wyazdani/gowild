@@ -32,6 +32,7 @@ const ActiveTabData = () => {
         ENDPOINT.sub_admin.delete.id = id;
         await AuthService.deleteMethod(ENDPOINT.sub_admin.delete.url+ENDPOINT.sub_admin.delete.id, true)
             .then((res) => {
+                subAdminAllData();
                 console.log(res.data);
             })
             .catch((err) => {
