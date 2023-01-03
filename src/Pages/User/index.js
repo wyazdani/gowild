@@ -15,7 +15,6 @@ const Users = () => {
     const [isLoader, setIsLoader] = useState(false);
 
 
-
     const subAdminAllData = async () => {
         await AuthService.getMethod(ENDPOINT.admin_user.listing, true,)
             .then((res) => {
@@ -66,7 +65,7 @@ const Users = () => {
               className="mb-3"
           >
             <Tab eventKey="All" title="All"  >
-              <AllTabData content={content} deleteSubAdmin={deleteSubAdmin} />
+              <AllTabData  content={content}  deleteSubAdmin={deleteSubAdmin} />
             </Tab>
             <Tab eventKey="Active" title="Active" >
               <ActiveTabData content={activeContent} deleteSubAdmin={deleteSubAdmin} />

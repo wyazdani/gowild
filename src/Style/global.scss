@@ -259,3 +259,64 @@ table{
     }
   }
 }
+
+
+// pagination css code
+.pagination {
+  display: flex !important;
+  justify-content: space-between !important;
+  // background-color: #FF7851 !important;
+  // color: white !important;
+  align-items: end !important;
+
+  // padding: 5px !important;
+ 
+    .page-link {
+      color: #FF7851 !important;
+      cursor: pointer !important;
+    }
+    .page-item {
+      line-height: 16px !important;
+       }
+}
+
+.page-link.active, .active > .page-link {
+  z-index: 3;
+  background-color: #FF7851 !important;
+  color: #fff !important;
+  cursor: pointer !important;
+  border: 1px solid #FF7851 !important;
+  // font-weight: bold !important;
+}
+
+
+// dot result_pagination css
+
+.result_pagination .pagination {
+  font-size: 15px;
+  gap: 5px;
+
+  .page-num {
+    padding: 4px 15px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-weight: 400;
+    text-decoration: none;
+    color: #FF7851;
+
+    &:hover {
+      background-color: #FF7851;
+    color: white;
+    }
+  }
+
+  .active {
+    background-color: #FF7851;
+    color: white;
+  }
+}
+.result_pagination{
+  display: flex;
+  justify-content: space-between;
+
+}

@@ -1,23 +1,44 @@
-import React, {useState, useEffect} from "react";
-import { Form, Dropdown, Button, Row, Col, Table} from "react-bootstrap";
-import  classes from "../../treasureHuntRegistration/index.module.scss";
+import React, { useState, useEffect } from "react";
+import { Form, Dropdown, Button, Row, Col, Table } from "react-bootstrap";
+import classes from "../../treasureHuntRegistration/index.module.scss";
 import ViewProfilePopup from "../UserComponent/ViewProfile/viewProfilePopup";
 import EditUser from "../UserComponent/EditUser";
 import AddUser from "../UserComponent/AddNewUser";
+import ReactPaginate from 'react-paginate';
 
 
 
 const AllTabData = (props) => {
 
+    const { content } = props;
+
+
     const [modalShow, setModalShow] = useState(false);
     const [modalShowView, setModalShowView] = useState(false);
+    const [search, setSearch] = useState("");
+
+    const [currentItems, setCurrentItems] = useState([]);
+    const [pageCount, setPageCount] = useState(0);
+    const [itemOffset, setItemOffset] = useState(0);
+    const itemsPerPage = 3;
+
+    useEffect(() => {
+        const endOffset = itemOffset + itemsPerPage;
+        setCurrentItems(content.slice(itemOffset, endOffset));
+        setPageCount(Math.ceil(content.length / itemsPerPage));
+    }, [itemOffset, itemsPerPage, content]);
+
+
+    const handlePageClick = (event) => {
+        const newOffset = (event.selected * itemsPerPage) % content.length;
+        setItemOffset(newOffset);
+    };
+
+
     const [modalEditUser, setModalEditUser] = useState(false);
-    const [editItem , setEditItem] = useState(null);
-    const [search , setSearch] = useState("");
+    const [editItem, setEditItem] = useState(null);
 
-
-
-    return(
+    return (
         <>
             <div className={classes.tableFilter}>
                 <Form>
@@ -54,7 +75,7 @@ const AllTabData = (props) => {
                 </thead>
                 <tbody>
                     {
-                        props.content.filter((item) => {
+                        currentItems.filter((item) => {
                             return search.toLowerCase() === ''
                                 ? item
                                 : (
@@ -64,82 +85,99 @@ const AllTabData = (props) => {
                                 )
                         })
                             .map((content) => (
-                    <tr>
-                    <td><Form.Check type="checkbox" /></td>
-                        <td>
-                            <div className={"d-flex"}>
-                                <div className={classes.userImg}>
-                                    <img src={content.imageUrl} alt={content.firstName} />
-                                </div>
-                                <div className={classes.description}>
-                                    <h4 className={"font-16 mb-0"}>{content.firstName+" "+content.lastName}</h4>
-                                    <div className={"text-muted"}>{content.email}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            {content.onlineStatus === true
-                                ? <span class={`${classes.tag} ${classes.active}`}>Active</span>
-                                : <span class={`${classes.tag} ${classes.inactive}`}>Inactive</span>
-                            }
-                        </td>
-                        <td>{content.location}</td>
-                        <td>
-                            {content.accountStatus === "active"
-                                ? <span class="text-success">Active</span>
-                                : <span class="text-danger">Disabled</span>
-                            }
-                        </td>
-                        <td>
-                            <Dropdown>
-                                <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                    <i className={"far fa-ellipsis-v fa-fw"}></i>
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item href="#/">
-                                        <i className={"fal fa-ban bg-danger text-white"}></i>
-                                        Disable User
-                                    </Dropdown.Item>
-                                    <Dropdown.Item href="#/" onClick={
-                                        () => {
-                                            setModalShowView(true)
-                                            setEditItem(content)
+                                <tr>
+                                    <td><Form.Check type="checkbox" /></td>
+                                    <td>
+                                        <div className={"d-flex"}>
+                                            <div className={classes.userImg}>
+                                                <img src={content.imageUrl} alt={content.firstName} />
+                                            </div>
+                                            <div className={classes.description}>
+                                                <h4 className={"font-16 mb-0"}>{content.firstName + " " + content.lastName}</h4>
+                                                <div className={"text-muted"}>{content.email}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {content.onlineStatus === true
+                                            ? <span class={`${classes.tag} ${classes.active}`}>Active</span>
+                                            : <span class={`${classes.tag} ${classes.inactive}`}>Inactive</span>
                                         }
-                                    }>
-                                        <i className={"fal fa-user bg-dark text-white"}></i>
-                                        View Profile
-                                    </Dropdown.Item>
-                                   {/* <Dropdown.Item href="#/" onClick={
-                                        () => {
-                                            setModalEditUser(true)
-                                            console.log(content)
-                                            setEditItem(content)
+                                    </td>
+                                    <td>{content.location}</td>
+                                    <td>
+                                        {content.accountStatus === "active"
+                                            ? <span class="text-success">Active</span>
+                                            : <span class="text-danger">Disabled</span>
                                         }
-                                    }>
-                                        <i className={"far fa-pen bg-dark text-white"}></i>
-                                        Edit User
-                                    </Dropdown.Item>*/}
-                                    {/*<Dropdown.Item href="#/" onClick={() => {
-                                        props.deleteSubAdmin(content.id)
-                                    }}>
-                                        <i className={"fal fa-trash bg-danger text-white"}></i>
-                                        Delete
-                                    </Dropdown.Item>*/}
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </td>
-                    </tr>
+                                    </td>
+                                    <td>
+                                        <Dropdown>
+                                            <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                                <i className={"far fa-ellipsis-v fa-fw"}></i>
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item href="#/">
+                                                    <i className={"fal fa-ban bg-danger text-white"}></i>
+                                                    Disable User
+                                                </Dropdown.Item>
+                                                <Dropdown.Item href="#/" onClick={
+                                                    () => {
+                                                        setModalShowView(true)
+                                                        setEditItem(content)
+                                                    }
+                                                }>
+                                                    <i className={"fal fa-user bg-dark text-white"}></i>
+                                                    View Profile
+                                                </Dropdown.Item>
+                                                <Dropdown.Item href="#/" onClick={
+                                                    () => {
+                                                        setModalEditUser(true)
+                                                        console.log(content)
+                                                        setEditItem(content)
+                                                    }
+                                                }>
+                                                    <i className={"far fa-pen bg-dark text-white"}></i>
+                                                    Edit User
+                                                </Dropdown.Item>
+                                                <Dropdown.Item href="#/" onClick={() => {
+                                                    props.deleteSubAdmin(content.id)
+                                                }}>
+                                                    <i className={"fal fa-trash bg-danger text-white"}></i>
+                                                    Delete
+                                                </Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </td>
+                                </tr>
                             ))
                     }
                 </tbody>
             </Table>
+            <div className="result_pagination mt-5">
+                <span>Showing <b> {currentItems.length} </b> out of  <b> {content.length}  </b> entries</span>
 
+                <ReactPaginate
+                    breakLabel="..."
+                    nextLabel=" next >"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={3}
+                    pageCount={pageCount}
+                    previousLabel="< previous"
+                    renderOnZeroPageCount={null}
+                    containerClassName="pagination"
+                    pageLinkClassName="page-num"
+                    previousLinkClassName="page-num"
+                    nextLinkClassName="page-num"
+                    activeLinkClassName="active"
+                />
+            </div>
 
-            {/*<EditUser
+            <EditUser
                 show={modalEditUser}
                 onHide={() => setModalEditUser(false)}
                 editItem={editItem}
-            />*/}
+            />
 
             <AddUser
                 show={modalShow}
@@ -152,6 +190,7 @@ const AllTabData = (props) => {
                 editItem={editItem}
 
             />
+
         </>
     )
 }

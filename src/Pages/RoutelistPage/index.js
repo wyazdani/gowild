@@ -45,6 +45,20 @@ const RouteList = () => {
     };
 
 
+
+    const deleteRouteList = async (id) => {
+        ENDPOINT.users_route.delete.id = id;
+        await AuthService.deleteMethod(ENDPOINT.users_route.delete.url + ENDPOINT.users_route.delete.id, true)
+            .then((res) => {
+                routeListData();
+                console.log(res.data);
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+    };
+
+
     useEffect(() => {
         routeListData();
     }, []);
@@ -131,7 +145,7 @@ const RouteList = () => {
                                             Edit
                                         </Dropdown.Item>
 
-                                        <Dropdown.Item href="#/">
+                                        <Dropdown.Item href="#/" onClick = {() => deleteRouteList(content.id)}>
                                             <i className={"fal fa-trash bg-danger text-white"}></i>
                                             Delete
                                         </Dropdown.Item>
