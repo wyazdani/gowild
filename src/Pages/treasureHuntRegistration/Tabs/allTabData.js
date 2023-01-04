@@ -158,8 +158,6 @@ const AllTabData = () => {
 
 
 
-
-
     return (
         <>
             <div className={classes.tableFilter}>

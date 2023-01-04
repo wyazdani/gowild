@@ -9,94 +9,53 @@ import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
 import Paginations from "Pages/Pagination/Paginations";
 import Paginate from 'react-paginate';
-import AllTabTable from "./AllTabTable";
 import ReactPaginate from 'react-paginate';
 
 
 
-const AllTabData = () => {
+const AllTabData = (props) => {
 
 
-    const [content, setContent] = useState([]);
-    const [isLoader, setIsLoader] = useState(false);
-    const [addAdmin, setAddAdmin] = useState(false);
+    const { content } = props;
+
+    const [currentItems, setCurrentItems] = useState([]);
+    const [pageCount, setPageCount] = useState(0);
+    const [itemOffset, setItemOffset] = useState(0);
     const [search, setSearch] = useState("");
+    const itemsPerPage = 3;
 
-    // const [currentItems, setCurrentItems] = useState([]);
-    // const [pageCount, setPageCount] = useState(0);
-    // const [itemOffset, setItemOffset] = useState(0);
-    // const itemsPerPage = 3;
-
-    // useEffect(() => {
-    //     const endOffset = itemOffset + itemsPerPage;
-    //      setCurrentItems(currentItems.slice(itemOffset, endOffset));
-    //      setPageCount(Math.ceil(currentItems.length / itemsPerPage));
-    // }, [itemOffset , itemsPerPage , currentItems]);
-    
-   
-    // const handlePageClick = (event) => {
-    //     const newOffset = (event.selected * itemsPerPage) % currentItems.length;
-    //     setItemOffset(newOffset);
-    // };
-    
+    useEffect(() => {
+        const endOffset = itemOffset + itemsPerPage;
+        setCurrentItems(content.slice(itemOffset, endOffset));
+        setPageCount(Math.ceil(content.length / itemsPerPage));
+    }, [itemOffset, itemsPerPage, content]);
 
 
-    // const [currentPage, setCurrentPage] = useState();
-    // const [employeePerPage] = useState(3);
-
-    // const indexOfLastEmployee = currentPage * employeePerPage;
-    // const indexOfFirstEmployee = indexOfLastEmployee - employeePerPage;
-    // const currentEntries = content.slice(indexOfFirstEmployee, indexOfLastEmployee);
-    // const totalPagesNum = Math.ceil(content.length / employeePerPage);
-
-
-    const userRouteAllData = async () => {
-        await AuthService.getMethod(ENDPOINT.users_route.listing, true,)
-            .then((res) => {
-                setContent(res.data.data);
-                setIsLoader(true);
-                // console.log("response data", res.data.data);
-            })
-            .catch((err) => {
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-            });
+    const handlePageClick = (event) => {
+        const newOffset = (event.selected * itemsPerPage) % content.length;
+        setItemOffset(newOffset);
     };
 
 
-    useEffect(() => {
-        userRouteAllData();
-    }, []);
-
-
-
     // convert date format to month / day / year
-    // function formatDate(date) {
-    //     var d = new Date(date),
-    //         month = '' + (d.getMonth() + 1),
-    //         day = '' + d.getDate(),
-    //         year = d.getFullYear();
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
 
-    //     if (month.length < 2)
-    //         month = '0' + month;
-    //     if (day.length < 2)
-    //         day = '0' + day;
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
 
-    //     return [month, day, year].join('/');
-    // }
-
-
-
-    if (!isLoader) {
-        return (
-            <div className='loader'>
-                <h3>Loading...</h3>
-            </div>
-        );
+        return [month, day, year].join('/');
     }
+
 
     return (
         <>
-            {/* <div className={classes.tableFilter}>
+            <div className={classes.tableFilter}>
                 <Form>
                     <Row>
                         <Col md={8}>
@@ -192,26 +151,26 @@ const AllTabData = () => {
                         </tr>
                     ))}
                 </tbody>
-            </Table> */}
+            </Table>
 
-            <AllTabTable data={content} />
+            <div className="result_pagination mt-5">
+                <span>Showing <b> {currentItems.length} </b> out of  <b> {content.length}  </b> entries</span>
 
-            {/* <Paginations pages={totalPagesNum} setCurrentPage={setCurrentPage} currentEntries={currentEntries} content={content} /> */}
-
-            {/* <ReactPaginate
-                breakLabel="..."
-                nextLabel="next >"
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={3}
-                pageCount={pageCount}
-                previousLabel="< previous"
-                renderOnZeroPageCount={null}
-                containerClassName="pagination"
-                pageLinkClassName="page-num"
-                previousLinkClassName="page-num"
-                nextLinkClassName="page-num"
-                activeLinkClassName="active"
-            /> */}
+                <ReactPaginate
+                    breakLabel="..."
+                    nextLabel=" next >"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={3}
+                    pageCount={pageCount}
+                    previousLabel="< previous"
+                    renderOnZeroPageCount={null}
+                    containerClassName="pagination"
+                    pageLinkClassName="page-num"
+                    previousLinkClassName="page-num"
+                    nextLinkClassName="page-num"
+                    activeLinkClassName="active"
+                />
+            </div>
 
         </>
     )

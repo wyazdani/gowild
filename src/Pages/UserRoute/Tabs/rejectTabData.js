@@ -7,32 +7,28 @@ import { ENDPOINT, KEY } from "config/constants";
 import AuthService from "services/auth.service";
 import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
+import ReactPaginate from 'react-paginate';
 
-const AllTabData = () => {
+const AllTabData = (props) => {
+    const { content } = props;
 
-    const [content, setContent] = useState([]);
-    const [isLoader, setIsLoader] = useState(false);
-    const [addAdmin, setAddAdmin] = useState(false);
+    const [currentItems, setCurrentItems] = useState([]);
+    const [pageCount, setPageCount] = useState(0);
+    const [itemOffset, setItemOffset] = useState(0);
     const [search, setSearch] = useState("");
-
-
-    const userRouteAllData = async () => {
-        await AuthService.getMethod(ENDPOINT.users_route.listing, true,)
-            .then((res) => {
-                setContent(res.data.data);
-                setIsLoader(true);
-                // console.log("response data", res.data.data);
-            })
-            .catch((err) => {
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-            });
-    };
-
+    const itemsPerPage = 3;
 
     useEffect(() => {
-        userRouteAllData();
-    }, []);
+        const endOffset = itemOffset + itemsPerPage;
+        setCurrentItems(content.slice(itemOffset, endOffset));
+        setPageCount(Math.ceil(content.length / itemsPerPage));
+    }, [itemOffset, itemsPerPage, content]);
 
+
+    const handlePageClick = (event) => {
+        const newOffset = (event.selected * itemsPerPage) % content.length;
+        setItemOffset(newOffset);
+    };
 
 
     // convert date format to month / day / year
@@ -50,20 +46,9 @@ const AllTabData = () => {
         return [month, day, year].join('/');
     }
 
-
-
-    if (!isLoader) {
-        return (
-            <div className='loader'>
-                <h3>Loading...</h3>
-            </div>
-        );
-    }
-
-    
-    return(
+    return (
         <>
-        <div className={classes.tableFilter}>
+            <div className={classes.tableFilter}>
                 <Form>
                     <Row>
                         <Col md={8}>
@@ -95,13 +80,13 @@ const AllTabData = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {content.filter((item) => {
+                    {currentItems.filter((item) => {
                         return search.toLowerCase() === ''
                             ? item
                             : (
                                 item.user.firstName.toLowerCase().includes(search) ||
-                                item.user.lastName.toLowerCase().includes(search)  ||
-                                item.user.email.toLowerCase().includes(search) 
+                                item.user.lastName.toLowerCase().includes(search) ||
+                                item.user.email.toLowerCase().includes(search)
                             )
                     }).map((content) => (
                         <tr>
@@ -160,6 +145,24 @@ const AllTabData = () => {
                     ))}
                 </tbody>
             </Table>
+            <div className="result_pagination mt-5">
+                <span>Showing <b> {currentItems.length} </b> out of  <b> {content.length}  </b> entries</span>
+
+                <ReactPaginate
+                    breakLabel="..."
+                    nextLabel=" next >"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={3}
+                    pageCount={pageCount}
+                    previousLabel="< previous"
+                    renderOnZeroPageCount={null}
+                    containerClassName="pagination"
+                    pageLinkClassName="page-num"
+                    previousLinkClassName="page-num"
+                    nextLinkClassName="page-num"
+                    activeLinkClassName="active"
+                />
+            </div>
         </>
     )
 }
