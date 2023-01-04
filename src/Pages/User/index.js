@@ -42,8 +42,6 @@ const Users = () => {
 
   useEffect(() => {
     subAdminAllData();
-    setIsLoader(true);
-
   }, []);
 
   

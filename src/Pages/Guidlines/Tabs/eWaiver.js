@@ -27,7 +27,6 @@ const EWavier = () => {
 
     useEffect(() => {
         guidlinessWaiverData();
-        setIsLoader(true);
 
     }, []);
 
@@ -61,9 +60,7 @@ const EWavier = () => {
         <>
             <Row>
                 {
-                    content.filter(item => {
-                        return item.type === "eWaiver" ? true : false;
-                    }).map((content) => {
+                    content.map((content) => {
                         return (
                             <>
                                 <Col md={8}>

@@ -71,6 +71,7 @@ export const ENDPOINT = {
     },
     treasure_chests :{
         listing : `${API_URL}/admin/treasure-chest`,
+        listing_hunt : `${API_URL}/admin/treasure-chest/user-hunts`,
         delete: {
             url:`${API_URL}/admin/treasure-chest/`,
             id:null
@@ -80,12 +81,12 @@ export const ENDPOINT = {
             id  : null
         },
     },
-    treasure_wild :{
-        listing : `${API_URL}/treasure-wild/listings`,
-        delete: {
-            url:`${API_URL}/treasure-wild/listings/`,
-            id:null
-        },
-    },
+    // treasure_hunt :{
+    //     listing : `${API_URL}/admin/treasure-chest/user-hunts`,
+    //     delete: {
+    //         url:`${API_URL}//admin/treasure-chest/user-hunts/`,
+    //         id:null
+    //     },
+    // },
 
 };

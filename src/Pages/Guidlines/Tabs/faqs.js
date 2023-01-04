@@ -26,7 +26,6 @@ const Faqs = () => {
 
     useEffect(() => {
         guidlinessFaqData();
-        setIsLoader(true);
 
     }, []);
 

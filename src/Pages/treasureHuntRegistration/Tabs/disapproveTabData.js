@@ -1,62 +1,51 @@
-
-import { React, useState } from "react";
+import { React, useState, useEffect, useContext } from "react";
 import  classes from "../index.module.scss";
 import userImg from "../../../Images/userImg.png";
 import { Form, Dropdown, Row, Col, Button ,Table} from "react-bootstrap";
 import AddSubAdmin from "../../../Components/SubAdminComponent/AddNewSubAdmin";
 import ViewProfilePopup from "./viewProfilePopup";
+import ReactPaginate from 'react-paginate';
 
-const DisapproveTabData = () => {
-    const alltabdata = [
-        {
-            id: 1,
-            name: "Miracle Septimus",
-            imageUrl: userImg,
-            email: "example@email.com",
-            status: true,
-            location: "Alberta, CA",
-            applicationStatus: "rejected",
-            userName: "Miracle",
-        },
-        {
-            id: 2,
-            name: "Anika Rhiel Madsen",
-            imageUrl: userImg,
-            email: "example@email.com",
-            status: false,
-            location: "Alberta, CA",
-            applicationStatus: "rejected",
-            userName: "Anikamad",
-        },
-        {
-            id: 3,
-            name: "Marco Vaccaro",
-            imageUrl: userImg,
-            email: "example@email.com",
-            status: true,
-            location: "Alberta, CA",
-            applicationStatus: "rejected",
-            userName: "Marcoro",
-        },
-    ]
+const DisapproveTabData = (props) => {
 
+    /* Destructuring the props object. */
+    const { content } = props;
+
+    const [currentItems, setCurrentItems] = useState([]);
+    const [pageCount, setPageCount] = useState(0);
+    const [itemOffset, setItemOffset] = useState(0);
 
     const [modalShow, setModalShow] = useState(false);
     const [modalShowView, setModalShowView] = useState(false);
+    const [search, setSearch] = useState("");
+
+    const itemsPerPage = 3;
+
+    useEffect(() => {
+        const endOffset = itemOffset + itemsPerPage;
+        setCurrentItems(content.slice(itemOffset, endOffset));
+        setPageCount(Math.ceil(content.length / itemsPerPage));
+    }, [itemOffset, itemsPerPage, content]);
+
+
+    const handlePageClick = (event) => {
+        const newOffset = (event.selected * itemsPerPage) % content.length;
+        setItemOffset(newOffset);
+    };
 
     return(
         <>
-           <div className={classes.tableFilter}>
+                <div className={classes.tableFilter}>
                 <Form>
                     <Row>
-                        <Col md={8}>
+                    <Col md={8}>
                             <div className={"d-md-flex"}>
                                 <Button variant="filter">
                                     <i className={"fal fa-filter"}></i>
                                     Filter
                                 </Button>
                                 <Form.Group className={classes.searchForm}>
-                                    <Form.Control type="search" placeholder="Search Users by Name, Email or Date" />
+                                    <Form.Control type="search" placeholder="Search Users by Name, Email or Date" onChange={(e) => setSearch(e.target.value)} />
                                 </Form.Group>
                             </div>
                         </Col>
@@ -73,7 +62,6 @@ const DisapproveTabData = () => {
                 onHide={() => setModalShowView(false)}
             />
 
-
             <Table>
                 <thead>
                     <tr>
@@ -81,6 +69,7 @@ const DisapproveTabData = () => {
                             <Form.Check type="checkbox" />
                         </th>
                         <th>Name</th>
+                        <th>Event Name</th>
                         <th>Online Status</th>
                         <th>Username</th>
                         <th>Application Status</th>
@@ -88,32 +77,42 @@ const DisapproveTabData = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {alltabdata.map((alltabdata) => (
+                    {currentItems.sort((a, b) => (a.name < b.name ? -1 : 1)).filter((item) => {
+                        return search.toLowerCase() === ''
+                            ? item
+                            : (
+                                item.user.firstName.toLowerCase().includes(search) ||
+                                item.user.email.toLowerCase().includes(search)
+                            )
+                    }).map((alltabdata) => (
                         <tr>
                             <td><Form.Check type="checkbox" /></td>
                             <td>
                                 <div className={"d-flex"}>
                                     <div className={classes.userImg}>
-                                        <img src={alltabdata.imageUrl} alt={alltabdata.name} />
+                                        <img src={alltabdata.user.picture} alt={alltabdata.user.firstName} />
                                     </div>
                                     <div className={classes.description}>
-                                        <h4 className={"font-16 mb-0"}>{alltabdata.name}</h4>
-                                        <div className={"text-muted"}>{alltabdata.email}</div>
+                                        <h4 className={"font-16 mb-0"}>{alltabdata.user.firstName + " " + alltabdata.user.lastName}</h4>
+                                        <div className={"text-muted"}>{alltabdata.user.email}</div>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                {alltabdata.status
-                                    ? <span class={`${classes.tag} ${classes.active}`}>Active</span>
-                                    : <span class={`${classes.tag} ${classes.inactive}`}>InActive</span>
+                                {alltabdata.treasure_chest.title}
+                            </td>
+                            <td>
+                                {alltabdata.treasure_chest.status === "pending"
+                                    ? <span class={`${classes.tag} ${classes.inactive}`}>InActive</span>
+                                    : <span class={`${classes.tag} ${classes.active}`}>Active</span>
                                 }
                             </td>
                             <td>
-                                {alltabdata.userName}
+                                {alltabdata.user.username}
                             </td>
                             <td>
-                                {alltabdata.applicationStatus === 'Approved' ? <span class="text-success">Approved</span>
-                                    : alltabdata.applicationStatus === 'pending' ? <span class="text-orange">Pending</span>
+                                {alltabdata.status === 'approved' ? <span class="text-success">Approved</span>
+                                    : alltabdata.status === 'pending' ? <span class="text-orange">Pending</span>
                                         : <span class="text-danger">Rejected</span>
                                 }
                             </td>
@@ -139,6 +138,26 @@ const DisapproveTabData = () => {
                     ))}
                 </tbody>
             </Table>
+
+            <div className="result_pagination mt-5">
+                <span>Showing <b> {currentItems.length} </b> out of  <b> {content.length}  </b> entries</span>
+
+                <ReactPaginate
+                    breakLabel="..."
+                    nextLabel=" next >"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={3}
+                    pageCount={pageCount}
+                    previousLabel="< previous"
+                    renderOnZeroPageCount={null}
+                    containerClassName="pagination"
+                    pageLinkClassName="page-num"
+                    previousLinkClassName="page-num"
+                    nextLinkClassName="page-num"
+                    activeLinkClassName="active"
+
+                />
+            </div>
 
         </>
     )
