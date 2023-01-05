@@ -125,22 +125,22 @@ const ActiveTabData = (props) => {
                     }
                 </tbody>
             </Table>
-            <div className="result_pagination mt-5">
-                <span>Showing <b> {currentItems.length} </b> out of  <b> {content.length}  </b> entries</span>
-
+            <div className="result_pagination">
+                <span> {currentItems.length} of {content.length} </span>
                 <ReactPaginate
                     breakLabel="..."
-                    nextLabel=" next >"
+                    nextLabel="  >"
                     onPageChange={handlePageClick}
-                    pageRangeDisplayed={3}
+                    pageRangeDisplayed={7}
                     pageCount={pageCount}
-                    previousLabel="< previous"
+                    previousLabel="<"
                     renderOnZeroPageCount={null}
                     containerClassName="pagination"
                     pageLinkClassName="page-num"
                     previousLinkClassName="page-num"
                     nextLinkClassName="page-num"
                     activeLinkClassName="active"
+
                 />
             </div>
         </>

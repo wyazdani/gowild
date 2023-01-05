@@ -54,11 +54,11 @@ const AllTabData = (props) => {
                         <Col md={8}>
                             <div className={"d-md-flex"}>
                                 <Button variant="filter">
-                                    <i className={"fal fa-filter"}></i>
+                                    <i className={"fas fa-filter"}></i>
                                     Filter
                                 </Button>
                                 <Form.Group className={classes.searchForm}>
-                                    <Form.Control type="search" placeholder="Search Users by Name or Email" onChange={(e) => setSearch(e.target.value)} />
+                                    <Form.Control type="search" placeholder="Search Users by Name, Email or Date" onChange={(e) => setSearch(e.target.value)} />
                                 </Form.Group>
                             </div>
                         </Col>
@@ -161,16 +161,15 @@ const AllTabData = (props) => {
                     }
                 </tbody>
             </Table>
-            <div className="result_pagination mt-5">
-                <span>Showing <b> {currentItems.length} </b> out of  <b> {content.length}  </b> entries</span>
-
+            <div className="result_pagination">
+                <span> {currentItems.length} of {content.length} </span>
                 <ReactPaginate
                     breakLabel="..."
-                    nextLabel=" next >"
+                    nextLabel="  >"
                     onPageChange={handlePageClick}
-                    pageRangeDisplayed={3}
+                    pageRangeDisplayed={5}
                     pageCount={pageCount}
-                    previousLabel="< previous"
+                    previousLabel="<"
                     renderOnZeroPageCount={null}
                     containerClassName="pagination"
                     pageLinkClassName="page-num"

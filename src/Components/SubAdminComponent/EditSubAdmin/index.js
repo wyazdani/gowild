@@ -15,7 +15,7 @@ const EditSubAmdin = (props) => {
         email: string().required(),
         userName: string().required(),
         location: string().required(),
-        phoneNo: string().required(),
+        //phoneNo: string().required(),
         birthDate: string().required(),
         password:  string().required(),
     });
@@ -55,7 +55,7 @@ const EditSubAmdin = (props) => {
                             userName: props.editItem.username,
                             location: props.editItem.location,
                             birthDate: props.editItem.birthDate,
-                            phoneNo: props.editItem.phoneNo,
+                            //phoneNo: props.editItem.phoneNo,
                             password: ""
                         }}
                     >
@@ -107,7 +107,7 @@ const EditSubAmdin = (props) => {
 
                                                     />
                                                 </Col>
-                                                <Col md={6} className={"mb-3"}>
+                                                {/*<Col md={6} className={"mb-3"}>
                                                     <Form.Label className={"text-orange mb-0"}>Phone</Form.Label>
                                                     <Form.Control
                                                         type="text"
@@ -118,8 +118,8 @@ const EditSubAmdin = (props) => {
                                                         isValid={touched.phoneNo && !errors.phoneNo}
 
                                                     />
-                                                </Col>
-                                                <Col md={12} className={"mb-3"}>
+                                                </Col>*/}
+                                                <Col md={6} className={"mb-3"}>
                                                     <Form.Label className={"text-orange mb-0"}>Location</Form.Label>
                                                     <Form.Control
                                                         type="text"

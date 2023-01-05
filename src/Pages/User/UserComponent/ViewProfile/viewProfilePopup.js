@@ -102,7 +102,7 @@ const ViewProfilePopup = (props) => {
                                                 className={"bottom-border"}
                                                 type="text"
                                                 name="firstName"
-                                                value={values.lastName}
+                                                value={values.firstName}
                                                 onChange={handleChange}
                                                 placeholder="Enter First Name"
                                                 isValid={touched.firstName && !errors.firstName}
@@ -115,7 +115,7 @@ const ViewProfilePopup = (props) => {
                                                 type="text"
                                                 placeholder="Last name"
                                                 name="lastName"
-                                                value={values.firstName}
+                                                value={values.lastName}
                                                 onChange={handleChange}
                                                 isValid={touched.lastName && !errors.lastName}
                                             />

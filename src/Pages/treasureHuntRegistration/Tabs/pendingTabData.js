@@ -38,10 +38,10 @@ const PendingTabData = (props) => {
             <div className={classes.tableFilter}>
                 <Form>
                     <Row>
-                    <Col md={8}>
+                        <Col md={8}>
                             <div className={"d-md-flex"}>
                                 <Button variant="filter">
-                                    <i className={"fal fa-filter"}></i>
+                                    <i className={"fas fa-filter"}></i>
                                     Filter
                                 </Button>
                                 <Form.Group className={classes.searchForm}>
@@ -111,8 +111,8 @@ const PendingTabData = (props) => {
                                 {alltabdata.user.username}
                             </td>
                             <td>
-                                {alltabdata.status === 'approved' ? <span class="text-success">Approved</span>
-                                    : alltabdata.status === 'pending' ? <span class="text-orange">Pending</span>
+                                {alltabdata.status === 'approved' ? <span class="text-success text-uppercase">Approved</span>
+                                    : alltabdata.status === 'pending' ? <span class="text-warning text-uppercase">Pending</span>
                                         : <span class="text-danger">Rejected</span>
                                 }
                             </td>
@@ -139,16 +139,15 @@ const PendingTabData = (props) => {
                 </tbody>
             </Table>
 
-            <div className="result_pagination mt-5">
-                <span>Showing <b> {currentItems.length} </b> out of  <b> {content.length}  </b> entries</span>
-
+            <div className="result_pagination">
+                <span> {currentItems.length} of {content.length} </span>
                 <ReactPaginate
                     breakLabel="..."
-                    nextLabel=" next >"
+                    nextLabel="  >"
                     onPageChange={handlePageClick}
-                    pageRangeDisplayed={3}
+                    pageRangeDisplayed={5}
                     pageCount={pageCount}
-                    previousLabel="< previous"
+                    previousLabel="<"
                     renderOnZeroPageCount={null}
                     containerClassName="pagination"
                     pageLinkClassName="page-num"

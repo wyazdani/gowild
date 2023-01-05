@@ -109,20 +109,21 @@ import moment from 'moment';
                 <Form>
                     <Row>
                         <Col md={4}>
-
-                            <Form.Group>
-                                <Form.Label className="mb-3"> <b>Title</b> </Form.Label>
-                                <p className={"mb-5"} > {values.title} </p>
-                                <Form.Label><b>Description</b></Form.Label>
-                                <p className={"mb-4"}>
-                                    {values.description}
-                                </p>
-                                <Form.Label><b>Treasure Location</b></Form.Label>
-                                <p className={"my-4"}>{values.latitude}</p>
-                                <p className={"mb-4"}>{values.longitude}</p>
-
+                            <Form.Group className={'mb-3'}>
+                                <Form.Label>Title</Form.Label>
+                                <Form.Control value={values.title} />
                             </Form.Group>
-
+                            <Form.Group className={'mb-3'}>
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control as={"textarea"}
+                                    value={values.description}
+                                />
+                            </Form.Group>
+                            <Form.Group className={'mb-3'}>
+                                <Form.Label>Treasure Location</Form.Label>
+                                <Form.Control className={'mb-2'} value={values.latitude} />
+                                <Form.Control value={values.longitude} />
+                            </Form.Group>
                         </Col>
                         <Col md={8}>
                             <div className={"img-box"}>
@@ -130,9 +131,7 @@ import moment from 'moment';
                             </div>
                         </Col>
 
-                        <Col md={12}>
-                            <div className={"pt-5"}>
-                            </div>
+                       {/* <Col md={12}>
                             <Row>
                                 <Col md={12}>
                                     <Row>
@@ -228,14 +227,9 @@ import moment from 'moment';
                                     </Row>
                                 </Col>
                             </Row>
-                        </Col>
+                        </Col>*/}
                     </Row>
                 </Form>
-
-
-
-
-
             </section>
         )}
     </Formik>

@@ -107,6 +107,7 @@ textarea{
 .fileUpload{
   position: relative;
   width: 100%;
+  cursor: pointer;
 
   &:after{
     position: absolute;
@@ -133,7 +134,7 @@ textarea{
     text-align: center;
 
     &:after{
-      background-image: url("/Images/chestcpAsset 1 1.svg");
+      background-image: url("/Images/iconCam.svg");
       width: 75px;
       height: 75px;
       margin: 0 auto;
@@ -354,6 +355,11 @@ textarea{
       background: #ECEFF0;
       color: #000;
     }
+  }
+
+  &.btn-transparent{
+    background: none;
+    border: none;
   }
 
 

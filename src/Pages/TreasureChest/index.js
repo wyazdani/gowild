@@ -114,7 +114,7 @@ const TreasureChestList = () => {
                             <th>
                                 <Form.Check type="checkbox" />
                             </th>
-                            <th>Image</th>
+                            <th></th>
                             <th>Name</th>
                             <th>Date Created</th>
                             <th>Event Date</th>
@@ -163,7 +163,7 @@ const TreasureChestList = () => {
 
                                             >
                                                 <i className={"far fa-pen bg-dark text-white"}></i>
-                                                Edit User
+                                                Edit
                                             </Dropdown.Item>
                                             <Dropdown.Item href="#/" onClick={() => {
                                                 deleteTreasureChests(content.id)

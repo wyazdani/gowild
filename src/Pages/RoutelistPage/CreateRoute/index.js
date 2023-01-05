@@ -143,7 +143,7 @@ const CreateRoute = () => {
                                                 className=""
                                                 onChange={uploadSingleFile}
                                             />
-                                            <span>Attach Images</span>
+                                            <span>Attach images of thumbnail</span>
                                         </label>
 
                                     </Col>
@@ -170,6 +170,9 @@ const CreateRoute = () => {
                                     value={formData.title}
                                     onChange={handleChange}
                                     className={"mb-3"} placeholder="My Race Title" />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Description</Form.Label>
                                 <Form.Control as="textarea" type="text"
                                     name="description"
                                     required

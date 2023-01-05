@@ -34,7 +34,7 @@ const Nav = () => {
                             Sub Admins
                         </Link>
                     </li>
-                    <li>
+                   {/* <li>
                         <Link to={"/cards"}>
                             <div className={classes.iconBox}>
                                 <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -44,7 +44,7 @@ const Nav = () => {
                             </div>
                             Cards
                         </Link>
-                    </li>
+                    </li>*/}
                     <li>
                         <Link to={"/route-list"}>
                             <div className={classes.iconBox}>

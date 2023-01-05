@@ -125,10 +125,10 @@ const Login = () => {
                     <Form.Group className={"text-center mb-3"}>
                         <Link to={"/forgetpassword"}>Forget Password ?</Link>
                     </Form.Group>
-                    <Form.Group className={"d-md-flex justify-content-between"}>
+                    {/*<Form.Group className={"d-md-flex justify-content-between"}>
                         <Link to={"/"}>Privacy policy</Link>
                         <Link to={"/"}>Terms and conditions</Link>
-                    </Form.Group>
+                    </Form.Group>*/}
                 </Form>
             </div>
         );

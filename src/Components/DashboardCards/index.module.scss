@@ -17,4 +17,15 @@
     justify-content: center;
     margin: 0 0 10px;
   }
+
+
+  .left{
+    width: 100px;
+    float: left;
+  }
+
+  .right{
+    overflow: hidden;
+    padding: 12px 0;
+  }
 }

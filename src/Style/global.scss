@@ -68,21 +68,7 @@ code {
 
 table{
 
-  th{
-    background: #FF7851 !important;
-    color: #fff;
 
-    input[type="checkbox"],
-    .form-check-input{
-      border-color: #fff;
-      border-width: 1px;
-      background-color: transparent;
-
-      &:checked{
-        border-color: #fff;
-      }
-    }
-  }
 
   th, td{
     vertical-align: middle;
@@ -94,6 +80,23 @@ table{
     // width: 0% !important;
     img{
       border-radius: 13px !important;
+    }
+  }
+
+  th{
+    background: #FF7851 !important;
+    color: #fff;
+    text-transform: uppercase;
+
+    input[type="checkbox"],
+    .form-check-input{
+      border-color: #fff;
+      border-width: 1px;
+      background-color: transparent;
+
+      &:checked{
+        border-color: #fff;
+      }
     }
   }
 
@@ -259,65 +262,43 @@ table{
     }
   }
 }
-// simple pagination css code ---
-.pagination {
-  display: flex !important;
-  justify-content: space-between !important;
-  // background-color: #FF7851 !important;
-  // color: white !important;
-  align-items: end !important;
-
-  // padding: 5px !important;
-
-  .page-link {
-    color: #FF7851 !important;
-    cursor: pointer !important;
-  }
-
-  .page-item {
-    line-height: 16px !important;
-  }
-}
-
-.page-link.active,
-.active>.page-link {
-  z-index: 3;
-  background-color: #FF7851 !important;
-  color: #fff !important;
-  cursor: pointer !important;
-  border: 1px solid #FF7851 !important;
-  // font-weight: bold !important;
-}
 
 
-// dot result_pagination css ---
-
-.result_pagination .pagination {
-  font-size: 15px;
-  gap: 5px;
-
-  .page-num {
-    padding: 4px 15px;
-    cursor: pointer;
-    border-radius: 3px;
-    font-weight: 400;
-    text-decoration: none;
-    color: #FF7851;
-
-    &:hover {
-      background-color: #FF7851;
-      color: white;
-    }
-  }
-
-  .active {
-    background-color: #FF7851;
-    color: white;
-  }
-}
 
 .result_pagination {
+  background-color: #FF7851;
+  color: #fff;
+  font-size: 13px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  padding: 10px;
+  align-items: center;
 
+  .pagination {
+    margin: 0;
+
+    li{
+      margin: 1px;
+    }
+
+    .page-num {
+      padding: 4px 15px;
+      cursor: pointer;
+      border-radius: 3px;
+      font-weight: 400;
+      text-decoration: none;
+      color: #fff;
+
+      &:hover {
+        background-color: rgba(255,255,255,0.1);
+        color: #fff;
+      }
+    }
+
+    .active {
+      background-color: rgba(255,255,255,0.15);
+      color: #fff;
+    }
+  }
 }

@@ -3,7 +3,7 @@ import classes from "./index.module.scss";
 import PageTitle from "../../Components/Pagetitle";
 import mapImg from "../../Images/wallstreetMapImg.jpg";
 import userImg from "../../Images/userImg.png";
-import {Button} from "reactstrap";
+import {Button} from "react-bootstrap";
 
 
 const ViewRoute = (props) => {
@@ -37,8 +37,8 @@ const ViewRoute = (props) => {
                     </li>
                 </ul>
                 <div className={"text-center"}>
-                    <Button variant="danger" className={"m-3"}>Reject</Button>
-                    <Button variant="success" className={"m-3"}>Approved</Button>
+                    <Button variant={"danger m-3"}>Reject</Button>
+                    <Button variant={"success m-3"}>Approve</Button>
                 </div>
             </section>
         </>

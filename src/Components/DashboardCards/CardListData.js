@@ -14,8 +14,14 @@ const CardListData = ( props ) => {
                         <div className={`${classes.iconBox}`}>
                             <img src={props.image} alt={props.title} />
                         </div>
-                        <h2 className={classes.total}>{props.content}</h2>
-                        <ProgressBar className={classes.status}  />
+                        <div className={"overflow-hidden"}>
+                            <div className={classes.left}>
+                                <h2 className={classes.total}>{props.content}</h2>
+                            </div>
+                            <div className={classes.right}>
+                                <ProgressBar className={classes.status}  />
+                            </div>
+                        </div>
                         <Card.Title className={"font-16"}>{props.title}</Card.Title>
                     </Card.Body>
                 </Card>

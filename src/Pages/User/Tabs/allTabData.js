@@ -46,11 +46,11 @@ const AllTabData = (props) => {
                         <Col md={8}>
                             <div className={"d-md-flex"}>
                                 <Button variant="filter">
-                                    <i className={"fal fa-filter"}></i>
+                                    <i className={"fas fa-filter"}></i>
                                     Filter
                                 </Button>
                                 <Form.Group className={classes.searchForm}>
-                                    <Form.Control type="search" placeholder="Search Users by Name or Email" onChange={(e) => setSearch(e.target.value)} />
+                                    <Form.Control type="search" placeholder="Search Users by Name, Email or Date" onChange={(e) => setSearch(e.target.value)} />
                                 </Form.Group>
                             </div>
                         </Col>
@@ -130,7 +130,7 @@ const AllTabData = (props) => {
                                                     <i className={"fal fa-user bg-dark text-white"}></i>
                                                     View Profile
                                                 </Dropdown.Item>
-                                                <Dropdown.Item href="#/" onClick={
+                                                {/*<Dropdown.Item href="#/" onClick={
                                                     () => {
                                                         setModalEditUser(true)
                                                         console.log(content)
@@ -145,7 +145,7 @@ const AllTabData = (props) => {
                                                 }}>
                                                     <i className={"fal fa-trash bg-danger text-white"}></i>
                                                     Delete
-                                                </Dropdown.Item>
+                                                </Dropdown.Item>*/}
                                             </Dropdown.Menu>
                                         </Dropdown>
                                     </td>
@@ -154,22 +154,22 @@ const AllTabData = (props) => {
                     }
                 </tbody>
             </Table>
-            <div className="result_pagination mt-5">
-                <span>Showing <b> {currentItems.length} </b> out of  <b> {content.length}  </b> entries</span>
-
+            <div className="result_pagination">
+                <span> {currentItems.length} of {content.length} </span>
                 <ReactPaginate
                     breakLabel="..."
-                    nextLabel=" next >"
+                    nextLabel="  >"
                     onPageChange={handlePageClick}
-                    pageRangeDisplayed={3}
+                    pageRangeDisplayed={7}
                     pageCount={pageCount}
-                    previousLabel="< previous"
+                    previousLabel="<"
                     renderOnZeroPageCount={null}
                     containerClassName="pagination"
                     pageLinkClassName="page-num"
                     previousLinkClassName="page-num"
                     nextLinkClassName="page-num"
                     activeLinkClassName="active"
+
                 />
             </div>
 

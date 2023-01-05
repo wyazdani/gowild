@@ -21,14 +21,14 @@ const LandingPage = () => {
         <section className={"section"}>
             <div className={classes.btnRow}>
                 <Button variant="secondary">Download CSV</Button>
-                <Form.Control type="date" placeholder="dd/mm/yyyy" />
+                <Form.Control type="date" placeholder="MM/DD/YYYY" />
             </div>
             <Tabs
                 defaultActiveKey="newuser"
                 id="uncontrolled-tab-example"
                 className="mb-3"
             >
-                <Tab eventKey="newuser" title="New User">
+                <Tab eventKey="newuser" title="New Users">
                     <img className={"img-fluid"} src={chartImg} alt={"img"} />
                 </Tab>
                 <Tab eventKey="online" title="Online">
