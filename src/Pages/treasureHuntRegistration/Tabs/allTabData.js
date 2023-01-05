@@ -11,150 +11,38 @@ import AuthService from "services/auth.service";
 import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
 import Paginations from "Pages/Pagination/Paginations";
+import ReactPaginate from 'react-paginate';
 
 
 
-
-const AllTabData = () => {
-
-
-    const content = [
-        {
-            id: 1,
-            name: "Miracle Septimus",
-            imageUrl: userImg,
-            email: "example@email.com",
-            status: true,
-            location: "Alberta, CA",
-            applicationStatus: "Approved",
-            userName: "Miracle",
-            eventName: "THRILL SEEKERS ATTRACTIONS IN HOUSTON",
-        },
-        {
-            id: 2,
-            name: "Anika Rhiel Madsen",
-            imageUrl: userImg,
-            email: "example@email.com",
-            status: false,
-            location: "Alberta, CA",
-            applicationStatus: "Pending",
-            userName: "Anikamad",
-            eventName: "THRILL SEEKERS ATTRACTIONS IN HOUSTON",
-        },
-        {
-            id: 3,
-            name: "Tayab Vaccaro",
-            imageUrl: userImg,
-            email: "example@email.com",
-            status: true,
-            location: "Alberta, CA",
-            applicationStatus: "Rejected",
-            userName: "Marcoro",
-            eventName: "THRILL SEEKERS ATTRACTIONS IN HOUSTON",
-        },
-        {
-            id: 4,
-            name: "Waqas Vaccaro",
-            imageUrl: userImg,
-            email: "example@email.com",
-            status: true,
-            location: "Alberta, CA",
-            applicationStatus: "Rejected",
-            userName: "Marcoro",
-            eventName: "THRILL SEEKERS ATTRACTIONS IN HOUSTON",
-        },
-        {
-            id: 5,
-            name: "Hassan Vaccaro",
-            imageUrl: userImg,
-            email: "example@email.com",
-            status: true,
-            location: "Alberta, CA",
-            applicationStatus: "Rejected",
-            userName: "Marcoro",
-            eventName: "THRILL SEEKERS ATTRACTIONS IN HOUSTON",
-        },
-        {
-            id: 6,
-            name: "Zain Vaccaro",
-            imageUrl: userImg,
-            email: "example@email.com",
-            status: true,
-            location: "Alberta, CA",
-            applicationStatus: "Rejected",
-            userName: "Marcoro",
-            eventName: "THRILL SEEKERS ATTRACTIONS IN HOUSTON",
-        },
-        {
-            id: 5,
-            name: "Bilal Vaccaro",
-            imageUrl: userImg,
-            email: "example@email.com",
-            status: true,
-            location: "Alberta, CA",
-            applicationStatus: "Rejected",
-            userName: "Marcoro",
-            eventName: "THRILL SEEKERS ATTRACTIONS IN HOUSTON",
-        },
-        {
-            id: 6,
-            name: "Haris Vaccaro",
-            imageUrl: userImg,
-            email: "example@email.com",
-            status: true,
-            location: "Alberta, CA",
-            applicationStatus: "Rejected",
-            userName: "Marcoro",
-            eventName: "THRILL SEEKERS ATTRACTIONS IN HOUSTON",
-        },
-        
-    ]
+const AllTabData = (props) => {
 
 
+    /* Destructuring the props object. */
+    const { content } = props;
 
-    // const [content, setContent] = useState([]);
+    const [currentItems, setCurrentItems] = useState([]);
+    const [pageCount, setPageCount] = useState(0);
+    const [itemOffset, setItemOffset] = useState(0);
+
     const [modalShow, setModalShow] = useState(false);
     const [modalShowView, setModalShowView] = useState(false);
     const [search, setSearch] = useState("");
-    const [isLoader, setIsLoader] = useState(false);
+
+    const itemsPerPage = 3;
+
+    useEffect(() => {
+        const endOffset = itemOffset + itemsPerPage;
+        setCurrentItems(content.slice(itemOffset, endOffset));
+        
+        setPageCount(Math.ceil(content.length / itemsPerPage));
+    }, [itemOffset, itemsPerPage, content]);
 
 
-
-    const [currentPage, setCurrentPage] = useState();
-    const [employeePerPage] = useState(3);
-
-    const indexOfLastEmployee = currentPage * employeePerPage;
-    const indexOfFirstEmployee = indexOfLastEmployee - employeePerPage;
-    const currentEntries = content.slice(indexOfFirstEmployee, indexOfLastEmployee);
-    const totalPagesNum = Math.ceil(content.length / employeePerPage);
-
-
-    // const treasureWildData = async () => {
-    //     await AuthService.getMethod(ENDPOINT.treasure_wild.listing, true,)
-    //     .then((res) => {
-    //         setContent(res.data);
-    //         setIsLoader(true);
-    //         console.log("wild" , res.data.data);
-    //     })
-    //     .catch((err) => {
-    //         swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-    //     });
-    // };
-
-
-    // useEffect(() => {
-    //     treasureWildData();
-    //     setIsLoader(true);
-
-    // }, []);
-
-    // if (!isLoader) {
-    //     return (
-    //         <div className='loader'>
-    //             <h3>Loading...</h3>
-    //         </div>
-    //     );
-    // }
+    const handlePageClick = (event) => {
+        const newOffset = (event.selected * itemsPerPage) % content.length;
+        setItemOffset(newOffset);
+    };
 
 
 
@@ -208,12 +96,12 @@ const AllTabData = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentEntries.sort((a, b) => (a.name < b.name ? -1 : 1)).filter((item) => {
+                    {currentItems.sort((a, b) => (a.name < b.name ? -1 : 1)).filter((item) => {
                         return search.toLowerCase() === ''
                             ? item
                             : (
-                                item.name.toLowerCase().includes(search) ||
-                                item.email.toLowerCase().includes(search)
+                                item.user.firstName.toLowerCase().includes(search) ||
+                                item.user.email.toLowerCase().includes(search)
                             )
                     }).map((alltabdata) => (
                         <tr>
@@ -221,29 +109,29 @@ const AllTabData = () => {
                             <td>
                                 <div className={"d-flex"}>
                                     <div className={classes.userImg}>
-                                        <img src={alltabdata.imageUrl} alt={alltabdata.name} />
+                                        <img src={alltabdata.user.picture} alt={alltabdata.user.firstName} />
                                     </div>
                                     <div className={classes.description}>
-                                        <h4 className={"font-16 mb-0"}>{alltabdata.name}</h4>
-                                        <div className={"text-muted"}>{alltabdata.email}</div>
+                                        <h4 className={"font-16 mb-0"}>{alltabdata.user.firstName +" "+ alltabdata.user.lastName}</h4>
+                                        <div className={"text-muted"}>{alltabdata.user.email}</div>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                {alltabdata.eventName}
+                                {alltabdata.treasure_chest.title}
                             </td>
                             <td>
-                                {alltabdata.status
-                                    ? <span class={`${classes.tag} ${classes.active}`}>Active</span>
-                                    : <span class={`${classes.tag} ${classes.inactive}`}>InActive</span>
+                                {alltabdata.treasure_chest.status === "pending"
+                                    ?  <span class={`${classes.tag} ${classes.inactive}`}>InActive</span> 
+                                    :  <span class={`${classes.tag} ${classes.active}`}>Active</span>
                                 }
                             </td>
                             <td>
-                                {alltabdata.userName}
+                                {alltabdata.user.username}
                             </td>
                             <td>
-                                {alltabdata.applicationStatus === 'Approved' ? <span class="text-success">Approved</span>
-                                    : alltabdata.applicationStatus === 'Pending' ? <span class="text-orange">Pending</span>
+                                {alltabdata.status === 'approved' ? <span class="text-success">Approved</span>
+                                    : alltabdata.status === 'pending' ? <span class="text-orange">Pending</span>
                                         : <span class="text-danger">Rejected</span>
                                 }
                             </td>
@@ -270,8 +158,25 @@ const AllTabData = () => {
                 </tbody>
             </Table>
 
-            <Paginations pages={totalPagesNum} setCurrentPage={setCurrentPage} currentEntries={currentEntries} content={content} />
+            <div className="result_pagination mt-5">
+                <span>Showing <b> {currentItems.length} </b> out of  <b> {content.length}  </b> entries</span>
 
+                <ReactPaginate
+                    breakLabel="..."
+                    nextLabel=" next >"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={3}
+                    pageCount={pageCount}
+                    previousLabel="< previous"
+                    renderOnZeroPageCount={null}
+                    containerClassName="pagination"
+                    pageLinkClassName="page-num"
+                    previousLinkClassName="page-num"
+                    nextLinkClassName="page-num"
+                    activeLinkClassName="active"
+                    
+                />
+            </div>
 
         </>
     )

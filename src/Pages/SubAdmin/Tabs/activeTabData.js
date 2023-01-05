@@ -5,56 +5,44 @@ import AuthService from "../../../services/auth.service";
 import {ENDPOINT} from "../../../config/constants";
 import swal from "sweetalert";
 import accessHeader from "../../../services/headers/access-header";
+import ReactPaginate from 'react-paginate';
 
 
+const ActiveTabData = (props) => {
 
-const ActiveTabData = () => {
+    const { content } = props;
 
-    const [content, setContent] = useState([]);
+ 
     const [isLoader, setIsLoader] = useState(false);
     const [addAdmin, setAddAdmin] = useState(false);
-    const [search , setSearch] = useState("");
+    const [editSubAdmin, setEditSubAdmin] = useState(false);
+    const [editItem , setEditItem] = useState(null);
 
 
-    const subAdminAllData = async () => {
-        await AuthService.getMethod(ENDPOINT.sub_admin.active, true,)
-            .then((res) => {
-                setContent(res.data);
-                setIsLoader(true);
-                //console.log(res.data);
-            })
-            .catch((err) => {
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-            });
-    };
 
-    const deleteSubAdmin = async (id) => {
-        ENDPOINT.sub_admin.delete.id = id;
-        await AuthService.deleteMethod(ENDPOINT.sub_admin.delete.url+ENDPOINT.sub_admin.delete.id, true)
-            .then((res) => {
-                subAdminAllData();
-                console.log(res.data);
-            })
-            .catch((err) => {
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-            });
-    };
+    const [currentItems, setCurrentItems] = useState([]);
+    const [pageCount, setPageCount] = useState(0);
+    const [itemOffset, setItemOffset] = useState(0);
+
+    const [modalShow, setModalShow] = useState(false);
+    const [modalShowView, setModalShowView] = useState(false);
+    const [search, setSearch] = useState("");
+
+    const itemsPerPage = 3;
 
     useEffect(() => {
-        subAdminAllData();
-        setIsLoader(true);
+        const endOffset = itemOffset + itemsPerPage;
+        setCurrentItems(content.slice(itemOffset, endOffset));
+        
+        setPageCount(Math.ceil(content.length / itemsPerPage));
+    }, [itemOffset, itemsPerPage, content]);
 
-    }, []);
 
+    const handlePageClick = (event) => {
+        const newOffset = (event.selected * itemsPerPage) % content.length;
+        setItemOffset(newOffset);
+    };
 
-
-    if (!isLoader) {
-        return (
-            <div className='loader'>
-                <h3>Loading...</h3>
-            </div>
-        );
-    }
 
     return (
         <>
@@ -72,7 +60,7 @@ const ActiveTabData = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {content.map((content) => (
+                    {currentItems.map((content) => (
                         <tr>
                             <td><Form.Check type="checkbox" /></td>
                             <td>
@@ -115,7 +103,7 @@ const ActiveTabData = () => {
                                             Edit User
                                         </Dropdown.Item>
                                         <Dropdown.Item href="#/" onClick={() => {
-                                                deleteSubAdmin(content.id)
+                                                props.deleteSubAdmin(content.id)
                                             }}>
                                             <i className={"fal fa-trash bg-danger text-white"}></i>
                                             Delete
@@ -127,6 +115,25 @@ const ActiveTabData = () => {
                     ))}
                 </tbody>
             </Table>
+            <div className="result_pagination mt-5">
+                <span>Showing <b> {currentItems.length} </b> out of  <b> {content.length}  </b> entries</span>
+
+                <ReactPaginate
+                    breakLabel="..."
+                    nextLabel=" next >"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={3}
+                    pageCount={pageCount}
+                    previousLabel="< previous"
+                    renderOnZeroPageCount={null}
+                    containerClassName="pagination"
+                    pageLinkClassName="page-num"
+                    previousLinkClassName="page-num"
+                    nextLinkClassName="page-num"
+                    activeLinkClassName="active"
+                    
+                />
+            </div>
         </>
     )
 }

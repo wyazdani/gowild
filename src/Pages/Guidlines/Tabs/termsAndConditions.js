@@ -51,8 +51,6 @@ const TermsAndConditions = () => {
 
     useEffect(() => {
         guidlinessTermsData();
-        setIsLoader(true);
-
     }, []);
 
 

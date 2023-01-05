@@ -29,7 +29,6 @@ const TreasureHuntEWaiver = (props) => {
 
     useEffect(() => {
         guidlinessTreasureHuntData();
-        setIsLoader(true);
 
     }, []);
 

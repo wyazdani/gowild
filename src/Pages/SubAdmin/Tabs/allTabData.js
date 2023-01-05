@@ -7,63 +7,44 @@ import { ENDPOINT, KEY } from "config/constants";
 import AuthService from "services/auth.service";
 import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
+import ReactPaginate from 'react-paginate';
 
 
+const AllTabData = (props) => {
 
-const AllTabData = () => {
+    /* Destructuring the props object. */
+    const { content } = props;
 
-
-
-    const [content, setContent] = useState([]);
+ 
     const [isLoader, setIsLoader] = useState(false);
     const [addAdmin, setAddAdmin] = useState(false);
     const [editSubAdmin, setEditSubAdmin] = useState(false);
-    const [search , setSearch] = useState("");
     const [editItem , setEditItem] = useState(null);
 
 
 
-     const subAdminAllData = async () => {
-         await AuthService.getMethod(ENDPOINT.sub_admin.listing, true,)
-         .then((res) => {
-             setContent(res.data);
-             setIsLoader(true);
-             //console.log(res.data);
-         })
-         .catch((err) => {
-             swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-         });
-     };
+    const [currentItems, setCurrentItems] = useState([]);
+    const [pageCount, setPageCount] = useState(0);
+    const [itemOffset, setItemOffset] = useState(0);
 
-    const deleteSubAdmin = async (id) => {
-        ENDPOINT.sub_admin.delete.id = id;
-        await AuthService.deleteMethod(ENDPOINT.sub_admin.delete.url+ENDPOINT.sub_admin.delete.id, true)
-        .then((res) => {
-            console.log(res.data);
-        })
-        .catch((err) => {
-            swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-        });
+    const [modalShow, setModalShow] = useState(false);
+    const [modalShowView, setModalShowView] = useState(false);
+    const [search, setSearch] = useState("");
+
+    const itemsPerPage = 3;
+
+    useEffect(() => {
+        const endOffset = itemOffset + itemsPerPage;
+        setCurrentItems(content.slice(itemOffset, endOffset));
+        
+        setPageCount(Math.ceil(content.length / itemsPerPage));
+    }, [itemOffset, itemsPerPage, content]);
+
+
+    const handlePageClick = (event) => {
+        const newOffset = (event.selected * itemsPerPage) % content.length;
+        setItemOffset(newOffset);
     };
-
-     useEffect(() => {
-         subAdminAllData();
-         setIsLoader(true);
-
-     }, []);
-
-
-
-
-
-    if (!isLoader) {
-        return (
-            <div className='loader'>
-                <h3>Loading...</h3>
-            </div>
-        );
-    }
-
 
     return (
         <>
@@ -108,7 +89,7 @@ const AllTabData = () => {
                 </thead>
                 <tbody>
                     {
-                        content.filter((item) => {
+                        currentItems.filter((item) => {
                             return search.toLowerCase() === ''
                                 ? item
                                 : (
@@ -164,9 +145,11 @@ const AllTabData = () => {
                                                     <i className={"far fa-pen bg-dark text-white"}></i>
                                                     Edit User
                                                 </Dropdown.Item>
-                                                <Dropdown.Item href="#/" onClick={() => {
-                                                    deleteSubAdmin(content.id)
-                                                }}>
+                                                <Dropdown.Item href="#/"
+                                                 onClick={() => {
+                                                    props.deleteSubAdmin(content.id)
+                                                }}
+                                                >
                                                     <i className={"fal fa-trash bg-danger text-white"}></i>
                                                     Delete
                                                 </Dropdown.Item>
@@ -178,6 +161,25 @@ const AllTabData = () => {
                     }
                 </tbody>
             </Table>
+            <div className="result_pagination mt-5">
+                <span>Showing <b> {currentItems.length} </b> out of  <b> {content.length}  </b> entries</span>
+
+                <ReactPaginate
+                    breakLabel="..."
+                    nextLabel=" next >"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={3}
+                    pageCount={pageCount}
+                    previousLabel="< previous"
+                    renderOnZeroPageCount={null}
+                    containerClassName="pagination"
+                    pageLinkClassName="page-num"
+                    previousLinkClassName="page-num"
+                    nextLinkClassName="page-num"
+                    activeLinkClassName="active"
+                    
+                />
+            </div>
             <EditSubAdmin
                 show={editSubAdmin}
                 onHide={() => setEditSubAdmin(false)}
