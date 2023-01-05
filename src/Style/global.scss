@@ -259,35 +259,6 @@ table{
     }
   }
 }
-// simple pagination css code ---
-.pagination {
-  display: flex !important;
-  justify-content: space-between !important;
-  // background-color: #FF7851 !important;
-  // color: white !important;
-  align-items: end !important;
-
-  // padding: 5px !important;
-
-  .page-link {
-    color: #FF7851 !important;
-    cursor: pointer !important;
-  }
-
-  .page-item {
-    line-height: 16px !important;
-  }
-}
-
-.page-link.active,
-.active>.page-link {
-  z-index: 3;
-  background-color: #FF7851 !important;
-  color: #fff !important;
-  cursor: pointer !important;
-  border: 1px solid #FF7851 !important;
-  // font-weight: bold !important;
-}
 
 
 // dot result_pagination css ---
@@ -320,4 +291,14 @@ table{
   display: flex;
   justify-content: space-between;
 
+}
+
+.dashboard_link{
+  li{
+    a{
+      &.active{
+        background-color:#82BAA7 !important;
+      }
+    }
+  }
 }

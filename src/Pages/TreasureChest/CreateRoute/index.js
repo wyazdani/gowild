@@ -47,7 +47,8 @@ const CreateTreasure = () => {
             },
             "eventDate": formData.date,
             "eventTime": formData.time,
-            "no_of_participants": formData.number
+            "no_of_participants": formData.number,
+            "picture":formData.picture
         }
 
         return await AuthService.postMethod(ENDPOINT.treasure_chests.listing, true, dataObj)
@@ -185,6 +186,8 @@ const CreateTreasure = () => {
                                             <label className={"fileUpload v2"} htmlFor="upload-photo">
                                                 <Form.Control
                                                     type="file"
+                                                    name="picture"
+                                                    value={formData.picture}
                                                     id={"upload-photo"}
                                                     disabled={file.length === 1}
                                                     className=""

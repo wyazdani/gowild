@@ -21,28 +21,10 @@ const TreasureHuntRegistration = () => {
     const treasureWildData = async () => {
         await AuthService.getMethod(ENDPOINT.treasure_chests.listing_hunt, true,)
             .then((res) => {
-                let content = res.data.filter(obj => {
-                    if (obj.status === "approved") {
-                        return obj
-                    }
-                });
-
-                let pending = res.data.filter(obj => {
-                    if (obj.status === "pending") {
-                        return obj
-                    }
-                });
-                let disapprove = res.data.filter(obj => {
-                    if (obj.status === "disapprove") {
-                        return obj
-                    }
-                });
-
-        
                 setContent(res.data);
-                setApproveContent(content);
-                setPendingContent(pending);
-                setDisapproveContent(disapprove);
+                setApproveContent(res.data.filter(data => ["approved"].includes(data.status)));
+                setPendingContent(res.data.filter(data => ["pending"].includes(data.status)));
+                setDisapproveContent(res.data.filter(data => ["disapproved"].includes(data.status)));
                 setIsLoader(true);
                 console.log("wild", res.data);
             })

@@ -54,7 +54,7 @@ const EditSubAmdin = (props) => {
                             email: props.editItem.email,
                             userName: props.editItem.username,
                             location: props.editItem.location,
-                            birthDate: props.editItem.birthDate,
+                            dateOfBirth: props.editItem.dateOfBirth,
                             phoneNo: props.editItem.phoneNo,
                             password: ""
                         }}
@@ -99,11 +99,11 @@ const EditSubAmdin = (props) => {
                                                     <Form.Label className={"text-orange mb-0"}>Date of Birth</Form.Label>
                                                     <Form.Control
                                                         type="date"
-                                                        name="birthDate"
-                                                        value={values.birthDate}
+                                                        name="dateOfBirth"
+                                                        value={values.dateOfBirth}
                                                         onChange={handleChange}
                                                         placeholder="00/00/0000"
-                                                        isValid={touched.birthDate && !errors.birthDate}
+                                                        isValid={touched.dateOfBirth && !errors.dateOfBirth}
 
                                                     />
                                                 </Col>

@@ -36,23 +36,27 @@ const EditTreasure = (props) => {
     const handleSubmit = async (data) => {
     const dataObj = {
 
-
-    "title": props.editItem.title,
-    "description": props.editItem.description,
-    "location": {
-        "latitude": props.editItem.location.latitude,
-        "longitude": props.editItem.location.longitude,
-    },
-    "eventDate": props.editItem.eventDate,
-    "eventTime": props.editItem.eventTime,
-    "status": "pending",
-    "no_of_participants": props.editItem.no_of_participants,
-    "a_r": "augmented reality"
+        "id": props.editItem.id,
+        "createdDate": props.editItem.createdDate,
+        "updatedDate": props.editItem.updatedDate,
+        "title": props.editItem.title,
+        "description": props.editItem.description,
+        "location": {
+          "latitude": props.editItem.location.latitude,
+          "longitude": props.editItem.location.longitude,
+        },
+        "eventDate": props.editItem.eventDate,
+        "eventTime": props.editItem.eventTime,
+        "no_of_participants": props.editItem.no_of_participants,
+        "picture":  props.editItem.picture
+    
     }
 
 
-    ENDPOINT.treasure_chests.edit_user.id = props.editItem;
-    return await AuthService.patchMethod(ENDPOINT.treasure_chests.edit_user.url + ENDPOINT.treasure_chests.edit_user.id, true, data, dataObj)
+    ENDPOINT.treasure_chests.edit_user.id = props.editItem
+    return await AuthService.patchMethod(ENDPOINT.treasure_chests.edit_user.url + ENDPOINT.treasure_chests.edit_user.id, true, data, dataObj ,{
+        body: JSON.stringify(dataObj)
+    })
     .then((res) => {
         //setContent(res.data);
         //setIsLoader(true);
@@ -108,19 +112,21 @@ const EditTreasure = (props) => {
     }
 
 
-return (
-<>
-<Modal
-    {...props}
-    size="xl"
-    aria-labelledby="contained-modal-title-vcenter"
->
+    return (
+    <>
+    <Modal
+        {...props}
+        size="xl"
+        aria-labelledby="contained-modal-title-vcenter"
+    >
     <Button variant="close" onClick={props.onHide}><i className={"fal fa-times"}></i> </Button>
     <Modal.Body>
         <Formik
             validationSchema={schema}
             onSubmit={handleSubmit}
             initialValues={{
+                "createdDate": props.editItem.createdDate,
+                "updatedDate": props.editItem.updatedDate,
                 title: props.editItem.title,
                 description: props.editItem.description,
                 latitude: props.editItem.location.latitude,
@@ -129,7 +135,8 @@ return (
                 "eventTime": props.editItem.eventTime,
                 "status": "pending",
                 "no_of_participants": props.editItem.no_of_participants,
-                "a_r": "augmented reality"
+                "a_r": "augmented reality",
+                "picture": props.editItem.picture,
             }}
         >
             {({
@@ -172,7 +179,6 @@ return (
                                         className={"mb-3"} placeholder="65.5234°" />
                                     <Form.Control type="text"
                                         name="longitude"
-
                                         value={values.longitude}
                                         onChange={handleChange}
                                         isValid={touched.longitude && !errors.longitude}
@@ -226,6 +232,8 @@ return (
                                                 <label className={"fileUpload v2"} htmlFor="upload-photo">
                                                     <Form.Control
                                                         type="file"
+                                                        name="picture"
+                                                         value={formData.picture}
                                                         id={"upload-photo"}
                                                         disabled={file.length === 1}
                                                         className=""

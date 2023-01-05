@@ -127,7 +127,7 @@ const TreasureChestList = () => {
                         {content.map((content) => (
                             <tr>
                                 <td><Form.Check type="checkbox" /></td>
-                                <td style={{width:"10%"}}>
+                                <td style={{ width: "10%" }}>
                                     <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} />
                                 </td>
                                 <td>{content.title}</td>
@@ -142,18 +142,18 @@ const TreasureChestList = () => {
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu>
-                                            <Dropdown.Item href="#/" 
-                                           onClick={
+                                            <Dropdown.Item href="#/"
+                                                onClick={
                                                     () => {
                                                         setViewTreasureChests(true)
                                                         setViewItem(content)
                                                     }}
-                                                    >
+                                            >
                                                 <i className={"fal fa-ban bg-warning text-white"}></i>
                                                 View
-                                                
+
                                             </Dropdown.Item>
-                                         
+
                                             <Dropdown.Item href="#/"
                                                 onClick={
                                                     () => {
@@ -178,7 +178,7 @@ const TreasureChestList = () => {
                         ))}
                     </tbody>
                 </Table>
-                
+
             </section>
 
 
@@ -194,7 +194,7 @@ const TreasureChestList = () => {
                 editItem={editItem}
             />
 
-         
+
         </>
     )
 }

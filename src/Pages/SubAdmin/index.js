@@ -19,8 +19,7 @@ const SubAdmin = () => {
 
     const subAdminAllData = async () => {
         await AuthService.getMethod(ENDPOINT.sub_admin.listing, true,)
-        .then((res) => {   
-
+        .then((res) => {
             setContent(res.data);
             setActiveContent(res.data.filter(data => ["active"].includes(data.accountStatus)));
             setInActiveContent(res.data.filter(data => ["inActiveTabData"].includes(data.accountStatus)));

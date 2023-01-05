@@ -112,7 +112,7 @@ const ApproveTabData = (props) => {
                                 }
                             </td>
                             <td>
-                                {alltabdata.user.username}
+                            {alltabdata.user.firstName}
                             </td>
                             <td>
                                 {alltabdata.status === 'approved' ? <span class="text-success">Approved</span>

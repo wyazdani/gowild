@@ -45,9 +45,9 @@ const AddSubAdmin = (props) => {
     }
 
 
-    useEffect(() => {
-        handleSubmit();   
-    }, []);
+    // useEffect(() => {
+    //     handleSubmit();   
+    // }, []);
     
     
     return (
@@ -96,6 +96,7 @@ const AddSubAdmin = (props) => {
                                                         value={values.firstName}
                                                         onChange={handleChange}
                                                         placeholder="Enter First Name"
+                                                        required
                                                         isValid={touched.firstName && !errors.firstName}
                                                     />
                                                 </Col>
@@ -107,6 +108,7 @@ const AddSubAdmin = (props) => {
                                                         value={values.lastName}
                                                         onChange={handleChange}
                                                         placeholder="Enter Last name"
+                                                        required
                                                         isValid={touched.lastName && !errors.lastName}
                                                     />
                                                 </Col>
@@ -118,6 +120,7 @@ const AddSubAdmin = (props) => {
                                                         value={values.birthDate}
                                                         onChange={handleChange}
                                                         placeholder="00/00/0000"
+                                                        required
                                                         isValid={touched.birthDate && !errors.birthDate}
 
                                                     />
@@ -130,6 +133,7 @@ const AddSubAdmin = (props) => {
                                                         value={values.phoneNo}
                                                         onChange={handleChange}
                                                         placeholder="+ 123 456 789"
+                                                        required
                                                         isValid={touched.phoneNo && !errors.phoneNo}
 
                                                     />
@@ -142,6 +146,7 @@ const AddSubAdmin = (props) => {
                                                         value={values.location}
                                                         onChange={handleChange}
                                                         placeholder="Address 1"
+                                                        required
                                                         isValid={touched.location && !errors.location}
 
                                                     />
@@ -161,6 +166,7 @@ const AddSubAdmin = (props) => {
                                                         value={values.email}
                                                         onChange={handleChange}
                                                         placeholder="Enter Email"
+                                                        required
                                                         isValid={touched.email && !errors.email}
 
                                                     />
@@ -170,7 +176,7 @@ const AddSubAdmin = (props) => {
                                                     <Form.Control
                                                         type="text"
                                                         name="userName"
-                                                        value={values.useName}
+                                                        value={values.userName}
                                                         onChange={handleChange}
                                                         placeholder="Enter Username"
                                                         isValid={touched.userName && !errors.userName}

@@ -1,7 +1,7 @@
 import React from "react";
 import classes from './index.module.scss';
 import Logo from "../Logo";
-import {Link} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
 
 const Nav = () => {
@@ -9,9 +9,9 @@ const Nav = () => {
         <>
             <nav id={"nav"} className={classes.navBar}>
                 <Logo  />
-                <ul>
+                <ul className="dashboard_link">
                     <li>
-                        <Link to={"/dashboard"}>
+                        <NavLink  to={"/dashboard"}>
                             <div className={classes.iconBox}>
                                 <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path opacity="0.4" d="M18.05 4.81774L12.29 0.78774C10.72 -0.31226 8.31 -0.252259 6.8 0.917741L1.79 4.82774C0.79 5.60774 0 7.20774 0 8.46774V15.3677C0 17.9177 2.07 19.9977 4.62 19.9977H15.4C17.95 19.9977 20.02 17.9277 20.02 15.3777V8.59774C20.02 7.24774 19.15 5.58774 18.05 4.81774Z" fill="white"/>
@@ -19,10 +19,10 @@ const Nav = () => {
                                 </svg>
                             </div>
                             Home
-                        </Link>
+                        </NavLink>
                     </li>
                     <li>
-                        <Link to={"/sub-admin"}>
+                        <NavLink  to={"/sub-admin"}>
                             <div className={classes.iconBox}>
                                 <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path opacity="0.4" d="M7.03906 0C4.41906 0 2.28906 2.13 2.28906 4.75C2.28906 7.32 4.29906 9.4 6.91906 9.49C6.99906 9.48 7.07906 9.48 7.13906 9.49C7.15906 9.49 7.16906 9.49 7.18906 9.49C7.19906 9.49 7.19906 9.49 7.20906 9.49C9.76906 9.4 11.7791 7.32 11.7891 4.75C11.7891 2.13 9.65906 0 7.03906 0Z" fill="white"/>
@@ -32,10 +32,10 @@ const Nav = () => {
                                 </svg>
                             </div>
                             Sub Admins
-                        </Link>
+                        </NavLink>
                     </li>
                     <li>
-                        <Link to={"/cards"}>
+                        <NavLink  to={"/cards"}>
                             <div className={classes.iconBox}>
                                 <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path opacity="0.4" d="M19.6739 7.93854L18.6939 12.1185C17.8539 15.7285 16.1939 17.1885 13.0739 16.8885C12.5739 16.8485 12.0339 16.7585 11.4539 16.6185L9.77385 16.2185C5.60385 15.2285 4.31385 13.1685 5.29385 8.98854L6.27385 4.79854C6.47385 3.94854 6.71385 3.20854 7.01385 2.59854C8.18385 0.178543 10.1739 -0.471457 13.5139 0.318543L15.1839 0.708543C19.3739 1.68854 20.6539 3.75854 19.6739 7.93854Z" fill="white"/>
@@ -43,10 +43,10 @@ const Nav = () => {
                                 </svg>
                             </div>
                             Cards
-                        </Link>
+                        </NavLink>
                     </li>
                     <li>
-                        <Link to={"/route-list"}>
+                        <NavLink  to={"/route-list"}>
                             <div className={classes.iconBox}>
                                 <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path opacity="0.4" d="M6.90932 2.59875C6.10932 -0.861249 0.899322 -0.871249 0.0993218 2.59875C-0.370678 4.62875 0.919322 6.34875 2.03932 7.41875C2.85932 8.18875 4.14932 8.18875 4.96932 7.41875C6.08932 6.34875 7.36932 4.62875 6.90932 2.59875ZM3.53932 4.19875C2.98932 4.19875 2.53932 3.74875 2.53932 3.19875C2.53932 2.64875 2.97932 2.19875 3.52932 2.19875H3.53932C4.09932 2.19875 4.53932 2.64875 4.53932 3.19875C4.53932 3.74875 4.09932 4.19875 3.53932 4.19875Z" fill="white"/>
@@ -57,10 +57,10 @@ const Nav = () => {
                                 </svg>
                             </div>
                             Route List
-                        </Link>
+                        </NavLink>
                     </li>
                     <li>
-                        <Link to={"/treasure-chests-list"}>
+                        <NavLink  to={"/treasure-chests-list"}>
                             <div className={classes.iconBox}>
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path opacity="0.4" d="M0 7V13C0 14.66 1.34 16 3 16H17C18.66 16 20 14.66 20 13V7C20 5.34 18.66 4 17 4H3C1.34 4 0 5.34 0 7Z" fill="white"/>
@@ -69,10 +69,10 @@ const Nav = () => {
                                 </svg>
                             </div>
                             Treasure Chest List
-                        </Link>
+                        </NavLink>
                     </li>
                     <li>
-                        <Link to={"/users"}>
+                        <NavLink  to={"/users"}>
                             <div className={classes.iconBox}>
                                 <svg width="15" height="20" viewBox="0 0 15 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path opacity="0.4" d="M7.03906 0C4.41906 0 2.28906 2.13 2.28906 4.75C2.28906 7.32 4.29906 9.4 6.91906 9.49C6.99906 9.48 7.07906 9.48 7.13906 9.49C7.15906 9.49 7.16906 9.49 7.18906 9.49C7.19906 9.49 7.19906 9.49 7.20906 9.49C9.76906 9.4 11.7791 7.32 11.7891 4.75C11.7891 2.13 9.65906 0 7.03906 0Z" fill="white"/>
@@ -80,10 +80,10 @@ const Nav = () => {
                                 </svg>
                             </div>
                             Users
-                        </Link>
+                        </NavLink>
                     </li>
                     <li>
-                        <Link to={"/users-route"}>
+                        <NavLink  to={"/users-route"}>
                             <div className={classes.iconBox}>
                                 <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path opacity="0.4" d="M10.75 21.4961C10.34 21.4961 10 21.1561 10 20.7461V18.7461C10 18.3361 10.34 17.9961 10.75 17.9961C11.16 17.9961 11.5 18.3361 11.5 18.7461V20.7461C11.5 21.1561 11.16 21.4961 10.75 21.4961Z" fill="white"/>
@@ -95,10 +95,10 @@ const Nav = () => {
                                 </svg>
                             </div>
                             Users Route
-                        </Link>
+                        </NavLink>
                     </li>
                     <li>
-                        <Link to={"/treasure-hunt"}>
+                        <NavLink  to={"/treasure-hunt"}>
                             <div className={classes.iconBox}>
                                 <svg width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M16.1905 1.5H2.31055C1.90055 1.5 1.56055 1.16 1.56055 0.75C1.56055 0.34 1.90055 0 2.31055 0H16.1905C16.6005 0 16.9405 0.34 16.9405 0.75C16.9405 1.16 16.6005 1.5 16.1905 1.5Z" fill="white"/>
@@ -107,10 +107,10 @@ const Nav = () => {
                                 </svg>
                             </div>
                             Treasure Hunt
-                        </Link>
+                        </NavLink>
                     </li>
                     <li>
-                        <Link to={"/support"}>
+                        <NavLink  to={"/support"}>
                             <div className={classes.iconBox}>
                                 <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path opacity="0.4" d="M0.751771 16.6C0.341771 16.6 0.00177137 16.26 0.00177137 15.85V10.15C-0.0482286 7.44 0.961772 4.88 2.84177 2.96C4.72177 1.05 7.24177 0 9.95177 0C15.4918 0 20.0018 4.51 20.0018 10.05V15.75C20.0018 16.16 19.6618 16.5 19.2518 16.5C18.8418 16.5 18.5018 16.16 18.5018 15.75V10.05C18.5018 5.34 14.6718 1.5 9.95177 1.5C7.64177 1.5 5.50177 2.39 3.91177 4.01C2.31177 5.64 1.46177 7.81 1.50177 10.13V15.84C1.50177 16.26 1.17177 16.6 0.751771 16.6Z" fill="white"/>
@@ -119,10 +119,10 @@ const Nav = () => {
                                 </svg>
                             </div>
                             Support
-                        </Link>
+                        </NavLink>
                     </li>
                     <li>
-                        <Link to={"/guidelines"}>
+                        <NavLink  to={"/guidelines"}>
                             <div className={classes.iconBox}>
                                 <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path opacity="0.4" d="M10 2.63759V18.6676C9.83 18.6676 9.65 18.6376 9.51 18.5576L9.47 18.5376C7.55 17.4876 4.2 16.3876 2.03 16.0976L1.74 16.0576C0.78 15.9376 0 15.0376 0 14.0776V1.99759C0 0.807591 0.97 -0.0924088 2.16 0.0075912C4.26 0.177591 7.44 1.23759 9.22 2.34759L9.47 2.49759C9.62 2.58759 9.81 2.63759 10 2.63759Z" fill="white"/>
@@ -132,10 +132,10 @@ const Nav = () => {
                                 </svg>
                             </div>
                             Guidelines
-                        </Link>
+                        </NavLink>
                     </li>
                     <li>
-                        <Link to={"/treasure-hunt-e-waiver"}>
+                        <NavLink  to={"/treasure-hunt-e-waiver"}>
                             <div className={classes.iconBox}>
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path opacity="0.4" d="M14.19 0H5.81C2.17 0 0 2.17 0 5.81V14.18C0 17.83 2.17 20 5.81 20H14.18C17.82 20 19.99 17.83 19.99 14.19V5.81C20 2.17 17.83 0 14.19 0Z" fill="white"/>
@@ -144,7 +144,7 @@ const Nav = () => {
                                 </svg>
                             </div>
                             Treasure Hunt E Waiver
-                        </Link>
+                        </NavLink>
                     </li>
                 </ul>
             </nav>
