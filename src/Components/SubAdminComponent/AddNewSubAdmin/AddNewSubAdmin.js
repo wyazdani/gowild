@@ -8,9 +8,9 @@ import { Formik } from 'formik';
 import { object, string } from 'yup';
 import { useNavigate } from "react-router-dom";
 
-const AddSubAdmin = (props) => {
+const AddNewSubAdmin = (props) => {
 
-    const [addAdmin, setAddAdmin] = useState(false);
+    // const [addAdmin, setAddAdmin] = useState(false);
 
     const navigate = useNavigate();
 
@@ -31,12 +31,7 @@ const AddSubAdmin = (props) => {
                 //setContent(res.data);
                 //setIsLoader(true);
                 navigate('/sub-admin');
-                
-                setTimeout(() => {
-                    setAddAdmin(props.onHide);
-                    // props.subAdminAllData();
-                  }, 1000);
-              
+                // setAddAdmin(props.onHide)
                 console.log(res.data);
             })
             .catch((err) => {
@@ -46,9 +41,8 @@ const AddSubAdmin = (props) => {
 
 
     useEffect(() => {
-        handleSubmit();   
+        handleSubmit()
     }, []);
-    
     
     return (
         <>
@@ -206,4 +200,4 @@ const AddSubAdmin = (props) => {
     )
 }
 
-export default AddSubAdmin;
+export default AddNewSubAdmin;

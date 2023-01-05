@@ -32,18 +32,17 @@ const TreasureHuntRegistration = () => {
                         return obj
                     }
                 });
-                let Disapprove = res.data.filter(obj => {
-                    if (obj.status === "Disapprove") {
+                let disapprove = res.data.filter(obj => {
+                    if (obj.status === "disapprove") {
                         return obj
                     }
                 });
 
-            
-
+        
                 setContent(res.data);
                 setApproveContent(content);
                 setPendingContent(pending);
-                setDisapproveContent(Disapprove);
+                setDisapproveContent(disapprove);
                 setIsLoader(true);
                 console.log("wild", res.data);
             })

@@ -18,11 +18,29 @@ const Users = () => {
   const subAdminAllData = async () => {
     await AuthService.getMethod(ENDPOINT.admin_user.listing, true,)
       .then((res) => {
+
+      //   let content = res.data.filter(obj => {
+      //     if (obj.status === "approved") {
+      //         return obj
+      //     }
+      // });
+
+      // let pending = res.data.filter(obj => {
+      //     if (obj.status === "pending") {
+      //         return obj
+      //     }
+      // });
+      // let disapprove = res.data.filter(obj => {
+      //     if (obj.status === "disapprove") {
+      //         return obj
+      //     }
+      // });
+
         setContent(res.data)
         setActiveContent(res.data.filter(data => ["active"].includes(data.accountStatus)));
         setDisableContent(res.data.filter(data => !["active"].includes(data.accountStatus)));
         setIsLoader(true);
-        //console.log(res.data);
+        console.log(res.data);
       })
       .catch((err) => {
         swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
