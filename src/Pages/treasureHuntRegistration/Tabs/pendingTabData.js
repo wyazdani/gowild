@@ -108,7 +108,7 @@ const PendingTabData = (props) => {
                                 }
                             </td>
                             <td>
-                                {alltabdata.user.username}
+                                      {alltabdata.user.firstName}
                             </td>
                             <td>
                                 {alltabdata.status === 'approved' ? <span class="text-success text-uppercase">Approved</span>

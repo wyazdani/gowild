@@ -10,7 +10,6 @@ import { ENDPOINT, KEY } from "config/constants";
 import AuthService from "services/auth.service";
 import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
-import Paginations from "Pages/Pagination/Paginations";
 import ReactPaginate from 'react-paginate';
 
 
@@ -139,7 +138,7 @@ const AllTabData = (props) => {
                                 }
                             </td>
                             <td>
-                                {alltabdata.user.username}
+                                {alltabdata.user.firstName}
                             </td>
                             <td>
                                 {alltabdata.status === 'approved' ? <span class="text-success text-uppercase">Approved</span>

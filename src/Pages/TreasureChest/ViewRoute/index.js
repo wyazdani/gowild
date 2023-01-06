@@ -165,6 +165,7 @@ import moment from 'moment';
                                         <Col md={4}>
                                             <Form.Label>Upload Augmented Reality</Form.Label>
                                                <p className="text-danger"> {error}</p>
+                                               <p>{values.picture}</p>
                                             <label className={"fileUpload v2"} htmlFor="upload-photo">
                                                 <Form.Control
                                                     type="file"

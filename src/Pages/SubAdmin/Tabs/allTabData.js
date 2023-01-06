@@ -118,7 +118,7 @@ const AllTabData = (props) => {
                                             : <span class={`${classes.tag} ${classes.inactive}`}>Inactive</span>
                                         }
                                     </td>
-                                    <td>{content.username}</td>
+                                    <td>{content.firstName}</td>
                                     <td>
                                         {content.accountStatus === "active"
                                             ? <span class="text-success">Active</span>

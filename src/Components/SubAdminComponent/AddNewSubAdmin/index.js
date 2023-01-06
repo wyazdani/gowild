@@ -25,7 +25,7 @@ const AddSubAdmin = (props) => {
         password: string().required(),
     });
 
-    /*const handleSubmit = async (data) => {
+    const handleSubmit = async (data) => {
         return await AuthService.postMethod(ENDPOINT.sub_admin.add_user, true, data)
             .then((res) => {
                 //setContent(res.data);
@@ -42,30 +42,11 @@ const AddSubAdmin = (props) => {
             .catch((err) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
             });
-    }*/
-
-    const handleSubmit = async (data) => {
-        return await AuthService.postMethod(ENDPOINT.sub_admin.add_user, true, data)
-            .then((res) => {
-                //setContent(res.data);
-                //setIsLoader(true);
-                navigate('/sub-admin');
-
-                setTimeout(() => {
-                    setAddAdmin(props.onHide);
-                    // props.subAdminAllData();
-                }, 1000);
-
-                console.log(res.data);
-            })
-            .catch((err) => {
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-            });
     }
 
 
    /* useEffect(() => {
-        handleSubmit();   
+        handleSubmit();
     }, []);*/
     
     
@@ -105,7 +86,7 @@ const AddSubAdmin = (props) => {
                                 <Row>
                                     <Col md={6}>
                                         <div className={classes.box}>
-                                            <h3 className={"font-20 text-orange mb-3"}>Perosnal Data</h3>
+                                            <h3 className={"font-20 text-orange mb-3"}>Perosnal Information</h3>
                                             <Row>
                                                 <Col md={12} className={"mb-3"}>
                                                     <Form.Label className={"text-orange mb-0"}>First Name</Form.Label>

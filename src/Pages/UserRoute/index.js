@@ -17,6 +17,9 @@ const UserRoute = () => {
     const [isLoader, setIsLoader] = useState(false);
 
 
+    // setActiveContent(res.data.filter(data => ["active"].includes(data.accountStatus)));
+    // setInActiveContent(res.data.filter(data => ["inActiveTabData"].includes(data.accountStatus)));
+
     const userRouteAllData = async () => {
         await AuthService.getMethod(ENDPOINT.users_route.listing, true,)
             .then((res) => {
@@ -24,7 +27,7 @@ const UserRoute = () => {
                 setApproveContent(res.data.data);
                 setDisapproveContent(res.data.data);
                 setIsLoader(true);
-                // console.log("response data", res.data.data);
+                console.log("response data abc", res.data.data[0].user.status);
             })
             .catch((err) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");

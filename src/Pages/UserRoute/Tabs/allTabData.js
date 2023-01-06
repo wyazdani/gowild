@@ -7,8 +7,6 @@ import { ENDPOINT, KEY } from "config/constants";
 import AuthService from "services/auth.service";
 import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
-import Paginations from "Pages/Pagination/Paginations";
-import Paginate from 'react-paginate';
 import ReactPaginate from 'react-paginate';
 
 
