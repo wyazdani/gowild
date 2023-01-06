@@ -20,7 +20,10 @@ const AllTabData = (props) => {
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const [itemOffset, setItemOffset] = useState(0);
-    const itemsPerPage = 4;
+    const [itemsPerPage, setItemsPerPage] = useState(4);
+    // var itemsPerPage = 4;
+
+
 
     useEffect(() => {
         const endOffset = itemOffset + itemsPerPage;
@@ -37,6 +40,14 @@ const AllTabData = (props) => {
 
     const [modalEditUser, setModalEditUser] = useState(false);
     const [editItem, setEditItem] = useState(null);
+    // const [pageNumber, setPageNumber] = useState(1);
+
+    const handleRowsPerPageChange = (event) => {
+        setItemsPerPage(event.target.value);
+        // setPageCount(1);
+    };
+
+
 
     return (
         <>
@@ -155,13 +166,24 @@ const AllTabData = (props) => {
                 </tbody>
             </Table>
             <div className="result_pagination">
-                <span> {currentItems.length} of {content.length} </span>
+                <span> Rows per page: &nbsp; </span> 
+                <select onChange={handleRowsPerPageChange} value={itemsPerPage}>
+                    <option>{currentItems.length}</option>
+                  {/* {currentItems.length === 4 ? null  :<option value={4}>4</option>} */}
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={25}>25</option>
+                    <option value={50}>50</option>
+                </select> <i className="fa fa-sort-desc" aria-hidden="true"></i>
+
+                <span className="mx-4"> {currentItems.length} of {content.length} </span>
                 <ReactPaginate
                     breakLabel="..."
                     nextLabel="  >"
                     onPageChange={handlePageClick}
-                    pageRangeDisplayed={7}
+                    pageRangeDisplayed={3}
                     pageCount={pageCount}
+                    rowsPerPage={itemsPerPage}
                     previousLabel="<"
                     renderOnZeroPageCount={null}
                     containerClassName="pagination"

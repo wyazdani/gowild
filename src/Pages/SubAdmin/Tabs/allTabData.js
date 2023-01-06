@@ -30,8 +30,8 @@ const AllTabData = (props) => {
     const [modalShow, setModalShow] = useState(false);
     const [modalShowView, setModalShowView] = useState(false);
     const [search, setSearch] = useState("");
-
-    const itemsPerPage = 3;
+    const [itemsPerPage, setItemsPerPage] = useState(4);
+    // const itemsPerPage = 3;
 
     useEffect(() => {
         const endOffset = itemOffset + itemsPerPage;
@@ -45,6 +45,12 @@ const AllTabData = (props) => {
         const newOffset = (event.selected * itemsPerPage) % content.length;
         setItemOffset(newOffset);
     };
+
+    const handleRowsPerPageChange = (event) => {
+        setItemsPerPage(event.target.value);
+        // setPageCount(1);
+    };
+
 
     return (
         <>
@@ -162,13 +168,24 @@ const AllTabData = (props) => {
                 </tbody>
             </Table>
             <div className="result_pagination">
-                <span> {currentItems.length} of {content.length} </span>
+                <span> Rows per page: &nbsp; </span> 
+                <select onChange={handleRowsPerPageChange} value={itemsPerPage}>
+                    <option>{currentItems.length}</option>
+                  {/* {currentItems.length === 4 ? null  :<option value={4}>4</option>} */}
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={25}>25</option>
+                    <option value={50}>50</option>
+                </select> <i className="fa fa-sort-desc" aria-hidden="true"></i>
+
+                <span className="mx-4"> {currentItems.length} of {content.length} </span>
                 <ReactPaginate
                     breakLabel="..."
                     nextLabel="  >"
                     onPageChange={handlePageClick}
-                    pageRangeDisplayed={5}
+                    pageRangeDisplayed={6}
                     pageCount={pageCount}
+                    rowsPerPage={itemsPerPage}
                     previousLabel="<"
                     renderOnZeroPageCount={null}
                     containerClassName="pagination"
@@ -176,7 +193,7 @@ const AllTabData = (props) => {
                     previousLinkClassName="page-num"
                     nextLinkClassName="page-num"
                     activeLinkClassName="active"
-                    
+
                 />
             </div>
             <EditSubAdmin
