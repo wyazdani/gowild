@@ -43,8 +43,7 @@ const AllTabData = (props) => {
     // const [pageNumber, setPageNumber] = useState(1);
 
     const handleRowsPerPageChange = (event) => {
-        setItemsPerPage(event.target.value);
-        // setPageCount(1);
+        setItemsPerPage(parseInt(event.target.value))
     };
 
 
