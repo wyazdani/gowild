@@ -46,7 +46,7 @@ const ActiveTabData = (props) => {
     const handleRowsPerPageChange = (event) => {
         setItemsPerPage(parseInt(event.target.value))
     };
-    
+
 
 
     return (
@@ -121,7 +121,7 @@ const ActiveTabData = (props) => {
                 </tbody>
             </Table>
             <div className="result_pagination">
-                <span> Rows per page: &nbsp; </span> 
+                <span> Rows per page: &nbsp; </span>
                 <select onChange={handleRowsPerPageChange} value={itemsPerPage}>
                     <option>{currentItems.length}</option>
                   {/* {currentItems.length === 4 ? null  :<option value={4}>4</option>} */}
@@ -131,12 +131,11 @@ const ActiveTabData = (props) => {
                     <option value={50}>50</option>
                 </select> <i className="fa fa-sort-desc" aria-hidden="true"></i>
 
-                <span className="mx-4"> {currentItems.length} of {content.length} </span>
                 <ReactPaginate
                     breakLabel="..."
                     nextLabel="  >"
                     onPageChange={handlePageClick}
-                    pageRangeDisplayed={6}
+                    pageRangeDisplayed={2}
                     pageCount={pageCount}
                     rowsPerPage={itemsPerPage}
                     previousLabel="<"
@@ -146,7 +145,7 @@ const ActiveTabData = (props) => {
                     previousLinkClassName="page-num"
                     nextLinkClassName="page-num"
                     activeLinkClassName="active"
-
+                    
                 />
             </div>
         </>

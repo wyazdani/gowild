@@ -9,7 +9,6 @@
   padding: 50px 15px 0;
   overflow-y: scroll;
 
-
   ul {
     list-style: none;
     margin: 0;
@@ -19,7 +18,6 @@
       display: block;
       position: relative;
       margin: 0 0 5px;
-      
 
       a {
         display: block;
@@ -28,23 +26,11 @@
         color: #fff;
         text-decoration: none;
         border-radius: 20px;
-      
+
         &:hover {
           background: #82BAA7;
-          
         }
-        
-        // nav{
-        //   ul {
-        //     li{
-        //       a{
-        //         &.active{
-        //           background-color:#82BAA7 !important;
-        //         }
-        //       }
-        //     }
-        //   }
-        // }
+
         .iconBox {
           width: 25px;
           height: 25px;
@@ -54,9 +40,7 @@
           position: absolute;
           top: 8px;
           left: 13px;
-          
         }
-        
       }
     }
   }

@@ -119,7 +119,7 @@ const InActiveTabData = (props) => {
                 </tbody>
             </Table>
             <div className="result_pagination">
-                <span> Rows per page: &nbsp; </span> 
+                <span> Rows per page: &nbsp; </span>
                 <select onChange={handleRowsPerPageChange} value={itemsPerPage}>
                     <option>{currentItems.length}</option>
                   {/* {currentItems.length === 4 ? null  :<option value={4}>4</option>} */}
@@ -134,7 +134,7 @@ const InActiveTabData = (props) => {
                     breakLabel="..."
                     nextLabel="  >"
                     onPageChange={handlePageClick}
-                    pageRangeDisplayed={6}
+                    pageRangeDisplayed={2}
                     pageCount={pageCount}
                     rowsPerPage={itemsPerPage}
                     previousLabel="<"
@@ -144,7 +144,7 @@ const InActiveTabData = (props) => {
                     previousLinkClassName="page-num"
                     nextLinkClassName="page-num"
                     activeLinkClassName="active"
-
+                    
                 />
             </div>
         </>
