@@ -8,7 +8,6 @@ import { Formik } from 'formik';
 import { object, string } from 'yup';
 
 const EditSubAmdin = (props) => {
-
     const schema = object().shape({
         firstName: string().required(),
         lastName: string().required(),
@@ -19,9 +18,8 @@ const EditSubAmdin = (props) => {
         birthDate: string().required(),
         password:  string().required(),
     });
-    console.log(props.editItem)
     const handleSubmit = async  (data) => {
-        ENDPOINT.sub_admin.edit_user.id = props.editItem;
+        ENDPOINT.sub_admin.edit_user.id = props.editItem.id;
         return await AuthService.patchMethod(ENDPOINT.sub_admin.edit_user.url+ENDPOINT.sub_admin.edit_user.id, true,data)
             .then((res) => {
                 //setContent(res.data);
@@ -36,9 +34,11 @@ const EditSubAmdin = (props) => {
     if(props.editItem===null){
         return "";
     }
+
     return(
         <>
             <Modal
+
                 {...props}
                 size="xl"
                 aria-labelledby="contained-modal-title-vcenter"
@@ -53,10 +53,10 @@ const EditSubAmdin = (props) => {
                             lastName: props.editItem.lastName,
                             email: props.editItem.email,
                             userName: props.editItem.username,
-                            location: props.editItem.location,
-                            birthDate: props.editItem.birthDate,
+                            location: props.editItem.addressOne,
+                            birthDate: props.editItem.dateOfBirth,
                             //phoneNo: props.editItem.phoneNo,
-                            password: ""
+                            //password: props.editItem.password
                         }}
                     >
                         {({
@@ -71,7 +71,7 @@ const EditSubAmdin = (props) => {
                                 <Row>
                                     <Col md={6}>
                                         <div className={classes.box}>
-                                            <h3 className={"font-20 text-orange mb-3"}>Perosnal Information</h3>
+                                            <h3 className={"font-20 text-orange mb-3"}>Personal Information</h3>
                                             <Row>
                                                 <Col md={12} className={"mb-3"}>
                                                     <Form.Label className={"text-orange mb-0"}>First Name</Form.Label>
@@ -126,7 +126,7 @@ const EditSubAmdin = (props) => {
                                                         name="location"
                                                         value={values.location}
                                                         onChange={handleChange}
-                                                        placeholder="Address 1"
+                                                        placeholder="Address"
                                                         isValid={touched.location && !errors.location}
 
                                                     />
@@ -144,9 +144,10 @@ const EditSubAmdin = (props) => {
                                                         type="email"
                                                         name="email"
                                                         value={values.email}
-                                                        onChange={handleChange}
+                                                        //onChange={handleChange}
                                                         placeholder="Enter Email"
-                                                        isValid={touched.email && !errors.email}
+                                                        disabled
+                                                        //isValid={touched.email && !errors.email}
 
                                                     />
                                                 </Col>

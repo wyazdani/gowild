@@ -50,6 +50,18 @@ code {
   }
 }
 
+nav{
+  ul {
+    li{
+      a{
+        &.active{
+          background-color:#82BAA7 !important;
+        }
+      }
+    }
+  }
+}
+
 
 .nav-tabs{
   li{

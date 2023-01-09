@@ -20,7 +20,7 @@ const AllTabData = (props) => {
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const [itemOffset, setItemOffset] = useState(0);
-    const itemsPerPage = 4;
+    const itemsPerPage = 10;
 
     useEffect(() => {
         const endOffset = itemOffset + itemsPerPage;
@@ -160,7 +160,7 @@ const AllTabData = (props) => {
                     breakLabel="..."
                     nextLabel="  >"
                     onPageChange={handlePageClick}
-                    pageRangeDisplayed={7}
+                    pageRangeDisplayed={1}
                     pageCount={pageCount}
                     previousLabel="<"
                     renderOnZeroPageCount={null}

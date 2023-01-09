@@ -28,7 +28,7 @@ const ActiveTabData = (props) => {
     const [modalShowView, setModalShowView] = useState(false);
     const [search, setSearch] = useState("");
 
-    const itemsPerPage = 3;
+    const itemsPerPage = 10;
 
     useEffect(() => {
         const endOffset = itemOffset + itemsPerPage;
@@ -122,7 +122,7 @@ const ActiveTabData = (props) => {
                     breakLabel="..."
                     nextLabel=" next >"
                     onPageChange={handlePageClick}
-                    pageRangeDisplayed={3}
+                    pageRangeDisplayed={2}
                     pageCount={pageCount}
                     previousLabel="< previous"
                     renderOnZeroPageCount={null}
