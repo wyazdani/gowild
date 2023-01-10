@@ -12,17 +12,18 @@ import AuthService from "services/auth.service";
 import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
 import EditRouteList from "./EditRouteList";
+import ViewRouteList from "./ViewRouteList";
 // °
-
-
 
 
 const RouteList = () => {
 
     const [addAdmin, setAddAdmin] = useState(false);
     const [editSubAdmin, setEditSubAdmin] = useState(false);
-    const [search , setSearch] = useState("");
     const [editItem , setEditItem] = useState(null);
+    const [viewRouteList, setViewRouteList] = useState(false);
+    const [viewItem, setViewItem] = useState(null);
+    const [search , setSearch] = useState("");
 
     const navigate = useNavigate();
     const goToCreateRoute = () => {
@@ -33,11 +34,11 @@ const RouteList = () => {
     const [isLoader, setIsLoader] = useState(false);
 
     const routeListData = async () => {
-        await AuthService.getMethod(ENDPOINT.users_route.listing, true,)
+        await AuthService.getMethod(ENDPOINT.admin_route.listing, true,)
             .then((res) => {
                 setContent(res.data.data);
                 setIsLoader(true);
-                // console.log("response data", res.data.data);
+                console.log("response data", res.data.data);
             })
             .catch((err) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
@@ -47,8 +48,8 @@ const RouteList = () => {
 
 
     const deleteRouteList = async (id) => {
-        ENDPOINT.users_route.delete.id = id;
-        await AuthService.deleteMethod(ENDPOINT.users_route.delete.url + ENDPOINT.users_route.delete.id, true)
+        ENDPOINT.route.delete.id = id;
+        await AuthService.deleteMethod(ENDPOINT.route.delete.url + ENDPOINT.route.delete.id, true)
             .then((res) => {
                 routeListData();
                 console.log(res.data);
@@ -113,15 +114,16 @@ const RouteList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                    {content.map((content) => (
+                    {content.sort((a, b) => (a.name < b.name ? -1 : 1)).map((content) => (
                         <tr>
                             <td>
                                 <Form.Check type="checkbox" />
                             </td>
                             <td>
-                            <img src={content.user.picture} alt={content.user.firstName} />
+                            <img src={content.picture} alt={""} />
                             </td>
-                            <td>{content.user.firstName + " " + content.user.lastName}</td>
+                            <td>{content.title}</td>
+                            {/* <td>{(content.user) ? (formatDate(content.createdDate)) : "-"}</td> */}
                             <td>{(formatDate(content.createdDate))}</td>
                             <td>{content.start.latitude} / {content.start.longitude}</td>
                             <td>{content.end.latitude} / {content.end.longitude}</td>
@@ -131,7 +133,11 @@ const RouteList = () => {
                                         <i className={"far fa-ellipsis-v fa-fw"}></i>
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
-                                        <Dropdown.Item href="#/">
+                                        <Dropdown.Item href="#/" onClick={
+                                                    () => {
+                                                        setViewRouteList(true)
+                                                        setViewItem(content)
+                                                    }}>
                                             <i className={"fal fa-eye  bg-light-yellow text-white"}></i>
                                             View
                                         </Dropdown.Item>
@@ -162,6 +168,12 @@ const RouteList = () => {
                 show={editSubAdmin}
                 onHide={() => setEditSubAdmin(false)}
                 editItem={editItem}
+            />
+
+            <ViewRouteList
+                show={viewRouteList}
+                onHide={() => setViewRouteList(false)}
+                viewItem={viewItem}
             />
 
 

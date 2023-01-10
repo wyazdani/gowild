@@ -32,28 +32,29 @@ const EditRouteList = (props) => {
     number: string().required(),
     });
     console.log(props.editItem)
+    // console.log({...props})
 
 
     const handleSubmit = async (data) => {
     const dataObj = {
 
-
-    "title": props.editItem.title,
-    "description": props.editItem.description,
-    "location": {
-        "latitude": props.editItem.location.latitude,
-        "longitude": props.editItem.location.longitude,
-    },
-    "eventDate": props.editItem.eventDate,
-    "eventTime": props.editItem.eventTime,
-    "status": "pending",
-    "no_of_participants": props.editItem.no_of_participants,
-    "a_r": "augmented reality"
+        "title": props.editItem.title,
+        "description":props.editItem.description,
+        "start": {
+          "latitude": JSON.parse(props.editItem['start'].latitude),
+          "longitude": JSON.parse(props.editItem['end'].longitude),
+        },
+        "end": {
+          "latitude":JSON.parse(props.editItem['end'].latitude),
+          "longitude": JSON.parse(props.editItem['end'].longitude),
+        },
+        "distance_miles": "string",
+        "distance_meters": "string",
+        "estimate_time": "01:04:55"
     }
-
-
-    ENDPOINT.treasure_chests.edit_user.id = props.editItem;
-    return await AuthService.patchMethod(ENDPOINT.treasure_chests.edit_user.url + ENDPOINT.treasure_chests.edit_user.id, true, data, dataObj)
+    // ENDPOINT.route.delete.id = id;
+    ENDPOINT.route.edit_user.id = props.editItem.id;
+    return await AuthService.patchMethod(ENDPOINT.route.edit_user.url + ENDPOINT.route.edit_user.id, true, data, dataObj)
     .then((res) => {
         //setContent(res.data);
         //setIsLoader(true);
@@ -107,7 +108,7 @@ const EditRouteList = (props) => {
 
     return [month, day, , year].join('/');
     }
-
+   
 
 return (
   <>
@@ -120,19 +121,26 @@ return (
     <Modal.Body>
         <Formik
             validationSchema={schema}
-            // onSubmit={handleSubmit}
-            initialValues={{
-                title: "",
-                description: "",
-                latitude: "",
-                longitude: "",
-                // longitude: props.editItem.location.longitude,
-                eventDate: "",
-                "eventTime": "",
-                "status": "pending",
-                "no_of_participants": "",
-                "a_r": "augmented reality"
-            }}
+            onSubmit={handleSubmit}
+                    initialValues={{
+
+                            "id": "",
+                            "createdDate": "",
+                            "updatedDate": "",
+                            "user_id": "",
+                            "title": props.editItem.title,
+                            "picture": null,
+                            "start": {
+                                "latitude":  props.editItem['start'].latitude,
+                                "longitude":  props.editItem['start'].longitude,
+                            },
+                            "end": {
+                                "latitude":  props.editItem['end'].latitude,
+                                "longitude": props.editItem['end'].longitude,
+                            },
+                            "description": props.editItem.description,
+                            "role": "",
+                        }}
         >
             {({
                 handleSubmit,
@@ -141,8 +149,9 @@ return (
                 touched,
                 isValid,
                 errors,
-            }) => (
+            }) =>   (
                 <section className={"section"}>
+                
                 <Row>
                     <Col md={4}>
                         <div className={"py-3"}>
@@ -150,39 +159,38 @@ return (
                             <p><i className={"fas fa-map-marker-alt text-danger mx-3"}></i> Finishing Point</p>
                             <p><i className={"fas fa-map-marker-alt text-yellow mx-3"}></i> Historical Event</p>
                         </div>
-                        <Form 
-                        // onSubmit={submitForm}
+                        <Form noValidate onSubmit={handleSubmit}
                         
                         >
                             <Form.Group>
                                 <Form.Label>Starting Point</Form.Label>
                                 <Form.Control type="text"
-                                    name="startLongtitude"
-                                    required
-                                    value={values.startLongtitude}
+                                    name="longitude"
+                                    value={values['start'].longitude}
                                     onChange={handleChange}
-                                    className={"mb-3"} placeholder="Longtitude" />
+                                    isValid={touched.longitude && !errors.longitude}
+                                    className={"mb-3"} placeholder="longitude" />
                                 <Form.Control type="text"
-                                    name="startLattitude"
-                                    required
-                                    value={values.startLattitude}
+                                    name="latitude"
+                                    value={values['start'].latitude}
                                     onChange={handleChange}
-                                    className={"mb-3"} placeholder="Lattitude" />
+                                    isValid={touched.latitude && !errors.latitude}
+                                    className={"mb-3"} placeholder="latitude" />
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label>End Point</Form.Label>
                                 <Form.Control type="text"
-                                    name="endLongtitude"
-                                    required
-                                    value={values.endLongtitude}
+                                    name="longitude"
+                                    value={values['end'].longitude}
                                     onChange={handleChange}
-                                    className={"mb-3"} placeholder="Longtitude" />
+                                    isValid={touched.longitude && !errors.longitude}
+                                    className={"mb-3"} placeholder="longitude" />
                                 <Form.Control type="text"
-                                    name="endLattitude"
-                                    required
-                                    value={values.endLattitude}
+                                    name="latitude"
+                                    value={values['end'].latitude}
                                     onChange={handleChange}
-                                    className={"mb-3"} placeholder="Lattitude" />
+                                    isValid={touched.latitude && !errors.latitude}
+                                    className={"mb-3"} placeholder="latitude" />
                             </Form.Group>
                             <Col md={12} className={"mb-3"}>
                                         <label className={"fileUpload v2"} htmlFor="upload-photo">
@@ -216,15 +224,15 @@ return (
                                 <Form.Label>Title</Form.Label>
                                 <Form.Control type="text"
                                     name="title"
-                                    required
                                     value={values.title}
                                     onChange={handleChange}
+                                    isValid={touched.title && !errors.title}
                                     className={"mb-3"} placeholder="My Race Title" />
                                 <Form.Control as="textarea" type="text"
                                     name="description"
-                                    required
                                     value={values.description}
                                     onChange={handleChange}
+                                    isValid={touched.description && !errors.description}
                                     className={"mb-3"} placeholder="Write something here ..." />
                             </Form.Group>
                             <Form.Group>

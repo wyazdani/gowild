@@ -16,6 +16,7 @@ const CreateRoute = () => {
     const navigate = useNavigate();
 
     const [file, setFile] = useState([]);
+    const [files, setFiles] = useState([]);
     const [formData, setFormData] = useState({});
 
 
@@ -33,19 +34,22 @@ const CreateRoute = () => {
 
     const submitForm = async (event) => {
         event.preventDefault();
-        const dataObj = {
+        const dataObj =   {
+
             "title": formData.title,
             "description": formData.description,
             "start": {
-                "latitude": JSON.parse(formData.startLattitude),
-                "longitude": JSON.parse(formData.startLongtitude)
+              "latitude": JSON.parse(formData.startLattitude),
+              "longitude": JSON.parse(formData.startLongtitude)
             },
-            "saved": true,
             "end": {
-                "latitude": JSON.parse(formData.endLattitude),
-                "longitude": JSON.parse(formData.endLongtitude)
-            }
-        }
+              "latitude": JSON.parse(formData.endLattitude),
+              "longitude": JSON.parse(formData.endLongtitude)
+            },
+            "distance_miles": "string",
+            "distance_meters": "string",
+            "estimate_time": "01:04:55"
+          }
 
         return await AuthService.postMethod(ENDPOINT.admin_route.listing, true, dataObj)
             .then((res) => {
@@ -80,6 +84,15 @@ const CreateRoute = () => {
         console.log(ImagesArray);
         setFile([...file, ...ImagesArray]);
         console.log("file", file);
+    }
+
+    function uploadSingleFile1(e) {
+        let ImagesArray = Object.entries(e.target.files).map((e) =>
+            URL.createObjectURL(e[1])
+        );
+        console.log(ImagesArray);
+        setFile([...files, ...ImagesArray]);
+        console.log("files", files);
     }
 
     function upload(e) {
@@ -237,11 +250,11 @@ const CreateRoute = () => {
                                     <Col md={12} className={"mb-3"}>
                                         <label className={"fileUpload v2"} htmlFor="upload-photo">
                                             <Form.Control
-                                                type="file"
+                                                type="files"
                                                 id={"upload-photo"}
-                                                disabled={file.length === 1}
+                                                disabled={files.length === 1}
                                                 className=""
-                                                onChange={uploadSingleFile}
+                                                onChange={uploadSingleFile1}
                                             />
                                             <span>Attach Images</span>
                                         </label>
@@ -249,8 +262,8 @@ const CreateRoute = () => {
                                     </Col>
                                     <Col md={12} className={"mb-3"}>
                                         <div className="form-group previewBox">
-                                            {file.length > 0 &&
-                                                file.map((item, index) => {
+                                            {files.length > 0 &&
+                                                files.map((item, index) => {
                                                     return (
                                                         <div className={"preview"} key={item}>
                                                             <img src={item} alt="" />

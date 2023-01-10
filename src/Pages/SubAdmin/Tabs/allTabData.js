@@ -95,7 +95,7 @@ const AllTabData = (props) => {
                 <tbody>
                     {
                         currentItems.filter((item) => {
-                            return search.toLowerCase() === ''
+                            return search.toUpperCase() === ''
                                 ? item
                                 : (
                                     item.firstName.toLowerCase().includes(search) ||

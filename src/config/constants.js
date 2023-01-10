@@ -57,6 +57,17 @@ export const ENDPOINT = {
     admin_route :{
         listing : `${API_URL}/admin/route`,
     },
+    route: {
+        listing: `${API_URL}/admin/route`,
+        delete: {
+            url: `${API_URL}/route/`,
+            id: null
+        },
+     edit_user: {
+            url : `${API_URL}/sub-admin/`,
+            id  : null
+        },
+    },
 
     admin_guidelines :{
         terms_conditions : `${API_URL}/admin-guidelines`,
