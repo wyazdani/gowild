@@ -166,13 +166,13 @@ return (
                                 <Form.Label>Starting Point</Form.Label>
                                 <Form.Control type="text"
                                     name="longitude"
-                                    value={values['start'].longitude}
+                                    value={values.start.longitude}
                                     onChange={handleChange}
                                     isValid={touched.longitude && !errors.longitude}
                                     className={"mb-3"} placeholder="longitude" />
                                 <Form.Control type="text"
                                     name="latitude"
-                                    value={values['start'].latitude}
+                                    value={values.start.latitude}
                                     onChange={handleChange}
                                     isValid={touched.latitude && !errors.latitude}
                                     className={"mb-3"} placeholder="latitude" />
@@ -181,13 +181,13 @@ return (
                                 <Form.Label>End Point</Form.Label>
                                 <Form.Control type="text"
                                     name="longitude"
-                                    value={values['end'].longitude}
+                                    value={values.end.longitude}
                                     onChange={handleChange}
                                     isValid={touched.longitude && !errors.longitude}
                                     className={"mb-3"} placeholder="longitude" />
                                 <Form.Control type="text"
                                     name="latitude"
-                                    value={values['end'].latitude}
+                                    value={values.end.latitude}
                                     onChange={handleChange}
                                     isValid={touched.latitude && !errors.latitude}
                                     className={"mb-3"} placeholder="latitude" />

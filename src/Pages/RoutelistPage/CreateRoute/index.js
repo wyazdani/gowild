@@ -30,6 +30,7 @@ const CreateRoute = () => {
             }
         })
     }
+    
 
 
     const submitForm = async (event) => {
@@ -46,9 +47,9 @@ const CreateRoute = () => {
               "latitude": JSON.parse(formData.endLattitude),
               "longitude": JSON.parse(formData.endLongtitude)
             },
-            "distance_miles": "string",
-            "distance_meters": "string",
-            "estimate_time": "01:04:55"
+            "distance_miles": 34,
+            "distance_meters": 600,
+            "estimate_time": "1h 14m"
           }
 
         return await AuthService.postMethod(ENDPOINT.admin_route.listing, true, dataObj)

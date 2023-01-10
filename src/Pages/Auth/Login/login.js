@@ -98,6 +98,7 @@ const Login = () => {
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="loginpassword">
                         <Form.Label>Password</Form.Label>
+                        <Link  to={"/forgetpassword"}  style={{float: "right"}}>Forget Password ?</Link>
                         <InputGroup>
                             <InputGroup.Text id="basic-addon1">
                                 <img src={Lock} alt={"img"}/>
@@ -122,9 +123,9 @@ const Login = () => {
                             Login
                         </Button>
                     </Form.Group>
-                    <Form.Group className={"text-center mb-3"}>
+                    {/* <Form.Group className={"text-center mb-3"}>
                         <Link to={"/forgetpassword"}>Forget Password ?</Link>
-                    </Form.Group>
+                    </Form.Group> */}
                     {/*<Form.Group className={"d-md-flex justify-content-between"}>
                         <Link to={"/"}>Privacy policy</Link>
                         <Link to={"/"}>Terms and conditions</Link>
