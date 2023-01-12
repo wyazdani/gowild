@@ -27,7 +27,7 @@ const UserRoute = () => {
                 setApproveContent(res.data.data);
                 setDisapproveContent(res.data.data);
                 setIsLoader(true);
-                console.log("response data abc", res.data.data[0].user.status);
+                console.log("response data", res.data.data);
             })
             .catch((err) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");

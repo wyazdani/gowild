@@ -60,7 +60,9 @@ const EWavier = () => {
         <>
             <Row>
                 {
-                    content.map((content) => {
+                    content.filter(item => {
+                        return item.type === "eWaiver" ? true : false;
+                    }).map((content) => {
                         return (
                             <>
                                 <Col md={8}>

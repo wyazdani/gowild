@@ -18,7 +18,7 @@ const PendingTabData = (props) => {
     const [modalShow, setModalShow] = useState(false);
     const [modalShowView, setModalShowView] = useState(false);
     const [search, setSearch] = useState("");
-    const [itemsPerPage, setItemsPerPage] = useState(4);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
     // var itemsPerPage = 4;
 
     useEffect(() => {
@@ -81,14 +81,10 @@ const PendingTabData = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentItems.sort((a, b) => (a.name < b.name ? -1 : 1)).filter((item) => {
-                        return search.toLowerCase() === ''
-                            ? item
-                            : (
-                                item.user.firstName.toLowerCase().includes(search) ||
-                                item.user.email.toLowerCase().includes(search)
-                            )
-                    }).map((alltabdata) => (
+                {currentItems.sort((a, b) => (a.name < b.name ? -1 : 1)).filter((row) =>
+                            !search.length || row.user.firstName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
+                            row.user.lastName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
+                            row.user.email.toString().toLowerCase().includes(search.toString().toLowerCase())).map((alltabdata) => (
                         <tr>
                             <td><Form.Check type="checkbox" /></td>
                             <td>
@@ -144,22 +140,23 @@ const PendingTabData = (props) => {
             </Table>
 
             <div className="result_pagination">
-                <span> Rows per page: &nbsp; </span> 
+                <span> Rows per page: &nbsp; </span>
                 <select onChange={handleRowsPerPageChange} value={itemsPerPage}>
                     <option>{currentItems.length}</option>
-                  {/* {currentItems.length === 4 ? null  :<option value={4}>4</option>} */}
+                    {/* {currentItems.length === 4 ? null  :<option value={4}>4</option>} */}
                     <option value={5}>5</option>
-                    <option value={10}>10</option>
                     <option value={25}>25</option>
                     <option value={50}>50</option>
+                    <option value={75}>75</option>
                 </select> <i className="fa fa-sort-desc" aria-hidden="true"></i>
 
-                <span className="mx-4"> {currentItems.length} of {content.length} </span>
+                {/* <span className="mx-5"> {currentItems.length} - {content.length} of {content.length} </span> */}
+                <span className="mx-5"> {pageCount} - {currentItems.length}  of {content.length} </span>
                 <ReactPaginate
                     breakLabel="..."
                     nextLabel="  >"
                     onPageChange={handlePageClick}
-                    pageRangeDisplayed={3}
+                    pageRangeDisplayed={2}
                     pageCount={pageCount}
                     rowsPerPage={itemsPerPage}
                     previousLabel="<"

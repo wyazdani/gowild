@@ -20,7 +20,7 @@ const AllTabData = (props) => {
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const [itemOffset, setItemOffset] = useState(0);
-    const [itemsPerPage, setItemsPerPage] = useState(4);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
     // var itemsPerPage = 4;
 
 
@@ -85,22 +85,16 @@ const AllTabData = (props) => {
                 </thead>
                 <tbody>
                     {
-                        currentItems.filter((item) => {
-                            return search.toLowerCase() === ''
-                                ? item
-                                : (
-                                    item.email.toLowerCase().includes(search) ||
-                                    item.firstName.toLowerCase().includes(search) ||
-                                    item.lastName.toLowerCase().includes(search)
-                                )
-                        })
-                            .map((content) => (
+                        currentItems.filter((row) =>
+                            !search.length || row.firstName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
+                            row.lastName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
+                            row.email.toString().toLowerCase().includes(search.toString().toLowerCase())).map((content) => (
                                 <tr>
                                     <td><Form.Check type="checkbox" /></td>
                                     <td>
                                         <div className={"d-flex"}>
                                             <div className={classes.userImg}>
-                                                <img src={content.imageUrl} alt={content.firstName} />
+                                                <img src={content.picture} alt={content.firstName} />
                                             </div>
                                             <div className={classes.description}>
                                                 <h4 className={"font-16 mb-0"}>{content.firstName + " " + content.lastName}</h4>
@@ -165,22 +159,23 @@ const AllTabData = (props) => {
                 </tbody>
             </Table>
             <div className="result_pagination">
-                <span> Rows per page: &nbsp; </span> 
+                <span> Rows per page: &nbsp; </span>
                 <select onChange={handleRowsPerPageChange} value={itemsPerPage}>
                     <option>{currentItems.length}</option>
-                  {/* {currentItems.length === 4 ? null  :<option value={4}>4</option>} */}
+                    {/* {currentItems.length === 4 ? null  :<option value={4}>4</option>} */}
                     <option value={5}>5</option>
-                    <option value={10}>10</option>
                     <option value={25}>25</option>
                     <option value={50}>50</option>
+                    <option value={75}>75</option>
                 </select> <i className="fa fa-sort-desc" aria-hidden="true"></i>
 
-                <span className="mx-4"> {currentItems.length} of {content.length} </span>
+                <span className="mx-5"> {currentItems.length} - {content.length} of {content.length} </span>
+                {/* <span className="mx-5"> {currentItems.length}  of {content.length} </span> */}
                 <ReactPaginate
                     breakLabel="..."
                     nextLabel="  >"
                     onPageChange={handlePageClick}
-                    pageRangeDisplayed={3}
+                    pageRangeDisplayed={2}
                     pageCount={pageCount}
                     rowsPerPage={itemsPerPage}
                     previousLabel="<"

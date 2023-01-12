@@ -25,17 +25,6 @@ const Users = () => {
       //     }
       // });
 
-      // let pending = res.data.filter(obj => {
-      //     if (obj.status === "pending") {
-      //         return obj
-      //     }
-      // });
-      // let disapprove = res.data.filter(obj => {
-      //     if (obj.status === "disapprove") {
-      //         return obj
-      //     }
-      // });
-
         setContent(res.data)
         setActiveContent(res.data.filter(data => ["active"].includes(data.accountStatus)));
         setDisableContent(res.data.filter(data => !["active"].includes(data.accountStatus)));

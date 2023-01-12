@@ -19,6 +19,8 @@ code {
   height: 10px;
   border-radius: 3px;
   margin: 0 0 10px;
+  // background-color: linear-gradient(270deg, #B3F0CB 0%, #00CC52 112.41%) !important;
+  // background: linear-gradient(270deg, #CEFFE2 0%, #00CC52 112.41%);
 
   &.signUp{
     background: #CEFFE2;
@@ -27,6 +29,7 @@ code {
         background: url(../Images/bgGreenbar.svg) no-repeat;
         background-size: 110%;
         background-position: -4px 0;
+        
     }
   }
 

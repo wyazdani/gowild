@@ -15,11 +15,11 @@ const AllTabData = (props) => {
     /* Destructuring the props object. */
     const { content } = props;
 
- 
+
     const [isLoader, setIsLoader] = useState(false);
     const [addAdmin, setAddAdmin] = useState(false);
     const [editSubAdmin, setEditSubAdmin] = useState(false);
-    const [editItem , setEditItem] = useState(null);
+    const [editItem, setEditItem] = useState(null);
 
 
 
@@ -30,13 +30,13 @@ const AllTabData = (props) => {
     const [modalShow, setModalShow] = useState(false);
     const [modalShowView, setModalShowView] = useState(false);
     const [search, setSearch] = useState("");
-    const [itemsPerPage, setItemsPerPage] = useState(4);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
     // const itemsPerPage = 3;
 
     useEffect(() => {
         const endOffset = itemOffset + itemsPerPage;
         setCurrentItems(content.slice(itemOffset, endOffset));
-        
+
         setPageCount(Math.ceil(content.length / itemsPerPage));
     }, [itemOffset, itemsPerPage, content]);
 
@@ -94,16 +94,11 @@ const AllTabData = (props) => {
                 </thead>
                 <tbody>
                     {
-                        currentItems.filter((item) => {
-                            return search.toUpperCase() === ''
-                                ? item
-                                : (
-                                    item.firstName.toLowerCase().includes(search) ||
-                                    item.email.toLowerCase().includes(search) ||
-                                    item.lastName.toLowerCase().includes(search)
-                                )
-                        })
-                            .map((content) => (
+
+                        currentItems.filter((row) =>
+                            !search.length || row.firstName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
+                            row.lastName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
+                            row.email.toString().toLowerCase().includes(search.toString().toLowerCase())).map((content) => (
                                 <tr>
                                     <td><Form.Check type="checkbox" /></td>
                                     <td>
@@ -112,7 +107,7 @@ const AllTabData = (props) => {
                                                 <img src={content.picture} alt={content.firstName} />
                                             </div>
                                             <div className={classes.description}>
-                                                <h4 className={"font-16 mb-0"}>{content.firstName+" "+content.lastName}</h4>
+                                                <h4 className={"font-16 mb-0"}>{content.firstName + " " + content.lastName}</h4>
                                                 <div className={"text-muted"}>{content.email}</div>
                                             </div>
                                         </div>
@@ -151,9 +146,9 @@ const AllTabData = (props) => {
                                                     Edit User
                                                 </Dropdown.Item>
                                                 <Dropdown.Item href="#/"
-                                                 onClick={() => {
-                                                    props.deleteSubAdmin(content.id)
-                                                }}
+                                                    onClick={() => {
+                                                        props.deleteSubAdmin(content.id)
+                                                    }}
                                                 >
                                                     <i className={"fal fa-trash bg-danger text-white"}></i>
                                                     Delete
@@ -170,14 +165,15 @@ const AllTabData = (props) => {
                 <span> Rows per page: &nbsp; </span>
                 <select onChange={handleRowsPerPageChange} value={itemsPerPage}>
                     <option>{currentItems.length}</option>
-                  {/* {currentItems.length === 4 ? null  :<option value={4}>4</option>} */}
+                    {/* {currentItems.length === 4 ? null  :<option value={4}>4</option>} */}
                     <option value={5}>5</option>
-                    <option value={10}>10</option>
                     <option value={25}>25</option>
                     <option value={50}>50</option>
+                    <option value={75}>75</option>
                 </select> <i className="fa fa-sort-desc" aria-hidden="true"></i>
 
-                <span className="mx-4"> {currentItems.length} of {content.length} </span>
+                {/* <span className="mx-4"> {currentItems.length} - {content.length} of {content.length} </span> */}
+                <span className="mx-5"> {pageCount-1} - {currentItems.length}  of {content.length} </span>
                 <ReactPaginate
                     breakLabel="..."
                     nextLabel="  >"
@@ -192,7 +188,7 @@ const AllTabData = (props) => {
                     previousLinkClassName="page-num"
                     nextLinkClassName="page-num"
                     activeLinkClassName="active"
-                    
+
                 />
             </div>
             <EditSubAdmin
@@ -200,7 +196,7 @@ const AllTabData = (props) => {
                 onHide={() => setEditSubAdmin(false)}
                 editItem={editItem}
             />
-            
+
         </>
     )
 }

@@ -47,7 +47,6 @@ const SubAdmin = () => {
 
     useEffect(() => {
         subAdminAllData();
-
     }, []);
 
 
@@ -70,7 +69,7 @@ const SubAdmin = () => {
                     className="mb-3"
                 >
                     <Tab eventKey="All" title="All">
-                        <AllTabData content={content} deleteSubAdmin={deleteSubAdmin} />
+                        <AllTabData content={content} deleteSubAdmin={deleteSubAdmin} subAdminAllData={subAdminAllData} />
                     </Tab>
                     <Tab eventKey="Active" title="Active">
                         <ActiveTabData content={activeContent} deleteSubAdmin={deleteSubAdmin} />

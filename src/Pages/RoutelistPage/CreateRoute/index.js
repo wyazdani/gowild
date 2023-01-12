@@ -20,7 +20,7 @@ const CreateRoute = () => {
     const [formData, setFormData] = useState({});
 
 
-    const handleChange = (event) => {
+    const handleChanges = (event) => {
         let value = event.target.value;
         let name = event.target.name;
         setFormData((prevalue) => {
@@ -30,7 +30,17 @@ const CreateRoute = () => {
             }
         })
     }
-    
+    const handleChange = (event) => {
+        let name = event.target.name;
+        const value = event.target.value.replace(/\D/g, "");
+        // const value = event.target.value.replace(/(0|)\D/g, "");
+        setFormData((prevalue) => {
+            return {
+                ...prevalue,   // Spread Operator               
+                [name]: value
+            }
+        })
+    }
 
 
     const submitForm = async (event) => {
@@ -47,6 +57,7 @@ const CreateRoute = () => {
               "latitude": JSON.parse(formData.endLattitude),
               "longitude": JSON.parse(formData.endLongtitude)
             },
+            "picture": formData.picture,
             "distance_miles": 34,
             "distance_meters": 600,
             "estimate_time": "1h 14m"
@@ -153,6 +164,7 @@ const CreateRoute = () => {
                                             <Form.Control
                                                 type="file"
                                                 id={"upload-photo"}
+                                                value={formData.picture}
                                                 disabled={file.length === 1}
                                                 className=""
                                                 onChange={uploadSingleFile}
@@ -182,7 +194,7 @@ const CreateRoute = () => {
                                     name="title"
                                     required
                                     value={formData.title}
-                                    onChange={handleChange}
+                                    onChange={handleChanges}
                                     className={"mb-3"} placeholder="My Race Title" />
                             </Form.Group>
                             <Form.Group>
@@ -191,7 +203,7 @@ const CreateRoute = () => {
                                     name="description"
                                     required
                                     value={formData.description}
-                                    onChange={handleChange}
+                                    onChange={handleChanges}
                                     className={"mb-3"} placeholder="Write something here ..." />
                             </Form.Group>
                             <Form.Group>
