@@ -3,6 +3,8 @@ import { Form, Dropdown, Button, Row, Col, Table } from "react-bootstrap";
 import classes from "../../treasureHuntRegistration/index.module.scss";
 import userImg from "../../../Images/userImg.png";
 import ReactPaginate from 'react-paginate';
+import profile from "Images/userImg.png";
+
 
 const DisableTabData = (props) => {
     const { content } = props;
@@ -59,7 +61,7 @@ const DisableTabData = (props) => {
                         <th>
                             <Form.Check type="checkbox" />
                         </th>
-                        <th>Name</th>
+                        <th> &nbsp;&nbsp;&nbsp;Name</th>
                         <th>Online status</th>
                         <th>Username</th>
                         <th>account Status</th>
@@ -77,7 +79,7 @@ const DisableTabData = (props) => {
                                     <td>
                                         <div className={"d-flex"}>
                                             <div className={classes.userImg}>
-                                                <img src={content.picture} alt={content.firstName} />
+                                                <img src={profile} alt={content.firstName} />
                                             </div>
                                             <div className={classes.description}>
                                                 <h4 className={"font-16 mb-0"}>{content.firstName + " " + content.lastName}</h4>

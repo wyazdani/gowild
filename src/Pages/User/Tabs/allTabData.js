@@ -5,7 +5,7 @@ import ViewProfilePopup from "../UserComponent/ViewProfile/viewProfilePopup";
 import EditUser from "../UserComponent/EditUser";
 import AddUser from "../UserComponent/AddNewUser";
 import ReactPaginate from 'react-paginate';
-
+import profile from "Images/userImg.png";
 
 
 const AllTabData = (props) => {
@@ -76,7 +76,7 @@ const AllTabData = (props) => {
                 <thead>
                     <tr>
                         <th><Form.Check type="checkbox" /></th>
-                        <th>Name</th>
+                        <th> &nbsp;&nbsp;&nbsp;Name</th>
                         <th>Online Status</th>
                         <th>Location</th>
                         <th>Account Status</th>
@@ -94,7 +94,7 @@ const AllTabData = (props) => {
                                     <td>
                                         <div className={"d-flex"}>
                                             <div className={classes.userImg}>
-                                                <img src={content.picture} alt={content.firstName} />
+                                                <img src={profile} alt={content.firstName} />
                                             </div>
                                             <div className={classes.description}>
                                                 <h4 className={"font-16 mb-0"}>{content.firstName + " " + content.lastName}</h4>

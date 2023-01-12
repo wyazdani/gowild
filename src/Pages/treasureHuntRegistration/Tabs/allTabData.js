@@ -11,7 +11,7 @@ import AuthService from "services/auth.service";
 import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
 import ReactPaginate from 'react-paginate';
-
+import profile from "Images/Ellipse 768.png";
 
 
 const AllTabData = (props) => {
@@ -102,7 +102,7 @@ const AllTabData = (props) => {
                         <th>
                             <Form.Check type="checkbox" />
                         </th>
-                        <th>Name</th>
+                        <th> &nbsp;&nbsp;&nbsp;Name</th>
                         <th>Event Name</th>
                         <th>Online Status</th>
                         <th>Username</th>
@@ -120,7 +120,7 @@ const AllTabData = (props) => {
                             <td>
                                 <div className={"d-flex"}>
                                     <div className={classes.userImg}>
-                                        <img src={alltabdata.user.picture} alt={alltabdata.user.firstName} />
+                                        <img src={profile} alt={alltabdata.user.firstName} />
                                     </div>
                                     <div className={classes.description}>
                                         <h4 className={"font-16 mb-0"}>{alltabdata.user.firstName +" "+ alltabdata.user.lastName}</h4>
