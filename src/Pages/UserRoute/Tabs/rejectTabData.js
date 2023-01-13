@@ -96,7 +96,7 @@ const AllTabData = (props) => {
                             <td>
                                 <div className={"d-flex"}>
                                     <div className={classes.userImg}>
-                                        <img src={profile} alt={content.user.firstName} />
+                                    {(content.picture)? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
                                     </div>
                                     <div className={classes.description}>
                                         <h4 className={"font-16 mb-0"}>{content.user.firstName + " " + content.user.lastName}</h4>
@@ -114,19 +114,18 @@ const AllTabData = (props) => {
                                 {(formatDate(content.createdDate))}
                             </td>
                             <td>
-                                {content.user.status.statusName === "active"
-                                    ? <span class="text-success">Approved</span>
-                                    : <span class="text-danger">Pending</span>
+                                {content.status === 'approved' ? <span class="text-success text-uppercase">Approved</span>
+                                    : <span class="text-danger text-uppercase">Rejected</span>
                                 }
                             </td>
                             <td>
-                                <Dropdown>
+                            <Dropdown>
                                     <Dropdown.Toggle variant="success" id="dropdown-basic">
                                         <i className={"far fa-ellipsis-v fa-fw"}></i>
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu>
-                                        {content.user.status.statusName === "active"
+                                        {content.status === 'approved'
                                             ? <Dropdown.Item href="#/">
                                                 <i className={"fal fa-ban bg-danger text-white"}></i>
                                                 Reject

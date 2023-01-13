@@ -121,21 +121,9 @@ const RouteList = () => {
                                 <Form.Check type="checkbox" />
                             </td>
                             <td>
-                            <img src={profile} alt={""} />
+                            {(content.picture)? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="80%" alt={"img"} /> :  <img src={profile} width="90%" alt={"img"} /> }
                             </td>
-                            {/* <td>
-                                <div className={"d-flex"}>
-                                    <div className={classes.userImg}>
-                                        <img src={alltabdata.user.picture} alt={alltabdata.user.firstName} />
-                                    </div>
-                                    <div className={classes.description}>
-                                        <h4 className={"font-16 mb-0"}>{alltabdata.user.firstName +" "+ alltabdata.user.lastName}</h4>
-                                        <div className={"text-muted"}>{alltabdata.user.email}</div>
-                                    </div>
-                                </div>
-                            </td> */}
                             <td>{content.title}</td>
-                            {/* <td>{(content.user) ? (formatDate(content.createdDate)) : "-"}</td> */}
                             <td>{(formatDate(content.createdDate))}</td>
                             <td>{content.start.latitude} / {content.start.longitude}</td>
                             <td>{content.end.latitude} / {content.end.longitude}</td>

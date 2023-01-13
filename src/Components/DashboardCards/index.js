@@ -13,7 +13,7 @@ import CardListData from "./CardListData";
 
 
 const DashboardCard = () => {
-  
+
 
     const [content, setContent] = useState([]);
     const [isLoader, setIsLoader] = useState(false);
@@ -44,11 +44,23 @@ const DashboardCard = () => {
     }
 
 
+    // const signUpBgColor = {
+    //     backgroundColor: "linear-gradient(270deg, #B3F0CB 0%, #00CC52 112.41%)",
+    // };
+
+    // const activeUserBgColor = {
+    //     backgroundColor: "green",
+    // };
+    // // const inActiveBgColor = {
+    //     backgroundColor: "red",
+    // };
+    // color={activeUserBgColor.backgroundColor} 
+
     return (
         <Row>
-            <CardListData content={content.data.signup_users}  title="Sign Up User" image={signUpUser} />
+            <CardListData content={content.data.signup_users} title="Sign Up User" image={signUpUser}  />
             <CardListData content={content.data.active_users} title="Active User" image={activeUser} />
-            <CardListData content={content.data.inactive_users} title="Inactive User" image={inActiveuser} />
+            <CardListData content={content.data.inactive_users} title="Inactive User" image={inActiveuser}  />
         </Row>
     )
 }

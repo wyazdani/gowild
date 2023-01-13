@@ -24,8 +24,8 @@ const UserRoute = () => {
         await AuthService.getMethod(ENDPOINT.users_route.listing, true,)
             .then((res) => {
                 setContent(res.data.data);
-                setApproveContent(res.data.data);
-                setDisapproveContent(res.data.data);
+                setApproveContent(res.data.data.filter(data => ["approved"].includes(data.status)));
+                setDisapproveContent(res.data.data.filter(data => ["pending"].includes(data.status)));
                 setIsLoader(true);
                 console.log("response data", res.data.data);
             })

@@ -99,8 +99,6 @@ const CreateTreasure = () => {
         console.log(s);
     }
 
-
-    
     
     return (
         <>

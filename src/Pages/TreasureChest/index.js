@@ -11,7 +11,7 @@ import { Routes, Route, useParams } from 'react-router-dom';
 import EditTreasure from './EditTreasureChests';
 import ViewRoute from 'Pages/UserRoute/viewRoute';
 import ViewTreasure from './ViewRoute';
-// import ViewTreasure from './ViewRoute/ViewRoute';
+import profile from "Images/cardsImg.png";
 
 
 
@@ -128,8 +128,8 @@ const TreasureChestList = () => {
                             <tr>
                                 <td><Form.Check type="checkbox" /></td>
                                 <td style={{ width: "10%" }}>
-                                    <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} />
-                                </td>
+                                   {(content.picture)? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
+                                </td>                             
                                 <td>{content.title}</td>
                                 <td>{(formatDate(content.createdDate))}</td>
                                 <td> {(formatDate(content.eventDate))}</td>
