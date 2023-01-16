@@ -47,8 +47,8 @@ const SubAdmin = () => {
 
     useEffect(() => {
         subAdminAllData();
-    }, []);
-
+    }, [content,activeContent,InActiveContent]);
+ 
 
     if (!isLoader) {
         return (

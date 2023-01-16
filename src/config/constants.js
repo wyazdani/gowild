@@ -54,9 +54,11 @@ export const ENDPOINT = {
     },
 
 
-    admin_route :{
-        listing : `${API_URL}/admin/route`,
+    admin_route: {
+        listing: `${API_URL}/admin/route`,
+        update_pictures: `${API_URL}/admin/route/`,
     },
+
     route: {
         listing: `${API_URL}/admin/route`,
         delete: {
@@ -91,13 +93,14 @@ export const ENDPOINT = {
             url : `${API_URL}/admin/treasure-chest/`,
             id  : null
         },
+        
     },
-    // treasure_hunt :{
-    //     listing : `${API_URL}/admin/treasure-chest/user-hunts`,
-    //     delete: {
-    //         url:`${API_URL}//admin/treasure-chest/user-hunts/`,
-    //         id:null
-    //     },
-    // },
+    historical_event :{
+        add_event : `${API_URL}/admin/route-historical-events/`,
+        delete: {
+            url:`${API_URL}/admin/route-historical-events`,
+            id:null
+        },
+    },
 
 };

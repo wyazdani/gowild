@@ -8,16 +8,21 @@ import { Formik } from 'formik';
 import { object, string } from 'yup';
 
 const EditSubAmdin = (props) => {
+
+    const [addAdmin, setAddAdmin] = useState(false);
+
     const schema = object().shape({
         firstName: string().required(),
         lastName: string().required(),
-        email: string().required(),
+        // email: string().required(),
         userName: string().required(),
-        location: string().required(),
+        addressTwo: string().required(),
         //phoneNo: string().required(),
         birthDate: string().required(),
         password:  string().required(),
     });
+
+    
     const handleSubmit = async  (data) => {
         ENDPOINT.sub_admin.edit_user.id = props.editItem.id;
         return await AuthService.patchMethod(ENDPOINT.sub_admin.edit_user.url+ENDPOINT.sub_admin.edit_user.id, true,data)
@@ -25,6 +30,10 @@ const EditSubAmdin = (props) => {
                 //setContent(res.data);
                 //setIsLoader(true);
                 //console.log(res.data);
+                setTimeout(() => {
+                    setAddAdmin(props.onHide);
+                    // props.subAdminAllData();
+                  }, 1000);
             })
             .catch((err) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
@@ -51,9 +60,9 @@ const EditSubAmdin = (props) => {
                         initialValues={{
                             firstName: props.editItem.firstName,
                             lastName: props.editItem.lastName,
-                            email: props.editItem.email,
+                            // email: props.editItem.email,
                             userName: props.editItem.username,
-                            location: props.editItem.addressOne,
+                            addressTwo: props.editItem.addressTwo,
                             birthDate: props.editItem.dateOfBirth,
                             //phoneNo: props.editItem.phoneNo,
                             //password: props.editItem.password
@@ -123,11 +132,11 @@ const EditSubAmdin = (props) => {
                                                     <Form.Label className={"text-orange mb-0"}>Location</Form.Label>
                                                     <Form.Control
                                                         type="text"
-                                                        name="location"
-                                                        value={values.location}
+                                                        name="addressTwo"
+                                                        value={values.addressTwo}
                                                         onChange={handleChange}
                                                         placeholder="Address"
-                                                        isValid={touched.location && !errors.location}
+                                                        isValid={touched.addressTwo && !errors.addressTwo}
 
                                                     />
                                                 </Col>
@@ -139,7 +148,7 @@ const EditSubAmdin = (props) => {
                                             <h3 className={"font-20 text-orange mb-3"}>Account Information</h3>
                                             <Row>
                                                 <Col md={12} className={"mb-3"}>
-                                                    <Form.Label className={"text-orange mb-0"}>Email</Form.Label>
+                                                    {/* <Form.Label className={"text-orange mb-0"}>Email</Form.Label>
                                                     <Form.Control
                                                         type="email"
                                                         name="email"
@@ -149,7 +158,7 @@ const EditSubAmdin = (props) => {
                                                         disabled
                                                         //isValid={touched.email && !errors.email}
 
-                                                    />
+                                                    /> */}
                                                 </Col>
                                                 <Col md={12} className={"mb-3"}>
                                                     <Form.Label className={"text-orange mb-0"}>Username</Form.Label>

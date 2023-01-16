@@ -132,10 +132,10 @@ const AllTabData = (props) => {
                                             </Dropdown.Toggle>
 
                                             <Dropdown.Menu>
-                                                <Dropdown.Item href="#/">
+                                                {/* <Dropdown.Item href="#/">
                                                     <i className={"fal fa-ban bg-warning text-white"}></i>
                                                     Disable User
-                                                </Dropdown.Item>
+                                                </Dropdown.Item> */}
                                                 <Dropdown.Item href="#/" onClick={
                                                     () => {
                                                         setEditSubAdmin(true)

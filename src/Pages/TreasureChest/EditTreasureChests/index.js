@@ -17,46 +17,25 @@ const EditTreasure = (props) => {
     const navigate = useNavigate();
 
     const [file, setFile] = useState([]);
-    const [formData, setFormData] = useState({})
-
-
 
     const schema = object().shape({
     title: string().required(),
     description: string().required(),
     latitude: string().required(),
     longitude: string().required(),
-    date: string().required(),
-    time: string().required(),
-    number: string().required(),
+    updatedDate: string().required(),
+    createdDate: string().required(),
+    eventTime: string().required(),
+    no_of_participants: string().required(),
     });
     console.log(props.editItem)
 
 
     const handleSubmit = async (data) => {
-    const dataObj = {
+    console.log("handleSubmit ~ data", data)
 
-        "id": props.editItem.id,
-        "createdDate": props.editItem.createdDate,
-        "updatedDate": props.editItem.updatedDate,
-        "title": props.editItem.title,
-        "description": props.editItem.description,
-        "location": {
-          "latitude": props.editItem.location.latitude,
-          "longitude": props.editItem.location.longitude,
-        },
-        "eventDate": props.editItem.eventDate,
-        "eventTime": props.editItem.eventTime,
-        "no_of_participants": props.editItem.no_of_participants,
-        "picture":  props.editItem.picture
-    
-    }
-
-
-    ENDPOINT.treasure_chests.edit_user.id = props.editItem
-    return await AuthService.patchMethod(ENDPOINT.treasure_chests.edit_user.url + ENDPOINT.treasure_chests.edit_user.id, true, data, dataObj ,{
-        body: JSON.stringify(dataObj)
-    })
+    ENDPOINT.treasure_chests.edit_user.id = props.editItem.id;
+    return await AuthService.patchMethod(ENDPOINT.treasure_chests.edit_user.url+ENDPOINT.treasure_chests.edit_user.id, true, data)
     .then((res) => {
         //setContent(res.data);
         //setIsLoader(true);
@@ -136,7 +115,10 @@ const EditTreasure = (props) => {
                 "status": "pending",
                 "no_of_participants": props.editItem.no_of_participants,
                 "a_r": "augmented reality",
-                "picture": props.editItem.picture,
+                "winnerId": "uuid",
+                "picture": "Picture",
+                "a_r": "augmented reality"
+
             }}
         >
             {({
@@ -156,7 +138,6 @@ const EditTreasure = (props) => {
                                     <Form.Label>Title</Form.Label>
                                     <Form.Control type="text"
                                         name="title"
-
                                         value={values.title}
                                         onChange={handleChange}
                                         isValid={touched.title && !errors.title}
@@ -233,7 +214,6 @@ const EditTreasure = (props) => {
                                                     <Form.Control
                                                         type="file"
                                                         name="picture"
-                                                         value={formData.picture}
                                                         id={"upload-photo"}
                                                         disabled={file.length === 1}
                                                         className=""

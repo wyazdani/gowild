@@ -19,7 +19,7 @@ const AddSubAdmin = (props) => {
         lastName: string().required(),
         email: string().required(),
         userName: string().required(),
-        location: string().required(),
+        addressOne: string().required(),
        // phoneNo: string().required(),
         birthDate: string().required(),
         password: string().required(),
@@ -68,7 +68,7 @@ const AddSubAdmin = (props) => {
                             lastName: '',
                             email: '',
                             userName: '',
-                            location: '',
+                            addressOne: '',
                             birthDate: '',
                            // phoneNo: '',
                             password: ""
@@ -138,11 +138,11 @@ const AddSubAdmin = (props) => {
                                                     <Form.Label className={"text-orange mb-0"}>Location</Form.Label>
                                                     <Form.Control
                                                         type="text"
-                                                        name="location"
-                                                        value={values.location}
+                                                        name="addressOne"
+                                                        value={values.addressOne}
                                                         onChange={handleChange}
                                                         placeholder="Address 1"
-                                                        isValid={touched.location && !errors.location}
+                                                        isValid={touched.addressOne && !errors.addressOne}
 
                                                     />
                                                 </Col>
