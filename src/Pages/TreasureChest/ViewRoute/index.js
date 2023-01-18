@@ -131,7 +131,7 @@ import moment from 'moment';
                             </div>
                         </Col>
 
-                       {/* <Col md={12}>
+                       <Col md={12}>
                             <Row>
                                 <Col md={12}>
                                     <Row>
@@ -228,7 +228,7 @@ import moment from 'moment';
                                     </Row>
                                 </Col>
                             </Row>
-                        </Col>*/}
+                        </Col>
                     </Row>
                 </Form>
             </section>

@@ -27,35 +27,30 @@ const EditRouteList = (props) => {
     description: string().required(),
     latitude: string().required(),
     longitude: string().required(),
-    date: string().required(),
-    time: string().required(),
-    number: string().required(),
+    // date: string().required(),
+    // time: string().required(),
+    // number: string().required(),
     });
     console.log(props.editItem)
     // console.log({...props})
 
 
     const handleSubmit = async (data) => {
-    const dataObj = {
-
-        "title": props.editItem.title,
-        "description":props.editItem.description,
-        "start": {
-          "latitude": JSON.parse(props.editItem['start'].latitude),
-          "longitude": JSON.parse(props.editItem['end'].longitude),
-        },
-        "end": {
-          "latitude":JSON.parse(props.editItem['end'].latitude),
-          "longitude": JSON.parse(props.editItem['end'].longitude),
-        },
-        "distance_miles": "string",
-        "distance_meters": "string",
-        "estimate_time": "01:04:55"
-    }
-    // ENDPOINT.route.delete.id = id;
     ENDPOINT.route.edit_user.id = props.editItem.id;
-    return await AuthService.patchMethod(ENDPOINT.route.edit_user.url + ENDPOINT.route.edit_user.id, true, data, dataObj)
+    return await AuthService.patchMethod(ENDPOINT.route.edit_user.url+ENDPOINT.route.edit_user.id, true, data)
     .then((res) => {
+        if (res.status === 200) {
+            toast.success('Route Updated Successfully', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }
         //setContent(res.data);
         //setIsLoader(true);
         console.log(res);
@@ -124,22 +119,19 @@ return (
             onSubmit={handleSubmit}
                     initialValues={{
 
-                            "id": "",
-                            "createdDate": "",
-                            "updatedDate": "",
-                            "user_id": "",
                             "title": props.editItem.title,
-                            "picture": null,
+                            "description": props.editItem.description,
                             "start": {
-                                "latitude":  props.editItem['start'].latitude,
-                                "longitude":  props.editItem['start'].longitude,
+                                "latitude": props.editItem['start'].latitude,
+                                "longitude":props.editItem['start'].longitude,
                             },
                             "end": {
-                                "latitude":  props.editItem['end'].latitude,
+                                "latitude": props.editItem['end'].latitude,
                                 "longitude": props.editItem['end'].longitude,
                             },
-                            "description": props.editItem.description,
-                            "role": "",
+                            "distance_miles": 0,
+                            "distance_meters": 0,
+                            "estimate_time": "2h 14m"
                         }}
         >
             {({

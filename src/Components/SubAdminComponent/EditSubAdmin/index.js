@@ -147,19 +147,19 @@ const EditSubAmdin = (props) => {
                                         <div className={classes.box}>
                                             <h3 className={"font-20 text-orange mb-3"}>Account Information</h3>
                                             <Row>
-                                                <Col md={12} className={"mb-3"}>
-                                                    {/* <Form.Label className={"text-orange mb-0"}>Email</Form.Label>
+                                                {/* <Col md={12} className={"mb-3"}>
+                                                    <Form.Label className={"text-orange mb-0"}>Email</Form.Label>
                                                     <Form.Control
                                                         type="email"
                                                         name="email"
                                                         value={values.email}
-                                                        //onChange={handleChange}
+                                                        onChange={handleChange}
                                                         placeholder="Enter Email"
-                                                        disabled
-                                                        //isValid={touched.email && !errors.email}
+                                                        // disabled
+                                                        isValid={touched.email && !errors.email}
 
-                                                    /> */}
-                                                </Col>
+                                                    />
+                                                </Col> */}
                                                 <Col md={12} className={"mb-3"}>
                                                     <Form.Label className={"text-orange mb-0"}>Username</Form.Label>
                                                     <Form.Control

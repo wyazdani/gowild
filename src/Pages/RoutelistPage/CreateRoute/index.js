@@ -9,7 +9,10 @@ import swal from 'sweetalert';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useNavigate} from "react-router-dom";
-// °
+import  GoogleMap  from "./GoogleMap";
+import { Wrapper, Status } from "@googlemaps/react-wrapper";
+
+
 
 const CreateRoute = () => {
 
@@ -20,22 +23,10 @@ const CreateRoute = () => {
     const [formData, setFormData] = useState({});
     const [historicalData, setHistoricalData] = useState({});
     const [uploadFile, setUploadFile] = useState();
+    const [showButton, setShowButton] = useState(false);
     // store id when user submit form
     const [id, setId] = useState();
     console.log("id", id)
-
-
-
-    // const handleChanges = (event) => {
-    //     let value = event.target.value;
-    //     let name = event.target.name;
-    //     setFormData((prevalue) => {
-    //         return {
-    //             ...prevalue,   // Spread Operator               
-    //             [name]: value
-    //         }
-    //     })
-    // }
 
 
     const handleChange = (event) => {
@@ -86,10 +77,11 @@ const CreateRoute = () => {
                         theme: "dark",
                     });
                 }
-                console.log(res.data);
+                console.log(res);
                 setId(res.data.id)
+                setShowButton(true)
                 // navigate('/route-list');
-                // setFormData("");
+                setFormData("");
                 // event.target.reset();
             })
             .catch((err) => {
@@ -131,7 +123,7 @@ const CreateRoute = () => {
         return  AuthService.postMethod(ENDPOINT.historical_event.add_event+id, true, dataObj)
             .then((res) => {
                 if (res.status === 200) {
-                    toast.success('Form data submitted successfully', {
+                    toast.success('Historical Event Routes submitted Successfully!', {
                         position: "bottom-right",
                         autoClose: 5000,
                         hideProgressBar: false,
@@ -300,10 +292,22 @@ const CreateRoute = () => {
                         </Form>
                     </Col>
                     <Col md={8}>
-                        <div className={"img-box"}>
+                        {/* <div className={"img-box"}>
                             <img src={map1} alt={"img"} />
-                        </div>
+                        </div> */}
+                        {/* <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d16821.829686653797!2d74.27623355730282!3d31.475672333592822!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3919023103af0bf3%3A0xc69a4d92168bdf89!2sDoctors%20Hospital%20%26%20Medical%20Center!5e0!3m2!1sen!2s!4v1673965953749!5m2!1sen!2s" width="100%" height="650"  allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>  */}
+                        <iframe
+                            width="100%"
+                            height="80%"
+                            loading="lazy"
+                            allowfullscreen
+                            referrerpolicy="no-referrer-when-downgrade"
+                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0
+                            &q=Space+Needle,Seattle+WA">
+                        </iframe>
+                  {/* <GoogleMap /> */}
                     </Col>
+                    
                 </Row>
                 <Row>
                     <Col md={12}>
@@ -414,7 +418,7 @@ const CreateRoute = () => {
                                 </Col>
                                 <Col md={12} className={"mb-3 text-center"}>
                                     <Form.Group>
-                                        <Button type="submit" className={"mt-3"} style={{ width: "25%" }}>Save</Button>
+                                   {showButton ? <Button type="submit" className={"mt-3"} style={{ width: "25%" }}>Save</Button> : ""}     
                                     </Form.Group>
                                 </Col>
                          

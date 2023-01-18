@@ -66,7 +66,7 @@ export const ENDPOINT = {
             id: null
         },
      edit_user: {
-            url : `${API_URL}/sub-admin/`,
+            url : `${API_URL}/admin/route/`,
             id  : null
         },
     },

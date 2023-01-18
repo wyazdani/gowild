@@ -71,7 +71,7 @@ const TreasureChestList = () => {
     useEffect(() => {
         treasureChestsListData();
 
-    }, []);
+    }, [content]);
 
     // convert date format to month / day / year
     function formatDate(date) {

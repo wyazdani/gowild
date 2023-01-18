@@ -13,6 +13,8 @@ import moment from 'moment';
 
 const EditTreasure = (props) => {
 
+    const [addAdmin, setAddAdmin] = useState(false);
+
 
     const navigate = useNavigate();
 
@@ -32,11 +34,15 @@ const EditTreasure = (props) => {
 
 
     const handleSubmit = async (data) => {
-    console.log("handleSubmit ~ data", data)
+    // console.log("handleSubmit ~ data", data)
 
     ENDPOINT.treasure_chests.edit_user.id = props.editItem.id;
     return await AuthService.patchMethod(ENDPOINT.treasure_chests.edit_user.url+ENDPOINT.treasure_chests.edit_user.id, true, data)
     .then((res) => {
+        setTimeout(() => {
+            setAddAdmin(props.onHide);
+            // props.subAdminAllData();
+          }, 1000);
         //setContent(res.data);
         //setIsLoader(true);
         console.log(res);
@@ -248,6 +254,7 @@ const EditTreasure = (props) => {
                                                         name="no_of_participants"
                                                         value={values.no_of_participants}
                                                         onChange={handleChange}
+                                                        min="1"
                                                         isValid={touched.no_of_participants && !errors.no_of_participants}
                                                         className={"mb-3"} placeholder="200" />
                                                 </Form.Group>

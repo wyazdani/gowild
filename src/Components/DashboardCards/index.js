@@ -58,9 +58,9 @@ const DashboardCard = () => {
 
     return (
         <Row>
-            <CardListData content={content.data.signup_users} title="Sign Up User" image={signUpUser}  />
-            <CardListData content={content.data.active_users} title="Active User" image={activeUser} />
-            <CardListData content={content.data.inactive_users} title="Inactive User" image={inActiveuser}  />
+            <CardListData content={content.data.signup_users} title="Sign Up Users" image={signUpUser}  />
+            <CardListData content={content.data.active_users} title="Active Users" image={activeUser} />
+            <CardListData content={content.data.inactive_users} title="Inactive Users" image={inActiveuser}  />
         </Row>
     )
 }
