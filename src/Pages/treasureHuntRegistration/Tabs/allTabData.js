@@ -151,7 +151,6 @@ const AllTabData = (props) => {
                                     <Dropdown.Toggle variant="success" id="dropdown-basic">
                                         <i className={"far fa-ellipsis-v fa-fw"}></i>
                                     </Dropdown.Toggle>
-
                                     <Dropdown.Menu>
                                         <Dropdown.Item href="#/">
                                             <i className={"fal fa-ban bg-danger text-white"}></i>

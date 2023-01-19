@@ -9,6 +9,8 @@ import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
 import ReactPaginate from 'react-paginate';
 import profile from "Images/routelist.png";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AllTabData = (props) => {
 
@@ -18,12 +20,14 @@ const AllTabData = (props) => {
 
     const [isLoader, setIsLoader] = useState(false);
     const [addAdmin, setAddAdmin] = useState(false);
+    // edit state
     const [editSubAdmin, setEditSubAdmin] = useState(false);
     const [editItem, setEditItem] = useState(null);
 
 
 
     const [currentItems, setCurrentItems] = useState([]);
+    // console.log(" currentItems", currentItems[0].id)
     const [pageCount, setPageCount] = useState(0);
     const [itemOffset, setItemOffset] = useState(0);
 
@@ -49,7 +53,41 @@ const AllTabData = (props) => {
     const handleRowsPerPageChange = (event) => {
         setItemsPerPage(parseInt(event.target.value))
     };
+    
 
+    const submitEventForm = async (id) => {
+        // console.log("1233"+id);
+        return  AuthService.postMethod(`${ENDPOINT.sub_admin.active_inactive}${id}/status`, true)
+            .then((res) => {
+                if (res.status === 201) {
+                    toast.success('User status Changed Successfully!', {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                    });
+                }
+                console.log(res);
+                // setId(res.data.accountStatus);
+                // navigate('/route-list');
+                // setFormData("");
+                // event.target.reset();
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+
+    };
+
+
+    // useEffect(() => {
+    //     submitEventForm();
+    // }, [])
+    
 
     return (
         <>
@@ -113,16 +151,16 @@ const AllTabData = (props) => {
                                         </div>
                                     </td>
                                     <td>
-                                        {content.onlineStatus
-                                            ? <span class={`${classes.tag} ${classes.active}`}>Active</span>
-                                            : <span class={`${classes.tag} ${classes.inactive}`}>Inactive</span>
+                                        { content.onlineStatus
+                                            ? <span class={`${classes.tag} text-danger ${classes.active} `}>Active</span>
+                                            : <span class={`${classes.tag} ${classes.inactive} text-default `}>Inactive </span>
                                         }
                                     </td>
                                     <td>{content.firstName}</td>
                                     <td>
                                         {content.accountStatus === "active"
-                                            ? <span class="text-success">Active</span>
-                                            : <span class="text-danger">inactive</span>
+                                            ? <span class="text-success ">  <b>ACTIVE</b></span>
+                                            : <span class="text-danger"> <b>DISABLED</b> </span>
                                         }
                                     </td>
                                     <td>
@@ -132,9 +170,14 @@ const AllTabData = (props) => {
                                             </Dropdown.Toggle>
 
                                             <Dropdown.Menu>
-                                                <Dropdown.Item href="#/">
+                                                <Dropdown.Item href="#/" 
+                                                >
                                                     <i className={"fal fa-ban bg-warning text-white"}></i>
-                                                    {content.accountStatus === "active" ? <p className="m-0 p-0">Disable User</p> :  <p className="m-0 p-0">Active User</p>}   
+                                                    {content.accountStatus === "active" ? <p className="m-0 p-0" onClick={() => {
+                                                        submitEventForm(content.id)
+                                                    }}>Disable User</p> :  <p className="m-0 p-0" onClick={() => {
+                                                        submitEventForm(content.id)
+                                                    }}>Active User</p>}   
                                                 </Dropdown.Item>
                                                 <Dropdown.Item href="#/" onClick={
                                                     () => {
@@ -195,6 +238,19 @@ const AllTabData = (props) => {
                 show={editSubAdmin}
                 onHide={() => setEditSubAdmin(false)}
                 editItem={editItem}
+            />
+
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
             />
 
         </>

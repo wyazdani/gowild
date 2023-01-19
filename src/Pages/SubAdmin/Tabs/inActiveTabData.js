@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Table, Form, Dropdown } from "react-bootstrap";
 import classes from "./index.module.scss";
 import AuthService from "../../../services/auth.service";
-import {ENDPOINT} from "../../../config/constants";
+import { ENDPOINT } from "../../../config/constants";
 import swal from "sweetalert";
 import accessHeader from "../../../services/headers/access-header";
 import ReactPaginate from 'react-paginate';
 import profile from "Images/routelist.png";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 const InActiveTabData = (props) => {
 
 
@@ -15,7 +19,7 @@ const InActiveTabData = (props) => {
     const [isLoader, setIsLoader] = useState(false);
     const [addAdmin, setAddAdmin] = useState(false);
     const [editSubAdmin, setEditSubAdmin] = useState(false);
-    const [editItem , setEditItem] = useState(null);
+    const [editItem, setEditItem] = useState(null);
 
 
 
@@ -32,7 +36,7 @@ const InActiveTabData = (props) => {
     useEffect(() => {
         const endOffset = itemOffset + itemsPerPage;
         setCurrentItems(content.slice(itemOffset, endOffset));
-        
+
         setPageCount(Math.ceil(content.length / itemsPerPage));
     }, [itemOffset, itemsPerPage, content]);
 
@@ -46,6 +50,35 @@ const InActiveTabData = (props) => {
         setItemsPerPage(parseInt(event.target.value))
     };
 
+
+
+    const submitEventForm = async (id) => {
+        // console.log("1233"+id);
+        return  AuthService.postMethod(`${ENDPOINT.sub_admin.active_inactive}${id}/status`, true)
+            .then((res) => {
+                if (res.status === 201) {
+                    toast.success('User status Changed Successfully!', {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                    });
+                }
+                console.log(res);
+                // setId(res.data.accountStatus);
+                // navigate('/route-list');
+                // setFormData("");
+                // event.target.reset();
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+
+    };
 
     return (
         <>
@@ -69,25 +102,25 @@ const InActiveTabData = (props) => {
                             <td>
                                 <div className={"d-flex"}>
                                     <div className={classes.userImg}>
-                                    {(content.picture)? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
+                                        {(content.picture) ? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} /> : <img src={profile} width="100%" alt={"img"} />}
                                     </div>
                                     <div className={classes.description}>
-                                        <h4 className={"font-16 mb-0"}>{content.firstName+" "+content.lastName}</h4>
+                                        <h4 className={"font-16 mb-0"}>{content.firstName + " " + content.lastName}</h4>
                                         <div className={"text-muted"}>{content.email}</div>
                                     </div>
                                 </div>
                             </td>
                             <td>
                                 {content.onlineStatus
-                                    ? <span class={`${classes.tag} ${classes.active}`}>Active</span>
-                                    : <span class={`${classes.tag} ${classes.inactive}`}>Inactive</span>
+                                    ? <span class={`${classes.tag} text-danger ${classes.active} `}>Active</span>
+                                    : <span class={`${classes.tag} ${classes.inactive} text-default `}>Inactive </span>
                                 }
                             </td>
                             <td>{content.firstName}</td>
                             <td>
                                 {content.accountStatus === "active"
-                                    ? <span class="text-success">Active</span>
-                                    : <span class="text-danger">inactive</span>
+                                    ? <span class="text-success ">  <b>ACTIVE</b></span>
+                                    : <span class="text-danger"> <b>DISABLED</b> </span>
                                 }
                             </td>
                             <td>
@@ -97,17 +130,29 @@ const InActiveTabData = (props) => {
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu>
-                                        <Dropdown.Item href="#/">
+                                        <Dropdown.Item href="#/"
+                                        >
                                             <i className={"fal fa-ban bg-warning text-white"}></i>
-                                            Disable User
+                                            {content.accountStatus === "active" ? <p className="m-0 p-0" onClick={() => {
+                                                submitEventForm(content.id)
+                                            }}>Disable User</p> : <p className="m-0 p-0" onClick={() => {
+                                                submitEventForm(content.id)
+                                            }}>Active User</p>}
                                         </Dropdown.Item>
-                                        <Dropdown.Item href="#/">
+                                        <Dropdown.Item href="#/" onClick={
+                                            () => {
+                                                setEditSubAdmin(true)
+                                                setEditItem(content)
+                                            }
+                                        }>
                                             <i className={"far fa-pen bg-dark text-white"}></i>
                                             Edit User
                                         </Dropdown.Item>
-                                        <Dropdown.Item href="#/" onClick={() => {
+                                        <Dropdown.Item href="#/"
+                                            onClick={() => {
                                                 props.deleteSubAdmin(content.id)
-                                            }}>
+                                            }}
+                                        >
                                             <i className={"fal fa-trash bg-danger text-white"}></i>
                                             Delete
                                         </Dropdown.Item>
@@ -148,6 +193,18 @@ const InActiveTabData = (props) => {
 
                 />
             </div>
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
         </>
     )
 }

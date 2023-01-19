@@ -8,6 +8,7 @@ import { Formik } from 'formik';
 import { object, string } from 'yup';
 
 const EditSubAmdin = (props) => {
+// console.log("1233"+ props.editItem.id)
 
     const [addAdmin, setAddAdmin] = useState(false);
 
@@ -75,7 +76,7 @@ const EditSubAmdin = (props) => {
                               touched,
                               isValid,
                               errors,
-                          }) => (
+                          }) =>  (
                             <Form noValidate onSubmit={handleSubmit}>
                                 <Row>
                                     <Col md={6}>

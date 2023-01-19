@@ -16,15 +16,17 @@ const SubAdmin = () => {
     const [activeContent, setActiveContent] = useState([]);
     const [InActiveContent, setInActiveContent] = useState([]);
     const [isLoader, setIsLoader] = useState(false);
+    const [status, setStatus] = useState('');
 
     const subAdminAllData = async () => {
         await AuthService.getMethod(ENDPOINT.sub_admin.listing, true,)
         .then((res) => {
             setContent(res.data);
             setActiveContent(res.data.filter(data => ["active"].includes(data.accountStatus)));
-            setInActiveContent(res.data.filter(data => ["inActiveTabData"].includes(data.accountStatus)));
+            setInActiveContent(res.data.filter(data => ["inactive"].includes(data.accountStatus)));
             setIsLoader(true);
             console.log(res.data);
+            
         })
         .catch((err) => {
             swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
@@ -47,8 +49,8 @@ const SubAdmin = () => {
 
     useEffect(() => {
         subAdminAllData();
-    }, [content,activeContent,InActiveContent]);
- 
+    }, []);
+    // content,activeContent,InActiveContent
 
     if (!isLoader) {
         return (
