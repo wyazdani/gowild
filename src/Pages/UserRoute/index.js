@@ -58,7 +58,7 @@ const UserRoute = () => {
                     className="mb-3"
                 >
                     <Tab eventKey="All" title="All">
-                        <AllTabData content={content} />
+                        <AllTabData content={content} userRouteAllData={userRouteAllData} />
                     </Tab>
                     <Tab eventKey="Approved" title="Approved">
                         <ApprovedTabData content={approveContent} />

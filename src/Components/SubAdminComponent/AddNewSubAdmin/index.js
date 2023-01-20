@@ -7,6 +7,9 @@ import swal from "sweetalert";
 import { Formik } from 'formik';
 import { object, string } from 'yup';
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const AddSubAdmin = (props) => {
 
@@ -28,16 +31,25 @@ const AddSubAdmin = (props) => {
     const handleSubmit = async (data) => {
         return await AuthService.postMethod(ENDPOINT.sub_admin.add_user, true, data)
             .then((res) => {
-                //setContent(res.data);
-                //setIsLoader(true);
-                navigate('/sub-admin');
-                
+                   if (res.status === 201) {
+                    toast.success('Created form successfully!', {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                        });
+                }
+
+                // props.subAdminAllData()
                 setTimeout(() => {
                     setAddAdmin(props.onHide);
                     // props.subAdminAllData();
                   }, 1000);
-              
-                console.log(res.data);
+                console.log(res);
             })
             .catch((err) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
@@ -202,6 +214,18 @@ const AddSubAdmin = (props) => {
 
                 </Modal.Body>
             </Modal>
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
         </>
     )
 }

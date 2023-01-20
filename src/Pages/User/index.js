@@ -50,7 +50,7 @@ const Users = () => {
   useEffect(() => {
     subAdminAllData();
   }, []);
-
+  // content
   
   if (!isLoader) {
     return (
@@ -70,13 +70,13 @@ const Users = () => {
           className="mb-3"
         >
           <Tab eventKey="All" title="All"  >
-            <AllTabData content={content} deleteSubAdmin={deleteSubAdmin} />
+            <AllTabData subAdminAllData={subAdminAllData} content={content} deleteSubAdmin={deleteSubAdmin} />
           </Tab>
           <Tab eventKey="Active" title="Active" >
-            <ActiveTabData content={activeContent} deleteSubAdmin={deleteSubAdmin} />
+            <ActiveTabData subAdminAllData={subAdminAllData} content={activeContent} deleteSubAdmin={deleteSubAdmin} />
           </Tab>
           <Tab eventKey="Disabled" title="Disabled" >
-            <DisableTabData content={disableContent} deleteSubAdmin={deleteSubAdmin} />
+            <DisableTabData subAdminAllData={subAdminAllData} content={disableContent} deleteSubAdmin={deleteSubAdmin} />
           </Tab>
         </Tabs>
       </section>

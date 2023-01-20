@@ -74,10 +74,10 @@ const SubAdmin = () => {
                         <AllTabData content={content} deleteSubAdmin={deleteSubAdmin} subAdminAllData={subAdminAllData} />
                     </Tab>
                     <Tab eventKey="Active" title="Active">
-                        <ActiveTabData content={activeContent} deleteSubAdmin={deleteSubAdmin} />
+                        <ActiveTabData content={activeContent} subAdminAllData={subAdminAllData}  deleteSubAdmin={deleteSubAdmin} />
                     </Tab>
                     <Tab eventKey="Inactive" title="Inactive">
-                       <InActiveTabData content={InActiveContent} deleteSubAdmin={deleteSubAdmin} />
+                       <InActiveTabData content={InActiveContent} subAdminAllData={subAdminAllData}  deleteSubAdmin={deleteSubAdmin} />
                     </Tab>
                 </Tabs>
             </section>

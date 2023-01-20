@@ -6,26 +6,45 @@ import {ENDPOINT} from "../../../../config/constants";
 import swal from "sweetalert";
 import { Formik } from 'formik';
 import { object, string } from 'yup';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddUser = (props) => {
+
+    const [addAdmin, setAddAdmin] = useState(false);
 
     const schema = object().shape({
         firstName: string().required(),
         lastName: string().required(),
         email: string().required(),
         userName: string().required(),
-        location: string().required(),
-        phoneNo: string().required(),
+        addressOne: string().required(),
+       // phoneNo: string().required(),
         birthDate: string().required(),
-        password:  string().required(),
+        password: string().required(),
     });
 
     const handleSubmit = async  (data) => {
        return await AuthService.postMethod(ENDPOINT.sub_admin.add_user, true,data)
             .then((res) => {
-                //setContent(res.data);
-                //setIsLoader(true);
-                console.log(res.data);
+                if (res.status === 201) {
+                    toast.success('Created form successfully!', {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                        });
+                }
+                setTimeout(() => {
+                    setAddAdmin(props.onHide);
+                    // props.subAdminAllData();
+                  }, 1000);
+              
+                console.log(res);
             })
             .catch((err) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
@@ -49,9 +68,9 @@ const AddUser = (props) => {
                         lastName: '',
                         email: '',
                         userName: '',
-                        location: '',
+                        // location: '',
                         birthDate: '',
-                        phoneNo: '',
+                        // phoneNo: '',
                         password: ""
                         }}
                         >
@@ -103,7 +122,7 @@ const AddUser = (props) => {
 
                                                 />
                                             </Col>
-                                            <Col md={6} className={"mb-3"}>
+                                            {/* <Col md={6} className={"mb-3"}>
                                                 <Form.Label className={"text-orange mb-0"}>phoneNo</Form.Label>
                                                 <Form.Control
                                                     type="tel"
@@ -114,18 +133,18 @@ const AddUser = (props) => {
                                                     isValid={touched.phoneNo && !errors.phoneNo}
 
                                                 />
-                                            </Col>
-                                            <Col md={12} className={"mb-3"}>
-                                                <Form.Label className={"text-orange mb-0"}>Location</Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    name="location"
-                                                    value={values.location}
-                                                    onChange={handleChange}
-                                                    placeholder="Address 1"
-                                                    isValid={touched.location && !errors.location}
+                                            </Col> */}
+                                            <Col md={6} className={"mb-3"}>
+                                                    <Form.Label className={"text-orange mb-0"}>Location</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        name="addressOne"
+                                                        value={values.addressOne}
+                                                        onChange={handleChange}
+                                                        placeholder="Address 1"
+                                                        isValid={touched.addressOne && !errors.addressOne}
 
-                                                />
+                                                    />
                                             </Col>
                                         </Row>
                                     </div>
@@ -183,6 +202,18 @@ const AddUser = (props) => {
 
                 </Modal.Body>
             </Modal>
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
         </>
     )
 }

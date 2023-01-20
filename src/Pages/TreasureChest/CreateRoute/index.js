@@ -18,6 +18,8 @@ const CreateTreasure = () => {
 
     const [file, setFile] = useState([]);
     const [formData, setFormData] = useState({});
+    const [uploadFile, setUploadFile] = useState();
+  
 
 
     const handleChange = (event) => {
@@ -189,7 +191,8 @@ const CreateTreasure = () => {
                                                     id={"upload-photo"}
                                                     disabled={file.length === 1}
                                                     className=""
-                                                    onChange={uploadSingleFile}
+                                                    onChange={(e) => setUploadFile(e.target.files)}
+                                                    // onChange={uploadSingleFile}
                                                 />
                                                 <span>Attach Images</span>
                                             </label>
@@ -201,18 +204,18 @@ const CreateTreasure = () => {
                                                 <Form.Control type="text" className={"mb-3 mt-4"} placeholder="🔗 link" />
                                             </Form.Group>
                                         </Col>
-                                        <Col md={3}>
-                                            <Form.Group>
-                                                <Form.Label>Time</Form.Label>
-                                                <Form.Control type="time"
-                                                    name="time"
-                                                    required
-                                                    value={formData.time}
-                                                    onChange={handleChange}
-                                                    className={"mb-3"} placeholder="00:00" />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col md={3}>
+                                            <Col md={3}>
+                                                <Form.Group>
+                                                    <Form.Label>Time</Form.Label>
+                                                    <Form.Control type="time"
+                                                        name="time"
+                                                        required
+                                                        value={formData.time}
+                                                        onChange={handleChange}
+                                                        className={"mb-3"} placeholder="00:00" />
+                                                </Form.Group>
+                                            </Col>
+                                        <Col md={3}> 
 
                                             <Form.Group>
                                                 <Form.Label>Number of participants</Form.Label>

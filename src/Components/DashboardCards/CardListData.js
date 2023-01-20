@@ -19,7 +19,7 @@ const CardListData = ( props ) => {
                                 <h2 className={classes.total}>{props.content}</h2>
                             </div>
                             <div className={classes.right}>
-                                <ProgressBar className={classes.status} style={{backgroundColor: props.color}}  />
+                                <ProgressBar className={classes.status} style={{background: props.background}}  />
                             </div>
                         </div>
                         <Card.Title className={"font-16"}>{props.title}</Card.Title>

@@ -4,7 +4,12 @@ import classes from "../../treasureHuntRegistration/index.module.scss";
 import userImg from "../../../Images/userImg.png";
 import ReactPaginate from 'react-paginate';
 import profile from "Images/userImg.png";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import AuthService from "../../../services/auth.service";
+import { ENDPOINT } from "../../../config/constants";
+import swal from "sweetalert";
+import ViewProfilePopup from "../UserComponent/ViewProfile/viewProfilePopup";
 
 const DisableTabData = (props) => {
     const { content } = props;
@@ -17,6 +22,11 @@ const DisableTabData = (props) => {
     const [pageCount, setPageCount] = useState(0);
     const [itemOffset, setItemOffset] = useState(0);
     const [itemsPerPage, setItemsPerPage] = useState(10);
+    // const itemsPerPage = 3;
+
+    const [modalEditUser, setModalEditUser] = useState(false);
+    const [editItem, setEditItem] = useState(null);
+    // const [pageNumber, setPageNumber] = useState(1);
     // const itemsPerPage = 3;
 
     useEffect(() => {
@@ -35,6 +45,21 @@ const DisableTabData = (props) => {
         setItemsPerPage(parseInt(event.target.value))
     };
 
+    const submitEventForm = async (id) => {
+        // console.log("1233"+id);
+        return  AuthService.postMethod(`${ENDPOINT.sub_admin.active_inactive}${id}/status`, true)
+            .then((res) => {
+                if (res.status === 201) {
+                    toast.success(res.data.message);
+                }
+                 props.subAdminAllData()
+                console.log(res);
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+
+    };
 
     return (
         <>
@@ -96,21 +121,30 @@ const DisableTabData = (props) => {
                                     <td>{content.location}</td>
                                     <td>
                                         {content.accountStatus === "active"
-                                            ? <span className="text-success">Active</span>
-                                            : <span className="text-danger">Disabled</span>
+                                            ? <span class="text-success"><b>ACTIVE</b></span>
+                                            : <span class="text-danger"><b>DISABLED</b></span>
                                         }
                                     </td>
                                     <td>
-                                        <Dropdown>
+                                    <Dropdown>
                                             <Dropdown.Toggle variant="success" id="dropdown-basic">
                                                 <i className={"far fa-ellipsis-v fa-fw"}></i>
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu>
                                                 <Dropdown.Item href="#/">
-                                                    <i className={"fal fa-ban bg-danger text-white"}></i>
-                                                    Disable User
+                                                    <i className={"fal fa-ban bg-warning text-white"}></i>
+                                                    {content.accountStatus === "active" ? <p className="m-0 p-0" onClick={() => {
+                                                        submitEventForm(content.id)
+                                                    }}>Disable User</p> : <p className="m-0 p-0" onClick={() => {
+                                                        submitEventForm(content.id)
+                                                    }}>Active User</p>}
                                                 </Dropdown.Item>
-                                                <Dropdown.Item href="#/" onClick={() => setModalShowView(true)}>
+                                                <Dropdown.Item href="#/" onClick={
+                                                    () => {
+                                                        setModalShowView(true)
+                                                        setEditItem(content)
+                                                    }
+                                                }>
                                                     <i className={"fal fa-user bg-dark text-white"}></i>
                                                     View Profile
                                                 </Dropdown.Item>
@@ -152,6 +186,26 @@ const DisableTabData = (props) => {
 
                 />
             </div>
+   
+            <ViewProfilePopup
+                show={modalShowView}
+                onHide={() => setModalShowView(false)}
+                editItem={editItem}
+
+            />
+
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
         </>
     )
 }

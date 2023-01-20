@@ -9,11 +9,16 @@ import AuthService from "../../../../services/auth.service";
 import swal from "sweetalert";
 import { Formik } from 'formik';
 import { object, string } from 'yup';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
 const ViewProfilePopup = (props) => {
+
+
+    const [addAdmin, setAddAdmin] = useState(false);
+
     //const [value, setValue] = useState();
     const schema = object().shape({
         firstName: string().required(),
@@ -34,34 +39,67 @@ const ViewProfilePopup = (props) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
             });
     }
-    const approveUser = async  () => {
-        ENDPOINT.admin_user.approve.id = props.editItem.id;
-        let url = ENDPOINT.admin_user.approve.url+ENDPOINT.admin_user.approve.id+ENDPOINT.admin_user.approve.type;
-        console.log(url)
-        return ;
-        return await AuthService.postMethod(url, true)
-            .then((res) => {
-                console.log(res.data);
-            })
-            .catch((err) => {
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-            });
-    }
-    const rejectUser = async  (data) => {
-        ENDPOINT.admin_user.reject.id = props.editItem.id;
-        let url = ENDPOINT.admin_user.reject.url+ENDPOINT.admin_user.reject.id+ENDPOINT.admin_user.reject.type;
-        return await AuthService.postMethod(url, true,data)
-            .then((res) => {
-                console.log(res.data);
-            })
-            .catch((err) => {
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-            });
-    }
+
 
     if(props.editItem===null){
         return "";
     }
+
+
+
+    const approveUser = async (id) => {
+        // console.log("1233"+id);
+        return  AuthService.postMethod(`${ENDPOINT.admin_user.approves}${id}/approve`, true)
+            .then((res) => {
+                 if(res.status === 200){
+                    toast.success('User approved successfully!', {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                        });
+                 }
+                 setAddAdmin(props.onHide);
+                 props.subAdminAllData()
+                console.log(res);
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+
+    };
+    
+    const rejectUser = async (id) => {
+        // console.log("1233"+id);
+        return  AuthService.postMethod(`${ENDPOINT.admin_user.rejects}${id}/reject`, true)
+            .then((res) => {
+                if(res.status === 200){
+                    toast.success('User rejected successfully!', {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                        });
+                 }
+                 setAddAdmin(props.onHide);
+                 props.subAdminAllData()
+                console.log(res);
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+
+    };
+
+
 
     return(
         <>
@@ -171,10 +209,10 @@ const ViewProfilePopup = (props) => {
                         </Row>
                         <Row className={"text-center pt-5"}>
                             <Col md={6}>
-                                <Button variant="danger w-50" onClick={props.onHide}>Reject</Button>
+                                <Button variant="danger w-50" onClick={() => rejectUser(props.editItem.id)}>Reject</Button>
                             </Col>
                             <Col md={6}>
-                                <Button variant="success w-50" onClick={approveUser}>Approve</Button>
+                                <Button variant="success w-50"  onClick={() => approveUser(props.editItem.id)}>Approve</Button>
                             </Col>
                         </Row>
                     </Form>
@@ -182,6 +220,18 @@ const ViewProfilePopup = (props) => {
                     </Formik>
                 </Modal.Body>
             </Modal>
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
         </>
     )
 }

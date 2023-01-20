@@ -31,7 +31,8 @@ const AddNewSubAdmin = (props) => {
                 //setContent(res.data);
                 //setIsLoader(true);
                 navigate('/sub-admin');
-                // setAddAdmin(props.onHide)
+                setAddAdmin(props.onHide)
+                props.subAdminAllData()
                 console.log(res.data);
             })
             .catch((err) => {

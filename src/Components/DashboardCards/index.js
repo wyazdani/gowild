@@ -43,24 +43,17 @@ const DashboardCard = () => {
         );
     }
 
+  //background-color
+    const signUpBgColor = 'linear-gradient(270deg, #B3F0CB 0%, #00CC52 112.21%)';
+    const activeUserBgColor = 'linear-gradient(270deg, #F9B8A5 0%, #E4572E 112.41%)';
+    const inActiveBgColor = 'linear-gradient(270deg, rgb(229, 191, 204) 0%, rgb(255, 47, 109) 112.41%)';
 
-    // const signUpBgColor = {
-    //     backgroundColor: "linear-gradient(270deg, #B3F0CB 0%, #00CC52 112.41%)",
-    // };
-
-    // const activeUserBgColor = {
-    //     backgroundColor: "green",
-    // };
-    // // const inActiveBgColor = {
-    //     backgroundColor: "red",
-    // };
-    // color={activeUserBgColor.backgroundColor} 
 
     return (
         <Row>
-            <CardListData content={content.data.signup_users} title="Sign Up Users" image={signUpUser}  />
-            <CardListData content={content.data.active_users} title="Active Users" image={activeUser} />
-            <CardListData content={content.data.inactive_users} title="Inactive Users" image={inActiveuser}  />
+            <CardListData content={content.data.signup_users} background={signUpBgColor} title="Sign Up Users" image={signUpUser}  />
+            <CardListData content={content.data.active_users} background={activeUserBgColor} title="Active Users" image={activeUser} />
+            <CardListData content={content.data.inactive_users} background={inActiveBgColor} title="Inactive Users" image={inActiveuser}  />
         </Row>
     )
 }

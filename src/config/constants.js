@@ -13,6 +13,8 @@ export const ENDPOINT = {
 
     admin_user: {
         listing: `${API_URL}/admin/users`,
+        approves: `${API_URL}/admin/users/`,
+        rejects: `${API_URL}/admin/users/`,
         delete: {
             url:`${API_URL}/admin/`,
             id:null,
@@ -58,6 +60,8 @@ export const ENDPOINT = {
     admin_route: {
         listing: `${API_URL}/admin/route`,
         update_pictures: `${API_URL}/admin/route/`,
+        approve: `${API_URL}/admin/route/`,
+        reject: `${API_URL}/admin/route/`,
     },
 
     route: {

@@ -11,7 +11,8 @@ import accessHeader from "services/headers/access-header";
 import Loader from "Components/Loader";
 import { LOGIN_SUCCESS } from "actions/types";
 import swal from 'sweetalert';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Login = () => {
@@ -51,6 +52,32 @@ const Login = () => {
                 fcm_token: user_fcm_token,
             })
             .then((res) => {
+                // if(res){
+                //     if (res.status === 200) {
+                //      // toast.success(res.data.message);
+                //      toast.success('Login Successfull!', {
+                //          position: "bottom-right",
+                //          autoClose: 5000,
+                //          hideProgressBar: false,
+                //          closeOnClick: true,
+                //          pauseOnHover: true,
+                //          draggable: true,
+                //          progress: undefined,
+                //          theme: "dark",
+                //      })
+                //  } else  {
+                //     console.log("errrrror")
+                //      toast.error('Unprocessable Entities!', {
+                //          position: "bottom-right",
+                //          autoClose: 5000,
+                //          hideProgressBar: false,
+                //          closeOnClick: true,
+                //          pauseOnHover: true,
+                //          draggable: true,
+                //          progress: undefined,
+                //          theme: "dark",
+                //          });
+                //  }}
                 console.log(res);
                 localStorage.setItem("accessToken", JSON.stringify(res.data.accessToken));
                 localStorage.setItem("refreshToken", JSON.stringify(res.data.refreshToken));
@@ -61,11 +88,14 @@ const Login = () => {
                 });
 
                 setTimeout(function () {
-                    setIsLoading(false);
+                    // setIsLoading(false);
                     goToDashboard("/dashboard");
                 }, 1000);
             })
             .catch((err) => {
+                //  if (res.response === 201) {
+                //     toast.success(res.data.message);
+                // }
                 setIsLoading(false);
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
             });
@@ -131,6 +161,18 @@ const Login = () => {
                         <Link to={"/"}>Terms and conditions</Link>
                     </Form.Group>*/}
                 </Form>
+                <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
             </div>
         );
 

@@ -21,7 +21,7 @@ const LandingPage = () => {
         <section className={"section"}>
             <div className={classes.btnRow}>
                 <Button variant="secondary">Download CSV</Button>
-                <Form.Control type="date" placeholder="MM/DD/YYYY" style={{textTransform:"uppercase"}}></Form.Control>
+                <Form.Control type="date" placeholder="MM/DD/YYYY" style={{textTransform:'uppercase',fontWeight: 'bold'}}></Form.Control>
             </div>
             <Tabs
                 defaultActiveKey="newuser"

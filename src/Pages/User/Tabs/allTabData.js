@@ -6,6 +6,12 @@ import EditUser from "../UserComponent/EditUser";
 import AddUser from "../UserComponent/AddNewUser";
 import ReactPaginate from 'react-paginate';
 import profile from "Images/userImg.png";
+import { ENDPOINT, KEY } from "config/constants";
+import AuthService from "services/auth.service";
+import accessHeader from "services/headers/access-header";
+import swal from 'sweetalert';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const AllTabData = (props) => {
@@ -44,6 +50,23 @@ const AllTabData = (props) => {
 
     const handleRowsPerPageChange = (event) => {
         setItemsPerPage(parseInt(event.target.value))
+    };
+
+
+    const submitEventForm = async (id) => {
+        // console.log("1233"+id);
+        return  AuthService.postMethod(`${ENDPOINT.sub_admin.active_inactive}${id}/status`, true)
+            .then((res) => {
+                if (res.status === 201) {
+                    toast.success(res.data.message);
+                }
+                 props.subAdminAllData()
+                console.log(res);
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+
     };
 
 
@@ -111,8 +134,8 @@ const AllTabData = (props) => {
                                     <td>{content.location}</td>
                                     <td>
                                         {content.accountStatus === "active"
-                                            ? <span class="text-success">Active</span>
-                                            : <span class="text-danger">Disabled</span>
+                                            ? <span class="text-success"><b>ACTIVE</b></span>
+                                            : <span class="text-danger"><b>DISABLED</b></span>
                                         }
                                     </td>
                                     <td>
@@ -122,8 +145,12 @@ const AllTabData = (props) => {
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu>
                                                 <Dropdown.Item href="#/">
-                                                    <i className={"fal fa-ban bg-danger text-white"}></i>
-                                                    Disable User
+                                                    <i className={"fal fa-ban bg-warning text-white"}></i>
+                                                    {content.accountStatus === "active" ? <p className="m-0 p-0" onClick={() => {
+                                                       submitEventForm(content.id)
+                                                    }}>Disable User</p> :  <p className="m-0 p-0" onClick={() => {
+                                                       submitEventForm(content.id)
+                                                    }}>Active User</p>}   
                                                 </Dropdown.Item>
                                                 <Dropdown.Item href="#/" onClick={
                                                     () => {
@@ -134,22 +161,6 @@ const AllTabData = (props) => {
                                                     <i className={"fal fa-user bg-dark text-white"}></i>
                                                     View Profile
                                                 </Dropdown.Item>
-                                                {/*<Dropdown.Item href="#/" onClick={
-                                                    () => {
-                                                        setModalEditUser(true)
-                                                        console.log(content)
-                                                        setEditItem(content)
-                                                    }
-                                                }>
-                                                    <i className={"far fa-pen bg-dark text-white"}></i>
-                                                    Edit User
-                                                </Dropdown.Item>
-                                                <Dropdown.Item href="#/" onClick={() => {
-                                                    props.deleteSubAdmin(content.id)
-                                                }}>
-                                                    <i className={"fal fa-trash bg-danger text-white"}></i>
-                                                    Delete
-                                                </Dropdown.Item>*/}
                                             </Dropdown.Menu>
                                         </Dropdown>
                                     </td>
@@ -198,6 +209,7 @@ const AllTabData = (props) => {
             <AddUser
                 show={modalShow}
                 onHide={() => setModalShow(false)}
+                
             />
 
             <ViewProfilePopup
@@ -205,6 +217,19 @@ const AllTabData = (props) => {
                 onHide={() => setModalShowView(false)}
                 editItem={editItem}
 
+            />
+
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
             />
 
         </>

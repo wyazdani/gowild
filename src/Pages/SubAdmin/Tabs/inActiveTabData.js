@@ -55,29 +55,16 @@ const InActiveTabData = (props) => {
     const submitEventForm = async (id) => {
         // console.log("1233"+id);
         return  AuthService.postMethod(`${ENDPOINT.sub_admin.active_inactive}${id}/status`, true)
-            .then((res) => {
-                if (res.status === 201) {
-                    toast.success('User status Changed Successfully!', {
-                        position: "bottom-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "dark",
-                    });
-                }
-                console.log(res);
-                // setId(res.data.accountStatus);
-                // navigate('/route-list');
-                // setFormData("");
-                // event.target.reset();
-            })
-            .catch((err) => {
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-            });
-
+        .then((res) => {
+            // if (res.status === 201) {
+            //     toast.success(res.data.message);
+            // }
+             props.subAdminAllData()
+            console.log(res);
+        })
+        .catch((err) => {
+            swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+        });
     };
 
     return (
