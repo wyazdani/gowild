@@ -1,54 +1,93 @@
-import React, { Component } from "react";
-
 import {
-    withScriptjs,
-    withGoogleMap,
+    Box,
+    Button,
+    ButtonGroup,
+    Flex,
+    HStack,
+    IconButton,
+    Input,
+    SkeletonText,
+    Text,
+  } from '@chakra-ui/react'
+  import { FaLocationArrow, FaTimes } from 'react-icons/fa'
+  
+  import {
+    useJsApiLoader,
     GoogleMap,
-    Marker
-} from "react-google-maps";
-
-
-class GoogleMaps extends Component{
-
-    static defaultProps = {
-        googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0&v=3.exp&libraries=geometry,drawing,places",
+    Marker,
+    Autocomplete,
+    DirectionsRenderer,
+  } from '@react-google-maps/api'
+  import { useRef, useState } from 'react'
+  
+  const center = { lat: 48.8584, lng: 2.2945 }
+  
+  function GoogleMaps() {
+    const { isLoaded } = useJsApiLoader({
+      googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+      libraries: ['places'],
+    })
+  
+    const [map, setMap] = useState(/** @type google.maps.Map */ (null))
+    const [directionsResponse, setDirectionsResponse] = useState(null)
+    const [distance, setDistance] = useState('')
+    const [duration, setDuration] = useState('')
+  
+    /** @type React.MutableRefObject<HTMLInputElement> */
+    const originRef = useRef()
+    /** @type React.MutableRefObject<HTMLInputElement> */
+    const destiantionRef = useRef()
+  
+    // if (!isLoaded) {
+    //   return <SkeletonText />
+    // }
+  
+    async function calculateRoute() {
+      if (originRef.current.value === '' || destiantionRef.current.value === '') {
+        return
+      }
+      // eslint-disable-next-line no-undef
+      const directionsService = new google.maps.DirectionsService()
+      const results = await directionsService.route({
+        origin: originRef.current.value,
+        destination: destiantionRef.current.value,
+        // eslint-disable-next-line no-undef
+        travelMode: google.maps.TravelMode.DRIVING,
+      })
+    //   setDirectionsResponse(results)
+    //   setDistance(results.routes[0].legs[0].distance.text)
+    //   setDuration(results.routes[0].legs[0].duration.text)
     }
-
-    constructor(props) {
-        super(props);
-    }
-
-
-
-    CMap = withScriptjs(withGoogleMap(props =>
-        <GoogleMap
-          defaultZoom={8}
-          defaultCenter={{ lat: -34.397, lng: 150.644 }}
-        >
-            {props.children}
-        </GoogleMap>
-      ));
-
-
-
-    render() {
-        return (
-            <>
-                <this.CMap
-                    googleMapURL={this.props.googleMapURL}
-                    loadingElement={<div style={{ height: `100%` }} />}
-                    containerElement={<div style={{ height: `700px` }} />}
-                    mapElement={<div style={{ height: `100%` }} />}
-                    center= {{ lat: 25.03, lng: 121.6 }} 
-                >
-                    <Marker
-                        position={{ lat: -34.397, lng: 150.644 }}
-                    />
-                </this.CMap>
-            </>
-        );
-    }
-}
-
-
-export default GoogleMaps;
+  
+    // function clearRoute() {
+    //   setDirectionsResponse(null)
+    //   setDistance('')
+    //   setDuration('')
+    //   originRef.current.value = ''
+    //   destiantionRef.current.value = ''
+    // }
+  
+    return (
+   
+          <GoogleMap
+            center={center}
+            zoom={15}
+            mapContainerStyle={{ width: '100%', height: '100%' }}
+            options={{
+              zoomControl: false,
+              streetViewControl: false,
+              mapTypeControl: false,
+              fullscreenControl: false,
+            }}
+            onLoad={map => setMap(map)}
+          >
+            <Marker position={center} />
+            {directionsResponse && (
+              <DirectionsRenderer directions={directionsResponse} />
+            )}
+          </GoogleMap>
+        
+    )
+  }
+  
+  export default GoogleMaps

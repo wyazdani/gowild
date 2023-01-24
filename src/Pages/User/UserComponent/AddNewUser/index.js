@@ -41,7 +41,7 @@ const AddUser = (props) => {
                 }
                 setTimeout(() => {
                     setAddAdmin(props.onHide);
-                    // props.subAdminAllData();
+                    props.subAdminAllData();
                   }, 1000);
               
                 console.log(res);

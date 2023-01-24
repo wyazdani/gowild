@@ -98,6 +98,7 @@ const AllTabData = (props) => {
                                 Add New
                             </Button>
                             <AddSubAdmin
+                                subAdminAllData={props.subAdminAllData}
                                 show={addAdmin}
                                 onHide={() => setAddAdmin(false)}
                             />

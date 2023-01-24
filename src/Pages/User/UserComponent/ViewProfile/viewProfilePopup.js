@@ -100,7 +100,6 @@ const ViewProfilePopup = (props) => {
     };
 
 
-
     return(
         <>
             <Modal

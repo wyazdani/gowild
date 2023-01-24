@@ -9,9 +9,29 @@ import swal from 'sweetalert';
 const EWavier = () => {
 
 
-    const [content, setContent] = useState([]);
+    const [content, setContent] = useState("");
     const [isLoader, setIsLoader] = useState(false);
 
+
+
+    // const handleChange = (event) => {
+    //     let name = event.target.name;
+    //     const value = event.target.value;
+    //     // const value = event.target.value.replace(/\D/g, "");
+    //     // const value = event.target.value.replace(/(0|)\D/g, "");
+    //     setContent((prevalue) => {
+    //         return {
+    //             ...prevalue,   // Spread Operator               
+    //             [name]: value
+    //         }
+    //     })
+    // }
+
+    const handleChange = (event) => {
+        const name = event.target.name;
+        const value = event.target.value;
+        setContent({ ...content, [name]: value });
+    }
 
     const guidlinessWaiverData = async () => {
         await AuthService.getMethod(ENDPOINT.admin_guidelines.terms_conditions)
@@ -56,26 +76,68 @@ const EWavier = () => {
 
     const DATE_OPTIONS = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
 
+
+    const submitEventForm = async (event) => {
+        // console.log("1233"+id);
+        // console.log("historicalData" , historicalData);
+        event.preventDefault();
+        const dataObj = {
+            "type": "eWaiver",
+            "description": content.description,
+        }
+
+        return AuthService.postMethod(ENDPOINT.admin_guidelines.terms_conditions, true, dataObj)
+            .then((res) => {
+                // if (res.status === 200) {
+                //     toast.success('Historical Event Routes submitted Successfully!', {
+                //         position: "bottom-right",
+                //         autoClose: 5000,
+                //         hideProgressBar: false,
+                //         closeOnClick: true,
+                //         pauseOnHover: true,
+                //         draggable: true,
+                //         progress: undefined,
+                //         theme: "dark",
+                //     });
+                // }
+                console.log(res);
+                // navigate('/route-list');
+                // setFormData("");
+                // event.target.reset();
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+
+    };
+
+    const filteredContent = content.filter(item => {
+        return item.type === "eWaiver" ? true : false;
+    });
+
     return (
         <>
             <Row>
                 {
-                    content.filter(item => {
-                        return item.type === "eWaiver" ? true : false;
-                    }).map((content) => {
+                    filteredContent.map((content, index) => {
                         return (
                             <>
-                                <Col md={8}>
+                                <Col md={8} key={index}>
                                     <div className={classes.editSection}>
                                         <Form >
                                             <Form.Group className={`${classes.formGroup} mb-3`}>
-                                                <textarea>
+                                                {/* <textarea>
                                                     {content.description}
+                                                </textarea> */}
+                                                <textarea
+                                                    name="description"
+                                                    value={content.description}
+                                                    onChange={handleChange}
+                                                >
                                                 </textarea>
-
                                             </Form.Group>
                                             <Form.Group>
-                                                <Button variant={"dark"}> Save </Button>
+                                                <Button variant={"dark"} onClick={submitEventForm}> Save </Button>
                                             </Form.Group>
                                         </Form>
                                     </div>

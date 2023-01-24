@@ -61,10 +61,10 @@ const UserRoute = () => {
                         <AllTabData content={content} userRouteAllData={userRouteAllData} />
                     </Tab>
                     <Tab eventKey="Approved" title="Approved">
-                        <ApprovedTabData content={approveContent} />
+                        <ApprovedTabData content={approveContent}  userRouteAllData={userRouteAllData}  />
                     </Tab>
                     <Tab eventKey="Reject" title="Reject">
-                        <RejectTabData content={disapproveContent} />
+                        <RejectTabData content={disapproveContent} userRouteAllData={userRouteAllData}  />
                     </Tab>
                 </Tabs>
             </section>

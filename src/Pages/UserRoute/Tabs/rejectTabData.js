@@ -9,6 +9,8 @@ import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
 import ReactPaginate from 'react-paginate';
 import profile from "Images/Ellipse 768.png";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const AllTabData = (props) => {
@@ -52,6 +54,42 @@ const AllTabData = (props) => {
 
         return [month, day, year].join('/');
     }
+
+    const approveUser = async (id) => {
+        // console.log("1233"+id);
+        return  AuthService.postMethod(`${ENDPOINT.admin_route.approve}${id}/approve`, true)
+            .then((res) => {
+                 if(res.status === 201){
+                    toast.success(res.data.message);
+                 }
+                //  setAddAdmin(props.onHide);
+                 props.userRouteAllData()
+                //  props.content()
+                console.log(res);
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+
+    };
+
+   
+    
+    const rejectUser = async (id) => {
+        // console.log("1233"+id);
+        return AuthService.postMethod(`${ENDPOINT.admin_route.reject}${id}/reject`, true)
+            .then((res) => {
+                if (res.status === 201) {
+                    toast.success(res.data.message);
+                }
+                props.userRouteAllData()
+                console.log(res);
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+
+    };
 
     return (
         <>
@@ -114,23 +152,23 @@ const AllTabData = (props) => {
                                 {(formatDate(content.createdDate))}
                             </td>
                             <td>
-                                {content.status === 'approved' ? <span class="text-success text-uppercase">Approved</span>
-                                    : <span class="text-danger text-uppercase">Rejected</span>
+                                {content.status === 'approved' ? <span class="text-success text-uppercase"><b>Approved</b></span>
+                                    :<span class="text-danger text-uppercase"><b>Rejected</b></span>
                                 }
                             </td>
                             <td>
-                            <Dropdown>
+                                <Dropdown>
                                     <Dropdown.Toggle variant="success" id="dropdown-basic">
                                         <i className={"far fa-ellipsis-v fa-fw"}></i>
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu>
                                         {content.status === 'approved'
-                                            ? <Dropdown.Item href="#/">
+                                            ? <Dropdown.Item href="#/" onClick={() => rejectUser(content.id)}>
                                                 <i className={"fal fa-ban bg-danger text-white"}></i>
                                                 Reject
                                             </Dropdown.Item>
-                                            : <Dropdown.Item href="#/">
+                                            : <Dropdown.Item href="#/" onClick={() => approveUser(content.id)}>
                                                 <i className={"fal fa-check bg-success text-white"}></i>
                                                 Approve
                                             </Dropdown.Item>
@@ -176,6 +214,18 @@ const AllTabData = (props) => {
 
                 />
             </div>
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
         </>
     )
 }

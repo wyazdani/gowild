@@ -207,12 +207,14 @@ const AllTabData = (props) => {
             />
 
             <AddUser
+                subAdminAllData={props.subAdminAllData}
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 
             />
 
             <ViewProfilePopup
+                subAdminAllData={props.subAdminAllData}
                 show={modalShowView}
                 onHide={() => setModalShowView(false)}
                 editItem={editItem}

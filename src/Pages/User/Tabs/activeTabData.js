@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ViewProfilePopup from "../UserComponent/ViewProfile/viewProfilePopup";
 
 
+
 const ActiveTabData = (props) => {
 
     const { content } = props;
@@ -61,6 +62,9 @@ const ActiveTabData = (props) => {
             });
 
     };
+
+
+    
 
     return (
         <>

@@ -44,10 +44,9 @@ const AddSubAdmin = (props) => {
                         });
                 }
 
-                // props.subAdminAllData()
+                props.subAdminAllData()
                 setTimeout(() => {
                     setAddAdmin(props.onHide);
-                    // props.subAdminAllData();
                   }, 1000);
                 console.log(res);
             })

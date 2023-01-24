@@ -4,6 +4,8 @@ import PageTitle from "../../Components/Pagetitle";
 import mapImg from "../../Images/wallstreetMapImg.jpg";
 import userImg from "../../Images/userImg.png";
 import {Button} from "react-bootstrap";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const ViewRoute = (props) => {
