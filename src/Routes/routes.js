@@ -124,7 +124,7 @@ const routes = [
         component: UserRoute,
       },
       {
-        path: "/view-route",
+        path: "/view-route/:id",
         component: ViewRoute,
       },
     ],

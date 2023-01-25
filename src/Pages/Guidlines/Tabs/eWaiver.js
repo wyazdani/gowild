@@ -9,7 +9,7 @@ import swal from 'sweetalert';
 const EWavier = () => {
 
 
-    const [content, setContent] = useState("");
+    const [content, setContent] = useState([]);
     const [isLoader, setIsLoader] = useState(false);
 
 
@@ -31,6 +31,7 @@ const EWavier = () => {
         const name = event.target.name;
         const value = event.target.value;
         setContent({ ...content, [name]: value });
+        // setContent("skldjf lsdjf lsdjf lsdjf lsdjlf sjdljldsjf lsdj flj");
     }
 
     const guidlinessWaiverData = async () => {
@@ -111,18 +112,21 @@ const EWavier = () => {
 
     };
 
-    const filteredContent = content.filter(item => {
-        return item.type === "eWaiver" ? true : false;
-    });
+    // const filteredContent = content.filter(item => {
+    //     return item.type === "eWaiver" ? true : false;
+    // });
+    // {(content.user) ? content.user.firstName : "-"}
 
     return (
         <>
             <Row>
                 {
-                    filteredContent.map((content, index) => {
+                   (content)? content.filter(item => {
+                        return item.type === "eWaiver" ? true : false;
+                    }).map((content) => {
                         return (
                             <>
-                                <Col md={8} key={index}>
+                                <Col md={8}>
                                     <div className={classes.editSection}>
                                         <Form >
                                             <Form.Group className={`${classes.formGroup} mb-3`}>
@@ -131,7 +135,7 @@ const EWavier = () => {
                                                 </textarea> */}
                                                 <textarea
                                                     name="description"
-                                                    value={content.description}
+                                                    value={ (content.description) ? content.description : "-"}
                                                     onChange={handleChange}
                                                 >
                                                 </textarea>
@@ -169,7 +173,7 @@ const EWavier = () => {
                             </>
                         )
                     })
-                }
+                : "-"}
             </Row>
         </>
     )

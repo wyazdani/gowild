@@ -18,13 +18,13 @@ const TreasureHuntRegistration = () => {
     const [disapproveContent, setDisapproveContent] = useState([]);
     const [isLoader, setIsLoader] = useState(false);
 
-    const treasureWildData = async () => {
+    const userRouteAllData = async () => {
         await AuthService.getMethod(ENDPOINT.treasure_chests.listing_hunt, true,)
             .then((res) => {
                 setContent(res.data);
-                setApproveContent(res.data.filter(data => ["approved"].includes(data.status)));
+                setApproveContent(res.data.filter(data => ["processing"].includes(data.status)));
                 setPendingContent(res.data.filter(data => ["pending"].includes(data.status)));
-                setDisapproveContent(res.data.filter(data => ["disapproved"].includes(data.status)));
+                setDisapproveContent(res.data.filter(data => ["disapprove"].includes(data.status)));
                 setIsLoader(true);
                 console.log("wild", res.data);
             })
@@ -35,7 +35,7 @@ const TreasureHuntRegistration = () => {
 
 
     useEffect(() => {
-        treasureWildData();
+        userRouteAllData();
 
     }, []);
 
@@ -60,13 +60,13 @@ const TreasureHuntRegistration = () => {
                         <AllTabData content={content} />
                     </Tab>
                     <Tab eventKey="Approve" title="Approve">
-                        <ApproveTabData content={approveContent} />
+                        <ApproveTabData content={approveContent}  userRouteAllData={userRouteAllData} />
                     </Tab>
                     <Tab eventKey="Pending" title="Pending">
-                        <PendingTabData content={pendingContent} />
+                        <PendingTabData content={pendingContent} userRouteAllData={userRouteAllData} />
                     </Tab>
                     <Tab eventKey="Disapprove" title="Disapprove">
-                        <DisapproveTabData content={disapproveContent} />
+                        <DisapproveTabData content={disapproveContent} userRouteAllData={userRouteAllData} />
                     </Tab>
                 </Tabs>
             </section>

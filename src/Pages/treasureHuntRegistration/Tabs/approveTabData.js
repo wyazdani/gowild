@@ -8,12 +8,20 @@ import AddSubAdmin from "../../../Components/SubAdminComponent/AddNewSubAdmin";
 import ViewProfilePopup from "./viewProfilePopup";
 import ReactPaginate from 'react-paginate';
 import profile from "Images/Ellipse 768.png";
+import { ENDPOINT, KEY } from "config/constants";
+import AuthService from "services/auth.service";
+import accessHeader from "services/headers/access-header";
+import swal from 'sweetalert';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const ApproveTabData = (props) => {
 
     /* Destructuring the props object. */
     const { content } = props;
 
+    const [editItem, setEditItem] = useState(null);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const [itemOffset, setItemOffset] = useState(0);
@@ -40,6 +48,49 @@ const ApproveTabData = (props) => {
         setItemsPerPage(parseInt(event.target.value))
     };
 
+    const approveUser = async (id) => {
+        const objData = {
+            "status": "processing"
+          }
+        // console.log("1233"+id);
+        return  AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true , objData)
+            .then((res) => {
+                 if(res.status === 201){
+                    toast.success(res.data.message);
+                 }
+                 props.userRouteAllData()
+                //  setAddAdmin(props.onHide);
+                //  props.content()
+                console.log(res);
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+
+    };
+
+        
+    const rejectUser = async (id) => {
+        const objData = {
+            "status": "disapprove"
+          }
+        // console.log("1233"+id);
+        return  AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true , objData)
+            .then((res) => {
+                 if(res.status === 201){
+                    toast.success(res.data.message);
+                 }
+                 props.userRouteAllData()
+                console.log(res);
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+
+
+    };
+
+
 
     return (
         <>
@@ -60,15 +111,7 @@ const ApproveTabData = (props) => {
                     </Row>
                 </Form>
             </div>
-            <AddSubAdmin
-                show={modalShow}
-                onHide={() => setModalShow(false)}
-            />
 
-            <ViewProfilePopup
-                show={modalShowView}
-                onHide={() => setModalShowView(false)}
-            />
 
             <Table>
                 <thead>
@@ -94,7 +137,7 @@ const ApproveTabData = (props) => {
                             <td>
                                 <div className={"d-flex"}>
                                     <div className={classes.userImg}>
-                                    {(content.picture)? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
+                                    {(alltabdata.picture)? <img src={"https://api.gowild.appscorridor.com" + alltabdata.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
                                     </div>
                                     <div className={classes.description}>
                                         <h4 className={"font-16 mb-0"}>{alltabdata.user.firstName + " " + alltabdata.user.lastName}</h4>
@@ -115,9 +158,9 @@ const ApproveTabData = (props) => {
                             {alltabdata.user.firstName}
                             </td>
                             <td>
-                                {alltabdata.status === 'approved' ? <span class="text-success">Approved</span>
-                                    : alltabdata.status === 'pending' ? <span class="text-orange">Pending</span>
-                                        : <span class="text-danger">Rejected</span>
+                                {alltabdata.status === "processing" ? <span class="text-success text-uppercase"><b>Approved</b></span>
+                                    : alltabdata.status === 'pending' ? <span class="text-warning  text-uppercase"><b>Pending</b></span>
+                                        : <span class="text-danger text-uppercase" ><b>Disapprove</b></span>
                                 }
                             </td>
                             <td>
@@ -125,13 +168,23 @@ const ApproveTabData = (props) => {
                                     <Dropdown.Toggle variant="success" id="dropdown-basic">
                                         <i className={"far fa-ellipsis-v fa-fw"}></i>
                                     </Dropdown.Toggle>
-
                                     <Dropdown.Menu>
-                                        <Dropdown.Item href="#/">
-                                            <i className={"fal fa-ban bg-danger text-white"}></i>
-                                            Disable User
-                                        </Dropdown.Item>
-                                        <Dropdown.Item href="#/" onClick={() => setModalShowView(true)}>
+                                        {alltabdata.status === 'processing'
+                                            ? <Dropdown.Item href="#/" onClick={() => rejectUser(alltabdata.id)}>
+                                                <i className={"fal fa-ban bg-danger text-white"}></i>
+                                                Disapprove
+                                            </Dropdown.Item>
+                                            : <Dropdown.Item href="#/" onClick={() => approveUser(alltabdata.id)}>
+                                                <i className={"fal fa-check bg-success text-white"}></i>
+                                                Approve
+                                            </Dropdown.Item>
+                                        }
+                                        <Dropdown.Item href="#/" onClick={
+                                                    () => {
+                                                        setModalShowView(true)
+                                                        setEditItem(alltabdata)
+                                                    }
+                                                }>
                                             <i className={"fal fa-user bg-dark text-white"}></i>
                                             View Profile
                                         </Dropdown.Item>
@@ -173,7 +226,30 @@ const ApproveTabData = (props) => {
 
                 />
             </div>
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
 
+            <AddSubAdmin
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+            />
+
+              <ViewProfilePopup
+                subAdminAllData={props.subAdminAllData}
+                show={modalShowView}
+                onHide={() => setModalShowView(false)}
+                editItem={editItem}
+            />
         </>
     )
 }
