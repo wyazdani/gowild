@@ -78,6 +78,10 @@ export const ENDPOINT = {
 
     admin_guidelines :{
         terms_conditions : `${API_URL}/admin-guidelines`,
+        eWaiver_listing : `${API_URL}/admin-guidelines/eWaiver`,
+        faq_listing : `${API_URL}/admin-guidelines/faq`,
+        termsAndConditions_listing : `${API_URL}/admin-guidelines/termsAndConditions`,
+        huntEWaiver_listing : `${API_URL}/admin-guidelines/huntEWaiver `,
     },
 
     users_route :{
@@ -89,6 +93,7 @@ export const ENDPOINT = {
     },
     treasure_chests :{
         listing : `${API_URL}/admin/treasure-chest`,
+        update_picture : `${API_URL}/admin/treasure-chest/`,
         listing_hunt : `${API_URL}/admin/treasure-chest/user-hunts`,
         approve_reject : `${API_URL}/admin/treasure-chest/hunt/status/`,
         delete: {

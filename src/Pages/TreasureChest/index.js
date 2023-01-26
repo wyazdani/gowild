@@ -71,7 +71,7 @@ const TreasureChestList = () => {
     useEffect(() => {
         treasureChestsListData();
 
-    }, [content]);
+    }, []);
 
     // convert date format to month / day / year
     function formatDate(date) {
@@ -189,6 +189,7 @@ const TreasureChestList = () => {
             />
 
             <EditTreasure
+                treasureChestsListData={treasureChestsListData}
                 show={editSubAdmin}
                 onHide={() => setEditSubAdmin(false)}
                 editItem={editItem}

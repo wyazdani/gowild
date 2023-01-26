@@ -61,7 +61,7 @@ const AllTabData = (props) => {
                  if(res.status === 201){
                     toast.success(res.data.message);
                  }
-                 props.userRouteAllData()
+                 content.userRouteAllData()
                 //  setAddAdmin(props.onHide);
                 //  props.content()
                 console.log(res);

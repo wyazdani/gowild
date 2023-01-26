@@ -41,6 +41,7 @@ const EditTreasure = (props) => {
     .then((res) => {
         setTimeout(() => {
             setAddAdmin(props.onHide);
+            props.treasureChestsListData()
             // props.subAdminAllData();
           }, 1000);
         //setContent(res.data);

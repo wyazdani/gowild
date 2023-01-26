@@ -15,7 +15,7 @@ const ViewRoute = (props) => {
 
     const [user, setUser] = useState({})
     const [isLoader, setIsLoader] = useState(false);
-    console.log(" ViewRoute ~ user", user)
+    // console.log(" ViewRoute ~ user", user)
 
     let { id } = useParams();
     const navigate = useNavigate();
@@ -24,9 +24,9 @@ const ViewRoute = (props) => {
     const singleUserRouteData = async () => {
         await AuthService.getMethod(`${ENDPOINT.admin_route.listing}/${id}`, true)
             .then((res) => {
-                setUser(res.data);
+                setUser(res.data.route);
                 setIsLoader(true);
-                // console.log("response data", res);
+                console.log("response data", res.data.route);
             })
             .catch((err) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
@@ -100,19 +100,19 @@ const ViewRoute = (props) => {
                     </li>
                     <li>
                         <strong>Starting Point</strong>
-                        <span className={"text-muted"}>51.2345/32.535</span>
+                        <span className={"text-muted"}> {user.start.latitude} / {user.start.longitude} </span>
                         {/* <span className={"text-muted"}>{(user.start.latitude)? user.start.latitude : "-"}</span> */}
                     </li>
                     <li>
                         <strong>end Point</strong>
-                        <span className={"text-muted"}>69.7345</span>
+                        <span className={"text-muted"}>{user.end.latitude} / {user.end.longitude}</span>
                     </li>
                     <li>
                         <div className={classes.userInfo}>
                             <div className={classes.userImg}>
                                 {(user.picture) ? <img src={"https://api.gowild.appscorridor.com" + user.picture} width="100%" alt={"img"} /> : <img src={userImg} width="100%" alt={"img"} />}
                             </div>
-                            <h6>john shan</h6>
+                            <h6>{user.firstName +" "+ user.lastName}</h6>
                         </div>
                     </li>
                 </ul>

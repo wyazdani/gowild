@@ -17,9 +17,10 @@ const CreateTreasure = () => {
     const navigate = useNavigate();
 
     const [file, setFile] = useState([]);
+    // const [files, setFiles] = useState([]);
     const [formData, setFormData] = useState({});
-    const [uploadFile, setUploadFile] = useState();
-  
+    const [uploadFile, setUploadFile] = useState("");
+
 
 
     const handleChange = (event) => {
@@ -33,55 +34,56 @@ const CreateTreasure = () => {
         })
     }
 
-    // if(value.type = "number"){
-    //    alert("hello 0 digit")
-    // }
-
 
     const submitForm = async (event) => {
         event.preventDefault();
-        const dataObj = {
-            "title": formData.title,
-            "description": formData.description,
-            "location": {
-                "latitude": JSON.parse(formData.latitude),
-                "longitude": JSON.parse(formData.longitude)
-            },
-            "eventDate": formData.date,
-            "eventTime": formData.time,
-            "no_of_participants": formData.number,
-            "picture":formData.picture
+        try {
+            // First API call
+            const dataObj = {
+                "title": formData.title,
+                "description": formData.description,
+                "location": {
+                    "latitude": JSON.parse(formData.latitude),
+                    "longitude": JSON.parse(formData.longitude)
+                },
+                "eventDate": formData.date,
+                "eventTime": formData.time,
+                "no_of_participants": formData.number,
+                "picture": formData.picture
+            }
+            const res = await AuthService.postMethod(`${ENDPOINT.treasure_chests.listing}`, true, dataObj);
+            if (res.status === 201) {
+                toast.success('Form data submitted successfully', {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                });
+            }
+            console.log(res.data);
+            const userId = (res.data.id);
+
+            // Second API call
+            // const dataArray = {
+            //     "picture":formData.picture,
+            // }
+            const dataArray = new FormData();
+            dataArray.append("image", uploadFile[0]);
+            const res2 = await AuthService.postMethod(`${ENDPOINT.treasure_chests.update_picture}${userId}/update-picture`, true, dataArray);
+            console.log("res2", res2.data);
+        } catch (err) {
+            swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
         }
-
-        return await AuthService.postMethod(ENDPOINT.treasure_chests.listing, true, dataObj)
-            .then((res) => {
-                if (res.status === 201) {
-                    toast.success('Form data submitted successfully', {
-                        position: "bottom-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "dark",
-                    });
-                }
-                console.log(res);
-                navigate('/treasure-chests-list');
-                setFormData("");
-                event.target.reset();
-            })
-            .catch((err) => {
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-            });
-
     };
 
 
 
-
     function uploadSingleFile(e) {
+        setUploadFile(e.target.files[0])
         let ImagesArray = Object.entries(e.target.files).map((e) =>
             URL.createObjectURL(e[1])
         );
@@ -90,10 +92,6 @@ const CreateTreasure = () => {
         console.log("file", file);
     }
 
-    function upload(e) {
-        e.preventDefault();
-        console.log(file);
-    }
 
     function deleteFile(e) {
         const s = file.filter((item, index) => index !== e);
@@ -101,7 +99,7 @@ const CreateTreasure = () => {
         console.log(s);
     }
 
-    
+
     return (
         <>
             <PageTitle title="Normal Route" />
@@ -181,20 +179,19 @@ const CreateTreasure = () => {
 
                                         </Col>
 
-                                        <Col md={4}>
+                                        <Col md={4} className={"mb-3"}>
                                             <Form.Label>Upload Augmented Reality</Form.Label>
                                             <label className={"fileUpload v2"} htmlFor="upload-photo">
                                                 <Form.Control
                                                     type="file"
-                                                    name="picture"
-                                                    value={formData.picture}
                                                     id={"upload-photo"}
+                                                    // value={formData.picture}
                                                     disabled={file.length === 1}
-                                                    className=""
-                                                    onChange={(e) => setUploadFile(e.target.files)}
-                                                    // onChange={uploadSingleFile}
+                                                    className="mt-4"
+                                                    // onChange={handleChange}
+                                                    onChange={uploadSingleFile}
                                                 />
-                                                <span>Attach Images</span>
+                                                <span>Attach images of thumbnail</span>
                                             </label>
 
                                         </Col>
@@ -204,18 +201,18 @@ const CreateTreasure = () => {
                                                 <Form.Control type="text" className={"mb-3 mt-4"} placeholder="🔗 link" />
                                             </Form.Group>
                                         </Col>
-                                            <Col md={3}>
-                                                <Form.Group>
-                                                    <Form.Label>Time</Form.Label>
-                                                    <Form.Control type="time"
-                                                        name="time"
-                                                        required
-                                                        value={formData.time}
-                                                        onChange={handleChange}
-                                                        className={"mb-3"} placeholder="00:00" />
-                                                </Form.Group>
-                                            </Col>
-                                        <Col md={3}> 
+                                        <Col md={3}>
+                                            <Form.Group>
+                                                <Form.Label>Time</Form.Label>
+                                                <Form.Control type="time"
+                                                    name="time"
+                                                    required
+                                                    value={formData.time}
+                                                    onChange={handleChange}
+                                                    className={"mb-3"} placeholder="00:00" />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col md={3}>
 
                                             <Form.Group>
                                                 <Form.Label>Number of participants</Form.Label>
@@ -228,12 +225,8 @@ const CreateTreasure = () => {
                                                     className={"mb-3"} placeholder="200" />
                                             </Form.Group>
                                         </Col>
-                                    </Row>
-                                </Col>
-                                <Col md={4}>
-                                    <Row>
+                                        <Col md={3}>
 
-                                        <Col md={12} className={"mb-3"}>
                                             <div className="form-group previewBox">
                                                 {file.length > 0 &&
                                                     file.map((item, index) => {
@@ -246,6 +239,16 @@ const CreateTreasure = () => {
                                                             </div>
                                                         );
                                                     })}
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col md={4}>
+                                    <Row>
+
+                                        <Col md={12} className={"mb-3"}>
+                                            <div className="form-group previewBox">
+
                                             </div>
                                         </Col>
 

@@ -51,23 +51,19 @@ const ViewProfilePopup = (props) => {
 
 
     const approveUser = async (id) => {
-        // console.log("1233"+id);
-        return  AuthService.postMethod(`${ENDPOINT.admin_user.approves}${id}/approve`, true)
+        const objData = {
+            "status": "processing"
+          }
+        return  AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true , objData)
             .then((res) => {
-                 if(res.status === 200){
-                    toast.success('User approved successfully!', {
-                        position: "bottom-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "dark",
-                        });
+                if(res.status === 201){
+                    toast.success(res.data.message);
                  }
-                 setAddAdmin(props.onHide);
-                 props.subAdminAllData()
+                            
+                 setTimeout(() => {
+                    props.subAdminAllData()
+                    setAddAdmin(props.onHide);  
+                }, 1000);
                 console.log(res);
             })
             .catch((err) => {
@@ -77,23 +73,19 @@ const ViewProfilePopup = (props) => {
     };
     
     const rejectUser = async (id) => {
+        const objData = {
+            "status": "disapprove"
+          }
         // console.log("1233"+id);
-        return  AuthService.postMethod(`${ENDPOINT.admin_user.rejects}${id}/reject`, true)
+        return  AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true , objData)
             .then((res) => {
-                if(res.status === 200){
-                    toast.success('User rejected successfully!', {
-                        position: "bottom-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "dark",
-                        });
+                if(res.status === 201){
+                    toast.success(res.data.message);
                  }
-                 setAddAdmin(props.onHide);
-                 props.subAdminAllData()
+                 setTimeout(() => {
+                    props.subAdminAllData()
+                    setAddAdmin(props.onHide);  
+                }, 1000);
                 console.log(res);
             })
             .catch((err) => {

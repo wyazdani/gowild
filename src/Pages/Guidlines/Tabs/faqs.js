@@ -5,27 +5,65 @@ import { ENDPOINT, KEY } from "config/constants";
 import AuthService from "services/auth.service";
 import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Faqs = () => {
 
-    const [content, setContent] = useState([]);
+ 
+    const [formData, setFormData] = useState({});
     const [isLoader, setIsLoader] = useState(false);
 
+    const handleChange = (event) => {
+        let name = event.target.name;
+        let value = event.target.value;
+        // const value = event.target.value.replace(/\D/g, "");
+        // const value = event.target.value.replace(/(0|)\D/g, "");
+        setFormData((prevalue) => {
+            return {
+                ...prevalue,   // Spread Operator               
+                [name]: value
+            }
+        })
+    }
 
-    const guidlinessFaqData = async () => {
-        await AuthService.getMethod(ENDPOINT.admin_guidelines.terms_conditions)
+
+    const guidlinessWaiverData = async () => {
+        await AuthService.getMethod(`${ENDPOINT.admin_guidelines.faq_listing}`, true)
             .then((res) => {
-                setContent(res.data.data);
+                setFormData(res.data.data)
                 setIsLoader(true);
-                // console.log(res.data.data);
+                // console.log(res.data.data)
             })
             .catch((err) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
             });
     };
 
+
+    const submitEventForm = async (event) => {
+        event.preventDefault();
+        const dataObj = {
+            "type": "faq",
+            "description": formData.description,
+        }
+        return AuthService.postMethod(ENDPOINT.admin_guidelines.terms_conditions, true, dataObj)
+            .then((res) => {
+                if (res.status === 201) {
+                    toast.success(res.data.message);
+                }
+                guidlinessWaiverData();
+                console.log(res);
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+
+    };
+
+
     useEffect(() => {
-        guidlinessFaqData();
+        guidlinessWaiverData();
 
     }, []);
 
@@ -58,56 +96,61 @@ const Faqs = () => {
     return (
         <>
             <Row>
-                {
-                    content.filter(item => {
-                        return item.type === "faq" ? true : false;
-                    }).map((content) => {
-                        return (
-                            <>
-                                <Col md={8}>
-                                    <div className={classes.editSection}>
-                                        <Form >
-                                            <Form.Group className={`${classes.formGroup} mb-3`}>
-                                                <textarea>
-                                                    {content.description}
-                                                </textarea>
-
-                                            </Form.Group>
-                                            <Form.Group>
-                                                <Button variant={"dark"}> Save </Button>
-                                            </Form.Group>
-                                        </Form>
-                                    </div>
-                                </Col>
-                                <Col md={4}>
-                                    <div className={classes.logBox}>
-                                        <h4>  {(new Date()).toLocaleDateString('en-US', DATE_OPTIONS)} </h4>
-                                        <div className={"text-muted font-12"}>Update Logs</div>
-                                        <ul className={classes.logList}>
-                                            <li>
-                                                <div className={classes.box}>
-                                                    <time className={"d-block"}>
-                                                        {(formatDate(content.updatedDate))}
-                                                    </time>
-                                                    <div>Term &amp; Conditions - Updated!</div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className={classes.box}>
-                                                    <time className="d-block">
-                                                        {(formatDate(content.createdDate))}
-                                                    </time>
-                                                    <div>FAQ</div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </Col>
-                            </>
-                        )
-                    })
-                }
+                <Col md={8}>
+                    <div className={classes.editSection}>
+                        <Form >
+                            <Form.Group className={`${classes.formGroup} mb-3`}>
+                                <textarea
+                                    name="description"
+                                    value={formData.description}
+                                    onChange={handleChange}
+                                >
+                                </textarea>
+                            </Form.Group>
+                            <Form.Group>
+                                <Button variant={"dark"} onClick={submitEventForm}> Save </Button>
+                            </Form.Group>
+                        </Form>
+                    </div>
+                </Col>
+                <Col md={4}>
+                    <div className={classes.logBox}>
+                        <h4>  {(new Date()).toLocaleDateString('en-US', DATE_OPTIONS)} </h4>
+                        <div className={"text-muted font-12"}>Update Logs</div>
+                        <ul className={classes.logList}>
+                            <li>
+                                <div className={classes.box}>
+                                    <time className={"d-block"}>
+                                        {(formatDate(formData.updatedDate))}
+                                    </time>
+                                    <div>Term &amp; Conditions - Updated!</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div className={classes.box}>
+                                    <time className="d-block">
+                                        {(formatDate(formData.createdDate))}
+                                    </time>
+                                    <div>FAQ</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </Col>
             </Row>
+
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
         </>
     )
 }
