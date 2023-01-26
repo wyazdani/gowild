@@ -1,10 +1,6 @@
 import {React} from "react";
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 
-
-
-
-
 const PushNotificationPopup = (props) => {
 
     return(
@@ -17,18 +13,28 @@ const PushNotificationPopup = (props) => {
             >
                     <Button variant="close" onClick={props.onHide}><i className={"fal fa-times"}></i> </Button>
 
-                <Modal.Body>
-                    <Button variant={"back"} className={"font-18 fw-bold"} >Push Notification</Button>
+                <Modal.Body style={{padding: '14px 41px'}}>
+                    <Button variant={"back"} className={"font-18 fw-bold"} onClick={props.onHide} >Push Notification</Button>
 
                     <Form>
                         <div className="d-flex">
                             <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                                <Form.Check type="checkbox" label="Send to all user" />
+                                <Form.Check type="checkbox" label="Send to all participants" />
                             </Form.Group>
-                            <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                            {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
                                 <Form.Check type="checkbox" label="Send to all Participants" />
-                            </Form.Group>
+                            </Form.Group> */}
                         </div>
+                        <Form.Group className="  mb-3" controlId="exampleForm.ControlInput1">
+                            <div className="input-group mb-3">
+                                <select className="form-select" name="actionRemove">
+                                    <option value="value">Event Name</option>
+                                    <option value="collect">COLLECT</option>
+                                    <option value="smash">SMASH</option>
+                                    <option value="cut">CUT</option>
+                                </select>
+                            </div>
+                        </Form.Group>
                         <Form.Group className={"mb-3"}>
                             <Form.Control type="text" placeholder="Caption Here!" />
                         </Form.Group>

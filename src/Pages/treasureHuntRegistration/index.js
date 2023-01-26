@@ -36,7 +36,6 @@ const TreasureHuntRegistration = () => {
 
     useEffect(() => {
         userRouteAllData();
-
     }, []);
 
     if (!isLoader) {

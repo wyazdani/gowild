@@ -19,7 +19,9 @@ const CreateTreasure = () => {
     const [file, setFile] = useState([]);
     // const [files, setFiles] = useState([]);
     const [formData, setFormData] = useState({});
-    const [uploadFile, setUploadFile] = useState("");
+    const [uploadFile, setUploadFile] = useState(null);
+    // console.log(" uploadFile", uploadFile)
+
 
 
 
@@ -52,6 +54,7 @@ const CreateTreasure = () => {
                 "picture": formData.picture
             }
             const res = await AuthService.postMethod(`${ENDPOINT.treasure_chests.listing}`, true, dataObj);
+
             if (res.status === 201) {
                 toast.success('Form data submitted successfully', {
                     position: "bottom-right",
@@ -64,16 +67,17 @@ const CreateTreasure = () => {
                     theme: "dark",
                 });
             }
+            // navigate('/treasure-chests-list');
+            // setFormData("");
+            // event.target.reset();
             console.log(res.data);
-            const userId = (res.data.id);
-
-            // Second API call
-            // const dataArray = {
-            //     "picture":formData.picture,
-            // }
+            // const id = (res.data.id);
+            //    setId(res.data.id);
+            console.log("abc" , uploadFile);
             const dataArray = new FormData();
-            dataArray.append("image", uploadFile[0]);
-            const res2 = await AuthService.postMethod(`${ENDPOINT.treasure_chests.update_picture}${userId}/update-picture`, true, dataArray);
+            dataArray.append("file", uploadFile);
+            const res2 = await AuthService.postMethod(`${ENDPOINT.treasure_chests.update_picture}${res.data.id}/update-picture`,true, dataArray,false);
+            // console.log(uploadFile);
             console.log("res2", res2.data);
         } catch (err) {
             swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
@@ -83,7 +87,10 @@ const CreateTreasure = () => {
 
 
     function uploadSingleFile(e) {
-        setUploadFile(e.target.files[0])
+        // setUploadFile(e.target.files[0])
+            setUploadFile({uploadFile:e.target.files[0]})
+            console.log("uploadFile" , e.target.files[0])
+
         let ImagesArray = Object.entries(e.target.files).map((e) =>
             URL.createObjectURL(e[1])
         );
@@ -99,6 +106,30 @@ const CreateTreasure = () => {
         console.log(s);
     }
 
+
+
+      // convert date format to month / day / year
+    //   function formatDate(date) {
+
+    //     var d = new Date(date),
+    //     month = '' + (d.getMonth() + 1),
+    //     day = '' + d.getDate(),
+    //     year = d.getFullYear();
+    
+    //     if (month.length < 2)
+    //     month = '0' + month;
+    //     if (day.length < 2)
+    //     day = '0' + day;
+    
+    //     return [month, day, year].join('/');
+    //     }
+
+    // const date = new Date();
+    // const utcDate = date.toISOString();
+    // const eventDate = { "eventDate": `${utcDate}` };
+    // console.log(eventDate);
+    
+    
 
     return (
         <>
@@ -168,7 +199,6 @@ const CreateTreasure = () => {
                                             <Form.Group>
                                                 <Form.Label>Event Date</Form.Label>
                                                 <Form.Group>
-
                                                     <Form.Control type="date"
                                                         name="date"
                                                         value={formData.date}
@@ -184,6 +214,7 @@ const CreateTreasure = () => {
                                             <label className={"fileUpload v2"} htmlFor="upload-photo">
                                                 <Form.Control
                                                     type="file"
+                                                    name="file"
                                                     id={"upload-photo"}
                                                     // value={formData.picture}
                                                     disabled={file.length === 1}
@@ -209,7 +240,7 @@ const CreateTreasure = () => {
                                                     required
                                                     value={formData.time}
                                                     onChange={handleChange}
-                                                    className={"mb-3"} placeholder="00:00" />
+                                                    className={"mb-3"} />
                                             </Form.Group>
                                         </Col>
                                         <Col md={3}>

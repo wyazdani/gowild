@@ -14,6 +14,7 @@ import ReactPaginate from 'react-paginate';
 import profile from "Images/Ellipse 768.png";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PushNotificationPopup from "../pushNotificationPopup";
 
 
 const AllTabData = (props) => {
@@ -58,10 +59,19 @@ const AllTabData = (props) => {
         // console.log("1233"+id);
         return  AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true , objData)
             .then((res) => {
-                 if(res.status === 201){
-                    toast.success(res.data.message);
+                if(res){
+                    toast.success('Status changed!', {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                        });
                  }
-                 content.userRouteAllData()
+                  props.userRouteAllData()
                 //  setAddAdmin(props.onHide);
                 //  props.content()
                 console.log(res);
@@ -80,10 +90,19 @@ const AllTabData = (props) => {
         // console.log("1233"+id);
         return  AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true , objData)
             .then((res) => {
-                 if(res.status === 201){
-                    toast.success(res.data.message);
+                 if(res){
+                    toast.success('Status changed!', {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                        });
                  }
-                 props.userRouteAllData()
+                  props.userRouteAllData()
                 console.log(res);
             })
             .catch((err) => {
@@ -133,7 +152,6 @@ const AllTabData = (props) => {
             </div>
 
 
-      
             <Table>
                 <thead>
                     <tr>
@@ -267,7 +285,7 @@ const AllTabData = (props) => {
                 editItem={editItem}
             />
 
-            <AddSubAdmin
+            <PushNotificationPopup
                 show={modalShow}
                 onHide={() => setModalShow(false)}
             />

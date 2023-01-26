@@ -56,12 +56,21 @@ const ViewProfilePopup = (props) => {
           }
         return  AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true , objData)
             .then((res) => {
-                if(res.status === 201){
-                    toast.success(res.data.message);
+                if(res){
+                    toast.success('Status changed!', {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                        });
                  }
                             
                  setTimeout(() => {
-                    props.subAdminAllData()
+                    // props.subAdminAllData()
                     setAddAdmin(props.onHide);  
                 }, 1000);
                 console.log(res);
@@ -79,9 +88,21 @@ const ViewProfilePopup = (props) => {
         // console.log("1233"+id);
         return  AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true , objData)
             .then((res) => {
-                if(res.status === 201){
-                    toast.success(res.data.message);
+                if(res){
+                    toast.success('Status changed!', {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                        });
                  }
+                // if(res.status === 201){
+                //     toast.success(res.data.message);
+                //  }
                  setTimeout(() => {
                     props.subAdminAllData()
                     setAddAdmin(props.onHide);  
