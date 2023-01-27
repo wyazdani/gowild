@@ -50,11 +50,11 @@ const ViewProfilePopup = (props) => {
 
 
 
-    const approveUser = async (id) => {
+    const approveUser = async (id , data) => {
         const objData = {
             "status": "processing"
           }
-        return  AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true , objData)
+        return  AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true ,data, objData)
             .then((res) => {
                 if(res){
                     toast.success('Status changed!', {
@@ -68,9 +68,8 @@ const ViewProfilePopup = (props) => {
                         theme: "dark",
                         });
                  }
-                            
-                 setTimeout(() => {
-                    // props.subAdminAllData()
+                 props.userRouteAllData()    
+                 setTimeout(() => { 
                     setAddAdmin(props.onHide);  
                 }, 1000);
                 console.log(res);

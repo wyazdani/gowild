@@ -73,10 +73,11 @@ const CreateTreasure = () => {
             console.log(res.data);
             // const id = (res.data.id);
             //    setId(res.data.id);
+
             console.log("abc" , uploadFile);
             const dataArray = new FormData();
             dataArray.append("file", uploadFile);
-            const res2 = await AuthService.postMethod(`${ENDPOINT.treasure_chests.update_picture}${res.data.id}/update-picture`,true, dataArray,false);
+            const res2 = await AuthService.postMethod(`${ENDPOINT.treasure_chests.update_picture}${res.data.id}/update-picture`,true, dataArray, false, true);
             // console.log(uploadFile);
             console.log("res2", res2.data);
         } catch (err) {
