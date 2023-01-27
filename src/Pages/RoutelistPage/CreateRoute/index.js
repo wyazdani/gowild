@@ -9,7 +9,7 @@ import swal from 'sweetalert';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useNavigate} from "react-router-dom";
-import GoogleMaps from "./GoogleMap";
+import RouteMap from "./RouteMap";
 
 
 
@@ -292,21 +292,11 @@ const CreateRoute = () => {
                         </Form>
                     </Col>
                     <Col md={8}>
-                        {/* <div className={"img-box"}>
-                            <img src={map1} alt={"img"} />
-                        </div> */}
-                        {/* <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d16821.829686653797!2d74.27623355730282!3d31.475672333592822!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3919023103af0bf3%3A0xc69a4d92168bdf89!2sDoctors%20Hospital%20%26%20Medical%20Center!5e0!3m2!1sen!2s!4v1673965953749!5m2!1sen!2s" width="100%" height="650"  allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>  */}
-                        <iframe
-                            width="100%"
-                            height="80%"
-                            loading="lazy"
-                            allowfullscreen
-                            referrerpolicy="no-referrer-when-downgrade"
-                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0
-                            &q=Space+Needle,Seattle+WA">
-                        </iframe>
-                  {/* <GoogleMaps /> */}
-                  
+                        <div className={"img-box"}>
+                            <RouteMap />
+                        </div>
+
+
                     </Col>
                     
                 </Row>
