@@ -337,6 +337,58 @@ table{
   font-weight: 700 !important;
 }
 
+// treasure_chests scss
+
+.treasure_chests{
+  .sponser {
+      border: 2px dashed #F3F3F3;
+      width: 86px;
+      font-size: 12px;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      color: #000000;
+      line-height: 16px;
+      opacity: 0.7;
+      cursor: pointer;
+    }
+  
+    .addMore {
+      font-size: 12px;
+      line-height: 16px;
+      text-align: right;
+      color: #000000;
+      opacity: 0.8;
+      cursor: pointer;
+      justify-content: flex-end;
+      align-items: flex-end;
+      margin-top: -23px;
+    }
+    .treasureChest_img{
+      padding: 27px;
+      border: 2px solid #F3F3F3;
+      border-radius: 20px;
+    }
+    .fileUpload.v2 {
+      padding: 0px 0 0 !important;
+      text-align: center;
+       &:after{
+      background-image: url("/Images/iconCam.svg");
+      width: 55px;
+      height: 55px;
+      margin: 0 auto;
+      left: 12% !important;
+      /* transform: translateX(-44%); */
+      transform: translate(-26px, 11px);
+      background-size: 60px;
+    }
+  }
+
+
+  }
+
 // .fileLoad .createList_img{
 //   opacity: 0 !important;
 // }

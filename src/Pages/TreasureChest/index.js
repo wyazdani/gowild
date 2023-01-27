@@ -29,6 +29,8 @@ const TreasureChestList = () => {
         // history.push(`/edit-form?id=${id}`);
     };
 
+    const [selectedItems, setSelectedItems] = useState([]);
+    const [isChecked, setIsChecked] = useState(true);
     const [content, setContent] = useState([]);
     const [isLoader, setIsLoader] = useState(false);
 
@@ -96,9 +98,25 @@ const TreasureChestList = () => {
             </div>
         );
     }
+    
+  // chekbox select all
+    const handleCheckboxChange = (item) => {
+        if (selectedItems.includes(item)) {
+          setSelectedItems(selectedItems.filter((i) => i !== item));
+        } else {
+          setSelectedItems([...selectedItems, item]);
+        }
+      };
+    
+      const handleSelectAll = () => {
+        setSelectedItems(content);
+        setIsChecked(!isChecked);
+      }
 
-
-
+      const handleDeselectAll = () => {
+        setSelectedItems([]);
+        setIsChecked(!isChecked);
+      };
 
     return (
         <>
@@ -112,7 +130,7 @@ const TreasureChestList = () => {
                     <thead>
                         <tr>
                             <th>
-                                <Form.Check type="checkbox" />
+                               {isChecked? <Form.Check type="checkbox" onChange={handleSelectAll} /> : <Form.Check type="checkbox" onClick={handleDeselectAll} /> } 
                             </th>
                             <th></th>
                             <th>Name</th>
@@ -124,17 +142,20 @@ const TreasureChestList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {content.map((content) => (
+                        {content.map((item) => (
                             <tr>
-                                <td><Form.Check type="checkbox" /></td>
+                                <td><Form.Check type="checkbox" value={item}
+                                    onChange={() => handleCheckboxChange(item)}
+                                    checked={selectedItems.includes(item)} /></td>
+                                    
                                 <td style={{ width: "10%" }}>
-                                   {(content.picture)? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
+                                   {(item.picture)? <img src={"https://api.gowild.appscorridor.com" + item.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
                                 </td>                             
-                                <td>{content.title}</td>
-                                <td>{(formatDate(content.createdDate))}</td>
-                                <td> {(formatDate(content.eventDate))}</td>
-                                <td>{content.location.latitude}</td>
-                                <td>{content.location.longitude}</td>
+                                <td>{item.title}</td>
+                                <td>{(formatDate(item.createdDate))}</td>
+                                <td> {(formatDate(item.eventDate))}</td>
+                                <td>{item.location.latitude}</td>
+                                <td>{item.location.longitude}</td>
                                 <td>
                                     <Dropdown>
                                         <Dropdown.Toggle variant="success" id="dropdown-basic">
@@ -146,7 +167,7 @@ const TreasureChestList = () => {
                                                 onClick={
                                                     () => {
                                                         setViewTreasureChests(true)
-                                                        setViewItem(content)
+                                                        setViewItem(item)
                                                     }}
                                             >
                                                 <i className={"fal fa-ban bg-warning text-white"}></i>
@@ -158,7 +179,7 @@ const TreasureChestList = () => {
                                                 onClick={
                                                     () => {
                                                         setEditSubAdmin(true)
-                                                        setEditItem(content)
+                                                        setEditItem(item)
                                                     }}
 
                                             >
@@ -166,7 +187,7 @@ const TreasureChestList = () => {
                                                 Edit
                                             </Dropdown.Item>
                                             <Dropdown.Item href="#/" onClick={() => {
-                                                deleteTreasureChests(content.id)
+                                                deleteTreasureChests(item.id)
                                             }}>
                                                 <i className={"fal fa-trash bg-danger text-white"}></i>
                                                 Delete
