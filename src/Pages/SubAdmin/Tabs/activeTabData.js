@@ -14,7 +14,8 @@ const ActiveTabData = (props) => {
 
     const { content } = props;
 
-
+    const [selectedItems, setSelectedItems] = useState([]);
+    const [isChecked, setIsChecked] = useState(true);
     const [isLoader, setIsLoader] = useState(false);
     const [addAdmin, setAddAdmin] = useState(false);
     const [editSubAdmin, setEditSubAdmin] = useState(false);
@@ -71,6 +72,26 @@ const ActiveTabData = (props) => {
 
     };
 
+         
+  // chekbox select all
+  const handleCheckboxChange = (content) => {
+    if (selectedItems.includes(content)) {
+      setSelectedItems(selectedItems.filter((i) => i !== content));
+    } else {
+      setSelectedItems([...selectedItems, content]);
+    }
+  };
+
+  const handleSelectAll = () => {
+    setSelectedItems(content);
+    setIsChecked(!isChecked);
+  }
+
+  const handleDeselectAll = () => {
+    setSelectedItems([]);
+    setIsChecked(!isChecked);
+  };
+
 
     return (
         <>
@@ -78,7 +99,7 @@ const ActiveTabData = (props) => {
                 <thead>
                     <tr>
                         <th>
-                            <Form.Check type="checkbox" />
+                            {isChecked ? <Form.Check type="checkbox" onChange={handleSelectAll} /> : <Form.Check type="checkbox" onClick={handleDeselectAll} />}
                         </th>
                         <th> &nbsp;&nbsp;&nbsp; Name</th>
                         <th>Online status</th>
@@ -90,7 +111,9 @@ const ActiveTabData = (props) => {
                 <tbody>
                     {currentItems.map((content) => (
                         <tr>
-                            <td><Form.Check type="checkbox" /></td>
+                            <td><Form.Check type="checkbox" value={content}
+                                onChange={() => handleCheckboxChange(content)}
+                                checked={selectedItems.includes(content)} /></td>
                             <td>
                                 <div className={"d-flex"}>
                                     <div className={classes.userImg}>

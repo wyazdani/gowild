@@ -17,6 +17,9 @@ const ActiveTabData = (props) => {
 
     const { content } = props;
 
+    const [selectedItems, setSelectedItems] = useState([]);
+    const [isChecked, setIsChecked] = useState(true);
+    
     const [modalShow, setModalShow] = useState(false);
     const [modalShowView, setModalShowView] = useState(false);
     const [search, setSearch] = useState("");
@@ -64,6 +67,24 @@ const ActiveTabData = (props) => {
     };
 
 
+  // chekbox select all
+  const handleCheckboxChange = (content) => {
+    if (selectedItems.includes(content)) {
+      setSelectedItems(selectedItems.filter((i) => i !== content));
+    } else {
+      setSelectedItems([...selectedItems, content]);
+    }
+  };
+
+  const handleSelectAll = () => {
+    setSelectedItems(content);
+    setIsChecked(!isChecked);
+  }
+
+  const handleDeselectAll = () => {
+    setSelectedItems([]);
+    setIsChecked(!isChecked);
+  };
     
 
     return (
@@ -89,7 +110,7 @@ const ActiveTabData = (props) => {
                 <thead>
                     <tr>
                         <th colSpan={0}>
-                            <Form.Check type="checkbox" />
+                        {isChecked ? <Form.Check type="checkbox" onChange={handleSelectAll} /> : <Form.Check type="checkbox" onClick={handleDeselectAll} />}
                         </th>
                         <th> &nbsp;&nbsp;&nbsp;Name</th>
                         <th>Online status</th>
@@ -105,8 +126,9 @@ const ActiveTabData = (props) => {
                             row.lastName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
                             row.email.toString().toLowerCase().includes(search.toString().toLowerCase())).map((content) => (
                                 <tr>
-                                    <td>
-                                        <Form.Check type="checkbox" />
+                                    <td><Form.Check type="checkbox" value={content}
+                                        onChange={() => handleCheckboxChange(content)}
+                                        checked={selectedItems.includes(content)} />
                                     </td>
                                     <td>
                                         <div className={"d-flex"}>

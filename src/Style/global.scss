@@ -365,6 +365,21 @@ table{
       justify-content: flex-end;
       align-items: flex-end;
       margin-top: -23px;
+
+      width: 79px;
+      padding: 3px;
+      float: right;
+    }
+    .deleteButton{
+      display: flex;
+      align-items: center;
+      border: none;
+      background-color: transparent;
+      color: red;
+      margin-bottom: 16px;
+      font-weight: bold;
+      font-size: 22px;
+      justify-content: center;
     }
     .treasureChest_img{
       padding: 27px;
@@ -395,5 +410,4 @@ table{
 // .DashboardCards_card__1wnU3 .progress{
 //   background-color: red !important;
 // }
-
 

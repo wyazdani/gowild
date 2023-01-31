@@ -1,6 +1,6 @@
 
 import PageTitle from "../../Components/Pagetitle";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import imgURL from "../../Images/routelist.png";
 import { React, useState, useEffect } from "react";
 import { Table, Dropdown, Button, Row, Col, Form } from "react-bootstrap";
@@ -19,12 +19,15 @@ import profile from "Images/cardsImg.png";
 
 const RouteList = () => {
 
+    const [selectedItems, setSelectedItems] = useState([]);
+    const [isChecked, setIsChecked] = useState(true);
+
     const [addAdmin, setAddAdmin] = useState(false);
     const [editSubAdmin, setEditSubAdmin] = useState(false);
-    const [editItem , setEditItem] = useState(null);
+    const [editItem, setEditItem] = useState(null);
     const [viewRouteList, setViewRouteList] = useState(false);
     const [viewItem, setViewItem] = useState(null);
-    const [search , setSearch] = useState("");
+    const [search, setSearch] = useState("");
 
     const navigate = useNavigate();
     const goToCreateRoute = () => {
@@ -66,21 +69,39 @@ const RouteList = () => {
     }, []);
 
 
-        // convert date format to month / day / year
-        function formatDate(date) {
-            var d = new Date(date),
-                month = '' + (d.getMonth() + 1),
-                day = '' + d.getDate(),
-                year = d.getFullYear();
-    
-            if (month.length < 2)
-                month = '0' + month;
-            if (day.length < 2)
-                day = '0' + day;
-    
-            return [month, day, year].join('/');
-        }
+    // convert date format to month / day / year
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
 
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return [month, day, year].join('/');
+    }
+
+    // chekbox select all
+    const handleCheckboxChange = (content) => {
+        if (selectedItems.includes(content)) {
+            setSelectedItems(selectedItems.filter((i) => i !== content));
+        } else {
+            setSelectedItems([...selectedItems, content]);
+        }
+    };
+
+    const handleSelectAll = () => {
+        setSelectedItems(content);
+        setIsChecked(!isChecked);
+    }
+
+    const handleDeselectAll = () => {
+        setSelectedItems([]);
+        setIsChecked(!isChecked);
+    };
 
 
     if (!isLoader) {
@@ -93,7 +114,7 @@ const RouteList = () => {
 
 
 
-    return(
+    return (
         <>
             <PageTitle title="Normal Route" />
             <section className={"section"}>
@@ -105,7 +126,7 @@ const RouteList = () => {
                     <thead>
                         <tr>
                             <th colSpan={2}>
-                                <Form.Check type="checkbox" />
+                                {isChecked ? <Form.Check type="checkbox" onChange={handleSelectAll} /> : <Form.Check type="checkbox" onClick={handleDeselectAll} />}
                             </th>
                             <th>Name</th>
                             <th>Date created</th>
@@ -115,51 +136,51 @@ const RouteList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                    {content.sort((a, b) => (a.name < b.name ? -1 : 1)).map((content) => (
-                        <tr>
-                            <td>
-                                <Form.Check type="checkbox" />
-                            </td>
-                            <td>
-                            {(content.picture)? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="80%" alt={"img"} /> :  <img src={profile} width="90%" alt={"img"} /> }
-                            </td>
-                            <td>{content.title}</td>
-                            <td>{(formatDate(content.createdDate))}</td>
-                            <td>{content.start.latitude} / {content.start.longitude}</td>
-                            <td>{content.end.latitude} / {content.end.longitude}</td>
-                            <td>
-                                <Dropdown>
-                                    <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                        <i className={"far fa-ellipsis-v fa-fw"}></i>
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item href="#/" onClick={
-                                                    () => {
-                                                        setViewRouteList(true)
-                                                        setViewItem(content)
-                                                    }}>
-                                            <i className={"fal fa-eye  bg-light-yellow text-white"}></i>
-                                            View
-                                        </Dropdown.Item>
-                                        <Dropdown.Item href="#/"  onClick={
-                                                    () => {
-                                                        setEditSubAdmin(true)
-                                                        setEditItem(content)
-                                                    }
-                                                }>
-                                            <i className={"far fa-pen bg-dark text-white"}></i>
-                                            Edit
-                                        </Dropdown.Item>
+                        {content.sort((a, b) => (a.name < b.name ? -1 : 1)).map((content) => (
+                            <tr>
+                                <td><Form.Check type="checkbox" value={content}
+                                    onChange={() => handleCheckboxChange(content)}
+                                    checked={selectedItems.includes(content)} /></td>
+                                <td>
+                                    {(content.picture) ? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="80%" alt={"img"} /> : <img src={profile} width="90%" alt={"img"} />}
+                                </td>
+                                <td>{content.title}</td>
+                                <td>{(formatDate(content.createdDate))}</td>
+                                <td>{content.start.latitude} / {content.start.longitude}</td>
+                                <td>{content.end.latitude} / {content.end.longitude}</td>
+                                <td>
+                                    <Dropdown>
+                                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                            <i className={"far fa-ellipsis-v fa-fw"}></i>
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item href="#/" onClick={
+                                                () => {
+                                                    setViewRouteList(true)
+                                                    setViewItem(content)
+                                                }}>
+                                                <i className={"fal fa-eye  bg-light-yellow text-white"}></i>
+                                                View
+                                            </Dropdown.Item>
+                                            <Dropdown.Item href="#/" onClick={
+                                                () => {
+                                                    setEditSubAdmin(true)
+                                                    setEditItem(content)
+                                                }
+                                            }>
+                                                <i className={"far fa-pen bg-dark text-white"}></i>
+                                                Edit
+                                            </Dropdown.Item>
 
-                                        <Dropdown.Item href="#/" onClick = {() => deleteRouteList(content.id)}>
-                                            <i className={"fal fa-trash bg-danger text-white"}></i>
-                                            Delete
-                                        </Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </td>
-                        </tr>
-                    ))}
+                                            <Dropdown.Item href="#/" onClick={() => deleteRouteList(content.id)}>
+                                                <i className={"fal fa-trash bg-danger text-white"}></i>
+                                                Delete
+                                            </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </Table>
             </section>

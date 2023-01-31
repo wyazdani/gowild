@@ -113,5 +113,9 @@ export const ENDPOINT = {
             id:null
         },
     },
+    admin_sponsor :{
+        sponsor : `${API_URL}/admin/sponsor`,
+        sponsor_img : `${API_URL}/admin/sponsor/`,
+    },
 
 };

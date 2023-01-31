@@ -15,6 +15,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const AllTabData = (props) => {
     const { content } = props;
+    const [selectedItems, setSelectedItems] = useState([]);
+    const [isChecked, setIsChecked] = useState(true);
 
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
@@ -91,6 +93,27 @@ const AllTabData = (props) => {
 
     };
 
+   // chekbox select all
+   const handleCheckboxChange = (content) => {
+    if (selectedItems.includes(content)) {
+      setSelectedItems(selectedItems.filter((i) => i !== content));
+    } else {
+      setSelectedItems([...selectedItems, content]);
+    }
+  };
+
+  const handleSelectAll = () => {
+    setSelectedItems(content);
+    setIsChecked(!isChecked);
+  }
+
+  const handleDeselectAll = () => {
+    setSelectedItems([]);
+    setIsChecked(!isChecked);
+  };
+   
+
+
     return (
         <>
             <div className={classes.tableFilter}>
@@ -114,7 +137,7 @@ const AllTabData = (props) => {
                 <thead>
                     <tr>
                         <th>
-                            <Form.Check type="checkbox" />
+                            {isChecked ? <Form.Check type="checkbox" onChange={handleSelectAll} /> : <Form.Check type="checkbox" onClick={handleDeselectAll} />}
                         </th>
                         <th> &nbsp;&nbsp;&nbsp;Name</th>
                         <th>Route Name</th>
@@ -130,7 +153,10 @@ const AllTabData = (props) => {
                             row.user.lastName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
                             row.user.email.toString().toLowerCase().includes(search.toString().toLowerCase())).map((content) => (
                         <tr>
-                            <td><Form.Check type="checkbox" /></td>
+                            <td><Form.Check type="checkbox" value={content}
+                                onChange={() => handleCheckboxChange(content)}
+                                checked={selectedItems.includes(content)} />
+                            </td>
                             <td>
                                 <div className={"d-flex"}>
                                     <div className={classes.userImg}>
