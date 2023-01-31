@@ -59,7 +59,7 @@ const TreasureHuntRegistration = () => {
                         <AllTabData content={content} />
                     </Tab>
                     <Tab eventKey="Approve" title="Approve">
-                        <ApproveTabData content={approveContent}  userRouteAllData={userRouteAllData} />
+                        <ApproveTabData content={approveContent} userRouteAllData={userRouteAllData} />
                     </Tab>
                     <Tab eventKey="Pending" title="Pending">
                         <PendingTabData content={pendingContent} userRouteAllData={userRouteAllData} />

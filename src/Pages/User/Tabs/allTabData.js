@@ -18,7 +18,8 @@ const AllTabData = (props) => {
 
     const { content } = props;
 
-
+    const [selectedItems, setSelectedItems] = useState([]);
+    const [isChecked, setIsChecked] = useState(true);
     const [modalShow, setModalShow] = useState(false);
     const [modalShowView, setModalShowView] = useState(false);
     const [search, setSearch] = useState("");
@@ -70,6 +71,25 @@ const AllTabData = (props) => {
     };
 
 
+  // chekbox select all
+  const handleCheckboxChange = (content) => {
+    if (selectedItems.includes(content)) {
+      setSelectedItems(selectedItems.filter((i) => i !== content));
+    } else {
+      setSelectedItems([...selectedItems, content]);
+    }
+  };
+
+  const handleSelectAll = () => {
+    setSelectedItems(content);
+    setIsChecked(!isChecked);
+  }
+
+  const handleDeselectAll = () => {
+    setSelectedItems([]);
+    setIsChecked(!isChecked);
+  };
+
 
     return (
         <>
@@ -98,7 +118,9 @@ const AllTabData = (props) => {
             <Table>
                 <thead>
                     <tr>
-                        <th><Form.Check type="checkbox" /></th>
+                        <th>
+                            {isChecked ? <Form.Check type="checkbox" onChange={handleSelectAll} /> : <Form.Check type="checkbox" onClick={handleDeselectAll} />}
+                        </th>
                         <th> &nbsp;&nbsp;&nbsp;Name</th>
                         <th>Online Status</th>
                         <th>Location</th>
@@ -113,7 +135,10 @@ const AllTabData = (props) => {
                             row.lastName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
                             row.email.toString().toLowerCase().includes(search.toString().toLowerCase())).map((content) => (
                                 <tr>
-                                    <td><Form.Check type="checkbox" /></td>
+                                    <td><Form.Check type="checkbox" value={content}
+                                        onChange={() => handleCheckboxChange(content)}
+                                        checked={selectedItems.includes(content)} />
+                                    </td>
                                     <td>
                                         <div className={"d-flex"}>
                                             <div className={classes.userImg}>

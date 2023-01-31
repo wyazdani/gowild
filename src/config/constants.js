@@ -10,6 +10,10 @@ export const ENDPOINT = {
     user_me: `${API_URL}/auth/me`,
     dashboard: `${API_URL}/dashboard/users-info`,
 
+    dashboards :{
+        bar_listing : `${API_URL}/dashboard/users`,
+        csv_file : `${API_URL}/dashboard/csv`,
+    },
 
     admin_user: {
         listing: `${API_URL}/admin/users`,
@@ -112,6 +116,10 @@ export const ENDPOINT = {
             url:`${API_URL}/admin/route-historical-events`,
             id:null
         },
+    },
+    admin_sponsor :{
+        sponsor : `${API_URL}/admin/sponsor`,
+        sponsor_img : `${API_URL}/admin/sponsor/`,
     },
 
 };
