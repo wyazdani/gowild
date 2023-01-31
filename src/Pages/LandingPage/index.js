@@ -10,8 +10,6 @@ const LandingPage = () => {
 
 
 
-
-
   return (
     <>
         <PageTitle title="Home" />

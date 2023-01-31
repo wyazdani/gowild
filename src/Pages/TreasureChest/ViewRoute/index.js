@@ -75,7 +75,6 @@ const ViewTreasure = (props) => {
     }
 
 
-
     return (
         <>
             <Modal

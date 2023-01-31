@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useRef } from "react";
 import PageTitle from "../../../Components/Pagetitle";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import map1 from "Images/map1.jpg";
@@ -73,32 +73,16 @@ const CreateTreasure = () => {
             const dataArray = new FormData();
             dataArray.append("file", uploadFile.uploadFile);
             const res2 = await AuthService.postMethod(`${ENDPOINT.treasure_chests.update_picture}${res.data.id}/update-picture`, true, dataArray, false, true);
-            setTimeout(() => {
-                // navigate('/treasure-chests-list');
-            }, 1000);
             console.log("res2", res2.data);
 
-                 // 3rd API call
+            // 3rd API call
             const linkObj = {
                 "treasure_chest": res.data.id,
-                "link":  formData.link,
+                "link": formData.link,
             }
-                const res3 = await AuthService.postMethod(`${ENDPOINT.admin_sponsor.sponsor}`, true, linkObj);
-                if (res.status === 201) {
-                    // toast.success('Form data submitted successfully', {
-                    //     position: "bottom-right",
-                    //     autoClose: 5000,
-                    //     hideProgressBar: false,
-                    //     closeOnClick: true,
-                    //     pauseOnHover: true,
-                    //     draggable: true,
-                    //     progress: undefined,
-                    //     theme: "dark",
-                    // });
-                    console.log("res3", res3.data);
-                }
-
-                 // 4th API call
+            const res3 = await AuthService.postMethod(`${ENDPOINT.admin_sponsor.sponsor}`, true, linkObj);
+                console.log("res3", res3.data);
+            // 4th API call
 
             // setFormData("");
             // event.target.reset();
@@ -111,7 +95,6 @@ const CreateTreasure = () => {
             }, 1000);
             console.log("res4", res4.data);
 
-                
         } catch (err) {
             swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
         }
@@ -120,11 +103,16 @@ const CreateTreasure = () => {
 
 
     function uploadHandleChange(e) {
-        // setUploadFile(e.target.files[0])
+        const file = e.target.files[0];
+        if (file && file.type.substr(0, 5) === "image") {
+            setImage(file)
+        } else {
+            setImage(null);
+        }
         setUploadFiles({ uploadFiles: e.target.files[0] })
         console.log("uploadFiles", e.target.files[0])
-
     }
+
     function uploadSingleFile(e) {
         // setUploadFile(e.target.files[0])
         setUploadFile({ uploadFile: e.target.files[0] })
@@ -138,47 +126,46 @@ const CreateTreasure = () => {
         // console.log("file", file);
     }
 
-
+    // add input field
     function deleteFile(e) {
         const s = file.filter((item, index) => index !== e);
         setFile(s);
         console.log(s);
     }
 
-
-    // const handleChanges = () => {
-    //     // const values = [...inputs];
-    //     // values[i].value = event.target.value;
-    //     // setInputs(values);
-    //   };
-    
-
-    
-    //   const handleRemove = (i) => {
-    //     const values = [...inputs];
-    //     values.splice(i, 1);
-    //     setInputs(values);
-    //   };
-
-
-    // const date = new Date();
-    // const utcDate = date.toISOString();
-    // const eventDate = { "eventDate": `${utcDate}` };
-    // console.log(eventDate);
-    const handleAdd=()=>{
-        const abc=[...val,[]]
-        setVal(abc)
+    const handleAdd = () => {
+        const addItem = [...val, []]
+        setVal(addItem)
     }
-    const handleChanges=(onChangeValue,i)=>{
-     const inputdata=[...val]
-     inputdata[i]=onChangeValue.target.value;
-     setVal(inputdata)
+    const handleChanges = (onChangeValue, i) => {
+        const inputdata = [...val]
+        inputdata[i] = onChangeValue.target.value;
+        setVal(inputdata)
     }
-    const handleDelete=(i)=>{
-        const deletVal=[...val]
-        deletVal.splice(i,1)
-        setVal(deletVal)  
+    const handleDelete = (i) => {
+        const deletVal = [...val]
+        deletVal.splice(i, 1)
+        setVal(deletVal)
     }
+
+
+    //  image upload and preview
+    const [image, setImage] = useState();
+    const [preview, setPreview] = useState();
+    const fileInputRef = useRef(null);
+
+    useEffect(() => {
+        if (image) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreview(reader.result);
+            };
+            reader.readAsDataURL(image);
+        } else {
+            setPreview(null);
+        }
+    }, [image]);
+
 
 
     return (
@@ -238,9 +225,11 @@ const CreateTreasure = () => {
                                                     <Form.Group>
                                                         <Form.Label className="mt-1"><b>Sponsors</b></Form.Label>
                                                         <div className="d-flex">
-                                                            <img src={rectangle} width="20%" alt="" />
+                                                            {/* <img src={rectangle} width="20%" alt="" /> */}
+                                                            {preview ? (<img src={preview} width="20%" alt="" />) : ""}
                                                             <Form.Control type="text"
                                                                 name="link"
+                                                                required
                                                                 value={formData.link}
                                                                 onChange={handleChange}
                                                                 className={"mb-1 ms-2 mb-md-2"} placeholder="🔗 www.redbull.com" style={{ marginBottom: '0px !important' }} />
@@ -263,38 +252,77 @@ const CreateTreasure = () => {
                                                 </Col>
                                                 <Col md={1}>
                                                 </Col>
-                                                {/* <Col md={2}>
-                                            <Form.Group>
-                                               <p className="sponser">add <br /> image</p>
-                                            </Form.Group>
-                                        </Col> */}
                                                 <Col md={6}>
                                                     <Form.Group className="mt-2">
                                                         <div className="d-flex">
-                                                            <p className="sponser">add <br /> image</p>
+                                                            {/* <p className="sponser">add <br /> image</p> */}
+                                                            <p className="sponser">
+                                                                <button onClick={(event) => {
+                                                                    event.preventDefault();
+                                                                    fileInputRef.current.click();
+                                                                }}>add <br /> image</button>
+
+                                                                <input type="file" name="file"
+                                                                    onChange={uploadHandleChange}
+                                                                    style={{ display: 'none' }} ref={fileInputRef}
+                                                                    accept="image/*"
+                                                                />
+                                                            </p>
                                                             {/* <Form.Control type="file"
-                                                              name="file"
-                                                              onChange={uploadHandleChange}
-                                                             className={"ms-2 mb-0"} placeholder="🔗 link" /> */}
+                                                name="file"
+                                                onChange={uploadHandleChange}
+                                                className={"ms-2 mb-0"} placeholder="🔗 link" /> */}
                                                             <Form.Control type="text"
-                                                              name="file"
-                                                              onChange={uploadHandleChange}
-                                                             className={"ms-2 mb-0"} placeholder="🔗 link" />
-                                                                                                                                                                
+                                                                name="file"
+                                                                value={preview}
+                                                                onChange={uploadHandleChange}
+                                                                className={"ms-2 mb-0"} placeholder="🔗 link" />
+
                                                         </div>
                                                         {val.map((data, i) => {
-                                                                return (
-                                                                   <>
-                                                                   <div className="d-flex">
-                                                                     <p className="sponser">add <br /> image</p>
-                                                                        <input className="form-control" value={data} onChange={e => handleChanges(e, i)} placeholder="🔗 link"  />
+                                                            return (
+                                                                <>
+                                                                    <Form.Group>
+
+                                                                        <div className="d-flex">
+                                                                            {/* <img src={rectangle} width="20%" alt="" /> */}
+                                                                            {preview ? (<img src={preview} width="20%" alt="" />) : ""}
+                                                                            <Form.Control type="text"
+                                                                                name="link"
+                                                                                required
+                                                                                value={formData.link}
+                                                                                onChange={handleChange}
+                                                                                className={"mb-1 ms-2 mb-md-2"} placeholder="🔗 www.redbull.com" style={{ marginBottom: '0px !important' }} />
+                                                                        </div>
+
+                                                                    </Form.Group>
+                                                                    <div className="d-flex">
+                                                                        <p className="sponser">
+                                                                            <button onClick={(event) => {
+                                                                                event.preventDefault();
+                                                                                fileInputRef.current.click();
+                                                                            }}>add <br /> image</button>
+
+                                                                            <input type="file" style={{ display: 'none' }} ref={fileInputRef}
+                                                                                accept="image/*"
+                                                                                onChange={(event) => {
+                                                                                    const file = event.target.files[0];
+                                                                                    if (file) {
+                                                                                        setImage(file)
+                                                                                    } else {
+                                                                                        setImage(null);
+                                                                                    }
+                                                                                }} />
+                                                                        </p>
+                                                                        <input type="text" className="form-control"
+                                                                            value={preview} onChange={e => handleChanges(e, i)} placeholder="🔗 link" />
                                                                         <button className="deleteButton" onClick={() => handleDelete(i)}>x</button>
                                                                     </div>
-                                                                    {/* <button onClick={() => handleDelete(i)}>x</button> */}
-                                                                   </>
-                                                                )
-                                                            })}
-                                                        <p className="mb-0 float-right addMore" onClick={()=>handleAdd()}>Add more</p>
+                                                                    {/* <button className="deleteButton" onClick={() => handleDelete(i)}>x</button> */}
+                                                                </>
+                                                            )
+                                                        })}
+                                                        <p className="mb-0 float-right addMore" onClick={() => handleAdd()}>Add more</p>
 
                                                     </Form.Group>
                                                 </Col>
