@@ -34,6 +34,7 @@
     "react-dom": "^18.2.0",
     "react-google-maps": "^9.4.5",
     "react-hook-form": "^7.41.5",
+    "react-hook-google-maps": "^0.0.3",
     "react-icons": "^4.7.1",
     "react-paginate": "^8.1.4",
     "react-phone-number-input": "^3.2.12",
