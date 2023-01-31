@@ -1,19 +1,19 @@
-import { React, useState, useEffect, useRef } from "react";
-import PageTitle from "../../../Components/Pagetitle";
-import { Button, Col, Form, Row } from "react-bootstrap";
-import map1 from "Images/map1.jpg";
-import rectangle from "Images/Rectangle.png";
-import img2 from "Images/chestcpAsset .png";
-import { ENDPOINT, KEY } from "config/constants";
-import AuthService from "services/auth.service";
-import accessHeader from "services/headers/access-header";
-import swal from 'sweetalert';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from "react-router-dom";
-// °
+    import { React, useState, useEffect, useRef } from "react";
+    import PageTitle from "../../../Components/Pagetitle";
+    import { Button, Col, Form, Row } from "react-bootstrap";
+    import map1 from "Images/map1.jpg";
+    import rectangle from "Images/Rectangle.png";
+    import img2 from "Images/chestcpAsset .png";
+    import { ENDPOINT, KEY } from "config/constants";
+    import AuthService from "services/auth.service";
+    import accessHeader from "services/headers/access-header";
+    import swal from 'sweetalert';
+    import { ToastContainer, toast } from 'react-toastify';
+    import 'react-toastify/dist/ReactToastify.css';
+    import { useNavigate } from "react-router-dom";
+    // °
 
-const CreateTreasure = () => {
+    const CreateTreasure = () => {
 
     const navigate = useNavigate();
     const [val, setVal] = useState([]);
@@ -428,6 +428,6 @@ const CreateTreasure = () => {
             </section>
         </>
     )
-}
+    }
 
-export default CreateTreasure;
+    export default CreateTreasure;

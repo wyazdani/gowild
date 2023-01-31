@@ -21,7 +21,7 @@ const Barchart = () => {
   // const [state, setState] = useState([]);
   // console.log("~ file: Barchart.js:82 ~ Barchart ~ state", state)
   const [content, setContent] = useState([]);
-  console.log("🚀 ~ file: Barchart.js:24 ~ Barchart ~ content", content)
+  console.log("Barchart ~ content", content)
   const [isLoader, setIsLoader] = useState(false);
 
 
@@ -79,21 +79,6 @@ const Barchart = () => {
 }
 
 
-    // convert date format to month / day / year
-    function formatDate(date) {
-
-      var d = new Date(date),
-          month = '' + (d.getMonth() + 1),
-          day = '' + d.getDate(),
-          year = d.getFullYear();
-
-      if (month.length < 2)
-          month = '0' + month;
-      if (day.length < 2)
-          day = '0' + day;
-
-      return [month, day, year].join('-');
-  }
 
 
   return (
