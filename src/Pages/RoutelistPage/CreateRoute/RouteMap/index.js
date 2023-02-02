@@ -2,7 +2,9 @@ import React from "react";
 import { Fragment, useEffect, useState, useRef } from "react";
 import { useGoogleMaps } from "react-hook-google-maps";
 
-export default function RouteMap(props) {
+export default function RouteMap({ startingPoint, endingPoint, travelMode }) {
+  console.log(`startingPoint: ${JSON.stringify(startingPoint)}`);
+  console.log(`endingPoint: ${JSON.stringify(endingPoint)}`);
   const prevMarkersRef = useRef([]);
 
   // incoming location to set
@@ -21,7 +23,7 @@ export default function RouteMap(props) {
     "AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0",
     {
       zoom: 6,
-      center: point,
+      center: startingPoint,
     }
   );
   useEffect(() => {
@@ -30,19 +32,19 @@ export default function RouteMap(props) {
       const m = addMarker();
       clearMarkers(prevMarkersRef.current); //clear prev markers
       prevMarkersRef.current.push(m);
-      map.setCenter(point);
+      map.setCenter(startingPoint);
       //Add Directions
       let directionsService = new google.maps.DirectionsService();
       let directionsRenderer = new google.maps.DirectionsRenderer();
       directionsRenderer.setMap(map);
       calcRoute(directionsService, directionsRenderer);
     }
-  }, [point]);
+  }, [startingPoint, endingPoint]);
 
   // SIDE FUNCTIONS
   function addMarker() {
     return new window.google.maps.Marker({
-      position: point,
+      position: startingPoint,
       map: map,
     });
   }
@@ -54,9 +56,9 @@ export default function RouteMap(props) {
 
   function calcRoute(directionsService, directionsRenderer) {
     let request = {
-      origin: point,
-      destination: dest,
-      travelMode: "DRIVING",
+      origin: startingPoint,
+      destination: endingPoint,
+      travelMode: travelMode,
     };
     directionsService.route(request, function (result, status) {
       if (status == "OK") {
