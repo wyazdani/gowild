@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useCallback, useRef } from "react";
 import PageTitle from "../../../Components/Pagetitle";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import map1 from "Images/map1.jpg";
@@ -13,11 +13,14 @@ import RouteMap from "./RouteMap";
 
 const CreateRoute = () => {
   const navigate = useNavigate();
+  const addHistoryBtnRef = useRef(null);
 
   const [file, setFile] = useState([]);
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({});
   const [historicalData, setHistoricalData] = useState({});
+  const [inputFields, setInputFields] = useState([]);
+
   const [uploadFile, setUploadFile] = useState();
   const [showButton, setShowButton] = useState(false);
 
@@ -167,6 +170,17 @@ const CreateRoute = () => {
         swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
       });
   };
+  const handleAddBtnClick = () => {
+    console.log("handleAddBtnClick");
+    addHistoryBtnRef.current.click();
+  };
+
+  const handleAddRow = useCallback(
+    (lat, lng) => {
+      setInputFields([...inputFields, { user: "" }]);
+    },
+    [inputFields]
+  );
 
   // const submitForm = async (id) => {
   //     id.preventDefault();
@@ -354,6 +368,7 @@ const CreateRoute = () => {
                 startingPoint={startingPoint}
                 endingPoint={endingPoint}
                 travelMode={"WALKING"}
+                handleAddRow={handleAddBtnClick}
               />
             </div>
           </Col>
@@ -362,7 +377,7 @@ const CreateRoute = () => {
           <Col md={12}>
             <div className={"d-md-flex item-center-between pt-5"}>
               <h3 className={"my-2 fw-bold"}>Historical</h3>
-              <Button>
+              <Button onClick={handleAddRow} ref={addHistoryBtnRef}>
                 <i className={"fal fa-plus"}></i> Add Historical
               </Button>
             </div>
@@ -497,6 +512,142 @@ const CreateRoute = () => {
                   </Form.Group>
                 </Col>
               </Row>
+              {inputFields.map((inputField, index) => (
+                <div key={index}>
+                  <Row>
+                    <Col md={8}>
+                      <Row>
+                        <Col md={6}>
+                          <Form.Group>
+                            <Form.Label>Historical Event</Form.Label>
+                            <Form.Control
+                              type="text"
+                              className={"mb-3 mb-md-5"}
+                              name="longtitude"
+                              required
+                              value={historicalData.longtitude}
+                              onChange={handleHistorical}
+                              placeholder="Longtitude"
+                            />
+                          </Form.Group>
+                          <Form.Group>
+                            <Form.Control
+                              type="text"
+                              className={"mb-3"}
+                              name="lattitude"
+                              required
+                              value={historicalData.lattitude}
+                              onChange={handleHistorical}
+                              placeholder="Lattitude"
+                            />
+                          </Form.Group>
+                        </Col>
+                        <Col md={6}>
+                          <Form.Group>
+                            <Form.Label>Title</Form.Label>
+                            <Form.Control
+                              type="text"
+                              className={"mb-3"}
+                              name="title"
+                              required
+                              value={historicalData.title}
+                              onChange={handleHistorical}
+                              placeholder="Historical Item"
+                            />
+                          </Form.Group>
+                          <Form.Group>
+                            <Form.Label>Sub-Title</Form.Label>
+                            <Form.Control
+                              type="text"
+                              className={"mb-3"}
+                              name="subTitle"
+                              required
+                              value={historicalData.subTitle}
+                              onChange={handleHistorical}
+                              placeholder="Write something here..."
+                            />
+                          </Form.Group>
+                        </Col>
+                        <Col md={12}>
+                          <Form.Group>
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control
+                              as="textarea"
+                              className={"mb-3"}
+                              name="description"
+                              required
+                              value={historicalData.description}
+                              onChange={handleHistorical}
+                              placeholder="Write something here..."
+                            />
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                    </Col>
+                    <Col md={4}>
+                      <Row>
+                        <Col md={12} className={"mb-3"}>
+                          <label
+                            className={"fileUpload v2"}
+                            htmlFor="upload-photo"
+                          >
+                            <Form.Control
+                              type="file"
+                              id={"upload-photo"}
+                              disabled={files.length === 1}
+                              className=""
+                              onChange={uploadSingleFile1}
+                            />
+                            <span>Attach Images</span>
+                          </label>
+                        </Col>
+                        <Col md={12} className={"mb-3"}>
+                          <div className="form-group previewBox">
+                            {files.length > 0 &&
+                              files.map((item, index) => {
+                                return (
+                                  <div className={"preview"} key={item}>
+                                    <img src={item} alt="" />
+                                    <Button
+                                      type="button"
+                                      onClick={() => deleteFile(index)}
+                                    >
+                                      <i className={"fal fa-times"}></i>
+                                    </Button>
+                                  </div>
+                                );
+                              })}
+                          </div>
+                        </Col>
+                        <Col md={12} className={"mb-3 text-center"}>
+                          <button
+                            type="button"
+                            className="btn btn-primary btn-block w-50"
+                            onClick={upload}
+                          >
+                            Upload
+                          </button>
+                        </Col>
+                      </Row>
+                    </Col>
+                    <Col md={12} className={"mb-3 text-center"}>
+                      <Form.Group>
+                        {showButton ? (
+                          <Button
+                            type="submit"
+                            className={"mt-3"}
+                            style={{ width: "25%" }}
+                          >
+                            Save
+                          </Button>
+                        ) : (
+                          ""
+                        )}
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                </div>
+              ))}
             </Form>
           </Col>
         </Row>
