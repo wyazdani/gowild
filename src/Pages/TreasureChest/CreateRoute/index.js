@@ -213,202 +213,202 @@
                             </div>
                         </Col>
 
-                        <Col md={12}>
-                            <div className={"pt-5"}>
-                            </div>
-                            <Row>
-                                <Col md={12}>
-                                    <Row>
-                                        <Col md={8}>
-                                            <Row>
-                                                <Col md={6}>
-                                                    <Form.Group>
-                                                        <Form.Label className="mt-1"><b>Sponsors</b></Form.Label>
-                                                        <div className="d-flex">
-                                                            {/* <img src={rectangle} width="20%" alt="" /> */}
-                                                            {preview ? (<img src={preview} width="20%" alt="" />) : ""}
-                                                            <Form.Control type="text"
-                                                                name="link"
-                                                                required
-                                                                value={formData.link}
-                                                                onChange={handleChange}
-                                                                className={"mb-1 ms-2 mb-md-2"} placeholder="🔗 www.redbull.com" style={{ marginBottom: '0px !important' }} />
-                                                        </div>
-
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col md={5}>
-                                                    <Form.Group>
-                                                        <Form.Label><b>Event Date</b></Form.Label>
-                                                        <Form.Group>
-                                                            <Form.Control type="date"
-                                                                name="date"
-                                                                value={formData.date}
-                                                                onChange={handleChange}
-                                                                className={"mb-1"} />
-                                                        </Form.Group>
-                                                    </Form.Group>
-
-                                                </Col>
-                                                <Col md={1}>
-                                                </Col>
-                                                <Col md={6}>
-                                                    <Form.Group className="mt-2">
-                                                        <div className="d-flex">
-                                                            {/* <p className="sponser">add <br /> image</p> */}
-                                                            <p className="sponser">
-                                                                <button onClick={(event) => {
-                                                                    event.preventDefault();
-                                                                    fileInputRef.current.click();
-                                                                }}>add <br /> image</button>
-
-                                                                <input type="file" name="file"
-                                                                    onChange={uploadHandleChange}
-                                                                    style={{ display: 'none' }} ref={fileInputRef}
-                                                                    accept="image/*"
-                                                                />
-                                                            </p>
-                                                            {/* <Form.Control type="file"
-                                                name="file"
-                                                onChange={uploadHandleChange}
-                                                className={"ms-2 mb-0"} placeholder="🔗 link" /> */}
-                                                            <Form.Control type="text"
-                                                                name="file"
-                                                                value={preview}
-                                                                onChange={uploadHandleChange}
-                                                                className={"ms-2 mb-0"} placeholder="🔗 link" />
-
-                                                        </div>
-                                                        {val.map((data, i) => {
-                                                            return (
-                                                                <>
-                                                                    <Form.Group>
-
-                                                                        <div className="d-flex">
-                                                                            {/* <img src={rectangle} width="20%" alt="" /> */}
-                                                                            {preview ? (<img src={preview} width="20%" alt="" />) : ""}
-                                                                            <Form.Control type="text"
-                                                                                name="link"
-                                                                                required
-                                                                                value={formData.link}
-                                                                                onChange={handleChange}
-                                                                                className={"mb-1 ms-2 mb-md-2"} placeholder="🔗 www.redbull.com" style={{ marginBottom: '0px !important' }} />
-                                                                        </div>
-
-                                                                    </Form.Group>
-                                                                    <div className="d-flex">
-                                                                        <p className="sponser">
-                                                                            <button onClick={(event) => {
-                                                                                event.preventDefault();
-                                                                                fileInputRef.current.click();
-                                                                            }}>add <br /> image</button>
-
-                                                                            <input type="file" style={{ display: 'none' }} ref={fileInputRef}
-                                                                                accept="image/*"
-                                                                                onChange={(event) => {
-                                                                                    const file = event.target.files[0];
-                                                                                    if (file) {
-                                                                                        setImage(file)
-                                                                                    } else {
-                                                                                        setImage(null);
-                                                                                    }
-                                                                                }} />
-                                                                        </p>
-                                                                        <input type="text" className="form-control"
-                                                                            value={preview} onChange={e => handleChanges(e, i)} placeholder="🔗 link" />
-                                                                        <button className="deleteButton" onClick={() => handleDelete(i)}>x</button>
-                                                                    </div>
-                                                                    {/* <button className="deleteButton" onClick={() => handleDelete(i)}>x</button> */}
-                                                                </>
-                                                            )
-                                                        })}
-                                                        <p className="mb-0 float-right addMore" onClick={() => handleAdd()}>Add more</p>
-
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col md={5}>
-                                                    <Form.Group>
-                                                        <Form.Label><b>Time</b></Form.Label>
-                                                        <Form.Control type="time"
-                                                            name="time"
+                    <Col md={12}>
+                        <div className={"pt-5"}>
+                        </div>
+                        <Row>
+                            <Col md={12}>
+                                <Row>
+                                    <Col md={8}>
+                                        <Row>
+                                            <Col md={6}>
+                                                <Form.Group>
+                                                    <Form.Label className="mt-1"><b>Sponsors</b></Form.Label>
+                                                    <div className="d-flex">
+                                                        {/* <img src={rectangle} width="20%" alt="" /> */}
+                                                        {preview ? (<img src={preview} width="20%" alt="" />) : ""}
+                                                        <Form.Control type="text"
+                                                            name="link"
                                                             required
-                                                            value={formData.time}
+                                                            value={formData.link}
                                                             onChange={handleChange}
-                                                            className={"mb-3"} />
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col md={1}>
-                                                </Col>
-                                                <Col md={6}>
-                                                </Col>
-                                                <Col md={5}>
+                                                            className={"mb-1 ms-2 mb-md-2"} placeholder="🔗 www.redbull.com" style={{ marginBottom: '0px !important' }} />
+                                                    </div>
 
+                                                </Form.Group>
+                                            </Col>
+                                            <Col md={5}>
+                                                <Form.Group>
+                                                    <Form.Label><b>Event Date</b></Form.Label>
                                                     <Form.Group>
-                                                        <Form.Label><b>Number of participants</b></Form.Label>
-                                                        <Form.Control type="number"
-                                                            name="number"
-                                                            min="1"
-                                                            //  max="20"
-                                                            value={formData.number}
+                                                        <Form.Control type="date"
+                                                            name="date"
+                                                            value={formData.date}
                                                             onChange={handleChange}
-                                                            className={"mb-3"} placeholder="200" />
+                                                            className={"mb-1"} />
                                                     </Form.Group>
-                                                </Col>
-                                            </Row>
-                                        </Col>
-                                        <Col md={4}>
-                                            <Form.Label className="d-flex "><b>Upload Augmented Reality</b></Form.Label>
-                                            <label className={"treasureChest_img"} htmlFor="upload-photo">
-                                                <img src={img2} width="85%" alt="" />
-                                            </label>
-                                            <Form.Label className="d-flex mt-4 mb-0 "><b>Upload Thumbnail</b></Form.Label>
-                                            <label className={"fileUpload v2 mb-0"} htmlFor="upload-photo">
-                                                <Form.Control
-                                                    type="file"
-                                                    name="file"
-                                                    id={"upload-photo"}
-                                                    // value={formData.picture}
-                                                    disabled={file.length === 1}
-                                                    className="mt-4"
-                                                    // onChange={handleChange}
-                                                    onChange={uploadSingleFile}
-                                                />
-                                                {/* <span>Attach images of thumbnail</span> */}
-                                            </label>
-                                            {/* preview image */}
-                                            <div className="form-group previewBox">
-                                                {file.length > 0 &&
-                                                    file.map((item, index) => {
+                                                </Form.Group>
+
+                                            </Col>
+                                            <Col md={1}>
+                                            </Col>
+                                            <Col md={6}>
+                                                <Form.Group className="mt-2">
+                                                    <div className="d-flex">
+                                                        {/* <p className="sponser">add <br /> image</p> */}
+                                                        <p className="sponser">
+                                                            <button onClick={(event) => {
+                                                                event.preventDefault();
+                                                                fileInputRef.current.click();
+                                                            }}>add <br /> image</button>
+
+                                                            <input type="file" name="file"
+                                                                onChange={uploadHandleChange}
+                                                                style={{ display: 'none' }} ref={fileInputRef}
+                                                                accept="image/*"
+                                                            />
+                                                        </p>
+                                                        {/* <Form.Control type="file"
+                                            name="file"
+                                            onChange={uploadHandleChange}
+                                            className={"ms-2 mb-0"} placeholder="🔗 link" /> */}
+                                                        <Form.Control type="text"
+                                                            name="file"
+                                                            value={preview}
+                                                            onChange={uploadHandleChange}
+                                                            className={"ms-2 mb-0"} placeholder="🔗 link" />
+
+                                                    </div>
+                                                    {val.map((data, i) => {
                                                         return (
-                                                            <div className={"preview"} key={item}>
-                                                                <img src={item} alt="" />
-                                                                <Button type="button" onClick={() => deleteFile(index)}>
-                                                                    <i className={"fal fa-times"}></i>
-                                                                </Button>
-                                                            </div>
-                                                        );
+                                                            <>
+                                                                <Form.Group>
+
+                                                                    <div className="d-flex">
+                                                                        {/* <img src={rectangle} width="20%" alt="" /> */}
+                                                                        {preview ? (<img src={preview} width="20%" alt="" />) : ""}
+                                                                        <Form.Control type="text"
+                                                                            name="link"
+                                                                            required
+                                                                            value={formData.link}
+                                                                            onChange={handleChange}
+                                                                            className={"mb-1 ms-2 mb-md-2"} placeholder="🔗 www.redbull.com" style={{ marginBottom: '0px !important' }} />
+                                                                    </div>
+
+                                                                </Form.Group>
+                                                                <div className="d-flex">
+                                                                    <p className="sponser">
+                                                                        <button onClick={(event) => {
+                                                                            event.preventDefault();
+                                                                            fileInputRef.current.click();
+                                                                        }}>add <br /> image</button>
+
+                                                                        <input type="file" style={{ display: 'none' }} ref={fileInputRef}
+                                                                            accept="image/*"
+                                                                            onChange={(event) => {
+                                                                                const file = event.target.files[0];
+                                                                                if (file) {
+                                                                                    setImage(file)
+                                                                                } else {
+                                                                                    setImage(null);
+                                                                                }
+                                                                            }} />
+                                                                    </p>
+                                                                    <input type="text" className="form-control"
+                                                                        value={preview} onChange={e => handleChanges(e, i)} placeholder="🔗 link" />
+                                                                    <button className="deleteButton" onClick={() => handleDelete(i)}>x</button>
+                                                                </div>
+                                                                {/* <button className="deleteButton" onClick={() => handleDelete(i)}>x</button> */}
+                                                            </>
+                                                        )
                                                     })}
-                                            </div>
-                                        </Col>
+                                                    <p className="mb-0 float-right addMore" onClick={() => handleAdd()}>Add more</p>
 
-                                    </Row>
-                                </Col>
-                                <Col md={4}>
-                                    <Row>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col md={5}>
+                                                <Form.Group>
+                                                    <Form.Label><b>Time</b></Form.Label>
+                                                    <Form.Control type="time"
+                                                        name="time"
+                                                        required
+                                                        value={formData.time}
+                                                        onChange={handleChange}
+                                                        className={"mb-3"} />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col md={1}>
+                                            </Col>
+                                            <Col md={6}>
+                                            </Col>
+                                            <Col md={5}>
 
-                                        <Col md={12} className={"mb-3"}>
-                                            <div className="form-group previewBox">
+                                                <Form.Group>
+                                                    <Form.Label><b>Number of participants</b></Form.Label>
+                                                    <Form.Control type="number"
+                                                        name="number"
+                                                        min="1"
+                                                        //  max="20"
+                                                        value={formData.number}
+                                                        onChange={handleChange}
+                                                        className={"mb-3"} placeholder="200" />
+                                                </Form.Group>
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                    <Col md={4}>
+                                        <Form.Label className="d-flex "><b>Upload Augmented Reality</b></Form.Label>
+                                        <label className={"treasureChest_img"} htmlFor="upload-photo">
+                                            <img src={img2} width="85%" alt="" />
+                                        </label>
+                                        <Form.Label className="d-flex mt-4 mb-0 "><b>Upload Thumbnail</b></Form.Label>
+                                        <label className={"fileUpload v2 mb-0"} htmlFor="upload-photo">
+                                            <Form.Control
+                                                type="file"
+                                                name="file"
+                                                id={"upload-photo"}
+                                                // value={formData.picture}
+                                                disabled={file.length === 1}
+                                                className="mt-4"
+                                                // onChange={handleChange}
+                                                onChange={uploadSingleFile}
+                                            />
+                                            {/* <span>Attach images of thumbnail</span> */}
+                                        </label>
+                                        {/* preview image */}
+                                        <div className="form-group previewBox">
+                                            {file.length > 0 &&
+                                                file.map((item, index) => {
+                                                    return (
+                                                        <div className={"preview"} key={item}>
+                                                            <img src={item} alt="" />
+                                                            <Button type="button" onClick={() => deleteFile(index)}>
+                                                                <i className={"fal fa-times"}></i>
+                                                            </Button>
+                                                        </div>
+                                                    );
+                                                })}
+                                        </div>
+                                    </Col>
 
-                                            </div>
-                                        </Col>
+                                </Row>
+                            </Col>
+                            <Col md={4}>
+                                <Row>
 
-                                    </Row>
-                                </Col>
-                                <Form.Group style={{ width: "55%" }}>
-                                    <Button type="submit" className={"w-50 my-4 m-auto"}>Submit</Button>
-                                </Form.Group>
-                            </Row>
-                        </Col>
+                                    <Col md={12} className={"mb-3"}>
+                                        <div className="form-group previewBox">
+
+                                        </div>
+                                    </Col>
+
+                                </Row>
+                            </Col>
+                            <Form.Group style={{ width: "55%" }}>
+                                <Button type="submit" className={"w-50 my-4 m-auto"}>Submit</Button>
+                            </Form.Group>
+                        </Row>
+                    </Col>
                     </Row>
                 </Form>
 

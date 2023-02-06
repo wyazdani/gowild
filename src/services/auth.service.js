@@ -219,13 +219,35 @@ const logoutNdelete = (headers, data, printConsole = false) => {
     })
 };
 
-const errorMessageHandler = (data) => {
-    let error = data.response.data.errors.map(function (value) {
-        return Object.values(value)[0];
-    })
-    return error[0];
+// const errorMessageHandler = (data) => {
+//     let error = data.response.data.errors.map(function (value) {
+//         return Object.values(value)[0];
+//     })
+//     return error[0];
 
-};
+// };
+
+
+const errorMessageHandler = (data) => {
+  if (!data || !data.response || !data.response.data || !data.response.data.errors) {
+    return 'Please enter the valid data.';
+  }
+  let error = data.response.data.errors.map(function (value) {
+    return Object.values(value)[0];
+  })
+  return error[0];
+}
+
+// this error is showing by wrong createdDate Enter in dashboard home page
+const errorMessageHandlerDate = (data) => {
+  if (!data || !data.response || !data.response.data || !data.response.data.errors) {
+    return 'No users found with provided created date.';
+  }
+  let error = data.response.data.errors.map(function (value) {
+    return Object.values(value)[0];
+  })
+  return error[0];
+}
 
 
 
@@ -239,6 +261,7 @@ export default {
     isAuthenticated,
     logoutNdelete,
     errorMessageHandler,
+    errorMessageHandlerDate,
     dashboardHomeData,
     subAdminAllDataRes,
     subAdminDelete,

@@ -12,6 +12,8 @@ import rectangle from "Images/Rectangle.png";
 import moment from 'moment';
 import img2 from "Images/chestcpAsset .png";
 
+
+
 const ViewTreasure = (props) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [error, setError] = useState(null);
