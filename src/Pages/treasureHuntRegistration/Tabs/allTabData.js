@@ -14,6 +14,7 @@ import ReactPaginate from 'react-paginate';
 import profile from "Images/Ellipse 768.png";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PushNotificationPopup from "../pushNotificationPopup";
 
 
 const AllTabData = (props) => {
@@ -21,6 +22,8 @@ const AllTabData = (props) => {
 
     /* Destructuring the props object. */
     const { content } = props;
+    const [selectedItems, setSelectedItems] = useState([]);
+    const [isChecked, setIsChecked] = useState(true);
     
     const [editItem, setEditItem] = useState(null);
     const [currentItems, setCurrentItems] = useState([]);
@@ -58,10 +61,19 @@ const AllTabData = (props) => {
         // console.log("1233"+id);
         return  AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true , objData)
             .then((res) => {
-                 if(res.status === 201){
-                    toast.success(res.data.message);
+                if(res){
+                    toast.success('Status changed!', {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                        });
                  }
-                 content.userRouteAllData()
+                  props.userRouteAllData()
                 //  setAddAdmin(props.onHide);
                 //  props.content()
                 console.log(res);
@@ -80,10 +92,19 @@ const AllTabData = (props) => {
         // console.log("1233"+id);
         return  AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true , objData)
             .then((res) => {
-                 if(res.status === 201){
-                    toast.success(res.data.message);
+                 if(res){
+                    toast.success('Status changed!', {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                        });
                  }
-                 props.userRouteAllData()
+                  props.userRouteAllData()
                 console.log(res);
             })
             .catch((err) => {
@@ -93,7 +114,24 @@ const AllTabData = (props) => {
 
     };
 
+      // chekbox select all
+  const handleCheckboxChange = (content) => {
+    if (selectedItems.includes(content)) {
+      setSelectedItems(selectedItems.filter((i) => i !== content));
+    } else {
+      setSelectedItems([...selectedItems, content]);
+    }
+  };
 
+  const handleSelectAll = () => {
+    setSelectedItems(content);
+    setIsChecked(!isChecked);
+  }
+
+  const handleDeselectAll = () => {
+    setSelectedItems([]);
+    setIsChecked(!isChecked);
+  };
 
     return (
         <>
@@ -133,12 +171,11 @@ const AllTabData = (props) => {
             </div>
 
 
-      
             <Table>
                 <thead>
                     <tr>
                         <th>
-                            <Form.Check type="checkbox" />
+                            {isChecked ? <Form.Check type="checkbox" onChange={handleSelectAll} /> : <Form.Check type="checkbox" onClick={handleDeselectAll} />}
                         </th>
                         <th> &nbsp;&nbsp;&nbsp;Name</th>
                         <th>Event Name</th>
@@ -152,35 +189,38 @@ const AllTabData = (props) => {
                     {currentItems.sort((a, b) => (a.name < b.name ? -1 : 1)).filter((row) =>
                             !search.length || row.user.firstName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
                             row.user.lastName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
-                            row.user.email.toString().toLowerCase().includes(search.toString().toLowerCase())).map((alltabdata) => (
+                            row.user.email.toString().toLowerCase().includes(search.toString().toLowerCase())).map((content) => (
                         <tr>
-                            <td><Form.Check type="checkbox" /></td>
+                            <td><Form.Check type="checkbox" value={content}
+                                onChange={() => handleCheckboxChange(content)}
+                                checked={selectedItems.includes(content)} />
+                            </td>
                             <td>
                                 <div className={"d-flex"}>
                                     <div className={classes.userImg}>
-                                    {(alltabdata.picture)? <img src={"https://api.gowild.appscorridor.com" + alltabdata.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
+                                    {(content.picture)? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
                                     </div>
                                     <div className={classes.description}>
-                                        <h4 className={"font-16 mb-0"}>{alltabdata.user.firstName +" "+ alltabdata.user.lastName}</h4>
-                                        <div className={"text-muted"}>{alltabdata.user.email}</div>
+                                        <h4 className={"font-16 mb-0"}>{content.user.firstName +" "+ content.user.lastName}</h4>
+                                        <div className={"text-muted"}>{content.user.email}</div>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                {alltabdata.treasure_chest.title}
+                                {content.treasure_chest.title}
                             </td>
                             <td>
-                                {alltabdata.treasure_chest.status === "pending"
+                                {content.treasure_chest.status === "pending"
                                     ?  <span class={`${classes.tag} ${classes.inactive}`}>InActive</span> 
                                     :  <span class={`${classes.tag} ${classes.active}`}>Active</span>
                                 }
                             </td>
                             <td>
-                                {alltabdata.user.firstName}
+                                {content.user.firstName}
                             </td>
                             <td>
-                                {alltabdata.status === "processing" ? <span class="text-success text-uppercase"><b>Approved</b></span>
-                                    : alltabdata.status === 'pending' ? <span class="text-warning  text-uppercase"><b>Pending</b></span>
+                                {content.status === "processing" ? <span class="text-success text-uppercase"><b>Approved</b></span>
+                                    : content.status === 'pending' ? <span class="text-warning  text-uppercase"><b>Pending</b></span>
                                         : <span class="text-danger text-uppercase" ><b>Disapprove</b></span>
                                 }
                             </td>
@@ -190,12 +230,12 @@ const AllTabData = (props) => {
                                         <i className={"far fa-ellipsis-v fa-fw"}></i>
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
-                                    {alltabdata.status === 'processing'
-                                            ? <Dropdown.Item href="#/"  onClick={() => rejectUser(alltabdata.id)}>
+                                    {content.status === 'processing'
+                                            ? <Dropdown.Item href="#/"  onClick={() => rejectUser(content.id)}>
                                                 <i className={"fal fa-ban bg-danger text-white"}></i>
                                                 Disapprove
                                             </Dropdown.Item>
-                                            : <Dropdown.Item href="#/" onClick={() => approveUser(alltabdata.id)}>
+                                            : <Dropdown.Item href="#/" onClick={() => approveUser(content.id)}>
                                                 <i className={"fal fa-check bg-success text-white"}></i>
                                                 Approve
                                             </Dropdown.Item>
@@ -203,7 +243,7 @@ const AllTabData = (props) => {
                                         <Dropdown.Item href="#/" onClick={
                                                     () => {
                                                         setModalShowView(true)
-                                                        setEditItem(alltabdata)
+                                                        setEditItem(content)
                                                     }
                                                 }>
                                             <i className={"fal fa-user bg-dark text-white"}></i>
@@ -261,13 +301,13 @@ const AllTabData = (props) => {
             />
 
             <ViewProfilePopup
-                subAdminAllData={props.subAdminAllData}
+                userRouteAllData={props.userRouteAllData}
                 show={modalShowView}
                 onHide={() => setModalShowView(false)}
                 editItem={editItem}
             />
 
-            <AddSubAdmin
+            <PushNotificationPopup
                 show={modalShow}
                 onHide={() => setModalShow(false)}
             />

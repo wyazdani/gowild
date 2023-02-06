@@ -150,7 +150,7 @@ const Login = () => {
                             className={"w-100"}
                             onClick={signinToEmailHome}
                         >
-                            Login
+                            Log In
                         </Button>
                     </Form.Group>
                     {/* <Form.Group className={"text-center mb-3"}>

@@ -204,9 +204,10 @@ const EditTreasure = (props) => {
                                                     <Form.Label>Event Date</Form.Label>
                                                     <Form.Group>
 
-                                                        <Form.Control type="text"
+                                                        <Form.Control type="date"
                                                             name="eventDate"
-                                                            value={(formatDate(values.eventDate))}
+                                                            value={values.eventDate}
+                                                            // value={(formatDate(values.eventDate))}
                                                             onChange={handleChange}
                                                             isValid={touched.eventDate && !errors.eventDate}
                                                             className={"mb-3"} />

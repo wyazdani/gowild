@@ -21,15 +21,26 @@ const getMethod = async (endpoint, authentication=true, data, printConsole = fal
         })
 }
 // Post Method
-const postMethod = async (endpoint, authentication=true, data=null, printConsole = false) => {
+const postMethod = async (endpoint, authentication=true, data=null, printConsole = false,multipart=false) => {
     header= {};
     if(authentication){
         var bearer_token = localStorage.getItem('accessToken');
-        var header = {
+        if(!multipart){
+          var header = {
             headers: {
                 "Authorization": `Bearer ${JSON.parse(bearer_token)}`
             }
         }
+        }else{
+          var header = {
+            headers: {
+                "Authorization": `Bearer ${JSON.parse(bearer_token)}`,
+                'content-type': 'multipart/form-data'
+
+            }
+        }
+        }
+        
     }
     return await axios.post(endpoint,data, header)
         .then((res) => {
