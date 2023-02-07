@@ -108,6 +108,7 @@ const AllTabData = (props) => {
                 console.log(res);
             })
             .catch((err) => {
+                
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
             });
 
@@ -287,18 +288,7 @@ const AllTabData = (props) => {
 
                 />
             </div>
-            <ToastContainer
-                position="bottom-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="dark"
-            />
+        
 
             <ViewProfilePopup
                 userRouteAllData={props.userRouteAllData}

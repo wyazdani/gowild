@@ -121,18 +121,7 @@ const ViewRoute = (props) => {
                     <Button variant={"success m-3"} onClick={approveUser}>Approve</Button>
                 </div>
             </section>
-            <ToastContainer
-                position="bottom-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="dark"
-            />
+    
         </>
     )
 }

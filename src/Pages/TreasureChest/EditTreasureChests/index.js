@@ -10,10 +10,17 @@ import { useNavigate } from "react-router-dom";
 import map1 from "Images/map1.jpg";
 import rectangle from "Images/Rectangle.png";
 import moment from 'moment';
+import img2 from "Images/chestcpAsset .png";
 
 const EditTreasure = (props) => {
 
     const [addAdmin, setAddAdmin] = useState(false);
+    const [formData, setFormData] = useState({});
+    const [uploadFile, setUploadFile] = useState({});
+    const [uploadFiles, setUploadFiles] = useState({});
+
+    const [fields, setFields] = useState([{ sponsor: '', file: null, imgLink: '' }]);
+    const [show, setShow] = useState(false);
 
 
     const navigate = useNavigate();
@@ -81,6 +88,45 @@ const EditTreasure = (props) => {
 
 
 
+
+    const handleAddField = () => {
+        setFields([...fields, { sponsor: '', file: null, imgLink: '' }]);
+        setShow(true);
+    };
+
+    const handleRemoveField = index => {
+        const newFields = [...fields];
+        newFields.splice(index, 1);
+        setFields(newFields);
+    };
+
+    const handleChanges = (index, event) => {
+
+        let value = event.target.value;
+        let name = event.target.name;
+        setFormData((prevalue) => {
+            return {
+                ...prevalue,   // Spread Operator               
+                [name]: value
+            }
+        })
+
+
+        setUploadFiles({ uploadFiles: event.target.files[0] })
+        console.log("uploadFiles", event.target.files[0])
+
+        const newFields = [...fields];
+        if (event.target.name === 'file') {
+            newFields[index][event.target.name] = URL.createObjectURL(event.target.files[0]);
+        } else {
+            newFields[index][event.target.name] = event.target.value;
+        }
+        setFields(newFields);
+    };
+
+
+
+
     // convert date format to month / day / year
     function formatDate(date) {
 
@@ -123,7 +169,7 @@ const EditTreasure = (props) => {
                 "no_of_participants": props.editItem.no_of_participants,
                 "a_r": "augmented reality",
                 "winnerId": "uuid",
-                "picture": "Picture",
+                "picture": props.editItem.picture,
                 "a_r": "augmented reality"
 
             }}
@@ -136,7 +182,7 @@ const EditTreasure = (props) => {
                 isValid,
                 errors,
             }) => (
-                <section className={"section"}>
+                <section className={"section treasure_chests"}>
                     <Form noValidate onSubmit={handleSubmit}>
                         <Row>
                             <Col md={4}>
@@ -183,27 +229,75 @@ const EditTreasure = (props) => {
                             <Col md={12}>
                                 <div className={"pt-5"}>
                                 </div>
+                         
                                 <Row>
-                                    <Col md={12}>
-                                        <Row>
-                                            <Col md={2}>
-                                                <Form.Group>
-                                                    <h6>Sponsors</h6>
-                                                    <img src={rectangle} width="50%" alt="" />
-                                                </Form.Group>
-
-                                            </Col>
-                                            <Col md={3}>
-                                                <Form.Group>
-                                                    <Form.Label className="mt-3"></Form.Label>
-                                                    <Form.Control type="text" className={"mb-3 mb-md-5"} placeholder="🔗 www.redbull.com" />
-                                                </Form.Group>
-                                            </Col>
-                                            <Col md={3}>
-                                                <Form.Group>
-                                                    <Form.Label>Event Date</Form.Label>
+                                <Col md={12}>
+                                    <Row>
+                                        <Col md={4}>
+                                            <Row>
+                                                <Col md={12}>
                                                     <Form.Group>
+                                                        <Form.Label className="mt-1"><b>Sponsors</b></Form.Label>
+                                                        <Form.Group className="mt-2">
 
+                                                            <div>
+                                                                {fields.map((values, index) => (
+                                                                    <div key={index}>
+                                                                        <div className="d-flex">
+                                                                            {fields[0].file ? <img src={values.file} width="20%" alt="Preview" /> : ""}
+                                                                            <input
+                                                                                type="text"
+                                                                                name="link"
+                                                                                required
+                                                                                value={values.link}
+                                                                                // onChange={handleChange}
+                                                                                className={"mb-1 ms-2 mb-md-2"} placeholder="🔗 www.redbull.com"
+                                                                                onChange={event => handleChanges(index, event)}
+                                                                                style={{ marginBottom: '0px !important' }}
+                                                                            />
+
+                                                                        </div>
+                                                                        <div className="d-flex my-2">
+                                                                            <p className="sponser">
+                                                                                <button>add <br /> image  <input
+                                                                                    type="file"
+                                                                                    className="fileCss"
+                                                                                    name="file"
+                                                                                    onChange={event => handleChanges(index, event)}
+                                                                                // style={{ display: 'none' }} ref={fileInputRef}
+                                                                                /></button>
+
+                                                                            </p>
+                                                                            <input
+                                                                                type="text"
+                                                                                name="file"
+                                                                                required
+                                                                                value={values.file}
+                                                                                // onChange={handleChange}
+                                                                                className={"mb-1 ms-2 mb-md-2"} placeholder="🔗Link" style={{ marginBottom: '0px !important' }}
+                                                                                onChange={event => handleChanges(index, event)}
+                                                                            />
+                                                                            {show ? <button className="deleteButton" onClick={() => handleRemoveField(index)}>X</button> : ""}
+                                                                        </div>
+
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                            <p className="mb-0 float-right addMore" onClick={handleAddField}>Add more</p>
+
+                                                        </Form.Group>
+
+                                                    </Form.Group>
+                                                </Col>
+                                            </Row>
+                                        </Col>
+
+                                        <Col md={4}>
+                                            <Row>
+                                                <Col md={12}>
+                                                    <Form.Group style={{ width: "90%" }}>
+                                                        <Form.Label><b>Event Date</b></Form.Label>
+                                                        <Form.Group>
                                                         <Form.Control type="date"
                                                             name="eventDate"
                                                             value={values.eventDate}
@@ -211,85 +305,81 @@ const EditTreasure = (props) => {
                                                             onChange={handleChange}
                                                             isValid={touched.eventDate && !errors.eventDate}
                                                             className={"mb-3"} />
+                                                        </Form.Group>
                                                     </Form.Group>
-                                                </Form.Group>
-
-                                            </Col>
-
-                                            <Col md={4}>
-                                                <Form.Label>Upload Augmented Reality</Form.Label>
-                                                <label className={"fileUpload v2"} htmlFor="upload-photo">
-                                                    <Form.Control
-                                                        type="file"
-                                                        name="picture"
-                                                        id={"upload-photo"}
-                                                        disabled={file.length === 1}
-                                                        className=""
-                                                        onChange={uploadSingleFile}
-                                                    />
-                                                    <span>Attach Images</span>
-                                                </label>
-
-                                            </Col>
-                                            <Col md={2}>
-                                                <Form.Group>
-
-                                                    <Form.Control type="text" className={"mb-3 mt-4"} placeholder="🔗 link" />
-                                                </Form.Group>
-                                            </Col>
-                                            <Col md={3}>
-                                                <Form.Group>
-                                                    <Form.Label>Time</Form.Label>
-                                                    <Form.Control type="time"
+                                                </Col>
+                                                <Col md={12}>
+                                                    <Form.Group className="mt-3" style={{ width: "90%" }}>
+                                                        <Form.Label><b>Time</b></Form.Label>
+                                                        <Form.Control type="time"
                                                         name="eventTime"
                                                         value={values.eventTime}
                                                         onChange={handleChange}
                                                         isValid={touched.eventTime && !errors.eventTime}
-                                                        className={"mb-3"} placeholder="00:00" />
-                                                </Form.Group>
-                                            </Col>
-                                            <Col md={3}>
-
-                                                <Form.Group>
-                                                    <Form.Label>Number of participants</Form.Label>
-                                                    <Form.Control type="number"
+                                                        className={"mb-3"}  />
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col md={12}>
+                                                    <Form.Group className="mt-3" style={{ width: "90%" }}>
+                                                        <Form.Label><b>Number of participants</b></Form.Label>
+                                                        <Form.Control type="number"
                                                         name="no_of_participants"
                                                         value={values.no_of_participants}
                                                         onChange={handleChange}
                                                         min="1"
                                                         isValid={touched.no_of_participants && !errors.no_of_participants}
                                                         className={"mb-3"} placeholder="200" />
-                                                </Form.Group>
-                                            </Col>
-                                        </Row>
+                                                    </Form.Group>
+                                                </Col>
+                                            </Row>
+                                        </Col>
 
-
-                                    </Col>
-                                    <Col md={4}>
-                                        <Row>
-
-                                <Col md={12} className={"mb-3"}>
-                                    <div className="form-group previewBox">
-                                        {file.length > 0 &&
-                                            file.map((item, index) => {
-                                                return (
-                                                    <div className={"preview"} key={item}>
-                                                        <img src={item} alt="" />
-                                                        <Button type="button" onClick={() => deleteFile(index)}>
-                                                            <i className={"fal fa-times"}></i>
-                                                        </Button>
+                                        <Col md={4}>
+                                            <Row>
+                                                <Col md={12}>
+                                                    <Form.Label className="d-flex "><b>Upload Augmented Reality</b></Form.Label>
+                                                    <label className={"treasureChest_img"} htmlFor="upload-photo">
+                                                        <img src={img2} width="85%" alt="" />
+                                                    </label>
+                                                    <Form.Label className="d-flex mt-4 mb-0 "><b>Upload Thumbnail</b></Form.Label>
+                                                    <label className={"fileUpload v2 mb-0"} htmlFor="upload-photo">
+                                                    <Form.Control
+                                                        type="file"
+                                                        name="picture"
+                                                        
+                                                        id={"upload-photo"}
+                                                        disabled={file.length === 1}
+                                                        className=""
+                                                        onChange={uploadSingleFile}
+                                                    />
+                                                        {/* <span>Attach images of thumbnail</span> */}
+                                                    </label>
+                                                    {/* preview image */}
+                                                    {/* <img src={"https://api.gowild.appscorridor.com" + values.picture} width="70%" alt={"img"} /> */}
+                                                    <div className="form-group previewBox">
+                                                        {file.length > 0 &&
+                                                            file.map((item, index) => {
+                                                                return (
+                                                                    <div className={"preview"} key={item}>
+                                                                        <img src={item} alt="" />
+                                                                        <Button type="button" onClick={() => deleteFile(index)}>
+                                                                            <i className={"fal fa-times"}></i>
+                                                                        </Button>
+                                                                    </div>
+                                                                );
+                                                            })}
                                                     </div>
-                                                );
-                                            })}
-                                    </div>
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                    </Row>
                                 </Col>
-
-                                        </Row>
-                                    </Col>
-                                    <Form.Group className={"text-center"} style={{ width: "40%" }}>
-                                        <Button type="submit" className={"w-50 my-4 m-auto"}>Update</Button>
+                                <Col md={12} className="d-flex justify-content-center">
+                                    <Form.Group className="text-center" style={{ width: "58%" }}>
+                                    <Button type="submit" className={"w-50 my-4 m-auto"}>Update</Button>
                                     </Form.Group>
-                                </Row>
+                                </Col>
+                            </Row>
                             </Col>
                         </Row>
                     </Form>
