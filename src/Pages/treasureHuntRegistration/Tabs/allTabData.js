@@ -61,8 +61,8 @@ const AllTabData = (props) => {
         // console.log("1233"+id);
         return  AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true , objData)
             .then((res) => {
-                if(res){
-                    toast.success('Status changed!', {
+                if(res.status === 201){
+                    toast.success('User status Changed Successfully! (Approved)', {
                         position: "bottom-right",
                         autoClose: 5000,
                         hideProgressBar: false,
@@ -71,15 +71,15 @@ const AllTabData = (props) => {
                         draggable: true,
                         progress: undefined,
                         theme: "dark",
-                        });
-                 }
-                  props.userRouteAllData()
+                    });
+                }
+                props.userRouteAllData()
                 //  setAddAdmin(props.onHide);
                 //  props.content()
                 console.log(res);
             })
             .catch((err) => {
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+                // swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
             });
 
     };
@@ -92,8 +92,8 @@ const AllTabData = (props) => {
         // console.log("1233"+id);
         return  AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true , objData)
             .then((res) => {
-                 if(res){
-                    toast.success('Status changed!', {
+                if(res.status === 201){
+                    toast.success('User status Changed Successfully! (Disapproved)', {
                         position: "bottom-right",
                         autoClose: 5000,
                         hideProgressBar: false,
@@ -102,14 +102,14 @@ const AllTabData = (props) => {
                         draggable: true,
                         progress: undefined,
                         theme: "dark",
-                        });
-                 }
-                  props.userRouteAllData()
-                console.log(res);
+                    });
+                }
+                props.userRouteAllData()
+                 console.log(res);
+                
             })
             .catch((err) => {
-                
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+                // swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
             });
 
 

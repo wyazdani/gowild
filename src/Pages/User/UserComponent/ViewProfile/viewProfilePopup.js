@@ -197,11 +197,11 @@ const ViewProfilePopup = (props) => {
                             </Col>
                             <Col md={6}>
                                 <div className={`${classes.box} h-100`}>
-                                    <div className={classes.imgBox}>
-                                        <img src={card1} alt={"card1"} />
+                                <div className={classes.imgBox}>
+                                        {(props.editItem.frontImage)? <img src={"https://api.gowild.appscorridor.com" + props.editItem.frontImage} width="100%" alt={"card1"} /> :  <img src={card1} width="100%" alt={"img"} /> }
                                     </div>
                                     <div className={classes.imgBox}>
-                                        <img src={card2} alt={"card2"} />
+                                    {(props.editItem.backImage)? <img src={"https://api.gowild.appscorridor.com" + props.editItem.backImage} width="100%" alt={"card2"} /> :  <img src={card2} width="100%" alt={"img"} /> }
                                     </div>
                                 </div>
                             </Col>

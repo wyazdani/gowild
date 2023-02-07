@@ -248,6 +248,7 @@ const AllTabData = (props) => {
                 />
             </div>
             <EditSubAdmin
+                subAdminAllData={props.subAdminAllData}
                 show={editSubAdmin}
                 onHide={() => setEditSubAdmin(false)}
                 editItem={editItem}
