@@ -170,14 +170,10 @@ const CreateRoute = () => {
         swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
       });
   };
-  const handleAddBtnClick = () => {
-    console.log("handleAddBtnClick");
-    addHistoryBtnRef.current.click();
-  };
-
   const handleAddRow = useCallback(
-    (lat, lng) => {
-      setInputFields([...inputFields, { user: "" }]);
+    (position = 0) => {
+      console.log(`handleAddRow: ${position}`);
+      setInputFields([...inputFields, { position: position }]);
     },
     [inputFields]
   );
@@ -368,7 +364,7 @@ const CreateRoute = () => {
                 startingPoint={startingPoint}
                 endingPoint={endingPoint}
                 travelMode={"WALKING"}
-                handleAddRow={handleAddBtnClick}
+                handleAddRow={handleAddRow}
               />
             </div>
           </Col>
@@ -383,136 +379,7 @@ const CreateRoute = () => {
             </div>
             <hr />
             <Form onSubmit={submitEventForm}>
-              <Row>
-                <Col md={8}>
-                  <Row>
-                    <Col md={6}>
-                      <Form.Group>
-                        <Form.Label>Historical Event</Form.Label>
-                        <Form.Control
-                          type="text"
-                          className={"mb-3 mb-md-5"}
-                          name="longtitude"
-                          required
-                          value={historicalData.longtitude}
-                          onChange={handleHistorical}
-                          placeholder="Longtitude"
-                        />
-                      </Form.Group>
-                      <Form.Group>
-                        <Form.Control
-                          type="text"
-                          className={"mb-3"}
-                          name="lattitude"
-                          required
-                          value={historicalData.lattitude}
-                          onChange={handleHistorical}
-                          placeholder="Lattitude"
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group>
-                        <Form.Label>Title</Form.Label>
-                        <Form.Control
-                          type="text"
-                          className={"mb-3"}
-                          name="title"
-                          required
-                          value={historicalData.title}
-                          onChange={handleHistorical}
-                          placeholder="Historical Item"
-                        />
-                      </Form.Group>
-                      <Form.Group>
-                        <Form.Label>Sub-Title</Form.Label>
-                        <Form.Control
-                          type="text"
-                          className={"mb-3"}
-                          name="subTitle"
-                          required
-                          value={historicalData.subTitle}
-                          onChange={handleHistorical}
-                          placeholder="Write something here..."
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={12}>
-                      <Form.Group>
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control
-                          as="textarea"
-                          className={"mb-3"}
-                          name="description"
-                          required
-                          value={historicalData.description}
-                          onChange={handleHistorical}
-                          placeholder="Write something here..."
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                </Col>
-                <Col md={4}>
-                  <Row>
-                    <Col md={12} className={"mb-3"}>
-                      <label className={"fileUpload v2"} htmlFor="upload-photo">
-                        <Form.Control
-                          type="file"
-                          id={"upload-photo"}
-                          disabled={files.length === 1}
-                          className=""
-                          onChange={uploadSingleFile1}
-                        />
-                        <span>Attach Images</span>
-                      </label>
-                    </Col>
-                    <Col md={12} className={"mb-3"}>
-                      <div className="form-group previewBox">
-                        {files.length > 0 &&
-                          files.map((item, index) => {
-                            return (
-                              <div className={"preview"} key={item}>
-                                <img src={item} alt="" />
-                                <Button
-                                  type="button"
-                                  onClick={() => deleteFile(index)}
-                                >
-                                  <i className={"fal fa-times"}></i>
-                                </Button>
-                              </div>
-                            );
-                          })}
-                      </div>
-                    </Col>
-                    <Col md={12} className={"mb-3 text-center"}>
-                      <button
-                        type="button"
-                        className="btn btn-primary btn-block w-50"
-                        onClick={upload}
-                      >
-                        Upload
-                      </button>
-                    </Col>
-                  </Row>
-                </Col>
-                <Col md={12} className={"mb-3 text-center"}>
-                  <Form.Group>
-                    {showButton ? (
-                      <Button
-                        type="submit"
-                        className={"mt-3"}
-                        style={{ width: "25%" }}
-                      >
-                        Save
-                      </Button>
-                    ) : (
-                      ""
-                    )}
-                  </Form.Group>
-                </Col>
-              </Row>
-              {inputFields.map((inputField, index) => (
+              {inputFields.map((data, index) => (
                 <div key={index}>
                   <Row>
                     <Col md={8}>
@@ -525,7 +392,7 @@ const CreateRoute = () => {
                               className={"mb-3 mb-md-5"}
                               name="longtitude"
                               required
-                              value={historicalData.longtitude}
+                              value={data?.position?.lng}
                               onChange={handleHistorical}
                               placeholder="Longtitude"
                             />
@@ -536,7 +403,7 @@ const CreateRoute = () => {
                               className={"mb-3"}
                               name="lattitude"
                               required
-                              value={historicalData.lattitude}
+                              value={data?.position?.lat}
                               onChange={handleHistorical}
                               placeholder="Lattitude"
                             />
