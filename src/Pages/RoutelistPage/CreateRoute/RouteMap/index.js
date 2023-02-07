@@ -30,10 +30,7 @@ export default function RouteMap({
           } else {
             color = "yellow";
           }
-          if (prevMarkers.length >= 2) {
-            console.log("handleAddRow");
-            handleAddRow();
-          }
+
           return [
             ...prevMarkers,
             {
@@ -54,6 +51,10 @@ export default function RouteMap({
   }, [map, google]);
 
   useEffect(() => {
+    if (markers.length >= 3) {
+      console.log("handleAddRow");
+      handleAddRow(markers[markers.length - 1].position);
+    }
     if (map && markers.length >= 2) {
       console.log("Calculate Distance");
       const directionsService = new google.maps.DirectionsService();
