@@ -108,6 +108,7 @@ const AllTabData = (props) => {
                 console.log(res);
             })
             .catch((err) => {
+                
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
             });
 
