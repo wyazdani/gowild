@@ -358,9 +358,24 @@ table {
     line-height: 16px;
     opacity: 0.7;
     cursor: pointer;
-
+  .fileCss{
+    background-color: transparent;
+    border: none;
+    opacity: 0;
+    outline: none;
+    cursor: pointer;
+    transform: translate(-15px, -32px);
+  }
     img,
     button {
+      // width: 60px;
+      // height: 60px;
+      // border-radius: 50%;
+      // border: 2px dashed #F3F3F3;
+      // font-size: 12px;
+      // cursor: pointer;
+      // outline: none;
+      // background-color: transparent;
       width: 60px;
       height: 60px;
       border-radius: 50%;
@@ -368,7 +383,9 @@ table {
       font-size: 12px;
       cursor: pointer;
       outline: none;
+      border: none;
       background-color: transparent;
+      transform: translate(0px, 10px);
     }
   }
 
@@ -424,6 +441,7 @@ table {
 
 
 }
+
 
 // .fileLoad .createList_img{
 //   opacity: 0 !important;
