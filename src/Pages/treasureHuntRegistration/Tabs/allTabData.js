@@ -73,7 +73,7 @@ const AllTabData = (props) => {
                         theme: "dark",
                         });
                  }
-                  props.userRouteAllData()
+                //   props.userRouteAllData()
                 //  setAddAdmin(props.onHide);
                 //  props.content()
                 console.log(res);
@@ -104,11 +104,10 @@ const AllTabData = (props) => {
                         theme: "dark",
                         });
                  }
-                  props.userRouteAllData()
+                //   props.userRouteAllData()
                 console.log(res);
             })
             .catch((err) => {
-                
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
             });
 
