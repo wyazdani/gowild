@@ -1,5 +1,6 @@
 //export const API_URL = "http://127.0.0.1:8000/api";
 export const API_URL = "https://api.gowild.appscorridor.com/api/v1";
+export const SOCKET_URL = "https://chat.gowild.appscorridor.com";
 export const KEY =
     "YW1Gb1lXNTZZV2xpTG1GemJHRnRMbTFsYUdGeVFHZHRZV2xzTG1OdmJUb3lZV2RoYVc0PQ==";
 
@@ -108,7 +109,7 @@ export const ENDPOINT = {
             url : `${API_URL}/admin/treasure-chest/`,
             id  : null
         },
-        
+
     },
     historical_event :{
         add_event : `${API_URL}/admin/route-historical-events/`,
@@ -120,6 +121,14 @@ export const ENDPOINT = {
     admin_sponsor :{
         sponsor : `${API_URL}/admin/sponsor`,
         sponsor_img : `${API_URL}/admin/sponsor/`,
+    },
+    support :{
+        tickets : `${API_URL}/ticket`,
+        ticket_messages : `${API_URL}/ticket-messages/:id`,
+        mark_as_complete: `${API_URL}/ticket/:id/status`,
+        socket_url: SOCKET_URL,
+        emit_message:'msgToUser',
+        listen_message:'msgSupport'
     },
 
 };

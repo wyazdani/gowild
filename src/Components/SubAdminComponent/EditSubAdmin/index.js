@@ -6,6 +6,7 @@ import {ENDPOINT} from "../../../config/constants";
 import swal from "sweetalert";
 import { Formik } from 'formik';
 import { object, string } from 'yup';
+import { ToastContainer, toast } from 'react-toastify';
 
 const EditSubAmdin = (props) => {
 // console.log("1233"+ props.editItem.id)
@@ -28,12 +29,22 @@ const EditSubAmdin = (props) => {
         ENDPOINT.sub_admin.edit_user.id = props.editItem.id;
         return await AuthService.patchMethod(ENDPOINT.sub_admin.edit_user.url+ENDPOINT.sub_admin.edit_user.id, true,data)
             .then((res) => {
-                //setContent(res.data);
-                //setIsLoader(true);
-                //console.log(res.data);
+                if (res.status === 200) {
+                    toast.success('Edit form successfully!', {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                        });
+                }
+                console.log(res);
+                props.subAdminAllData();
                 setTimeout(() => {
-                    setAddAdmin(props.onHide);
-                    // props.subAdminAllData();
+                    setAddAdmin(props.onHide);          
                   }, 1000);
             })
             .catch((err) => {

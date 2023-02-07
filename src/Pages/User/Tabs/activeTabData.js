@@ -217,6 +217,7 @@ const ActiveTabData = (props) => {
             </div>
 
             <ViewProfilePopup
+             subAdminAllData={props.subAdminAllData}
                 show={modalShowView}
                 onHide={() => setModalShowView(false)}
                 editItem={editItem}
