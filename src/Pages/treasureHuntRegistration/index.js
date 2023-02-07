@@ -26,7 +26,7 @@ const TreasureHuntRegistration = () => {
                 setPendingContent(res.data.filter(data => ["pending"].includes(data.status)));
                 setDisapproveContent(res.data.filter(data => ["disapprove"].includes(data.status)));
                 setIsLoader(true);
-                console.log("wild", res.data);
+                console.log("treasure hunt", res.data);
             })
             .catch((err) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
