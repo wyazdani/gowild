@@ -81,9 +81,9 @@ const AllTabData = (props) => {
         // console.log("1233"+id);
         return  AuthService.postMethod(`${ENDPOINT.sub_admin.active_inactive}${id}/status`, true)
             .then((res) => {
-                // if (res.status === 201) {
-                //     toast.success(res.data.message);
-                // }
+                if (res.status === 201) {
+                    toast.success(res.data.message);
+                }
                  props.subAdminAllData()
                 console.log(res);
             })
@@ -253,18 +253,6 @@ const AllTabData = (props) => {
                 editItem={editItem}
             />
 
-            <ToastContainer
-                position="bottom-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="dark"
-            />
 
         </>
     )
