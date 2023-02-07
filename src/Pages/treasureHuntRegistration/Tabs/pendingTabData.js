@@ -54,7 +54,16 @@ const PendingTabData = (props) => {
         return AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true, objData)
             .then((res) => {
                 if (res.status === 201) {
-                    toast.success(res.data.message);
+                    toast.success('User status Changed Successfully! (Approved)', {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                        });
                 }
                 props.userRouteAllData()
                 //  setAddAdmin(props.onHide);
@@ -76,7 +85,16 @@ const PendingTabData = (props) => {
         return AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true, objData)
             .then((res) => {
                 if (res.status === 201) {
-                    toast.success(res.data.message);
+                    toast.success('User status Changed Successfully! (Disapproved)', {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                        });
                 }
                 props.userRouteAllData()
                 console.log(res);

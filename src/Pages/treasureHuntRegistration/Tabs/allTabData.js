@@ -71,9 +71,9 @@ const AllTabData = (props) => {
                         draggable: true,
                         progress: undefined,
                         theme: "dark",
-                        });
-                 }
-                  props.userRouteAllData()
+                    });
+                }
+                props.userRouteAllData()
                 //  setAddAdmin(props.onHide);
                 //  props.content()
                 console.log(res);
@@ -102,10 +102,10 @@ const AllTabData = (props) => {
                         draggable: true,
                         progress: undefined,
                         theme: "dark",
-                        });
-                 }
+                    });
+                }
+                props.userRouteAllData()
                  console.log(res);
-                  props.userRouteAllData()
                 
             })
             .catch((err) => {

@@ -34,13 +34,7 @@ const ViewProfilePopup = (props) => {
         ENDPOINT.admin_user.edit_user.id = props.editItem;
         return await AuthService.patchMethod(ENDPOINT.admin_user.edit_user.url+ENDPOINT.admin_user.edit_user.id, true,data)
             .then((res) => {
-                //setContent(res.data);
-                //setIsLoader(true);
                 console.log(res.data);
-                // props.userRouteAllData() 
-                // setTimeout(() => {
-                //     setAddAdmin(props.onHide);          
-                //   }, 1000);
             })
             .catch((err) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
@@ -54,14 +48,14 @@ const ViewProfilePopup = (props) => {
 
 
 
-    const approveUser = async (id , data) => {
+    const approveUser = async (id) => {
         const objData = {
             "status": "processing"
           }
-        return  AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true ,data, objData)
+        return  AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true, objData)
             .then((res) => {
-                if(res){
-                    toast.success('Status changed!', {
+                if(res.status === 201){
+                    toast.success('Status changed approved successfully!', {
                         position: "bottom-right",
                         autoClose: 5000,
                         hideProgressBar: false,
@@ -91,8 +85,8 @@ const ViewProfilePopup = (props) => {
         // console.log("1233"+id);
         return  AuthService.postMethod(`${ENDPOINT.treasure_chests.approve_reject}${id}`, true , objData)
             .then((res) => {
-                if(res){
-                    toast.success('Status changed!', {
+                if(res.status === 201){
+                    toast.success('Status changed disapproved successfully!', {
                         position: "bottom-right",
                         autoClose: 5000,
                         hideProgressBar: false,
