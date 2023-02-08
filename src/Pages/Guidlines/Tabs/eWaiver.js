@@ -52,7 +52,7 @@ const EWavier = () => {
             // console.log("res3", res3.data.data);
 
         } catch (err) {
-            // swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
         }
     };
 

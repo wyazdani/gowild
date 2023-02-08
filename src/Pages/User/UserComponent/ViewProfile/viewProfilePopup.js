@@ -113,10 +113,11 @@ const ViewProfilePopup = (props) => {
                         validationSchema={schema}
                         onSubmit={handleSubmit}
                         initialValues={{
-                            firstName: props.editItem.firstName,
-                            lastName: props.editItem.lastName,
-                            birthDate: props.editItem.birthDate,
-                            phoneNo: props.editItem.phoneNo,
+                            // firstName: props.editItem.firstName,
+                            // lastName: props.editItem.lastName,
+                            // birthDate: props.editItem.birthDate,
+                            // phoneNo: props.editItem.phoneNo,
+                            // gender: props.editItem.gender,
                         }}
                     >
                         {({
@@ -128,7 +129,7 @@ const ViewProfilePopup = (props) => {
                               errors,
                           }) => (
                             <Form noValidate onSubmit={handleSubmit}>
-                        <Row>
+                        <Row className="backGroundColor">
                             <Col md={6}>
                                 <div className={classes.box}>
                                     <h3 className={"font-20 text-orange mb-3"}>Perosnal Data</h3>
@@ -138,8 +139,9 @@ const ViewProfilePopup = (props) => {
                                             <Form.Control
                                                 className={"bottom-border"}
                                                 type="text"
+                                                disabled
                                                 name="firstName"
-                                                value={values.firstName}
+                                                value={props.editItem.firstName}
                                                 onChange={handleChange}
                                                 placeholder="Enter First Name"
                                                 isValid={touched.firstName && !errors.firstName}
@@ -150,9 +152,10 @@ const ViewProfilePopup = (props) => {
                                             <Form.Control
                                                 className={"bottom-border"}
                                                 type="text"
+                                                disabled
                                                 placeholder="Last name"
                                                 name="lastName"
-                                                value={values.lastName}
+                                                value={props.editItem.lastName}
                                                 onChange={handleChange}
                                                 isValid={touched.lastName && !errors.lastName}
                                             />
@@ -160,6 +163,7 @@ const ViewProfilePopup = (props) => {
                                         <Col md={12} className={"mb-3"}>
                                             <Form.Label className={"text-orange mb-0"}>Phone Number</Form.Label>
                                             <PhoneInput
+                                                disabled
                                                 placeholder="Phone Number"
                                                 className={"bottom-border"}
                                                 defaultCountry="CA"
@@ -167,27 +171,27 @@ const ViewProfilePopup = (props) => {
                                                 countryCallingCodeEditable={false}
                                                 //onChange={setValue}
                                                 name="phoneNo"
-                                                value={values.phoneNo}
+                                                value={props.editItem.phoneNo}
                                                 onChange={handleChange}
                                                 isValid={touched.lastName && !errors.lastName}
                                             />
                                         </Col>
                                         <Col md={12} className={"mb-3"}>
                                             <Form.Label className={"text-orange mb-0"}>Gender</Form.Label>
-                                            <Form.Select className={"bottom-border"}>
-                                                <option>Male</option>
-                                                <option>Female</option>
+                                            <Form.Select disabled className={"bottom-border"}>
+                                            <option>{props.editItem.gender}</option>
                                             </Form.Select>
 
                                         </Col>
                                         <Col md={12} className={"mb-3"}>
                                             <Form.Label className={"text-orange mb-0"}>Date of Birth</Form.Label>
                                             <Form.Control
+                                               disabled
                                                 className={"bottom-border"}
                                                 type="date"
                                                 placeholder="00/00/0000"
-                                                name="birthDate"
-                                                value={values.birthDate}
+                                                name="dateOfBirth"
+                                                value={(props.editItem.dateOfBirth)? props.editItem.dateOfBirth : <p> 02/08/2002 </p>}
                                                 onChange={handleChange}
                                                 isValid={touched.birthDate && !errors.birthDate}
                                             />

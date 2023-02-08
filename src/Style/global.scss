@@ -442,10 +442,26 @@ table {
 
 }
 
+// viewpopup treasurehunt
+.backGroundColor{
 
-// .fileLoad .createList_img{
-//   opacity: 0 !important;
-// }
-// .DashboardCards_card__1wnU3 .progress{
-//   background-color: red !important;
-// }
+  .form-control,
+  select,
+  .form-select,
+  input[type='text'],
+  input[type='tel'],
+  input[type='email'],
+  input[type='search'],
+  input[type='password'],
+  input[type='gender'],
+  input[type='date'],
+  input[type='file'],
+  textarea.form-control,
+  textarea {
+    font-weight: 400;
+    font-size: 17px;
+    color: #242426;
+    background-color: #fff;
+  }
+}
+
