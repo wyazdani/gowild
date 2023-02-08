@@ -134,6 +134,19 @@ const CreateRoute = () => {
     setHistoricalData(newRows);
   };
 
+  const updateStartEndPosition = useCallback(
+    (startPos, endPos) => {
+      console.log(
+        `updateStartEndPosition: ${JSON.stringify(startPos)} ${JSON.stringify(
+          endPos
+        )}`
+      );
+      setStartingPoint(startPos);
+      setEndingPoint(endPos);
+    },
+    [startingPoint, endingPoint]
+  );
+
   const handleAddRow = useCallback(
     (position = 0) => {
       //console.log(`handleAddRow: ${JSON.stringify(position)}`);
@@ -212,7 +225,7 @@ const CreateRoute = () => {
                   name="startLongtitude"
                   id="startLongtitude"
                   required
-                  value={formData.startLongtitude}
+                  value={startingPoint?.lng}
                   onChange={handleChange}
                   className={"mb-3"}
                   placeholder="Longtitude"
@@ -222,7 +235,7 @@ const CreateRoute = () => {
                   name="startLattitude"
                   id="startLattitude"
                   required
-                  value={formData.startLattitude}
+                  value={startingPoint?.lat}
                   onChange={handleChange}
                   className={"mb-3"}
                   placeholder="Lattitude"
@@ -235,7 +248,7 @@ const CreateRoute = () => {
                   name="endLongtitude"
                   id="endLongtitude"
                   required
-                  value={formData.endLongtitude}
+                  value={startingPoint?.lng}
                   onChange={handleChange}
                   className={"mb-3"}
                   placeholder="Longtitude"
@@ -245,7 +258,7 @@ const CreateRoute = () => {
                   id="endLattitude"
                   name="endLattitude"
                   required
-                  value={formData.endLattitude}
+                  value={startingPoint?.lat}
                   onChange={handleChange}
                   className={"mb-3"}
                   placeholder="Lattitude"
@@ -320,6 +333,7 @@ const CreateRoute = () => {
                   endingPoint={endingPoint}
                   travelMode={"WALKING"}
                   handleAddRow={handleAddRow}
+                  updateStartEndPosition={updateStartEndPosition}
                 />
               </div>
             </Col>
