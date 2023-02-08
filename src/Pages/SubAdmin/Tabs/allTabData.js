@@ -98,7 +98,7 @@ const AllTabData = (props) => {
     //     submitEventForm();
     // }, [])
     
-
+    // the issue is when i search firstName by user  but this name is 3rd rows per page i cannot find how can i solv and search firstname any rows per page 
     return (
         <>
             <div className={classes.tableFilter}>

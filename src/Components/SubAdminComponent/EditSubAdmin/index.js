@@ -18,7 +18,7 @@ const EditSubAmdin = (props) => {
         lastName: string().required(),
         // email: string().required(),
         userName: string().required(),
-        addressTwo: string().required(),
+        location: string().required(),
         //phoneNo: string().required(),
         birthDate: string().required(),
         password:  string().required(),
@@ -74,7 +74,7 @@ const EditSubAmdin = (props) => {
                             lastName: props.editItem.lastName,
                             // email: props.editItem.email,
                             userName: props.editItem.username,
-                            addressTwo: props.editItem.addressTwo,
+                            location: props.editItem.location,
                             birthDate: props.editItem.dateOfBirth,
                             //phoneNo: props.editItem.phoneNo,
                             //password: props.editItem.password
@@ -144,11 +144,11 @@ const EditSubAmdin = (props) => {
                                                     <Form.Label className={"text-orange mb-0"}>Location</Form.Label>
                                                     <Form.Control
                                                         type="text"
-                                                        name="addressTwo"
-                                                        value={values.addressTwo}
+                                                        name="location"
+                                                        value={values.location}
                                                         onChange={handleChange}
                                                         placeholder="Address"
-                                                        isValid={touched.addressTwo && !errors.addressTwo}
+                                                        isValid={touched.location && !errors.location}
 
                                                     />
                                                 </Col>

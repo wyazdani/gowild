@@ -82,6 +82,7 @@ export const ENDPOINT = {
     },
 
     admin_guidelines :{
+        listing : `${API_URL}/admin-guidelines`,
         terms_conditions : `${API_URL}/admin-guidelines`,
         eWaiver_listing : `${API_URL}/admin-guidelines/eWaiver`,
         faq_listing : `${API_URL}/admin-guidelines/faq`,

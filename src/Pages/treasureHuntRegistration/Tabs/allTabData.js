@@ -170,7 +170,6 @@ const AllTabData = (props) => {
                 </Form>
             </div>
 
-
             <Table>
                 <thead>
                     <tr>

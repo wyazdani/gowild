@@ -1,9 +1,4 @@
-
 import React, { useState, useEffect } from "react";
-import { ENDPOINT, KEY } from "config/constants";
-import AuthService from "services/auth.service";
-import accessHeader from "services/headers/access-header";
-import swal from 'sweetalert';
 import {
   ResponsiveContainer,
   BarChart,
@@ -14,7 +9,7 @@ import {
   Tooltip,
   Legend
 } from "recharts";
-import moment from 'moment';
+
 
 
 const OnlineUserChart = (props) => {

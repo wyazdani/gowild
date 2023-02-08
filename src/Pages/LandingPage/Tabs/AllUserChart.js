@@ -87,6 +87,7 @@ const AllUserChart = (props) => {
             <Bar type="monotone" dataKey="firstName" barSize={20} fill="#FF7851" />
             <Bar type="monotone" dataKey="email" barSize={20} fill="#FF7851" />
             
+            
             {/* <Bar type="monotone" dataKey="name"  fill="#FF7851" /> */}
           </BarChart>
         </ResponsiveContainer>
