@@ -1,10 +1,13 @@
-import React from "react";
+import React, {useEffect} from "react";
 import classes from "./index.module.scss";
 import PageTitle from "../../Components/Pagetitle";
 import userImg from "../../Images/userImg.png";
 import {Form} from "reactstrap";
 
 const Support =(props) => {
+    useEffect(() => {
+        console.log('Here')
+    }, []);
     return(
         <>
             <PageTitle title={"Support"} />
