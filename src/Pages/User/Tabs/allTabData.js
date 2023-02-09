@@ -107,11 +107,11 @@ const AllTabData = (props) => {
                                 </Form.Group>
                             </div>
                         </Col>
-                        <Col md={4} className={"d-md-flex justify-content-end"}>
+                        {/* <Col md={4} className={"d-md-flex justify-content-end"}>
                             <Button onClick={() => setModalShow(true)}>
                                 Add New
                             </Button>
-                        </Col>
+                        </Col> */}
                     </Row>
                 </Form>
             </div>

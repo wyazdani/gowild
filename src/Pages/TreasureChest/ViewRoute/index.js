@@ -110,22 +110,23 @@ const ViewTreasure = (props) => {
                         }) => (
                             <section className={"section"}>
                                 <Form>
-                                    <Row>
+                                    <Row className="backGroundColor">
                                         <Col md={4}>
                                             <Form.Group className={'mb-3'}>
-                                                <Form.Label>Title</Form.Label>
-                                                <Form.Control value={values.title} />
+                                                <Form.Label> <b>Title</b> </Form.Label>
+                                                <Form.Control disabled value={values.title} style={{border:'none'}} />
                                             </Form.Group>
                                             <Form.Group className={'mb-3'}>
-                                                <Form.Label>Description</Form.Label>
+                                                <Form.Label><b>Description</b></Form.Label>
                                                 <Form.Control as={"textarea"}
-                                                    value={values.description}
+                                                 disabled value={values.description}
+                                                 style={{border:'none'}} 
                                                 />
                                             </Form.Group>
                                             <Form.Group className={'mb-3'}>
-                                                <Form.Label>Treasure Location</Form.Label>
-                                                <Form.Control className={'mb-2'} value={values.latitude} />
-                                                <Form.Control value={values.longitude} />
+                                                <Form.Label><b>Treasure Location</b></Form.Label>
+                                                <Form.Control className={'mb-2'} disabled value={values.latitude} style={{border:'none'}}  />
+                                                <Form.Control disabled value={values.longitude} style={{border:'none'}}  />
                                             </Form.Group>
                                         </Col>
                                         <Col md={8}>
@@ -134,107 +135,107 @@ const ViewTreasure = (props) => {
                                             </div>
                                         </Col>
 
+                                <Col md={12}>
+
+                                    <Row>
                                         <Col md={12}>
-
                                             <Row>
-                                                <Col md={12}>
+                                                <Col md={8}>
                                                     <Row>
-                                                        <Col md={8}>
-                                                            <Row>
-                                                                <Col md={6}>
-                                                                    <Form.Group>
-                                                                        <Form.Label className="mt-3"><b>Sponsors</b></Form.Label>
-                                                                        <div className="d-flex">
-                                                                            <img src={rectangle} width="20%" alt="" />
-                                                                            <Form.Control type="text" className={"mb-1 ms-2 mb-md-2"} placeholder="🔗 www.redbull.com" style={{ marginBottom: '0px !important' }} />
+                                                        <Col md={6}>
+                                                            <Form.Group>
+                                                                <Form.Label className="mt-3"><b>Sponsors</b></Form.Label>
+                                                                <div className="d-flex">
+                                                                    <img src={rectangle} width="20%" alt="" />
+                                                                    <Form.Control disabled type="text" className={"mb-1 ms-2 mb-md-2"} placeholder="🔗 www.redbull.com" style={{ marginBottom: '0px !important',border:'none' }} />
 
-                                                                        </div>
+                                                                </div>
 
-                                                                    </Form.Group>
-                                                                </Col>
-                                                                <Col md={5}>
-                                                                    <Form.Group>
-                                                                        <Form.Label className="mt-3"><b>Event Date</b></Form.Label>
-                                                                        <Form.Group>
-
-                                                                            <p className={"mb-3"}>
-                                                                                {(formatDate(values.eventDate))}
-                                                                            </p>
-
-                                                                        </Form.Group>
-                                                                    </Form.Group>
-
-                                                                </Col>
-                                                                <Col md={1}>
-                                                                </Col>
-                                                                <Col md={6}>
-                                                                </Col>
-                                                                <Col md={5}>
-                                                                    <Form.Group>
-                                                                        <Form.Label className="mt-3"><b>Time</b></Form.Label>
-                                                                        <p className={"mb-3"}>
-                                                                            {values.eventTime}
-                                                                        </p>
-                                                                    </Form.Group>
-                                                                </Col>
-                                                                <Col md={1}>
-                                                                </Col>
-                                                                <Col md={6}>
-                                                                </Col>
-                                                                <Col md={5}>
-
-                                                                    <Form.Group>
-                                                                        <Form.Label className="mt-3"><b>Number of participants</b></Form.Label>
-                                                                        <p className={"mb-3"}>
-                                                                            {values.no_of_participants}
-                                                                        </p>
-                                                                    </Form.Group>
-                                                                </Col>
-                                                            </Row>
+                                                            </Form.Group>
                                                         </Col>
-                                                        <Col md={4}>
+                                                        <Col md={5}>
+                                                            <Form.Group>
+                                                                <Form.Label className="mt-3"><b>Event Date</b></Form.Label>
+                                                                <Form.Group>
 
-                                                            <Form.Label className="d-flex  mt-3"><b>Upload Augmented Reality</b></Form.Label>
-                                                            <label className={"treasureChest_img"} htmlFor="upload-photo">
-                                                                <img src={img2} width="85%" alt="" />
-                                                            </label> <br />
-                                                            <Form.Label className="mt-2"><b>Uploaded Thumbnail</b></Form.Label>
-                                                            <p className="text-danger"> {error}</p>
-                                                            <img src={"https://api.gowild.appscorridor.com" + values.picture} width="70%" alt={"img"} />
-                                                            {/* <img src={values.picture} width="100%" alt="" /> */}
-                                                            <p></p>
+                                                                    <p className={"mb-3"}>
+                                                                        {(formatDate(values.eventDate))}
+                                                                    </p>
 
-                                                            {/* preview image */}
-                                                            <div className="form-group previewBox">
-                                                                {file.length > 0 &&
-                                                                    file.map((item, index) => {
-                                                                        return (
-                                                                            <div className={"preview"} key={item}>
-                                                                                <img src={item} alt="" />
-                                                                                <Button type="button" onClick={() => deleteFile(index)}>
-                                                                                    <i className={"fal fa-times"}></i>
-                                                                                </Button>
-                                                                            </div>
-                                                                        );
-                                                                    })}
-                                                            </div>
+                                                                </Form.Group>
+                                                            </Form.Group>
+
                                                         </Col>
+                                                        <Col md={1}>
+                                                        </Col>
+                                                        <Col md={6}>
+                                                        </Col>
+                                                        <Col md={5}>
+                                                            <Form.Group>
+                                                                <Form.Label className="mt-3"><b>Time</b></Form.Label>
+                                                                <p className={"mb-3"}>
+                                                                    {values.eventTime}
+                                                                </p>
+                                                            </Form.Group>
+                                                        </Col>
+                                                        <Col md={1}>
+                                                        </Col>
+                                                        <Col md={6}>
+                                                        </Col>
+                                                        <Col md={5}>
 
+                                                            <Form.Group>
+                                                                <Form.Label className="mt-3"><b>Number of participants</b></Form.Label>
+                                                                <p className={"mb-3"}>
+                                                                    {values.no_of_participants}
+                                                                </p>
+                                                            </Form.Group>
+                                                        </Col>
                                                     </Row>
                                                 </Col>
                                                 <Col md={4}>
-                                                    <Row>
 
-                                                        <Col md={12} className={"mb-3"}>
-                                                            <div className="form-group previewBox">
+                                                    <Form.Label className="d-flex  mt-3"><b>Upload Augmented Reality</b></Form.Label>
+                                                    <label className={"treasureChest_img"} htmlFor="upload-photo">
+                                                        <img src={img2} width="85%" alt="" />
+                                                    </label> <br />
+                                                    <Form.Label className="mt-2"><b>Uploaded Thumbnail</b></Form.Label>
+                                                    <p className="text-danger"> {error}</p>
+                                                    <img src={"https://api.gowild.appscorridor.com" + values.picture} width="70%" alt={"img"} />
+                                                    {/* <img src={values.picture} width="100%" alt="" /> */}
+                                                    <p></p>
 
-                                                            </div>
-                                                        </Col>
-
-                                                    </Row>
+                                                    {/* preview image */}
+                                                    <div className="form-group previewBox">
+                                                        {file.length > 0 &&
+                                                            file.map((item, index) => {
+                                                                return (
+                                                                    <div className={"preview"} key={item}>
+                                                                        <img src={item} alt="" />
+                                                                        <Button type="button" onClick={() => deleteFile(index)}>
+                                                                            <i className={"fal fa-times"}></i>
+                                                                        </Button>
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                    </div>
                                                 </Col>
+
                                             </Row>
                                         </Col>
+                                        <Col md={4}>
+                                            <Row>
+
+                                                <Col md={12} className={"mb-3"}>
+                                                    <div className="form-group previewBox">
+
+                                                    </div>
+                                                </Col>
+
+                                            </Row>
+                                        </Col>
+                                    </Row>
+                                </Col>
                                     </Row>
                                 </Form>
                             </section>

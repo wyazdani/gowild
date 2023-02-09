@@ -97,7 +97,7 @@ const Login = () => {
                 //     toast.success(res.data.message);
                 // }
                 setIsLoading(false);
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+                swal("Error", `${AuthService.errorMessageHandlerLogin(err)}`, "error");
             });
         }
     };

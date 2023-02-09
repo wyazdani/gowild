@@ -26,7 +26,7 @@ const OnlineUserChart = (props) => {
             <XAxis dataKey="date"   />
             <YAxis />
             <Tooltip />
-            <Legend />
+            {/* <Legend /> */}
             <Bar type="monotone" dataKey="firstName" barSize={20} fill="#FF7851" />
             <Bar type="monotone" dataKey="email" barSize={20} fill="#FF7851" />
             

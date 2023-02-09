@@ -13,6 +13,8 @@ import 'react-toastify/dist/ReactToastify.css';
 const TreasureHuntEWaiver = (props) => {
 
     const [formData, setFormData] = useState({});
+    const [faqData, setFaqData] = useState({});
+    const [termsData, setTermsData] = useState({});
     const [isLoader, setIsLoader] = useState(false);
 
     const handleChange = (event) => {
@@ -29,18 +31,41 @@ const TreasureHuntEWaiver = (props) => {
     }
 
 
-    const guidlinessWaiverData = async () => {
-        await AuthService.getMethod(`${ENDPOINT.admin_guidelines.huntEWaiver_listing}`, true)
-            .then((res) => {
-                setFormData(res.data.data)
-                setIsLoader(true);
-                // console.log(res.data.data)
-            })
-            .catch((err) => {
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-            });
-    };
+    // const guidlinessWaiverData = async () => {
+    //     await AuthService.getMethod(`${ENDPOINT.admin_guidelines.huntEWaiver_listing}`, true)
+    //         .then((res) => {
+    //             setFormData(res.data.data)
+    //             setIsLoader(true);
+    //             // console.log(res.data.data)
+    //         })
+    //         .catch((err) => {
+    //             swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+    //         });
+    // };
 
+
+    const guidlinessWaiverData = async () => {
+        try {
+            // First API call
+         
+            const res = await AuthService.getMethod(`${ENDPOINT.admin_guidelines.huntEWaiver_listing}`, true);
+            setFormData(res.data.data)
+            // console.log("res", res.data.data);
+            // 2nd API call
+            const res2 = await AuthService.getMethod(`${ENDPOINT.admin_guidelines.faq_listing}`, true);
+            setFaqData(res2.data.data)
+            // console.log("res2", res2.data.data);
+
+            // // 3rd API call
+            const res3 = await AuthService.getMethod(`${ENDPOINT.admin_guidelines.termsAndConditions_listing}`, true);
+            setTermsData(res3.data.data)
+            setIsLoader(true);
+            // console.log("res3", res3.data.data);
+
+        } catch (err) {
+            swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+        }
+    };
 
     const submitEventForm = async (event) => {
         event.preventDefault();
@@ -82,6 +107,15 @@ const TreasureHuntEWaiver = (props) => {
 
         return [month, day, year].join('/');
     }
+
+    const date =  formData.updatedDate ? new Date(formData.updatedDate) : null;
+    
+    const options = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    };
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
 
 
     if (!isLoader) {
@@ -127,13 +161,13 @@ const TreasureHuntEWaiver = (props) => {
                 </Col>
                 <Col md={4}>
                     <div className={classes.logBox}>
-                        <h4>  {(new Date()).toLocaleDateString('en-US', DATE_OPTIONS)} </h4>
+                    <h4>  {formattedDate} </h4>
                         <div className={"text-muted font-12"}>Update Logs</div>
                         <ul className={classes.logList}>
                             <li>
                                 <div className={classes.box}>
                                     <time className={"d-block"}>
-                                        {(formatDate(formData.updatedDate))}
+                                        {(formatDate(termsData.updatedDate))}
                                     </time>
                                     <div>Term &amp; Conditions - Updated!</div>
                                 </div>
@@ -141,7 +175,7 @@ const TreasureHuntEWaiver = (props) => {
                             <li>
                                 <div className={classes.box}>
                                     <time className="d-block">
-                                        {(formatDate(formData.createdDate))}
+                                        {(formatDate(faqData.updatedDate))}
                                     </time>
                                     <div>FAQ</div>
                                 </div>
