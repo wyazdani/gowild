@@ -320,11 +320,6 @@ const CreateRoute = () => {
                   placeholder="Write something here ..."
                 />
               </Form.Group>
-              <Form.Group>
-                <Button type="submit" className={"w-100"}>
-                  Save
-                </Button>
-              </Form.Group>
             </Col>
             <Col md={8}>
               <div className={"img-box"}>
@@ -510,6 +505,11 @@ const CreateRoute = () => {
             theme="dark"
           />
         </section>
+        <Form.Group>
+          <Button type="submit" className={"w-100"}>
+            Save
+          </Button>
+        </Form.Group>
       </Form>
     </Fragment>
   );
