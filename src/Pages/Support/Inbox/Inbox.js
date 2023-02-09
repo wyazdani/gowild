@@ -4,7 +4,6 @@ import classes from "../index.module.scss";
 import 'react-toastify/dist/ReactToastify.css';
 import userImg from "../../../Images/userImg.png";
 import {imageUrl, timeSince} from "../../../Helper/Helpers";
-import moment from "moment/moment";
 
 const Inbox = (props) => {
     // const { content } = props;
@@ -14,7 +13,6 @@ const Inbox = (props) => {
         if (props){
             setCurrentItems(props.content.data)
         }
-        // console.log(content)
     }, []);
     return (
         <>
@@ -26,9 +24,8 @@ const Inbox = (props) => {
                     </div>
                 </form>
                 <ul>
-                    {console.log(currentItems)}
                     {currentItems.map((data) => (
-                        <li className="active">
+                        <li key={data.id} className="active">
                             <div className={classes.userImg}>
                                 <img src={imageUrl(data.user?.picture,userImg)} alt="username"/>
                             </div>
