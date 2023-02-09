@@ -11,9 +11,10 @@ const Inbox = (props) => {
 
     useEffect(() => {
         if (props){
-            setCurrentItems(props.content.data)
+            setCurrentItems(props.inbox?.data)
         }
     }, []);
+
     return (
         <>
 
@@ -25,7 +26,7 @@ const Inbox = (props) => {
                 </form>
                 <ul>
                     {currentItems.map((data) => (
-                        <li key={data.id} className="active">
+                        <li onClick={props.ticketMessages.bind(null,data.id,data)} key={data.id} className="active">
                             <div className={classes.userImg}>
                                 <img src={imageUrl(data.user?.picture,userImg)} alt="username"/>
                             </div>

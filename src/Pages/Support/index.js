@@ -7,19 +7,32 @@ import AuthService from "../../services/auth.service";
 import {ENDPOINT} from "../../config/constants";
 import swal from "sweetalert";
 import Inbox from "./Inbox/Inbox";
+import Messages from "./messages/messages";
 
 const Support =(props) => {
-    const [content, setContent] = useState([]);
+    const [inbox, setInbox] = useState([]);
+    const [message, setMessage] = useState([]);
+    const [rowUser, setRowUser] = useState(null);
     const [isLoader, setIsLoader] = useState(false);
     const supportTickets  = async () => {
         await AuthService.getMethod(ENDPOINT.support.tickets, true,)
+            .then(async (res) => {
+                setInbox(res.data)
+                if (res.data?.data.length > 0) {
+                    await ticketMessages(res.data.data[0].id, res.data.data[0])
+                }
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+    };
+    const ticketMessages = async (id, row)=> {
+        const url = (ENDPOINT.support.ticket_messages).replace(':id',id);
+        await AuthService.getMethod(url, true,)
             .then((res) => {
-                setContent(res.data)
-                setTimeout(()=>{
-                    setIsLoader(true)
-                }, 500);
-
-
+                setMessage(res.data)
+                setRowUser(row)
+                setIsLoader(true)
             })
             .catch((err) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
@@ -41,56 +54,8 @@ const Support =(props) => {
             <PageTitle title={"Support"} />
             <section className={"section"}>
                 <div className={classes.supportblock}>
-                    <Inbox content={content} />
-                    <div className={classes.msgPreview}>
-                        <div className={classes.chatheader}>
-                            <div className={classes.userInfo}>
-                                <div className={classes.userImg}>
-                                    <img src={userImg} alt="username"/>
-                                </div>
-                                <div className={classes.description}>
-                                    <h6>Marcus Curtis</h6>
-                                    <small className={classes.text}>marcuscurtis01@gmail.com</small>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className={classes.mesgs}>
-                            <div className={classes.msghistory}>
-                                <div className={classes.incoming}>
-                                    <div className={classes.userImg}>
-                                        <img src={userImg} alt="username"/>
-                                    </div>
-                                    <div className={classes.description}>
-                                        <div className={classes.text}>Test which is a new approach to have all
-                                            solutions
-                                            <div className={classes.time}> 11:01 AM</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={classes.outgoing}>
-                                    <div className={classes.userImg}>
-                                        <img src={userImg} alt="username"/>
-                                    </div>
-                                    <div className={classes.description}>
-                                        <div className={classes.text}>Test which is a new approach to have all
-                                            solutions
-                                        </div>
-                                        <div className={classes.time}> 11:01 AM</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={classes.typemsg}>
-                                <div className={classes.btngroup}>
-                                    <button type="button" className={classes.btn}><i className="fal fa-paperclip"></i></button>
-                                    <button type="button" className={classes.btn}><i className="fal fa-image"></i></button>
-                                </div>
-                                <input type="text" className={classes.formcontrol} placeholder="Type a message"/>
-                                <button className={`${classes.btn} ${classes.btnSend}`} type="button"><i className="fas fa-paper-plane"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <Inbox inbox={inbox} ticketMessages={ticketMessages} />
+                    <Messages message={message} rowUser={rowUser}/>
                 </div>
             </section>
         </>
