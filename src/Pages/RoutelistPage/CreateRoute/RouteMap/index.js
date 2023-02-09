@@ -7,6 +7,7 @@ export default function RouteMap({
   endingPoint,
   travelMode,
   handleAddRow,
+  updateStartEndPosition,
 }) {
   const [markers, setMarkers] = useState([]);
   const { ref, map, google } = useGoogleMaps(
@@ -80,6 +81,8 @@ export default function RouteMap({
           directionsRenderer.setDirections(result);
         }
       });
+
+      updateStartEndPosition(origin, destination);
     }
   }, [map, markers, travelMode]);
 

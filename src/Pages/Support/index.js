@@ -1,39 +1,47 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import classes from "./index.module.scss";
 import PageTitle from "../../Components/Pagetitle";
 import userImg from "../../Images/userImg.png";
 import {Form} from "reactstrap";
+import AuthService from "../../services/auth.service";
+import {ENDPOINT} from "../../config/constants";
+import swal from "sweetalert";
+import Inbox from "./Inbox/Inbox";
 
 const Support =(props) => {
+    const [content, setContent] = useState([]);
+    const [isLoader, setIsLoader] = useState(false);
+    const supportTickets  = async () => {
+        await AuthService.getMethod(ENDPOINT.support.tickets, true,)
+            .then((res) => {
+                setContent(res.data)
+                setTimeout(()=>{
+                    setIsLoader(true)
+                }, 500);
+
+
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+    };
+    useEffect( () => {
+         supportTickets()
+    }, []);
+
+    if (!isLoader) {
+        return (
+            <div className='loader'>
+                <h3>Loading...</h3>
+            </div>
+        );
+    }
     return(
         <>
             <PageTitle title={"Support"} />
             <section className={"section"}>
                 <div className={classes.supportblock}>
-                    <div className={classes.messageListSidebar}>
-                        <form className={classes.searchform}>
-                            <div className="form-group">
-                                <input type="search" className="form-control" placeholder="Search Message" />
-                            </div>
-                        </form>
-                        <ul>
-                            <li className="active">
-                                <div className={classes.userImg}>
-                                    <img src={userImg} alt="username"/>
-                                </div>
-                                <div className={classes.description}>
-                                    <h6>Marcus Curtis</h6>
-                                    <div className="text-muted">
-                                        <time>5min</time>
-                                        <div className={classes.text}>
-                                            Lorem IPSUM DOLOR Lorem IPSUM DOLOR
-                                        </div>
-                                    </div>
-                                    <span className={classes.counter}>2</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                    <Inbox content={content} />
                     <div className={classes.msgPreview}>
                         <div className={classes.chatheader}>
                             <div className={classes.userInfo}>
