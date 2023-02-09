@@ -248,7 +248,7 @@ const CreateRoute = () => {
                   name="endLongtitude"
                   id="endLongtitude"
                   required
-                  value={startingPoint?.lng}
+                  value={endingPoint?.lng}
                   onChange={handleChange}
                   className={"mb-3"}
                   placeholder="Longtitude"
@@ -258,7 +258,7 @@ const CreateRoute = () => {
                   id="endLattitude"
                   name="endLattitude"
                   required
-                  value={startingPoint?.lat}
+                  value={endingPoint?.lat}
                   onChange={handleChange}
                   className={"mb-3"}
                   placeholder="Lattitude"
