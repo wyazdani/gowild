@@ -185,16 +185,19 @@ const ViewProfilePopup = (props) => {
                                         </Col>
                                         <Col md={12} className={"mb-3"}>
                                             <Form.Label className={"text-orange mb-0"}>Date of Birth</Form.Label>
-                                            <Form.Control
+                                       {
+                                        (props.editItem.dateOfBirth)? <Form.Control
                                                disabled
                                                 className={"bottom-border"}
                                                 type="date"
                                                 placeholder="00/00/0000"
                                                 name="dateOfBirth"
-                                                value={(props.editItem.dateOfBirth)? props.editItem.dateOfBirth : <p> 02/08/2002 </p>}
+                                                value={props.editItem.dateOfBirth}
                                                 onChange={handleChange}
                                                 isValid={touched.birthDate && !errors.birthDate}
-                                            />
+                                            /> : <p className="mt-2"> 02/08/2002 </p>
+                                       }
+                                       
                                         </Col>
                                     </Row>
                                 </div>

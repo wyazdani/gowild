@@ -34,7 +34,7 @@ const AllTabData = (props) => {
 
     const [modalShow, setModalShow] = useState(false);
     const [modalShowView, setModalShowView] = useState(false);
-    const [search, setSearch] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
     const [itemsPerPage, setItemsPerPage] = useState(10);
     // const itemsPerPage = 3;
 
@@ -75,6 +75,38 @@ const AllTabData = (props) => {
     setSelectedItems([]);
     setIsChecked(!isChecked);
   };
+
+
+//   const handleSearch = (event) => {
+//     setSearchTerm(event.target.value);
+//     setCurrentItems(
+//       content.filter(item => item.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//             item.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//             item.email.toLowerCase().includes(searchTerm.toLowerCase()))
+//     );
+//   };
+
+//   const handleSearch = (event) => {
+//     setSearchTerm(event.target.value);
+//     setCurrentItems(
+//         content.filter(
+//         (content) =>
+//           (content.firstName.trim() + " " + content.lastName.trim()).toLowerCase().includes(event.target.value.toLowerCase().trim())
+//       )
+//     );
+//   };
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    setCurrentItems(
+        content.filter(
+        (content) =>
+          (content.firstName.trim() + " " + content.lastName.trim()).toLowerCase().includes(event.target.value.toLowerCase().trim()) ||
+          content.email.toLowerCase().includes(event.target.value.toLowerCase().trim())
+      )
+    );
+  };
+  
     
 
     const submitEventForm = async (id) => {
@@ -93,12 +125,14 @@ const AllTabData = (props) => {
 
     };
 
-
-    // useEffect(() => {
-    //     submitEventForm();
-    // }, [])
-    
-    // the issue is when i search firstName by user  but this name is 3rd rows per page i cannot find how can i solv and search firstname any rows per page 
+    // const filteredData = content.filter(item => {
+    //     return (
+    //       item.firstName.toLowerCase().includes(search.toLowerCase()) ||
+    //       item.lastName.toLowerCase().includes(search.toLowerCase()) ||
+    //       item.email.toLowerCase().includes(search.toLowerCase())
+    //     );
+    //   });
+ 
     return (
         <>
             <div className={classes.tableFilter}>
@@ -111,7 +145,7 @@ const AllTabData = (props) => {
                                     Filter
                                 </Button>
                                 <Form.Group className={classes.searchForm}>
-                                    <Form.Control type="search" placeholder="Search Users by Name, Email or Date" onChange={(e) => setSearch(e.target.value)} />
+                                    <Form.Control type="search" placeholder="Search Users by Name, Email or Date" value={searchTerm} onChange={handleSearch}  />
                                 </Form.Group>
                             </div>
                         </Col>
@@ -144,10 +178,7 @@ const AllTabData = (props) => {
                 <tbody>
                     {
 
-                        currentItems.filter((row) =>
-                            !search.length || row.firstName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
-                            row.lastName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
-                            row.email.toString().toLowerCase().includes(search.toString().toLowerCase())).map((content) => (
+                        currentItems.map((content) => (
                                 <tr>
                                 <td><Form.Check type="checkbox" value={content}
                                     onChange={() => handleCheckboxChange(content)}
@@ -239,13 +270,16 @@ const AllTabData = (props) => {
                     rowsPerPage={itemsPerPage}
                     previousLabel="<"
                     renderOnZeroPageCount={null}
+                    breakClassName={"break-me"}
                     containerClassName="pagination"
+                    subContainerClassName={"pages pagination"}
                     pageLinkClassName="page-num"
                     previousLinkClassName="page-num"
                     nextLinkClassName="page-num"
                     activeLinkClassName="active"
 
                 />
+  
             </div>
             <EditSubAdmin
                 subAdminAllData={props.subAdminAllData}

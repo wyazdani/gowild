@@ -73,7 +73,7 @@ const AllTabData = (props) => {
                         theme: "dark",
                         });
                  }
-                //   props.userRouteAllData()
+                  props.userRouteAllData()
          //  setAddAdmin(props.onHide);
                 //  props.content()
                 console.log(res);
@@ -210,7 +210,7 @@ const AllTabData = (props) => {
                             </td>
                             <td>
                                 {content.treasure_chest.status === "pending"
-                                    ?  <span class={`${classes.tag} ${classes.inactive}`}>InActive</span> 
+                                    ?  <span class={`${classes.tag} ${classes.inactive}`}>Inactive</span> 
                                     :  <span class={`${classes.tag} ${classes.active}`}>Active</span>
                                 }
                             </td>

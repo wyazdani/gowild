@@ -91,7 +91,8 @@ const ViewRoute = (props) => {
             <PageTitle title="Wall Street" />
             <section className={"section"}>
                 <div className={classes.mapBox}>
-                    <img src={mapImg} alt={"map-img"} />
+                    {/* <img src={mapImg} alt={"map-img"} /> */}
+                    {(user.picture) ? <img src={"https://api.gowild.appscorridor.com" + user.picture} width="100%" alt={"img"} /> : <img src={userImg} width="100%" alt={"img"} />}
                 </div>
                 <ul className={classes.mapDetail}>
                     <li>
@@ -110,7 +111,7 @@ const ViewRoute = (props) => {
                     <li>
                         <div className={classes.userInfo}>
                             <div className={classes.userImg}>
-                                {(user.picture) ? <img src={"https://api.gowild.appscorridor.com" + user.picture} width="100%" alt={"img"} /> : <img src={userImg} width="100%" alt={"img"} />}
+                                {(user.userPicture) ? <img src={"https://api.gowild.appscorridor.com" + user.userPicture} width="100%" alt={"img"} /> : <img src={userImg} width="100%" alt={"img"} />}
                             </div>
                             <h6>{user.firstName +" "+ user.lastName}</h6>
                         </div>

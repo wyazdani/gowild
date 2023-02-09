@@ -187,7 +187,7 @@ const PendingTabData = (props) => {
                                 </td>
                                 <td>
                                     {content.treasure_chest.status === "pending"
-                                        ? <span class={`${classes.tag} ${classes.inactive}`}>InActive</span>
+                                        ? <span class={`${classes.tag} ${classes.inactive}`}>Inctive</span>
                                         : <span class={`${classes.tag} ${classes.active}`}>Active</span>
                                     }
                                 </td>

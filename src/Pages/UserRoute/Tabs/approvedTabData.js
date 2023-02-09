@@ -11,6 +11,7 @@ import ReactPaginate from 'react-paginate';
 import profile from "Images/Ellipse 768.png";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link , useNavigate} from 'react-router-dom';
 
 const AllTabData = (props) => {
 
@@ -204,10 +205,13 @@ const AllTabData = (props) => {
                                                     Approve
                                                 </Dropdown.Item>
                                             }
-                                            <Dropdown.Item href="users-route/view-route">
-                                                <i className={"fal fa-eye bg-dark text-white"}></i>
-                                                View
-                                            </Dropdown.Item>
+                                            <Dropdown.Item>
+                                                    <Link to={`/users-route/view-route/${content.id}`} style={{ textDecoration: 'none', color: 'black' }}>
+                                                        <i className={"fal fa-eye bg-dark text-white"}></i>
+                                                        View
+                                                    </Link>
+
+                                                </Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 </td>

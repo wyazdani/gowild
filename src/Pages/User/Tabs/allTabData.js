@@ -130,10 +130,12 @@ const AllTabData = (props) => {
                 </thead>
                 <tbody>
                     {
-                        currentItems.filter((row) =>
-                            !search.length || row.firstName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
-                            row.lastName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
-                            row.email.toString().toLowerCase().includes(search.toString().toLowerCase())).map((content) => (
+                        currentItems.filter((row) => {
+                            let searchTerm = search.toString().toLowerCase().trim();
+                            let fullName = row.firstName.toString().toLowerCase() + " " + row.lastName.toString().toLowerCase();
+                            return !searchTerm.length || fullName.includes(searchTerm) ||
+                                row.email.toString().toLowerCase().includes(searchTerm);
+                        }).map((content) => (
                                 <tr>
                                     <td><Form.Check type="checkbox" value={content}
                                         onChange={() => handleCheckboxChange(content)}
