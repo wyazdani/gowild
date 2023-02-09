@@ -58,34 +58,35 @@ const CreateRoute = () => {
   const handleChange = (event) => {
     let name = event.target.name;
     const value = event.target.value;
-
+    console.log(name);
     if (name == "startLongtitude") {
       setStartingPoint({ ...startingPoint, lng: parseFloat(value) });
-    }
-
-    if (name == "startLattitude") {
+      console.log(name + "1");
+    } else if (name == "startLattitude") {
       setStartingPoint({ ...startingPoint, lat: parseFloat(value) });
-    }
-
-    if (name == "endLongtitude") {
+    } else if (name == "endLongtitude") {
       setEndingPoint({ ...endingPoint, lng: parseFloat(value) });
-    }
-
-    if (name == "endLattitude") {
+    } else if (name == "endLattitude") {
       setEndingPoint({ ...endingPoint, lat: parseFloat(value) });
+    } else {
+      // const value = event.target.value.replace(/\D/g, "");
+      // const value = event.target.value.replace(/(0|)\D/g, "");
+      setFormData((prevalue) => {
+        return {
+          ...prevalue, // Spread Operator
+          [name]: value,
+        };
+      });
     }
-    // const value = event.target.value.replace(/\D/g, "");
-    // const value = event.target.value.replace(/(0|)\D/g, "");
-    setFormData((prevalue) => {
-      return {
-        ...prevalue, // Spread Operator
-        [name]: value,
-      };
-    });
   };
 
   const submitForm = async (event) => {
     event.preventDefault();
+    formData.startLattitude = startingPoint.lat;
+    formData.startLongtitude = startingPoint.lng;
+    formData.endLongtitude = endingPoint.lng;
+    formData.endLattitude = endingPoint.lat;
+    console.log(`DUCK`, "startingPoint", JSON.stringify(startingPoint));
     console.log(`DUCK`, "formData", JSON.stringify(formData));
     console.log(`DUCK`, "historicalData", JSON.stringify(historicalData));
     const mergedState = Object.assign({}, formData, {
