@@ -12,24 +12,26 @@ import {
   YAxis,
   Bar,
   Tooltip,
+  LineChart,
+  Line,
   Legend
 } from "recharts";
 import moment from 'moment';
 
-const data = [
-  { name: 'Jan', sales: 4000 },
-  { name: 'Feb', sales: 3000 },
-  { name: 'Mar', sales: 2000 },
-  { name: 'Apr', sales: 2780 },
-  { name: 'May', sales: 1890 },
-  { name: 'Jun', sales: 2390 },
-  { name: 'Jul', sales: 3490 },
-  { name: 'Aug', sales: 2000 },
-  { name: 'Sep', sales: 2780 },
-  { name: 'Oct', sales: 1890 },
-  { name: 'Nov', sales: 2390 },
-  { name: 'Dec', sales: 3490 },
-];
+// const data = [
+//   { name: 'Jan', sales: 4000 },
+//   { name: 'Feb', sales: 3000 },
+//   { name: 'Mar', sales: 2000 },
+//   { name: 'Apr', sales: 2780 },
+//   { name: 'May', sales: 1890 },
+//   { name: 'Jun', sales: 2390 },
+//   { name: 'Jul', sales: 3490 },
+//   { name: 'Aug', sales: 2000 },
+//   { name: 'Sep', sales: 2780 },
+//   { name: 'Oct', sales: 1890 },
+//   { name: 'Nov', sales: 2390 },
+//   { name: 'Dec', sales: 3490 },
+// ];
 
 
 const AllUserChart = (props) => {
@@ -83,9 +85,10 @@ const AllUserChart = (props) => {
             <XAxis dataKey="date"   />
             <YAxis />
             <Tooltip />
-            <Legend />
+            {/* <Legend /> */}
             <Bar type="monotone" dataKey="firstName" barSize={20} fill="#FF7851" />
             <Bar type="monotone" dataKey="email" barSize={20} fill="#FF7851" />
+            
             
             {/* <Bar type="monotone" dataKey="name"  fill="#FF7851" /> */}
           </BarChart>

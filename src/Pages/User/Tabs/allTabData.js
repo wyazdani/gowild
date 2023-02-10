@@ -107,11 +107,11 @@ const AllTabData = (props) => {
                                 </Form.Group>
                             </div>
                         </Col>
-                        <Col md={4} className={"d-md-flex justify-content-end"}>
+                        {/* <Col md={4} className={"d-md-flex justify-content-end"}>
                             <Button onClick={() => setModalShow(true)}>
                                 Add New
                             </Button>
-                        </Col>
+                        </Col> */}
                     </Row>
                 </Form>
             </div>
@@ -130,10 +130,12 @@ const AllTabData = (props) => {
                 </thead>
                 <tbody>
                     {
-                        currentItems.filter((row) =>
-                            !search.length || row.firstName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
-                            row.lastName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
-                            row.email.toString().toLowerCase().includes(search.toString().toLowerCase())).map((content) => (
+                        currentItems.filter((row) => {
+                            let searchTerm = search.toString().toLowerCase().trim();
+                            let fullName = row.firstName.toString().toLowerCase() + " " + row.lastName.toString().toLowerCase();
+                            return !searchTerm.length || fullName.includes(searchTerm) ||
+                                row.email.toString().toLowerCase().includes(searchTerm);
+                        }).map((content) => (
                                 <tr>
                                     <td><Form.Check type="checkbox" value={content}
                                         onChange={() => handleCheckboxChange(content)}
@@ -146,7 +148,7 @@ const AllTabData = (props) => {
                                             </div>
                                             <div className={classes.description}>
                                                 <h4 className={"font-16 mb-0"}>{content.firstName + " " + content.lastName}</h4>
-                                                <div className={"text-muted"}>{content.email}</div>
+                                                <div className={"text-muted text-lowercase"}>{content.email}</div>
                                             </div>
                                         </div>
                                     </td>

@@ -12,7 +12,11 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const TreasureHuntEWaiver = (props) => {
 
+    const [content, setContent] = useState([]);
+    console.log("🚀 ~ file: index.js:16 ~ TreasureHuntEWaiver ~ content", content)
     const [formData, setFormData] = useState({});
+    const [faqData, setFaqData] = useState({});
+    const [termsData, setTermsData] = useState({});
     const [isLoader, setIsLoader] = useState(false);
 
     const handleChange = (event) => {
@@ -27,20 +31,35 @@ const TreasureHuntEWaiver = (props) => {
             }
         })
     }
+   
 
 
     const guidlinessWaiverData = async () => {
-        await AuthService.getMethod(`${ENDPOINT.admin_guidelines.huntEWaiver_listing}`, true)
-            .then((res) => {
-                setFormData(res.data.data)
-                setIsLoader(true);
-                // console.log(res.data.data)
-            })
-            .catch((err) => {
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-            });
-    };
+        try {
+            // First API call
+         
+            const res = await AuthService.getMethod(`${ENDPOINT.admin_guidelines.huntEWaiver_listing}`, true);
+            setFormData(res.data.data)
+            // console.log("res", res.data.data);
+            // 2nd API call
+            const res2 = await AuthService.getMethod(`${ENDPOINT.admin_guidelines.faq_listing}`, true);
+            setFaqData(res2.data.data)
+            // console.log("res2", res2.data.data);
 
+            // // 3rd API call
+            const res3 = await AuthService.getMethod(`${ENDPOINT.admin_guidelines.termsAndConditions_listing}`, true);
+            setTermsData(res3.data.data)
+            setIsLoader(true);
+            // // 4th API call
+            const res4 = await AuthService.getMethod(`${ENDPOINT.treasure_chests.listing}`, true);
+            setContent(res4.data.data)
+            setIsLoader(true);
+            // console.log("res4", res3.data.data);
+
+        } catch (err) {
+            swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+        }
+    };
 
     const submitEventForm = async (event) => {
         event.preventDefault();
@@ -83,6 +102,33 @@ const TreasureHuntEWaiver = (props) => {
         return [month, day, year].join('/');
     }
 
+    const date =  formData.updatedDate ? new Date(formData.updatedDate) : null;
+    
+    const options = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    };
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+
+
+    // const treasureChestsListData = async (data) => {
+    //     await AuthService.getMethod(ENDPOINT.treasure_chests.listing, data, true)
+    //         .then((res) => {
+    //             setContent(res.data.data);
+    //             setIsLoader(true);
+    //             console.log(res.data.data);
+    //         })
+    //         .catch((err) => {
+    //             swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+    //         });
+    // };
+
+
+    // useEffect(() => {
+    //     treasureChestsListData();
+
+    // }, []);
 
     if (!isLoader) {
         return (
@@ -101,13 +147,19 @@ const TreasureHuntEWaiver = (props) => {
             <Row>
                 <Col md={8}>
                         <div className={"d-flex justify-content-between align-items-center pb-3"}>
-                            <h5>E - Waiver</h5>
+                            <h5><b>E - Waiver</b></h5>
                             <Form.Select className={"form-select"} aria-label="Default select example" style={{ maxWidth: "150px" }}>
                                 <option>Select Events</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </Form.Select>
+                                {
+                                    content.map((content) => {
+                                        return (
+                                            <>
+                                                <option value="1">{content.title}</option>
+                                            </>
+                                        )
+                                    })
+                                }
+                      </Form.Select>
                         </div>
                     <div className={classes.editSection}>
                         <Form >
@@ -127,13 +179,13 @@ const TreasureHuntEWaiver = (props) => {
                 </Col>
                 <Col md={4}>
                     <div className={classes.logBox}>
-                        <h4>  {(new Date()).toLocaleDateString('en-US', DATE_OPTIONS)} </h4>
+                    <h4>  {formattedDate} </h4>
                         <div className={"text-muted font-12"}>Update Logs</div>
                         <ul className={classes.logList}>
                             <li>
                                 <div className={classes.box}>
                                     <time className={"d-block"}>
-                                        {(formatDate(formData.updatedDate))}
+                                        {(formatDate(termsData.updatedDate))}
                                     </time>
                                     <div>Term &amp; Conditions - Updated!</div>
                                 </div>
@@ -141,7 +193,7 @@ const TreasureHuntEWaiver = (props) => {
                             <li>
                                 <div className={classes.box}>
                                     <time className="d-block">
-                                        {(formatDate(formData.createdDate))}
+                                        {(formatDate(faqData.updatedDate))}
                                     </time>
                                     <div>FAQ</div>
                                 </div>

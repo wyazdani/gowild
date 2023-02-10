@@ -86,6 +86,7 @@ export const ENDPOINT = {
     },
 
     admin_guidelines :{
+        listing : `${API_URL}/admin-guidelines`,
         terms_conditions : `${API_URL}/admin-guidelines`,
         eWaiver_listing : `${API_URL}/admin-guidelines/eWaiver`,
         faq_listing : `${API_URL}/admin-guidelines/faq`,
@@ -105,6 +106,7 @@ export const ENDPOINT = {
         update_picture : `${API_URL}/admin/treasure-chest/`,
         listing_hunt : `${API_URL}/admin/treasure-chest/user-hunts`,
         approve_reject : `${API_URL}/admin/treasure-chest/hunt/status/`,
+        csv_file : `${API_URL}/admin/treasure-chest/csv`,
         delete: {
             url:`${API_URL}/admin/treasure-chest/`,
             id:null

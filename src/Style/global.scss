@@ -77,6 +77,7 @@ nav {
       &.active {
         color: #25213B;
         border-color: #FF7851;
+        font-weight: bold;
       }
     }
   }
@@ -442,10 +443,68 @@ table {
 
 }
 
+// viewpopup treasurehunt
+.backGroundColor{
 
-// .fileLoad .createList_img{
-//   opacity: 0 !important;
-// }
-// .DashboardCards_card__1wnU3 .progress{
-//   background-color: red !important;
-// }
+  .form-control,
+  select,
+  .form-select,
+  input[type='text'],
+  input[type='tel'],
+  input[type='email'],
+  input[type='search'],
+  input[type='password'],
+  input[type='gender'],
+  input[type='date'],
+  input[type='file'],
+  textarea.form-control,
+  textarea {
+    font-weight: 400;
+    font-size: 17px;
+    color: #242426;
+    background-color: #fff;
+  }
+}
+
+
+.allTabData {
+  .dropdown-menu {
+    position: absolute;
+    width: 0px !important;
+    inset: 0px 0px auto auto !important;
+    transform: translate(-30px, 4px) !important;
+    border: none;
+    background-color: #F3F3F3 !important;
+  }
+
+
+  .imgSpan {
+    position: relative;
+    display: block;
+    padding: 11px;
+    border-radius: 16px;
+    min-width: 100px;
+    color: white;
+    display: flex;
+    max-width: 93px;
+    font-weight: 500;
+    font-size: 14px;
+    // background-color: red;
+    justify-content: center
+  }
+.dropdown .dropdown-item {
+    position: relative;
+    display: block;
+    padding: 6px 15px 0px 29px;
+    border-radius: 16px;
+    width: 102px;
+    color: white;
+    font-size: 14px;
+    &:hover {
+      background: #FFE4DC;
+      background-color: transparent;
+      color: #000;
+  }
+
+}
+}

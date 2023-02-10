@@ -20,13 +20,21 @@ const AddSubAdmin = (props) => {
     const schema = object().shape({
         firstName: string().required(),
         lastName: string().required(),
-        email: string().required(),
+        email: string().lowercase().required(),
+        
         userName: string().required(),
         addressOne: string().required(),
        // phoneNo: string().required(),
         birthDate: string().required(),
         password: string().required(),
     });
+
+    // function validateEmail(email) {
+    //     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    //     return re.test(String(email).toLowerCase());
+    //   }
+
+            
 
     const handleSubmit = async (data) => {
         return await AuthService.postMethod(ENDPOINT.sub_admin.add_user, true, data)
@@ -107,8 +115,12 @@ const AddSubAdmin = (props) => {
                                                         value={values.firstName}
                                                         onChange={handleChange}
                                                         placeholder="Enter First Name"
-                                                        isValid={touched.firstName && !errors.firstName}
+                                                        // isValid={touched.firstName && !errors.firstName}
+                                                        isInvalid={!!errors.firstName && touched.firstName}
                                                     />
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {errors.firstName}
+                                                    </Form.Control.Feedback>
                                                 </Col>
                                                 <Col md={12} className={"mb-3"}>
                                                     <Form.Label className={"text-orange mb-0"}>Last Name</Form.Label>
@@ -118,8 +130,12 @@ const AddSubAdmin = (props) => {
                                                         value={values.lastName}
                                                         onChange={handleChange}
                                                         placeholder="Enter Last name"
-                                                        isValid={touched.lastName && !errors.lastName}
+                                                        // isValid={touched.lastName && !errors.lastName}
+                                                        isInvalid={!!errors.lastName && touched.lastName}
                                                     />
+                                                       <Form.Control.Feedback type="invalid">
+                                                        {errors.lastName}
+                                                    </Form.Control.Feedback>
                                                 </Col>
                                                 <Col md={6} className={"mb-3"}>
                                                     <Form.Label className={"text-orange mb-0"}>Date of Birth</Form.Label>
@@ -129,22 +145,15 @@ const AddSubAdmin = (props) => {
                                                         value={values.birthDate}
                                                         onChange={handleChange}
                                                         placeholder="00/00/0000"
-                                                        isValid={touched.birthDate && !errors.birthDate}
+                                                        // isValid={touched.birthDate && !errors.birthDate}
+                                                        isInvalid={!!errors.birthDate && touched.birthDate}
 
                                                     />
+                                                     <Form.Control.Feedback type="invalid">
+                                                        {errors.birthDate}
+                                                    </Form.Control.Feedback>
                                                 </Col>
-                                               {/* <Col md={6} className={"mb-3"}>
-                                                    <Form.Label className={"text-orange mb-0"}>phoneNo</Form.Label>
-                                                    <Form.Control
-                                                        type="tel"
-                                                        name="phoneNo"
-                                                        value={values.phoneNo}
-                                                        onChange={handleChange}
-                                                        placeholder="+ 123 456 789"
-                                                        isValid={touched.phoneNo && !errors.phoneNo}
-
-                                                    />
-                                                </Col>*/}
+                                          
                                                 <Col md={6} className={"mb-3"}>
                                                     <Form.Label className={"text-orange mb-0"}>Location</Form.Label>
                                                     <Form.Control
@@ -153,9 +162,12 @@ const AddSubAdmin = (props) => {
                                                         value={values.addressOne}
                                                         onChange={handleChange}
                                                         placeholder="Address 1"
-                                                        isValid={touched.addressOne && !errors.addressOne}
-
+                                                        // isValid={touched.addressOne && !errors.addressOne}
+                                                        isInvalid={!!errors.addressOne && touched.addressOne}
                                                     />
+                                                     <Form.Control.Feedback type="invalid">
+                                                        {errors.addressOne}
+                                                    </Form.Control.Feedback>
                                                 </Col>
                                             </Row>
                                         </div>
@@ -169,12 +181,16 @@ const AddSubAdmin = (props) => {
                                                     <Form.Control
                                                         type="email"
                                                         name="email"
+                                                        required
                                                         value={values.email}
                                                         onChange={handleChange}
                                                         placeholder="Enter Email"
-                                                        isValid={touched.email && !errors.email}
-
+                                                        // isValid={touched.email && !errors.email}
+                                                        isInvalid={!!errors.email && touched.email}
                                                     />
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {errors.email}
+                                                    </Form.Control.Feedback>
                                                 </Col>
                                                 <Col md={12} className={"mb-3"}>
                                                     <Form.Label className={"text-orange mb-0"}>Username</Form.Label>

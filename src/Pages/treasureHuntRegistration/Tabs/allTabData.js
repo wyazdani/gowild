@@ -73,7 +73,7 @@ const AllTabData = (props) => {
                         theme: "dark",
                         });
                  }
-                //   props.userRouteAllData()
+                  props.userRouteAllData()
          //  setAddAdmin(props.onHide);
                 //  props.content()
                 console.log(res);
@@ -114,6 +114,35 @@ const AllTabData = (props) => {
 
     };
 
+     // download csv file
+     const handleDownload = async () => {
+        try {
+            const res = await AuthService.getMethod(`${ENDPOINT.treasure_chests.csv_file}`, true);
+            const blob = new Blob([res.data], { type: "text/csv" });
+            const fileUrl = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = fileUrl;
+            a.download = "data.csv";
+            a.click();
+            console.log("file: index.js:31 ~ handleDownload ~ res", res)
+            if (res.status === 200) {
+                toast.success('csv file downloaded successfully!', {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                });
+            }
+
+        } catch (err) {
+            swal("Error", `${AuthService.errorMessageHandlerDate(err)}`, "error");
+        }
+    };
+
       // chekbox select all
   const handleCheckboxChange = (content) => {
     if (selectedItems.includes(content)) {
@@ -150,7 +179,7 @@ const AllTabData = (props) => {
                             </div>
                         </Col>
                         <Col md={5} className={"d-md-flex justify-content-end"}>
-                            <Button variant={'transparent text-dark'}>
+                            <Button variant={'transparent text-dark'} onClick={handleDownload}>
                                 <span className={'d-inline-block mx-2'}>
                                     <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M15.2344 5.27344L11.1328 4.10156L9.96094 0H1.17188C0.524648 0 0 0.524648 0 1.17188V18.8281C0 19.4754 0.524648 20 1.17188 20H14.0625C14.7097 20 15.2344 19.4754 15.2344 18.8281V5.27344Z" fill="#59C36A"/>
@@ -169,7 +198,6 @@ const AllTabData = (props) => {
                     </Row>
                 </Form>
             </div>
-
 
             <Table>
                 <thead>
@@ -198,11 +226,11 @@ const AllTabData = (props) => {
                             <td>
                                 <div className={"d-flex"}>
                                     <div className={classes.userImg}>
-                                    {(content.picture)? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
+                                    {(content.user.picture)? <img src={"https://api.gowild.appscorridor.com" + content.user.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
                                     </div>
                                     <div className={classes.description}>
                                         <h4 className={"font-16 mb-0"}>{content.user.firstName +" "+ content.user.lastName}</h4>
-                                        <div className={"text-muted"}>{content.user.email}</div>
+                                        <div className={"text-muted text-lowercase"}>{content.user.email}</div>
                                     </div>
                                 </div>
                             </td>
@@ -211,7 +239,7 @@ const AllTabData = (props) => {
                             </td>
                             <td>
                                 {content.treasure_chest.status === "pending"
-                                    ?  <span class={`${classes.tag} ${classes.inactive}`}>InActive</span> 
+                                    ?  <span class={`${classes.tag} ${classes.inactive}`}>Inactive</span> 
                                     :  <span class={`${classes.tag} ${classes.active}`}>Active</span>
                                 }
                             </td>

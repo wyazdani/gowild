@@ -31,9 +31,10 @@ const BannedUserChart = (props) => {
             <XAxis dataKey="date"   />
             <YAxis />
             <Tooltip />
-            <Legend />
-            <Bar type="monotone" dataKey="firstName" barSize={20} fill="#FF7851" />
-            <Bar type="monotone" dataKey="email" barSize={20} fill="#FF7851" />
+            {/* <Legend /> */}
+            <Bar type="monotone" dataKey="firstName" barSize={30} fill="#FF7851" />
+            <Bar type="monotone" dataKey="email" barSize={30} fill="#FF7851" />
+           
             
             {/* <Bar type="monotone" dataKey="name"  fill="#FF7851" /> */}
           </BarChart>

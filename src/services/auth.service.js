@@ -248,6 +248,16 @@ const errorMessageHandlerDate = (data) => {
   })
   return error[0];
 }
+// this error is showing by wrong email or password in login page
+const errorMessageHandlerLogin = (data) => {
+  if (!data || !data.response || !data.response.data || !data.response.data.errors) {
+    return 'Email Address and/or Password is Incorrect';
+  }
+  let error = data.response.data.errors.map(function (value) {
+    return Object.values(value)[0];
+  })
+  return error[0];
+}
 
 
 
@@ -262,6 +272,7 @@ export default {
     logoutNdelete,
     errorMessageHandler,
     errorMessageHandlerDate,
+    errorMessageHandlerLogin,
     dashboardHomeData,
     subAdminAllDataRes,
     subAdminDelete,

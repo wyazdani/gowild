@@ -16,9 +16,9 @@ const EditSubAmdin = (props) => {
     const schema = object().shape({
         firstName: string().required(),
         lastName: string().required(),
-        // email: string().required(),
+        email: string().required(),
         userName: string().required(),
-        addressTwo: string().required(),
+        location: string().required(),
         //phoneNo: string().required(),
         birthDate: string().required(),
         password:  string().required(),
@@ -72,9 +72,9 @@ const EditSubAmdin = (props) => {
                         initialValues={{
                             firstName: props.editItem.firstName,
                             lastName: props.editItem.lastName,
-                            // email: props.editItem.email,
+                            email: props.editItem.email,
                             userName: props.editItem.username,
-                            addressTwo: props.editItem.addressTwo,
+                            location: props.editItem.location,
                             birthDate: props.editItem.dateOfBirth,
                             //phoneNo: props.editItem.phoneNo,
                             //password: props.editItem.password
@@ -144,11 +144,11 @@ const EditSubAmdin = (props) => {
                                                     <Form.Label className={"text-orange mb-0"}>Location</Form.Label>
                                                     <Form.Control
                                                         type="text"
-                                                        name="addressTwo"
-                                                        value={values.addressTwo}
+                                                        name="location"
+                                                        value={values.location}
                                                         onChange={handleChange}
                                                         placeholder="Address"
-                                                        isValid={touched.addressTwo && !errors.addressTwo}
+                                                        isValid={touched.location && !errors.location}
 
                                                     />
                                                 </Col>
@@ -159,7 +159,7 @@ const EditSubAmdin = (props) => {
                                         <div className={classes.box}>
                                             <h3 className={"font-20 text-orange mb-3"}>Account Information</h3>
                                             <Row>
-                                                {/* <Col md={12} className={"mb-3"}>
+                                                <Col md={12} className={"mb-3"}>
                                                     <Form.Label className={"text-orange mb-0"}>Email</Form.Label>
                                                     <Form.Control
                                                         type="email"
@@ -167,11 +167,11 @@ const EditSubAmdin = (props) => {
                                                         value={values.email}
                                                         onChange={handleChange}
                                                         placeholder="Enter Email"
-                                                        // disabled
+                                                        disabled
                                                         isValid={touched.email && !errors.email}
 
                                                     />
-                                                </Col> */}
+                                                </Col>
                                                 <Col md={12} className={"mb-3"}>
                                                     <Form.Label className={"text-orange mb-0"}>Username</Form.Label>
                                                     <Form.Control

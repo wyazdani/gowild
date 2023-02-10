@@ -91,7 +91,13 @@ const Faqs = () => {
         );
     }
 
-    const DATE_OPTIONS = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+    const date = formData.updatedDate ? new Date(formData.updatedDate) : null;
+    const options = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    };
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
 
     return (
         <>
@@ -115,7 +121,7 @@ const Faqs = () => {
                 </Col>
                 <Col md={4}>
                     <div className={classes.logBox}>
-                        <h4>  {(new Date()).toLocaleDateString('en-US', DATE_OPTIONS)} </h4>
+                    <h4>  {formattedDate} </h4>
                         <div className={"text-muted font-12"}>Update Logs</div>
                         <ul className={classes.logList}>
                             <li>
@@ -129,7 +135,7 @@ const Faqs = () => {
                             <li>
                                 <div className={classes.box}>
                                     <time className="d-block">
-                                        {(formatDate(formData.createdDate))}
+                                        {(formatDate(formData.updatedDate))}
                                     </time>
                                     <div>FAQ</div>
                                 </div>
