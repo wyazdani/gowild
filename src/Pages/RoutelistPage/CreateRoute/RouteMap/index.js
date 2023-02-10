@@ -77,6 +77,7 @@ export default function RouteMap({
 
       directionsService.route(request, (result, status) => {
         console.log(status);
+        console.log(result);
         if (status === "OK") {
           directionsRenderer.setDirections(result);
         }
