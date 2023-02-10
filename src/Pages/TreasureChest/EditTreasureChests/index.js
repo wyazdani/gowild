@@ -161,6 +161,10 @@ const EditTreasure = (props) => {
                 "updatedDate": props.editItem.updatedDate,
                 title: props.editItem.title,
                 description: props.editItem.description,
+                "location": {
+                    "latitude": props.editItem.location.latitude,
+                    "longitude": props.editItem.location.longitude,
+                },
                 latitude: props.editItem.location.latitude,
                 longitude: props.editItem.location.longitude,
                 eventDate: props.editItem.eventDate,
@@ -188,14 +192,14 @@ const EditTreasure = (props) => {
                             <Col md={4}>
 
                                 <Form.Group>
-                                    <Form.Label>Title</Form.Label>
+                                    <Form.Label><b>Title</b></Form.Label>
                                     <Form.Control type="text"
                                         name="title"
                                         value={values.title}
                                         onChange={handleChange}
                                         isValid={touched.title && !errors.title}
                                         className={"mb-3"} placeholder="First On The List" />
-                                    <Form.Label>Description</Form.Label>
+                                    <Form.Label><b>Description</b></Form.Label>
                                     <Form.Control as="textarea" type="text"
                                         name="description"
 
@@ -203,7 +207,7 @@ const EditTreasure = (props) => {
                                         onChange={handleChange}
                                         isValid={touched.description && !errors.description}
                                         className={"mb-3"} placeholder="Write something here ..." />
-                                    <Form.Label>Treasure Location</Form.Label>
+                                    <Form.Label><b>Treasure Location</b></Form.Label>
                                     <Form.Control type="text"
                                         name="latitude"
 

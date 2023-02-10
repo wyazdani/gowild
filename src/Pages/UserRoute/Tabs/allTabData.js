@@ -184,7 +184,7 @@ const AllTabData = (props) => {
                                         </div>
                                         <div className={classes.description}>
                                             <h4 className={"font-16 mb-0"}>{content.user.firstName + " " + content.user.lastName}</h4>
-                                            <div className={"text-muted text-lowercase"}>{content.user.email}</div>
+                                            <div className={"text-muted"}>{content.user.email}</div>
                                         </div>
                                     </div>
                                 </td>
@@ -242,9 +242,9 @@ const AllTabData = (props) => {
             <div className="result_pagination">
                 <span> Rows per page: &nbsp; </span>
                 <select onChange={handleRowsPerPageChange} value={itemsPerPage}>
-                    <option>{currentItems.length}</option>
+                    {/* <option>{currentItems.length}</option> */}
                     {/* {currentItems.length === 4 ? null  :<option value={4}>4</option>} */}
-                    <option value={5}>5</option>
+                    <option value={10}>10</option>
                     <option value={25}>25</option>
                     <option value={50}>50</option>
                     <option value={75}>75</option>
