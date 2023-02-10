@@ -8,6 +8,7 @@ export default function RouteMap({
   travelMode,
   handleAddRow,
   updateStartEndPosition,
+  preRenderMarkers = false,
 }) {
   const [markers, setMarkers] = useState([]);
   const { ref, map, google } = useGoogleMaps(
@@ -17,6 +18,35 @@ export default function RouteMap({
       center: startingPoint,
     }
   );
+
+  // useEffect(() => {
+  //   if (preRenderMarkers) {
+  //     const directionsService = new google.maps.DirectionsService();
+  //     const directionsRenderer = new google.maps.DirectionsRenderer();
+  //     directionsRenderer.setMap(map);
+
+  //     const origin = startingPoint;
+  //     const destination = endingPoint;
+
+  //     console.log(origin);
+  //     console.log(destination);
+  //     console.log(travelMode);
+
+  //     const request = {
+  //       origin: origin,
+  //       destination: destination,
+  //       travelMode: travelMode,
+  //     };
+
+  //     directionsService.route(request, (result, status) => {
+  //       console.log(status);
+  //       console.log(result);
+  //       if (status === "OK") {
+  //         directionsRenderer.setDirections(result);
+  //       }
+  //     });
+  //   }
+  // }, [preRenderMarkers, google, map]);
 
   useEffect(() => {
     if (map) {
@@ -45,6 +75,33 @@ export default function RouteMap({
         });
       });
 
+      if (preRenderMarkers) {
+        const directionsService = new google.maps.DirectionsService();
+        const directionsRenderer = new google.maps.DirectionsRenderer();
+        directionsRenderer.setMap(map);
+
+        const origin = startingPoint;
+        const destination = endingPoint;
+
+        console.log(origin);
+        console.log(destination);
+        console.log(travelMode);
+
+        const request = {
+          origin: origin,
+          destination: destination,
+          travelMode: travelMode,
+        };
+
+        directionsService.route(request, (result, status) => {
+          console.log(status);
+          console.log(result);
+          if (status === "OK") {
+            directionsRenderer.setDirections(result);
+          }
+        });
+      }
+
       return () => {
         google.maps.event.removeListener(listener);
       };
@@ -54,7 +111,7 @@ export default function RouteMap({
   useEffect(() => {
     if (markers.length >= 3) {
       console.log("handleAddRow");
-      handleAddRow(markers[markers.length - 1].position);
+      if (handleAddRow) handleAddRow(markers[markers.length - 1].position);
     }
     if (map && markers.length >= 2) {
       console.log("Calculate Distance");
@@ -77,12 +134,13 @@ export default function RouteMap({
 
       directionsService.route(request, (result, status) => {
         console.log(status);
+        console.log(result);
         if (status === "OK") {
           directionsRenderer.setDirections(result);
         }
       });
 
-      updateStartEndPosition(origin, destination);
+      if (updateStartEndPosition) updateStartEndPosition(origin, destination);
     }
   }, [map, markers, travelMode]);
 
