@@ -33,14 +33,13 @@ const Messages = (props) => {
         handleChange(props)
     }, []);
 
+
     useEffect(() => {
         socket.on('msgSupport', (data)=>{
-            const test = [...currentItems, data];
-            console.log(test)
-            //setCurrentItems([...currentItems, data]);
-            console.log(data)
+            setCurrentItems([...currentItems, data.data]);
 
         })
+
         handleChange(props)
     }, [props, currentItems]);
 

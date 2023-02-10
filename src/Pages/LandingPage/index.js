@@ -56,7 +56,7 @@ const LandingPage = () => {
 
 
     useEffect(() => {
-        subAdminAllData();
+        //subAdminAllData();
     }, [])
 
   // download csv file
@@ -93,7 +93,7 @@ const LandingPage = () => {
     if (!isLoader) {
         return (
             <div className='loader'>
-                <h3>Loading...</h3>
+                <h3>Working...</h3>
             </div>
         );
     }
@@ -103,7 +103,7 @@ const LandingPage = () => {
             <PageTitle title="Home" />
 
             <section className={"section mb-5"}>
-                <DashboardCard />
+                {/*<DashboardCard />*/}
             </section>
             <section className={"section"}>
                 <div className={classes.btnRow}>
@@ -111,7 +111,7 @@ const LandingPage = () => {
                     <Form.Control type="date" placeholder="MM/DD/YYYY" value={selectedDate}
                         onChange={handleDateChange} style={{ textTransform: 'uppercase', fontWeight: 'bold' }}></Form.Control>
                 </div>
-                <Tabs
+                {/*<Tabs
                     defaultActiveKey="newuser"
                     id="uncontrolled-tab-example"
                     className="mb-3 navLinkBold"
@@ -125,9 +125,9 @@ const LandingPage = () => {
                     <Tab eventKey="banned" title="Banned">
                         <BannedUserChart bannedContent={bannedContent} />
                     </Tab>
-                </Tabs>
+                </Tabs>*/}
             </section>
- 
+
         </>
     );
 };
