@@ -15,13 +15,15 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import RouteMap from "./RouteMap";
+import axios from "axios";
 
 const CreateRoute = () => {
   const addHistoryBtnRef = useRef(null);
-
+  const navigate = useNavigate();
   const [file, setFile] = useState([]);
   const [files, setFiles] = useState([]);
   const [historicalData, setHistoricalData] = useState([]);
+  const [directionsData, setDirectionsData] = useState([]);
   const [inputFields, setInputFields] = useState([]);
 
   const [formArray, setFormArray] = useState([{}]);
@@ -82,10 +84,17 @@ const CreateRoute = () => {
 
   const submitForm = async (event) => {
     event.preventDefault();
-    formData.startLattitude = startingPoint.lat;
-    formData.startLongtitude = startingPoint.lng;
-    formData.endLongtitude = endingPoint.lng;
-    formData.endLattitude = endingPoint.lat;
+    formData.start = startingPoint;
+    formData.end = endingPoint;
+
+    formData.distance_miles =
+      directionsData?.routes[0]?.legs[0]?.distance?.value;
+    formData.distance_meters =
+      directionsData?.routes[0]?.legs[0]?.duration?.value;
+    formData.estimate_time = directionsData?.routes[0]?.legs[0]?.distance?.text;
+    formData.startLocation = directionsData?.routes[0]?.legs[0]?.start_address;
+    formData.endLocation = directionsData?.routes[0]?.legs[0]?.end_address;
+
     console.log(`DUCK`, "startingPoint", JSON.stringify(startingPoint));
     console.log(`DUCK`, "formData", JSON.stringify(formData));
     console.log(`DUCK`, "historicalData", JSON.stringify(historicalData));
@@ -116,7 +125,7 @@ const CreateRoute = () => {
         setId(res.data.id);
 
         setShowButton(true);
-        // navigate('/route-list');
+        navigate("/route-list");
         setFormData("");
         // event.target.reset();
       })
@@ -144,6 +153,28 @@ const CreateRoute = () => {
       );
       setStartingPoint(startPos);
       setEndingPoint(endPos);
+      axios
+        .get(
+          "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json",
+          {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+            },
+            params: {
+              origin: "51,0",
+              destination: "51.5,-0.1",
+              sensor: false,
+              key: "AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          setDirectionsData(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
     [startingPoint, endingPoint]
   );
