@@ -87,13 +87,22 @@ const CreateRoute = () => {
     formData.start = startingPoint;
     formData.end = endingPoint;
 
-    formData.distance_miles =
-      directionsData?.routes[0]?.legs[0]?.distance?.value;
-    formData.distance_meters =
-      directionsData?.routes[0]?.legs[0]?.duration?.value;
-    formData.estimate_time = directionsData?.routes[0]?.legs[0]?.distance?.text;
-    formData.startLocation = directionsData?.routes[0]?.legs[0]?.start_address;
-    formData.endLocation = directionsData?.routes[0]?.legs[0]?.end_address;
+    // formData.distance_miles =
+    //   directionsData?.routes[0]?.legs[0]?.distance?.value ?? 0;
+    // formData.distance_meters =
+    //   directionsData?.routes[0]?.legs[0]?.duration?.value ?? 0;
+    // formData.estimate_time =
+    //   directionsData?.routes[0]?.legs[0]?.distance?.text ?? "-";
+    // formData.startLocation =
+    //   directionsData?.routes[0]?.legs[0]?.start_address ?? "-";
+    // formData.endLocation =
+    //   directionsData?.routes[0]?.legs[0]?.end_address ?? "-";
+
+    formData.distance_miles = 0;
+    formData.distance_meters = 0;
+    formData.estimate_time = "-";
+    formData.startLocation = "-";
+    formData.endLocation = "-";
 
     console.log(`DUCK`, "startingPoint", JSON.stringify(startingPoint));
     console.log(`DUCK`, "formData", JSON.stringify(formData));
@@ -153,30 +162,27 @@ const CreateRoute = () => {
       );
       setStartingPoint(startPos);
       setEndingPoint(endPos);
-      if (directionsData == null) {
-        axios
-          .get(
-            "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json",
-            {
-              headers: {
-                "Access-Control-Allow-Origin": "*",
-              },
-              params: {
-                origin: "51,0",
-                destination: "51.5,-0.1",
-                sensor: false,
-                key: "AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0",
-              },
-            }
-          )
-          .then((response) => {
-            console.log(response.data);
-            setDirectionsData(response.data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
+      // if (directionsData == null) {
+      //   axios
+      //     .get("https://maps.googleapis.com/maps/api/directions/json", {
+      //       headers: {
+      //         "Access-Control-Allow-Origin": "*",
+      //       },
+      //       params: {
+      //         origin: "51,0",
+      //         destination: "51.5,-0.1",
+      //         sensor: false,
+      //         key: "AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0",
+      //       },
+      //     })
+      //     .then((response) => {
+      //       console.log(response.data);
+      //       setDirectionsData(response.data);
+      //     })
+      //     .catch((error) => {
+      //       console.error(error);
+      //     });
+      // }
     },
     [startingPoint, endingPoint]
   );
