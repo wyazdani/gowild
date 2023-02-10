@@ -17,6 +17,7 @@ const ActiveTabData = (props) => {
 
     const { content } = props;
 
+    const [searchTerm, setSearchTerm] = useState("");
     const [selectedItems, setSelectedItems] = useState([]);
     const [isChecked, setIsChecked] = useState(true);
     
@@ -66,6 +67,17 @@ const ActiveTabData = (props) => {
 
     };
 
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+        setCurrentItems(
+            content.filter(
+            (content) =>
+              (content.firstName.trim() + " " + content.lastName.trim()).toLowerCase().includes(event.target.value.toLowerCase().trim()) ||
+              content.email.toLowerCase().includes(event.target.value.toLowerCase().trim())
+          )
+        );
+      };
+
 
   // chekbox select all
   const handleCheckboxChange = (content) => {
@@ -99,7 +111,7 @@ const ActiveTabData = (props) => {
                                     Filter
                                 </Button>
                                 <Form.Group className={classes.searchForm}>
-                                    <Form.Control type="search" placeholder="Search Users by Name or Email" onChange={(e) => setSearch(e.target.value)} />
+                                <Form.Control type="search" placeholder="Search Users by Name, Email or Date" value={searchTerm} onChange={handleSearch}  />
                                 </Form.Group>
                             </div>
                         </Col>
@@ -121,12 +133,7 @@ const ActiveTabData = (props) => {
                 </thead>
                 <tbody>
                     {
-                        currentItems.filter((row) => {
-                            let searchTerm = search.toString().toLowerCase().trim();
-                            let fullName = row.firstName.toString().toLowerCase() + " " + row.lastName.toString().toLowerCase();
-                            return !searchTerm.length || fullName.includes(searchTerm) ||
-                                row.email.toString().toLowerCase().includes(searchTerm);
-                        }).map((content) => (
+                        currentItems.map((content) => (
                                 <tr>
                                     <td><Form.Check type="checkbox" value={content}
                                         onChange={() => handleCheckboxChange(content)}
@@ -190,9 +197,9 @@ const ActiveTabData = (props) => {
             <div className="result_pagination">
                 <span> Rows per page: &nbsp; </span>
                 <select onChange={handleRowsPerPageChange} value={itemsPerPage}>
-                    <option>{currentItems.length}</option>
+                    {/* <option>{currentItems.length}</option> */}
                     {/* {currentItems.length === 4 ? null  :<option value={4}>4</option>} */}
-                    <option value={5}>5</option>
+                    <option value={10}>10</option>
                     <option value={25}>25</option>
                     <option value={50}>50</option>
                     <option value={75}>75</option>

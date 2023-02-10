@@ -180,7 +180,7 @@ const AllTabData = (props) => {
                         </Col>
                         <Col md={5} className={"d-md-flex justify-content-end"}>
                             <Button variant={'transparent text-dark'} onClick={handleDownload}>
-                                <span className={'d-inline-block mx-2'}>
+                                <span className={'d-inline-block mx-2 mr-5'}>
                                     <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M15.2344 5.27344L11.1328 4.10156L9.96094 0H1.17188C0.524648 0 0 0.524648 0 1.17188V18.8281C0 19.4754 0.524648 20 1.17188 20H14.0625C14.7097 20 15.2344 19.4754 15.2344 18.8281V5.27344Z" fill="#59C36A"/>
                                     <path d="M15.2343 5.27344V18.8281C15.2343 19.4754 14.7097 20 14.0625 20H7.71094V0H9.9609L11.1328 4.10156L15.2343 5.27344Z" fill="#00A66C"/>
@@ -191,7 +191,7 @@ const AllTabData = (props) => {
 
                                 Download CSV
                             </Button>
-                            <Button variant={"success"} onClick={() => setModalShow(true)}>
+                            <Button variant={"success"} className="sendEmail" onClick={() => setModalShow(true)}>
                                 Send Email
                             </Button>
                         </Col>

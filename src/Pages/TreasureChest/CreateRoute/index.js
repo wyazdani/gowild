@@ -26,6 +26,7 @@ const CreateTreasure = () => {
 
 
     const handleChange = (event) => {
+        
         let value = event.target.value;
         let name = event.target.name;
         setFormData((prevalue) => {
@@ -304,6 +305,8 @@ const CreateTreasure = () => {
                                                             //  max="20"
                                                             value={formData.number}
                                                             onChange={handleChange}
+                                                            pattern="[0-9]*"
+                                                             inputMode="numeric"
                                                             className={"mb-3"} placeholder="200" />
                                                     </Form.Group>
                                                 </Col>
@@ -314,7 +317,7 @@ const CreateTreasure = () => {
                                             <Row>
                                                 <Col md={12}>
                                                     <Form.Label className="d-flex "><b>Upload Augmented Reality</b></Form.Label>
-                                                    <label className={"treasureChest_img"} htmlFor="upload-photo">
+                                                    <label className={"treasureChest_img"} htmlFor="upload">
                                                         <img src={img2} width="85%" alt="" />
                                                     </label>
                                                     <Form.Label className="d-flex mt-4 mb-0 "><b>Upload Thumbnail</b></Form.Label>

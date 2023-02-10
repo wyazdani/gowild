@@ -27,6 +27,7 @@ const EditSubAmdin = (props) => {
     
     const handleSubmit = async  (data) => {
         ENDPOINT.sub_admin.edit_user.id = props.editItem.id;
+        delete data['email']
         return await AuthService.patchMethod(ENDPOINT.sub_admin.edit_user.url+ENDPOINT.sub_admin.edit_user.id, true,data)
             .then((res) => {
                 if (res.status === 200) {

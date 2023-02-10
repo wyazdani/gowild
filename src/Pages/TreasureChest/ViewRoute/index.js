@@ -88,16 +88,16 @@ const ViewTreasure = (props) => {
                 <Modal.Body>
                     <Formik
                         initialValues={{
-                            title: props.viewItem.title,
-                            description: props.viewItem.description,
-                            latitude: props.viewItem.location.latitude,
-                            longitude: props.viewItem.location.longitude,
-                            eventDate: props.viewItem.eventDate,
-                            "eventTime": props.viewItem.eventTime,
-                            "status": "pending",
-                            "no_of_participants": props.viewItem.no_of_participants,
-                            "a_r": "augmented reality",
-                            "picture": props.viewItem.picture,
+                            // title: props.viewItem.title,
+                            // description: props.viewItem.description,
+                            // latitude: props.viewItem.location.latitude,
+                            // longitude: props.viewItem.location.longitude,
+                            // eventDate: props.viewItem.eventDate,
+                            // "eventTime": props.viewItem.eventTime,
+                            // "status": "pending",
+                            // "no_of_participants": props.viewItem.no_of_participants,
+                            // "a_r": "augmented reality",
+                            // "picture": props.viewItem.picture,
                         }}
                     >
                         {({
@@ -114,19 +114,19 @@ const ViewTreasure = (props) => {
                                         <Col md={4}>
                                             <Form.Group className={'mb-3'}>
                                                 <Form.Label> <b>Title</b> </Form.Label>
-                                                <Form.Control disabled value={values.title} style={{border:'none'}} />
+                                                <Form.Control disabled value={props.viewItem.title} style={{border:'none'}} />
                                             </Form.Group>
                                             <Form.Group className={'mb-3'}>
                                                 <Form.Label><b>Description</b></Form.Label>
                                                 <Form.Control as={"textarea"}
-                                                 disabled value={values.description}
+                                                 disabled value={props.viewItem.description}
                                                  style={{border:'none'}} 
                                                 />
                                             </Form.Group>
                                             <Form.Group className={'mb-3'}>
                                                 <Form.Label><b>Treasure Location</b></Form.Label>
-                                                <Form.Control className={'mb-2'} disabled value={values.latitude} style={{border:'none'}}  />
-                                                <Form.Control disabled value={values.longitude} style={{border:'none'}}  />
+                                                <Form.Control className={'mb-2'} disabled value={props.viewItem.location.latitude} style={{border:'none'}}  />
+                                                <Form.Control disabled value={props.viewItem.location.longitude} style={{border:'none'}}  />
                                             </Form.Group>
                                         </Col>
                                         <Col md={8}>
@@ -146,8 +146,12 @@ const ViewTreasure = (props) => {
                                                             <Form.Group>
                                                                 <Form.Label className="mt-3"><b>Sponsors</b></Form.Label>
                                                                 <div className="d-flex">
-                                                                    <img src={rectangle} width="20%" alt="" />
-                                                                    <Form.Control disabled type="text" className={"mb-1 ms-2 mb-md-2"} placeholder="🔗 www.redbull.com" style={{ marginBottom: '0px !important',border:'none' }} />
+                                                               
+                                                                    {(props.viewItem.sponsor[0].img)? <img src={"https://api.gowild.appscorridor.com" + props.viewItem.sponsor[0].img} width="20%" alt={"img"} /> :  <img src={rectangle} width="20%" alt={"img"} /> }
+                                                                
+                                                                    <Form.Control disabled type="text" className={"mb-1 ms-2 mb-md-2"} 
+                                                                    value={props.viewItem.sponsor[0].link}
+                                                                    placeholder="🔗 www.redbull.com" style={{ marginBottom: '0px !important',border:'none' }} />
 
                                                                 </div>
 
@@ -159,7 +163,7 @@ const ViewTreasure = (props) => {
                                                                 <Form.Group>
 
                                                                     <p className={"mb-3"}>
-                                                                        {(formatDate(values.eventDate))}
+                                                                        {(formatDate(props.viewItem.eventDate))}
                                                                     </p>
 
                                                                 </Form.Group>
@@ -187,7 +191,7 @@ const ViewTreasure = (props) => {
                                                             <Form.Group>
                                                                 <Form.Label className="mt-3"><b>Number of participants</b></Form.Label>
                                                                 <p className={"mb-3"}>
-                                                                    {values.no_of_participants}
+                                                                    {props.viewItem.no_of_participants}
                                                                 </p>
                                                             </Form.Group>
                                                         </Col>
@@ -201,7 +205,7 @@ const ViewTreasure = (props) => {
                                                     </label> <br />
                                                     <Form.Label className="mt-2"><b>Uploaded Thumbnail</b></Form.Label>
                                                     <p className="text-danger"> {error}</p>
-                                                    <img src={"https://api.gowild.appscorridor.com" + values.picture} width="70%" alt={"img"} />
+                                                    <img src={"https://api.gowild.appscorridor.com" +props.viewItem.picture} width="70%" alt={"img"} />
                                                     {/* <img src={values.picture} width="100%" alt="" /> */}
                                                     <p></p>
 
