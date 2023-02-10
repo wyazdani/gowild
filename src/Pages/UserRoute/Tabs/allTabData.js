@@ -184,7 +184,7 @@ const AllTabData = (props) => {
                                         </div>
                                         <div className={classes.description}>
                                             <h4 className={"font-16 mb-0"}>{content.user.firstName + " " + content.user.lastName}</h4>
-                                            <div className={"text-muted"}>{content.user.email}</div>
+                                            <div className={"text-muted text-lowercase"}>{content.user.email}</div>
                                         </div>
                                     </div>
                                 </td>
