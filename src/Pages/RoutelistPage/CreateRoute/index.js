@@ -23,7 +23,7 @@ const CreateRoute = () => {
   const [file, setFile] = useState([]);
   const [files, setFiles] = useState([]);
   const [historicalData, setHistoricalData] = useState([]);
-  const [directionsData, setDirectionsData] = useState([]);
+  const [directionsData, setDirectionsData] = useState(null);
   const [inputFields, setInputFields] = useState([]);
 
   const [formArray, setFormArray] = useState([{}]);
@@ -153,25 +153,27 @@ const CreateRoute = () => {
       );
       setStartingPoint(startPos);
       setEndingPoint(endPos);
-      axios
-        .get("https://maps.googleapis.com/maps/api/directions/json", {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
-          params: {
-            origin: "51,0",
-            destination: "51.5,-0.1",
-            sensor: false,
-            key: "AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0",
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          setDirectionsData(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      if (directionsData == null) {
+        axios
+          .get("https://maps.googleapis.com/maps/api/directions/json", {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+            },
+            params: {
+              origin: "51,0",
+              destination: "51.5,-0.1",
+              sensor: false,
+              key: "AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0",
+            },
+          })
+          .then((response) => {
+            console.log(response.data);
+            setDirectionsData(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
     },
     [startingPoint, endingPoint]
   );
