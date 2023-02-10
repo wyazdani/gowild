@@ -12,6 +12,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const TreasureHuntEWaiver = (props) => {
 
+    const [content, setContent] = useState([]);
+    console.log("🚀 ~ file: index.js:16 ~ TreasureHuntEWaiver ~ content", content)
     const [formData, setFormData] = useState({});
     const [faqData, setFaqData] = useState({});
     const [termsData, setTermsData] = useState({});
@@ -29,19 +31,7 @@ const TreasureHuntEWaiver = (props) => {
             }
         })
     }
-
-
-    // const guidlinessWaiverData = async () => {
-    //     await AuthService.getMethod(`${ENDPOINT.admin_guidelines.huntEWaiver_listing}`, true)
-    //         .then((res) => {
-    //             setFormData(res.data.data)
-    //             setIsLoader(true);
-    //             // console.log(res.data.data)
-    //         })
-    //         .catch((err) => {
-    //             swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-    //         });
-    // };
+   
 
 
     const guidlinessWaiverData = async () => {
@@ -60,7 +50,11 @@ const TreasureHuntEWaiver = (props) => {
             const res3 = await AuthService.getMethod(`${ENDPOINT.admin_guidelines.termsAndConditions_listing}`, true);
             setTermsData(res3.data.data)
             setIsLoader(true);
-            // console.log("res3", res3.data.data);
+            // // 4th API call
+            const res4 = await AuthService.getMethod(`${ENDPOINT.treasure_chests.listing}`, true);
+            setContent(res4.data.data)
+            setIsLoader(true);
+            // console.log("res4", res3.data.data);
 
         } catch (err) {
             swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
@@ -118,6 +112,24 @@ const TreasureHuntEWaiver = (props) => {
     const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
 
 
+    // const treasureChestsListData = async (data) => {
+    //     await AuthService.getMethod(ENDPOINT.treasure_chests.listing, data, true)
+    //         .then((res) => {
+    //             setContent(res.data.data);
+    //             setIsLoader(true);
+    //             console.log(res.data.data);
+    //         })
+    //         .catch((err) => {
+    //             swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+    //         });
+    // };
+
+
+    // useEffect(() => {
+    //     treasureChestsListData();
+
+    // }, []);
+
     if (!isLoader) {
         return (
             <div className='loader'>
@@ -135,13 +147,19 @@ const TreasureHuntEWaiver = (props) => {
             <Row>
                 <Col md={8}>
                         <div className={"d-flex justify-content-between align-items-center pb-3"}>
-                            <h5>E - Waiver</h5>
+                            <h5><b>E - Waiver</b></h5>
                             <Form.Select className={"form-select"} aria-label="Default select example" style={{ maxWidth: "150px" }}>
                                 <option>Select Events</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </Form.Select>
+                                {
+                                    content.map((content) => {
+                                        return (
+                                            <>
+                                                <option value="1">{content.title}</option>
+                                            </>
+                                        )
+                                    })
+                                }
+                      </Form.Select>
                         </div>
                     <div className={classes.editSection}>
                         <Form >

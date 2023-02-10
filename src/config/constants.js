@@ -104,6 +104,7 @@ export const ENDPOINT = {
         update_picture : `${API_URL}/admin/treasure-chest/`,
         listing_hunt : `${API_URL}/admin/treasure-chest/user-hunts`,
         approve_reject : `${API_URL}/admin/treasure-chest/hunt/status/`,
+        csv_file : `${API_URL}/admin/treasure-chest/csv`,
         delete: {
             url:`${API_URL}/admin/treasure-chest/`,
             id:null

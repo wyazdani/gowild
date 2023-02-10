@@ -152,7 +152,7 @@ const AllTabData = (props) => {
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="allTabData">
                     {currentItems.filter((row) =>
                             !search.length || row.user.firstName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
                             row.user.lastName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
@@ -169,7 +169,7 @@ const AllTabData = (props) => {
                                     </div>
                                     <div className={classes.description}>
                                         <h4 className={"font-16 mb-0"}>{content.user.firstName + " " + content.user.lastName}</h4>
-                                        <div className={"text-muted"}>{content.user.email}</div>
+                                        <div className={"text-muted text-lowercase"}>{content.user.email}</div>
                                     </div>
                                 </div>
                             </td>
@@ -189,7 +189,7 @@ const AllTabData = (props) => {
                                 }
                             </td>
                                 <td>
-                                    <Dropdown>
+                                <Dropdown>
                                         <Dropdown.Toggle variant="success" id="dropdown-basic">
                                             <i className={"far fa-ellipsis-v fa-fw"}></i>
                                         </Dropdown.Toggle>
@@ -197,21 +197,25 @@ const AllTabData = (props) => {
                                         <Dropdown.Menu>
                                             {content.status === 'approved'
                                                 ? <Dropdown.Item href="#/" onClick={() => rejectUser(content.id)}>
-                                                    <i className={"fal fa-ban bg-danger text-white"}></i>
-                                                    Reject
+                                                    {/* <i className={" fa-ban text-white"} style={{backgroundColor:'#FF2F6D'}}></i> */}
+                                                    <span className="imgSpan" style={{ backgroundColor: '#FF2F6D' }}> <img src="image/reject.png" alt="" /> &nbsp;
+                                                        Reject</span>
                                                 </Dropdown.Item>
                                                 : <Dropdown.Item href="#/" onClick={() => approveUser(content.id)}>
-                                                    <i className={"fal fa-check bg-success text-white"}></i>
-                                                    Approve
+                                                    <span className="imgSpan" style={{ backgroundColor: '#0D5351' }}> <i class="fa fa-check" aria-hidden="true" style={{ marginTop: '3px' }} ></i> &nbsp;&nbsp;  &nbsp; &nbsp; Approve
+                                                    </span>
+                                                    {/* <span className="imgSpan">  </span> */}
                                                 </Dropdown.Item>
                                             }
                                             <Dropdown.Item>
-                                                    <Link to={`/users-route/view-route/${content.id}`} style={{ textDecoration: 'none', color: 'black' }}>
-                                                        <i className={"fal fa-eye bg-dark text-white"}></i>
-                                                        View
-                                                    </Link>
+                                                <Link to={`/users-route/view-route/${content.id}`} style={{ textDecoration: 'none', color: 'black' }}>
+                                                    {/* <i className={"fal fa-eye  text-white"} style={{backgroundColor:'#FF7851'}}></i> */}
+                                                    <span className="imgSpan" style={{ backgroundColor: '#FF7851' }}> <img src="image/view.png" alt="" /> &nbsp; View
+                                                    </span>
 
-                                                </Dropdown.Item>
+                                                </Link>
+
+                                            </Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 </td>

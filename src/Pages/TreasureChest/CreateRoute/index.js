@@ -280,7 +280,7 @@ const CreateTreasure = () => {
                                                                 name="date"
                                                                 value={formData.date}
                                                                 onChange={handleChange}
-                                                                className={"mb-1"} />
+                                                                className={"mb-1"}  style={{ textTransform: 'uppercase' }} />
                                                         </Form.Group>
                                                     </Form.Group>
                                                 </Col>

@@ -11,7 +11,7 @@ import ReactPaginate from 'react-paginate';
 import profile from "Images/Ellipse 768.png";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Link , useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const AllTabData = (props) => {
 
@@ -30,7 +30,7 @@ const AllTabData = (props) => {
     // const itemsPerPage = 3;
 
 
-   
+
 
     useEffect(() => {
         const endOffset = itemOffset + itemsPerPage;
@@ -69,13 +69,13 @@ const AllTabData = (props) => {
 
     const approveUser = async (id) => {
         // console.log("1233"+id);
-        return  AuthService.postMethod(`${ENDPOINT.admin_route.approve}${id}/approve`, true)
+        return AuthService.postMethod(`${ENDPOINT.admin_route.approve}${id}/approve`, true)
             .then((res) => {
-                 if(res.status === 201){
+                if (res.status === 201) {
                     toast.success(res.data.message);
-                 }
+                }
                 //  setAddAdmin(props.onHide);
-                 props.userRouteAllData()
+                props.userRouteAllData()
                 //  props.content()
                 console.log(res);
             })
@@ -85,8 +85,8 @@ const AllTabData = (props) => {
 
     };
 
-   
-    
+
+
     const rejectUser = async (id) => {
         // console.log("1233"+id);
         return AuthService.postMethod(`${ENDPOINT.admin_route.reject}${id}/reject`, true)
@@ -103,25 +103,25 @@ const AllTabData = (props) => {
 
     };
 
-      // chekbox select all
-  const handleCheckboxChange = (content) => {
-    if (selectedItems.includes(content)) {
-      setSelectedItems(selectedItems.filter((i) => i !== content));
-    } else {
-      setSelectedItems([...selectedItems, content]);
+    // chekbox select all
+    const handleCheckboxChange = (content) => {
+        if (selectedItems.includes(content)) {
+            setSelectedItems(selectedItems.filter((i) => i !== content));
+        } else {
+            setSelectedItems([...selectedItems, content]);
+        }
+    };
+
+    const handleSelectAll = () => {
+        setSelectedItems(content);
+        setIsChecked(!isChecked);
     }
-  };
 
-  const handleSelectAll = () => {
-    setSelectedItems(content);
-    setIsChecked(!isChecked);
-  }
+    const handleDeselectAll = () => {
+        setSelectedItems([]);
+        setIsChecked(!isChecked);
+    };
 
-  const handleDeselectAll = () => {
-    setSelectedItems([]);
-    setIsChecked(!isChecked);
-  };
-    
 
     // const goToEditRoute = () => {
     //     navigate('/treasure-list/edit');
@@ -138,7 +138,7 @@ const AllTabData = (props) => {
         <>
             <div className={classes.tableFilter}>
                 <Form>
-                    <Row>
+                    <Row >
                         <Col md={8}>
                             <div className={"d-md-flex"}>
                                 <Button variant="filter">
@@ -167,71 +167,75 @@ const AllTabData = (props) => {
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="allTabData">
                     {currentItems.filter((row) =>
-                            !search.length || row.user.firstName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
-                            row.user.lastName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
-                            row.user.email.toString().toLowerCase().includes(search.toString().toLowerCase())).map((content) => (
-                        <tr>
-                            <td><Form.Check type="checkbox" value={content}
-                                onChange={() => handleCheckboxChange(content)}
-                                checked={selectedItems.includes(content)} />
-                            </td>
-                            <td>
-                                <div className={"d-flex"}>
-                                    <div className={classes.userImg}>
-                                    {(content.user.picture)? <img src={"https://api.gowild.appscorridor.com" + content.user.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
+                        !search.length || row.user.firstName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
+                        row.user.lastName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
+                        row.user.email.toString().toLowerCase().includes(search.toString().toLowerCase())).map((content) => (
+                            <tr>
+                                <td><Form.Check type="checkbox" value={content}
+                                    onChange={() => handleCheckboxChange(content)}
+                                    checked={selectedItems.includes(content)} />
+                                </td>
+                                <td>
+                                    <div className={"d-flex"}>
+                                        <div className={classes.userImg}>
+                                            {(content.user.picture) ? <img src={"https://api.gowild.appscorridor.com" + content.user.picture} width="100%" alt={"img"} /> : <img src={profile} width="100%" alt={"img"} />}
+                                        </div>
+                                        <div className={classes.description}>
+                                            <h4 className={"font-16 mb-0"}>{content.user.firstName + " " + content.user.lastName}</h4>
+                                            <div className={"text-muted text-lowercase"}>{content.user.email}</div>
+                                        </div>
                                     </div>
-                                    <div className={classes.description}>
-                                        <h4 className={"font-16 mb-0"}>{content.user.firstName + " " + content.user.lastName}</h4>
-                                        <div className={"text-muted"}>{content.user.email}</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                {content.title}
-                            </td>
-                            <td>
-                                {(formatDate(content.updatedDate))}
-                            </td>
-                            <td>
-                                {(formatDate(content.createdDate))}
-                            </td>
-                            <td>
-                                {content.status === 'approved' ? <span class="text-success text-uppercase"><b>Approved</b></span>
-                                    : content.status === 'pending' ? <span class="text-warning  text-uppercase"><b>Pending</b></span>
-                                        : <span class="text-danger text-uppercase"><b>Rejected</b></span>
-                                }
-                            </td>
-                            <td>
-                                <Dropdown>
-                                    <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                        <i className={"far fa-ellipsis-v fa-fw"}></i>
-                                    </Dropdown.Toggle>
+                                </td>
+                                <td>
+                                    {content.title}
+                                </td>
+                                <td>
+                                    {(formatDate(content.updatedDate))}
+                                </td>
+                                <td>
+                                    {(formatDate(content.createdDate))}
+                                </td>
+                                <td>
+                                    {content.status === 'approved' ? <span class="text-success text-uppercase"><b>Approved</b></span>
+                                        : content.status === 'pending' ? <span class="text-warning  text-uppercase"><b>Pending</b></span>
+                                            : <span class="text-danger text-uppercase"><b>Rejected</b></span>
+                                    }
+                                </td>
+                                <td>
+                                    <Dropdown>
+                                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                            <i className={"far fa-ellipsis-v fa-fw"}></i>
+                                        </Dropdown.Toggle>
 
-                                    <Dropdown.Menu>
-                                        {content.status === 'approved'
-                                            ? <Dropdown.Item href="#/" onClick={() => rejectUser(content.id)}>
-                                                <i className={"fal fa-ban bg-danger text-white"}></i>
-                                                Reject
-                                            </Dropdown.Item>
-                                            : <Dropdown.Item href="#/" onClick={() => approveUser(content.id)}>
-                                                <i className={"fal fa-check bg-success text-white"}></i>
-                                                Approve
-                                            </Dropdown.Item>
-                                        }
-                                                <Dropdown.Item>
-                                                    <Link to={`/users-route/view-route/${content.id}`} style={{ textDecoration: 'none', color: 'black' }}>
-                                                        <i className={"fal fa-eye bg-dark text-white"}></i>
-                                                        View
-                                                    </Link>
-
+                                        <Dropdown.Menu>
+                                            {content.status === 'approved'
+                                                ? <Dropdown.Item href="#/" onClick={() => rejectUser(content.id)}>
+                                                    {/* <i className={" fa-ban text-white"} style={{backgroundColor:'#FF2F6D'}}></i> */}
+                                                    <span className="imgSpan" style={{ backgroundColor: '#FF2F6D' }}> <img src="image/reject.png" alt="" /> &nbsp;
+                                                        Reject</span>
                                                 </Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </td>
-                        </tr>
-                    ))}
+                                                : <Dropdown.Item href="#/" onClick={() => approveUser(content.id)}>
+                                                    <span className="imgSpan" style={{ backgroundColor: '#0D5351' }}> <i class="fa fa-check" aria-hidden="true" style={{ marginTop: '3px' }} ></i> &nbsp;&nbsp;  &nbsp; &nbsp; Approve
+                                                    </span>
+                                                    {/* <span className="imgSpan">  </span> */}
+                                                </Dropdown.Item>
+                                            }
+                                            <Dropdown.Item>
+                                                <Link to={`/users-route/view-route/${content.id}`} style={{ textDecoration: 'none', color: 'black' }}>
+                                                    {/* <i className={"fal fa-eye  text-white"} style={{backgroundColor:'#FF7851'}}></i> */}
+                                                    <span className="imgSpan" style={{ backgroundColor: '#FF7851' }}> <img src="image/view.png" alt="" /> &nbsp; View
+                                                    </span>
+
+                                                </Link>
+
+                                            </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </td>
+                            </tr>
+                        ))}
                 </tbody>
             </Table>
 
@@ -265,7 +269,7 @@ const AllTabData = (props) => {
 
                 />
             </div>
-     
+
         </>
     )
 }

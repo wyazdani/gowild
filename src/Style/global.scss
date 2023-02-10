@@ -77,6 +77,7 @@ nav {
       &.active {
         color: #25213B;
         border-color: #FF7851;
+        font-weight: bold;
       }
     }
   }
@@ -465,3 +466,45 @@ table {
   }
 }
 
+
+.allTabData {
+  .dropdown-menu {
+    position: absolute;
+    width: 0px !important;
+    inset: 0px 0px auto auto !important;
+    transform: translate(-30px, 4px) !important;
+    border: none;
+    background-color: #F3F3F3 !important;
+  }
+
+
+  .imgSpan {
+    position: relative;
+    display: block;
+    padding: 11px;
+    border-radius: 16px;
+    min-width: 100px;
+    color: white;
+    display: flex;
+    max-width: 93px;
+    font-weight: 500;
+    font-size: 14px;
+    // background-color: red;
+    justify-content: center
+  }
+.dropdown .dropdown-item {
+    position: relative;
+    display: block;
+    padding: 6px 15px 0px 29px;
+    border-radius: 16px;
+    width: 102px;
+    color: white;
+    font-size: 14px;
+    &:hover {
+      background: #FFE4DC;
+      background-color: transparent;
+      color: #000;
+  }
+
+}
+}

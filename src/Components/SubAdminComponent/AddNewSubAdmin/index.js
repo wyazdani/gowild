@@ -20,10 +20,7 @@ const AddSubAdmin = (props) => {
     const schema = object().shape({
         firstName: string().required(),
         lastName: string().required(),
-        email: string().required().matches(
-            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-            'Email is not in the correct format'
-          ),
+        email: string().lowercase().required(),
         
         userName: string().required(),
         addressOne: string().required(),
