@@ -155,17 +155,20 @@ const CreateRoute = () => {
       setEndingPoint(endPos);
       if (directionsData == null) {
         axios
-          .get("https://maps.googleapis.com/maps/api/directions/json", {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-            },
-            params: {
-              origin: "51,0",
-              destination: "51.5,-0.1",
-              sensor: false,
-              key: "AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0",
-            },
-          })
+          .get(
+            "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json",
+            {
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+              },
+              params: {
+                origin: "51,0",
+                destination: "51.5,-0.1",
+                sensor: false,
+                key: "AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0",
+              },
+            }
+          )
           .then((response) => {
             console.log(response.data);
             setDirectionsData(response.data);
