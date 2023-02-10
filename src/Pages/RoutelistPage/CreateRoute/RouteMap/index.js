@@ -165,17 +165,6 @@ export default function RouteMap({
       },
     });
 
-    // window.google.maps.event.addListener(marker, "dragend", (event) => {
-    //   onPositionChange(event.latLng.toJSON());
-    // });
-
-    // window.google.maps.event.addListener(marker, "dblclick", (event) => {
-    //   marker.setMap(null);
-    //   if (onRemove) {
-    //     onRemove();
-    //   }
-    // });
-
     return null;
   };
 
