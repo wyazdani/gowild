@@ -24,20 +24,25 @@ const Messages = (props) => {
                 ticket_id: id
             })
             setMsg('')
+
         }
 
     };
     useEffect(() => {
-        socket.on('msgSupport', (data)=>{
-            console.log(data)
-        })
+
         handleChange(props)
     }, []);
 
     useEffect(() => {
+        socket.on('msgSupport', (data)=>{
+            const test = [...currentItems, data];
+            console.log(test)
+            //setCurrentItems([...currentItems, data]);
+            console.log(data)
 
+        })
         handleChange(props)
-    }, [props]);
+    }, [props, currentItems]);
 
     const handleChange = (props) => {
         if (ticketId!== ticket?.id){

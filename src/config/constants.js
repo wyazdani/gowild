@@ -1,10 +1,10 @@
 //export const API_URL = "http://127.0.0.1:8000/api";
-//export const BASE_URL = "https://api.gowild.appscorridor.com";
-export const BASE_URL = "http://localhost:3000";
+export const BASE_URL = "https://api.gowild.appscorridor.com";
+//export const BASE_URL = "http://localhost:3000";
 export const API_URL = `${BASE_URL}/api/v1`;
 
-//export const SOCKET_URL = "https://chat.gowild.appscorridor.com";
-export const SOCKET_URL = "http://localhost:5000";
+export const SOCKET_URL = "https://chat.gowild.appscorridor.com";
+//export const SOCKET_URL = "http://localhost:5000";
 export const KEY =
     "YW1Gb1lXNTZZV2xpTG1GemJHRnRMbTFsYUdGeVFHZHRZV2xzTG1OdmJUb3lZV2RoYVc0PQ==";
 
