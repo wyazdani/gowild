@@ -1,8 +1,10 @@
 //export const API_URL = "http://127.0.0.1:8000/api";
-export const BASE_URL = "https://api.gowild.appscorridor.com";
+//export const BASE_URL = "https://api.gowild.appscorridor.com";
+export const BASE_URL = "http://localhost:3000";
 export const API_URL = `${BASE_URL}/api/v1`;
 
-export const SOCKET_URL = "https://chat.gowild.appscorridor.com";
+//export const SOCKET_URL = "https://chat.gowild.appscorridor.com";
+export const SOCKET_URL = "http://localhost:5000";
 export const KEY =
     "YW1Gb1lXNTZZV2xpTG1GemJHRnRMbTFsYUdGeVFHZHRZV2xzTG1OdmJUb3lZV2RoYVc0PQ==";
 
@@ -126,10 +128,10 @@ export const ENDPOINT = {
     },
     support :{
         tickets : `${API_URL}/ticket`,
-        ticket_messages : `${API_URL}/ticket-messages/:id`,
+        ticket_messages : `${API_URL}/ticket-messages/:id?limit=100`,
         mark_as_complete: `${API_URL}/ticket/:id/status`,
         socket_url: SOCKET_URL,
-        emit_message:'msgToUser',
+        emit_message:'msgToAdmin',
         listen_message:'msgSupport'
     },
 

@@ -4,23 +4,47 @@ import classes from "../index.module.scss";
 import 'react-toastify/dist/ReactToastify.css';
 import userImg from "../../../Images/userImg.png";
 import {imageUrl, timeSince} from "../../../Helper/Helpers";
+import io from 'socket.io-client';
+import {ENDPOINT, SOCKET_URL} from "../../../config/constants";
 
 const Messages = (props) => {
     // const { content } = props;
     const [currentItems, setCurrentItems] = useState([]);
+    const [sendMessage, setSendMessage] = useState([]);
     const [ticket, setTicket] = useState(null);
+    const [msg, setMsg] = useState('');
+    const [ticketId, setTicketId] = useState(null);
+    const socket = io(SOCKET_URL);
+    const emitEvent = async (id)=> {
+        if (msg) {
+            socket.emit(ENDPOINT.support.emit_message,{
+                user_id: '',
+                message: msg,
+                token: `Bearer ${JSON.parse(localStorage.getItem('accessToken'))}`,
+                ticket_id: id
+            })
+            setMsg('')
+        }
 
+    };
     useEffect(() => {
+        socket.on('msgSupport', (data)=>{
+            console.log(data)
+        })
         handleChange(props)
     }, []);
 
     useEffect(() => {
+
         handleChange(props)
     }, [props]);
 
     const handleChange = (props) => {
-        setCurrentItems(props.message?.data)
-        setTicket(props.rowUser)
+        if (ticketId!== ticket?.id){
+            setCurrentItems(props.message?.data.reverse())
+            setTicket(props.rowUser)
+            setTicketId(props.rowUser?.id)
+        }
     }
 
     return (
@@ -58,8 +82,9 @@ const Messages = (props) => {
                             <button type="button" className={classes.btn}><i className="fal fa-paperclip"></i></button>
                             <button type="button" className={classes.btn}><i className="fal fa-image"></i></button>
                         </div>
-                        <input type="text" className={classes.formcontrol} placeholder="Type a message"/>
-                        <button className={`${classes.btn} ${classes.btnSend}`} type="button"><i className="fas fa-paper-plane"></i>
+                        <input type="text" className={classes.formcontrol} value={msg}
+                               onChange={(e) => setMsg(e.target.value)} placeholder="Type a message"/>
+                        <button className={`${classes.btn} ${classes.btnSend}`} onClick={emitEvent.bind(null,ticket?.id)} type="button"><i className="fas fa-paper-plane"></i>
                         </button>
                     </div>
                 </div>
