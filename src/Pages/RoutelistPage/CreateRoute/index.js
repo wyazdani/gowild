@@ -55,13 +55,11 @@ const CreateRoute = () => {
   console.log("id", id);
 
   useEffect(() => {
-    console.log(startingPoint);
   }, [startingPoint]);
 
   const handleChange = (event) => {
     let name = event.target.name;
     const value = event.target.value;
-    console.log(name);
     switch (name) {
       case 'startLongtitude':
         setStartingPoint({ ...startingPoint, lng: parseFloat(value) });
@@ -163,14 +161,19 @@ const CreateRoute = () => {
 
   // add historical event
 
-  const handleHistorical = (event, index, key) => {
-    console.log(event.target.value)
-    console.log(event.target.name)
-    let dataObject = historicalData[index];
-    console.log(key)
-    dataObject[key] = event.target.value;
-    console.log(dataObject)
+  const handleHistorical = (event, index) => {
+    const name = event.target.name;
     const newRows = [...historicalData];
+    // switch (name) {
+    //   case 'longitude':
+    //     newRows[index][event.target.name] = parseFloat(event.target.value);
+    //     break;
+    //   case 'latitude':
+    //     newRows[index][event.target.name] = parseFloat(event.target.value);
+    //     break;
+    //   default:
+    //     newRows[index][event.target.name] = event.target.value;
+    // }
     newRows[index][event.target.name] = event.target.value;
     setHistoricalData(newRows);
   };
@@ -222,11 +225,17 @@ const CreateRoute = () => {
   );
 
   function uploadSingleFile(e) {
+    let ImagesArray = Object.entries(e.target.files).map((e) =>
+        URL.createObjectURL(e[1])
+    );
+    console.log(ImagesArray);
+    setFile([...files, ...ImagesArray]);
     setUploadFile(e.target.files[0]);
     console.log("file", file);
   }
 
   function uploadSingleFileHistorical(e, index) {
+
     console.log(e.target.name)
     console.log(e.target.files)
     const newRows = [...historicalData];
@@ -247,6 +256,9 @@ const CreateRoute = () => {
     console.log(s);
   }
 
+  function deleteFileSingle(e) {
+    setUploadFile('');
+  }
   return (
     <Fragment>
       <PageTitle title="Normal Route" />
@@ -331,19 +343,19 @@ const CreateRoute = () => {
               <Col md={12} className={"mb-3"}>
                 <div className="form-group previewBox">
                   {file.length > 0 &&
-                    file.map((item, index) => {
-                      return (
-                        <div className={"preview"} key={item}>
-                          <img src={item} alt="" />
-                          <Button
-                            type="button"
-                            onClick={() => deleteFile(index)}
-                          >
-                            <i className={"fal fa-times"}></i>
-                          </Button>
-                        </div>
-                      );
-                    })}
+                      file.map((item, index) => {
+                        return (
+                            <div className={"preview"} key={item}>
+                              <img src={item} alt="" />
+                              <Button
+                                  type="button"
+                                  onClick={() => deleteFile(index)}
+                              >
+                                <i className={"fal fa-times"}></i>
+                              </Button>
+                            </div>
+                        );
+                      })}
                 </div>
               </Col>
               <Form.Group>
