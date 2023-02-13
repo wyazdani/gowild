@@ -9,6 +9,7 @@ import ReactPaginate from "react-paginate";
 import profile from "Images/routelist.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import EditSubAmdin from "Components/SubAdminComponent/EditSubAdmin";
 
 const InActiveTabData = (props) => {
   const { content } = props;
@@ -133,7 +134,7 @@ const InActiveTabData = (props) => {
                     <h4 className={"font-16 mb-0"}>
                       {content.firstName + " " + content.lastName}
                     </h4>
-                    <div className={"text-muted"}>{content.email}</div>
+                    <div className={"text-muted text text-lowercase"}>{content.email}</div>
                   </div>
                 </div>
               </td>
@@ -249,6 +250,12 @@ const InActiveTabData = (props) => {
           activeLinkClassName="active"
         />
       </div>
+
+
+      <EditSubAmdin subAdminAllData={props.subAdminAllData}
+        show={editSubAdmin}
+        onHide={() => setEditSubAdmin(false)}
+        editItem={editItem} />
     </>
   );
 };

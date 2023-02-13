@@ -21,22 +21,20 @@ const BannedUserChart = (props) => {
 
   return (
     <>
-      <div className="BarChart p-3">
+        <div className="BarChart p-3">
         <ResponsiveContainer width="100%" aspect={2}>
           <BarChart
             data={props.bannedContent}
             margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
           >
             <CartesianGrid stroke="#ccc" strokeDasharray="3 3" />
-            <XAxis dataKey="date"   />
+            <XAxis dataKey="date"  tickFormatter={(date) => moment(date).format("M-D-YYYY")} />
             <YAxis />
             <Tooltip />
             {/* <Legend /> */}
-            <Bar type="monotone" dataKey="firstName" barSize={30} fill="#FF7851" />
-            <Bar type="monotone" dataKey="email" barSize={30} fill="#FF7851" />
-           
-            
-            {/* <Bar type="monotone" dataKey="name"  fill="#FF7851" /> */}
+            <Bar type="monotone" dataKey="count" barSize={50} fill="#FF7851" />
+            {/* <Bar type="monotone" dataKey="email" barSize={20} fill="#FF7851" /> */}
+          
           </BarChart>
         </ResponsiveContainer>
       </div>

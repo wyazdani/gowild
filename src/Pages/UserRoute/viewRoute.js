@@ -24,9 +24,9 @@ const ViewRoute = (props) => {
     const singleUserRouteData = async () => {
         await AuthService.getMethod(`${ENDPOINT.admin_route.listing}/${id}`, true)
             .then((res) => {
-                setUser(res.data.route);
+                setUser(res.data);
                 setIsLoader(true);
-                console.log("response data", res.data.route);
+                console.log("response data", res.data);
             })
             .catch((err) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");

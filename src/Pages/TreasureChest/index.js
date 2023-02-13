@@ -170,7 +170,9 @@ const TreasureChestList = () => {
                                                         setViewItem(item)
                                                     }}
                                             >
-                                                <i className={"fal fa-ban bg-warning text-white"}></i>
+                                            <i className="fa fa-eye text-white" aria-hidden="true" style={{backgroundColor:'#FFAE78'}}></i>
+                                                {/* <i className={"fal fa-ban bg-warning text-white"}></i>
+                                                <img src="image/treasure.png" width="30%" alt="" /> */}
                                                 View
 
                                             </Dropdown.Item>

@@ -91,13 +91,13 @@ const Faqs = () => {
         );
     }
 
-    const date = formData.updatedDate ? new Date(formData.updatedDate) : null;
-    const options = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    };
-    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+    // const date = formData.updatedDate ? new Date(formData.updatedDate) : null;
+    // const options = {
+    //   year: 'numeric',
+    //   month: 'long',
+    //   day: 'numeric'
+    // };
+    // const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
 
     return (
         <>
@@ -108,7 +108,7 @@ const Faqs = () => {
                             <Form.Group className={`${classes.formGroup} mb-3`}>
                                 <textarea
                                     name="description"
-                                    value={formData.description}
+                                    // value={formData.description}
                                     onChange={handleChange}
                                 >
                                 </textarea>
@@ -121,13 +121,13 @@ const Faqs = () => {
                 </Col>
                 <Col md={4}>
                     <div className={classes.logBox}>
-                    <h4>  {formattedDate} </h4>
+                    {/* <h4>  {formattedDate} </h4> */}
                         <div className={"text-muted font-12"}>Update Logs</div>
                         <ul className={classes.logList}>
                             <li>
                                 <div className={classes.box}>
                                     <time className={"d-block"}>
-                                        {(formatDate(formData.updatedDate))}
+                                        {/* {(formatDate(formData.updatedDate))} */}
                                     </time>
                                     <div>Term &amp; Conditions - Updated!</div>
                                 </div>
@@ -135,7 +135,7 @@ const Faqs = () => {
                             <li>
                                 <div className={classes.box}>
                                     <time className="d-block">
-                                        {(formatDate(formData.updatedDate))}
+                                        {/* {(formatDate(formData.updatedDate))} */}
                                     </time>
                                     <div>FAQ</div>
                                 </div>

@@ -20,6 +20,8 @@ import Support from "../Pages/Support";
 import Guidlines from "../Pages/Guidlines";
 import TreasureHuntEWaiver from "../Pages/TreasureHuntEWaiver";
 import CreateTreasure from "Pages/TreasureChest/CreateRoute";
+import ForgetPassword from "Pages/Auth/Forget/ForgetPassword";
+import RegisterEmail from "Pages/Auth/Forget/RegisterEmail";
 // import EditTreasure from "Pages/TreasureChest/EditRoute";
 
 const routes = [
@@ -27,6 +29,16 @@ const routes = [
     path: "/",
     layout: AuthLayout,
     component: Login,
+  },
+  {
+    path: "/forget-Password",
+    layout: AuthLayout,
+    component: ForgetPassword,
+  },
+  {
+    path: "/rigister-email",
+    layout: AuthLayout,
+    component: RegisterEmail,
   },
   {
     path: "/dashboard",

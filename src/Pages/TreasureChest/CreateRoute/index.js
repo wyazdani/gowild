@@ -163,7 +163,7 @@ const CreateTreasure = () => {
 
     return (
         <>
-            <PageTitle title="Normal Route" />
+            <PageTitle title="Treasure Chest" />
             <section className={"section treasure_chests"}>
                 <Form onSubmit={submitForm}>
                     <Row>

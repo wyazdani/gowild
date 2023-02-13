@@ -158,7 +158,8 @@ const EWavier = () => {
                             <li>
                                 <div className={classes.box}>
                                     <time className="d-block">
-                                        {(formatDate(faqData.updatedDate))}
+                                        {/* {(formatDate(faqData.updatedDate))} */}
+                                        {(formatDate(termsData.updatedDate))}
                                     </time>
                                     <div>FAQ</div>
                                 </div>

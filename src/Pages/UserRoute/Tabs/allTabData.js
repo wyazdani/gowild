@@ -12,12 +12,14 @@ import profile from "Images/Ellipse 768.png";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link, useNavigate } from 'react-router-dom';
+import { imageUrl } from "Helper/Helpers";
 
 const AllTabData = (props) => {
 
     const navigate = useNavigate();
     const { content } = props;
 
+    const [searchTerm, setSearchTerm] = useState("");
     // const [editItem, setEditItem] = useState(null);
     const [selectedItems, setSelectedItems] = useState([]);
     const [isChecked, setIsChecked] = useState(true);
@@ -29,9 +31,7 @@ const AllTabData = (props) => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
     // const itemsPerPage = 3;
 
-
-
-
+    
     useEffect(() => {
         const endOffset = itemOffset + itemsPerPage;
         setCurrentItems(content.slice(itemOffset, endOffset));
@@ -123,16 +123,20 @@ const AllTabData = (props) => {
     };
 
 
-    // const goToEditRoute = () => {
-    //     navigate('/treasure-list/edit');
-    //     // history.push(`/edit-form?id=${id}`);
-    // };
-
-    // const handleEditClick = () => {
-    //     // setCurrentItems(content);
-    //     navigate('/users-route/view-route');
-    //   }
-
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+        setCurrentItems(
+          content.filter(
+            (content) =>
+              (content.user?.firstName.trim() + " " + content.user?.lastName.trim()).toLowerCase().includes(event.target.value.toLowerCase().trim()) ||
+              content.user?.email.toLowerCase().includes(event.target.value.toLowerCase().trim())
+          )
+        );
+        if (event.target.value.trim() === '') {
+          props.userRouteAllData();
+        }
+      };
+    
 
     return (
         <>
@@ -146,7 +150,7 @@ const AllTabData = (props) => {
                                     Filter
                                 </Button>
                                 <Form.Group className={classes.searchForm}>
-                                    <Form.Control type="search" placeholder="Search Users by Name or Email" onChange={(e) => setSearch(e.target.value)} />
+                                <Form.Control type="search" placeholder="Search Users by Name, Email or Date" value={searchTerm} onChange={handleSearch}  />
                                 </Form.Group>
                             </div>
                         </Col>
@@ -168,10 +172,7 @@ const AllTabData = (props) => {
                     </tr>
                 </thead>
                 <tbody className="allTabData">
-                    {currentItems.filter((row) =>
-                        !search.length || row.user.firstName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
-                        row.user.lastName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
-                        row.user.email.toString().toLowerCase().includes(search.toString().toLowerCase())).map((content) => (
+                    {currentItems.map((content) => (
                             <tr>
                                 <td><Form.Check type="checkbox" value={content}
                                     onChange={() => handleCheckboxChange(content)}
@@ -180,11 +181,11 @@ const AllTabData = (props) => {
                                 <td>
                                     <div className={"d-flex"}>
                                         <div className={classes.userImg}>
-                                            {(content.user.picture) ? <img src={"https://api.gowild.appscorridor.com" + content.user.picture} width="100%" alt={"img"} /> : <img src={profile} width="100%" alt={"img"} />}
+                                            {<img src={imageUrl(content.user?.picture,profile)} width="100%" alt={"img"} />}
                                         </div>
                                         <div className={classes.description}>
-                                            <h4 className={"font-16 mb-0"}>{content.user.firstName + " " + content.user.lastName}</h4>
-                                            <div className={"text-muted"}>{content.user.email}</div>
+                                            <h4 className={"font-16 mb-0"}>{(content.user?.firstName + " " + content.user?.lastName)? content.user?.firstName + " " + content.user?.lastName:""}</h4>
+                                            <div className={"text-muted text-lowercase"}>{content.user?.email}</div>
                                         </div>
                                     </div>
                                 </td>

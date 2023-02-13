@@ -66,7 +66,7 @@ const ViewProfilePopup = (props) => {
                         theme: "dark",
                     });
                 }
-                //  props.userRouteAllData();
+                props.userRouteAllData()
                 setTimeout(() => {
                     setAddAdmin(props.onHide);
                 }, 1000);
@@ -100,7 +100,7 @@ const ViewProfilePopup = (props) => {
                 // if(res.status === 201){
                 //     toast.success(res.data.message);
                 //  }
-                //  props.userRouteAllData();
+                props.userRouteAllData()
                 setTimeout(() => {
                     setAddAdmin(props.onHide);
                 }, 1000);
