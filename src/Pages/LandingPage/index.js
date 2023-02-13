@@ -20,7 +20,7 @@ const LandingPage = () => {
     const [content, setContent] = useState([]);
     const [onlineContent, setOnlineContent] = useState([]);
     const [bannedContent, setBannedContent] = useState([]);
-    console.log("All user", content);
+    // console.log("All user", content);
     const [selectedDate, setSelectedDate] = useState("");
     const [isLoader, setIsLoader] = useState(false);
 
@@ -32,20 +32,21 @@ const LandingPage = () => {
     const subAdminAllData = async () => {
         await AuthService.getMethod(`${ENDPOINT.dashboards.bar_listing}`, true)
             .then((res) => {
+                // console.log("🚀 ~ file: index.js:35 ~ .then ~ res", res.data.onlineUsers)
                 // 1st all user data
-                setContent(res.data.data.map(item => ({
+                setContent(res.data.newUsers.map(item => ({
                     ...item,
-                    date: moment(item.createdDate).format('MM-DD-YYYY')
+                    date: moment(item.date).format('MM-DD-YYYY')
                 })));
                 // 2nd online user data
-                setOnlineContent(res.data.data.filter(data => ["active"].includes(data.status.statusName)).map(item => ({
+                setOnlineContent(res.data.onlineUsers.map(item => ({
                     ...item,
-                    date: moment(item.createdDate).format('MM-DD-YYYY')
+                    date: moment(item.date).format('MM-DD-YYYY')
                 })));
-                // 3rd banned user data
-                setBannedContent(res.data.data.filter(data => ["inactive"].includes(data.status.statusName)).map(item => ({
+                // // 3rd banned user data
+                setBannedContent(res.data.bannedUsers.map(item => ({
                     ...item,
-                    date: moment(item.createdDate).format('MM-DD-YYYY')
+                    date: moment(item.date).format('MM-DD-YYYY')
                 })));
                 setIsLoader(true);
             })
@@ -56,7 +57,7 @@ const LandingPage = () => {
 
 
     useEffect(() => {
-        //subAdminAllData();
+        subAdminAllData();
     }, [])
 
   // download csv file
@@ -93,7 +94,7 @@ const LandingPage = () => {
     if (!isLoader) {
         return (
             <div className='loader'>
-                <h3>Working...</h3>
+                <h3>Loading...</h3>
             </div>
         );
     }
@@ -103,7 +104,7 @@ const LandingPage = () => {
             <PageTitle title="Home" />
 
             <section className={"section mb-5"}>
-                {/*<DashboardCard />*/}
+                <DashboardCard />
             </section>
             <section className={"section"}>
                 <div className={classes.btnRow}>
@@ -111,7 +112,7 @@ const LandingPage = () => {
                     <Form.Control type="date" placeholder="MM/DD/YYYY" value={selectedDate}
                         onChange={handleDateChange} style={{ textTransform: 'uppercase', fontWeight: 'bold' }}></Form.Control>
                 </div>
-                {/*<Tabs
+                <Tabs
                     defaultActiveKey="newuser"
                     id="uncontrolled-tab-example"
                     className="mb-3 navLinkBold"
@@ -125,7 +126,7 @@ const LandingPage = () => {
                     <Tab eventKey="banned" title="Banned">
                         <BannedUserChart bannedContent={bannedContent} />
                     </Tab>
-                </Tabs>*/}
+                </Tabs>
             </section>
 
         </>

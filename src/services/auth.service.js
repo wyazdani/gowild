@@ -258,6 +258,16 @@ const errorMessageHandlerLogin = (data) => {
   })
   return error[0];
 }
+// this error is showing by create sub admin in sub admin page
+const errorMessageHandlerSubAdmin = (data) => {
+  if (!data || !data.response || !data.response.data || !data.response.data.errors) {
+    return 'Email already Exists! Please try another one';
+  }
+  let error = data.response.data.errors.map(function (value) {
+    return Object.values(value)[0];
+  })
+  return error[0];
+}
 
 
 
@@ -273,6 +283,7 @@ export default {
     errorMessageHandler,
     errorMessageHandlerDate,
     errorMessageHandlerLogin,
+    errorMessageHandlerSubAdmin,
     dashboardHomeData,
     subAdminAllDataRes,
     subAdminDelete,

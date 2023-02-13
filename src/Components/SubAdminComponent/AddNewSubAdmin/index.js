@@ -59,7 +59,7 @@ const AddSubAdmin = (props) => {
                 console.log(res);
             })
             .catch((err) => {
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+                swal("Error", `${AuthService.errorMessageHandlerSubAdmin(err)}`, "error");
             });
     }
 

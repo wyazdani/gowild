@@ -72,16 +72,6 @@ const AllTabData = (props) => {
     };
 
 
-    const handleSearch = (event) => {
-        setSearchTerm(event.target.value);
-        setCurrentItems(
-            content.filter(
-            (content) =>
-              (content.firstName.trim() + " " + content.lastName.trim()).toLowerCase().includes(event.target.value.toLowerCase().trim()) ||
-              content.email.toLowerCase().includes(event.target.value.toLowerCase().trim())
-          )
-        );
-      };
 
 
   // chekbox select all
@@ -101,6 +91,20 @@ const AllTabData = (props) => {
   const handleDeselectAll = () => {
     setSelectedItems([]);
     setIsChecked(!isChecked);
+  };
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    setCurrentItems(
+      content.filter(
+        (content) =>
+          (content.firstName.trim() + " " + content.lastName.trim()).toLowerCase().includes(event.target.value.toLowerCase().trim()) ||
+          content.email.toLowerCase().includes(event.target.value.toLowerCase().trim())
+      )
+    );
+    if (event.target.value.trim() === '') {
+      props.subAdminAllData();
+    }
   };
 
 
@@ -172,7 +176,7 @@ const AllTabData = (props) => {
                                     <td>
                                         {content.accountStatus === "active"
                                             ? <span class="text-success"><b>ACTIVE</b></span>
-                                            : <span class="text-danger"><b>DISABLED</b></span>
+                                            : <span class="text-danger" ><b>DISABLED</b></span>
                                         }
                                     </td>
                                     <td>
@@ -182,12 +186,12 @@ const AllTabData = (props) => {
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu>
                                                 <Dropdown.Item href="#/">
-                                                    <i className={"fal fa-ban bg-warning text-white"}></i>
+                                                    <i className={"fal fa-ban bg-warning text-white"}  style={{backgroundColor:'#FF7374'}}></i>
                                                     {content.accountStatus === "active" ? <p className="m-0 p-0" onClick={() => {
                                                        submitEventForm(content.id)
-                                                    }}>Disable User</p> :  <p className="m-0 p-0" onClick={() => {
+                                                    }} >Disable User</p> :   <p className="m-0 p-0" onClick={() => {
                                                        submitEventForm(content.id)
-                                                    }}>Active User</p>}   
+                                                    }}>  <i className={"fal fa-ban bg-warning text-white"}  style={{backgroundColor:'green'}}></i> Active User</p>}   
                                                 </Dropdown.Item>
                                                 <Dropdown.Item href="#/" onClick={
                                                     () => {

@@ -9,6 +9,7 @@ import ReactPaginate from "react-paginate";
 import profile from "Images/routelist.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import EditSubAmdin from "Components/SubAdminComponent/EditSubAdmin";
 
 const ActiveTabData = (props) => {
   const { content } = props;
@@ -253,6 +254,12 @@ const ActiveTabData = (props) => {
           activeLinkClassName="active"
         />
       </div>
+ 
+      <EditSubAmdin subAdminAllData={props.subAdminAllData}
+        show={editSubAdmin}
+        onHide={() => setEditSubAdmin(false)}
+        editItem={editItem} />
+
     </>
   );
 };

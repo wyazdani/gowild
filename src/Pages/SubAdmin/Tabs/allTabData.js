@@ -77,20 +77,6 @@ const AllTabData = (props) => {
   };
 
 
-
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-    setCurrentItems(
-        content.filter(
-        (content) =>
-          (content.firstName.trim() + " " + content.lastName.trim()).toLowerCase().includes(event.target.value.toLowerCase().trim()) ||
-          content.email.toLowerCase().includes(event.target.value.toLowerCase().trim())
-      )
-    );
-  };
-  
-    
-
     const submitEventForm = async (id) => {
         // console.log("1233"+id);
         return  AuthService.postMethod(`${ENDPOINT.sub_admin.active_inactive}${id}/status`, true)
@@ -107,13 +93,22 @@ const AllTabData = (props) => {
 
     };
 
-    // const filteredData = content.filter(item => {
-    //     return (
-    //       item.firstName.toLowerCase().includes(search.toLowerCase()) ||
-    //       item.lastName.toLowerCase().includes(search.toLowerCase()) ||
-    //       item.email.toLowerCase().includes(search.toLowerCase())
-    //     );
-    //   });
+
+
+      const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+        setCurrentItems(
+          content.filter(
+            (content) =>
+              (content.firstName.trim() + " " + content.lastName.trim()).toLowerCase().includes(event.target.value.toLowerCase().trim()) ||
+              content.email.toLowerCase().includes(event.target.value.toLowerCase().trim())
+          )
+        );
+        if (event.target.value.trim() === '') {
+          props.subAdminAllData();
+        }
+      };
+      
  
     return (
         <>
@@ -233,8 +228,7 @@ const AllTabData = (props) => {
             <div className="result_pagination">
                 <span> Rows per page: &nbsp; </span>
                 <select onChange={handleRowsPerPageChange} value={itemsPerPage}>
-                    {/* <option>{currentItems.length}</option> */}
-                    {/* {currentItems.length === 4 ? null  :<option value={4}>4</option>} */}
+
                     <option value={10}>10</option>
                     <option value={25}>25</option>
                     <option value={50}>50</option>

@@ -22,6 +22,7 @@ const AllTabData = (props) => {
 
     /* Destructuring the props object. */
     const { content } = props;
+    const [searchTerm, setSearchTerm] = useState("");
     const [selectedItems, setSelectedItems] = useState([]);
     const [isChecked, setIsChecked] = useState(true);
     
@@ -104,7 +105,7 @@ const AllTabData = (props) => {
                         theme: "dark",
                         });
                  }
-                //   props.userRouteAllData()
+                  props.userRouteAllData()
                 console.log(res);
             })
             .catch((err) => {
@@ -162,6 +163,21 @@ const AllTabData = (props) => {
     setIsChecked(!isChecked);
   };
 
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    setCurrentItems(
+      content.filter(
+        (content) =>
+          (content.user.firstName.trim() + " " + content.user.lastName.trim()).toLowerCase().includes(event.target.value.toLowerCase().trim()) ||
+          content.user.email.toLowerCase().includes(event.target.value.toLowerCase().trim())
+      )
+    );
+    if (event.target.value.trim() === '') {
+      props.userRouteAllData();
+    }
+  };
+
+
     return (
         <>
             <div className={classes.tableFilter}>
@@ -174,7 +190,7 @@ const AllTabData = (props) => {
                                     Filter
                                 </Button>
                                 <Form.Group className={classes.searchForm}>
-                                    <Form.Control type="search" placeholder="Search Users by Name, Email or Date" onChange={(e) => setSearch(e.target.value)} />
+                                <Form.Control type="search" placeholder="Search Users by Name, Email or Date" value={searchTerm} onChange={handleSearch}  />
                                 </Form.Group>
                             </div>
                         </Col>
@@ -214,10 +230,7 @@ const AllTabData = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentItems.sort((a, b) => (a.name < b.name ? -1 : 1)).filter((row) =>
-                            !search.length || row.user.firstName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
-                            row.user.lastName.toString().toLowerCase().includes(search.toString().toLowerCase()) ||
-                            row.user.email.toString().toLowerCase().includes(search.toString().toLowerCase())).map((content) => (
+                    {currentItems.map((content) => (
                         <tr>
                             <td><Form.Check type="checkbox" value={content}
                                 onChange={() => handleCheckboxChange(content)}
@@ -288,15 +301,15 @@ const AllTabData = (props) => {
             <div className="result_pagination">
                 <span> Rows per page: &nbsp; </span>
                 <select onChange={handleRowsPerPageChange} value={itemsPerPage}>
-                    <option>{currentItems.length}</option>
+                    {/* <option>{currentItems.length}</option> */}
                     {/* {currentItems.length === 4 ? null  :<option value={4}>4</option>} */}
-                    <option value={5}>5</option>
+                    <option value={10}>10</option>
                     <option value={25}>25</option>
                     <option value={50}>50</option>
                     <option value={75}>75</option>
                 </select> <i className="fa fa-sort-desc" aria-hidden="true"></i>
 
-                {/* <span className="mx-5"> {currentItems.length} - {content.length} of {content.length} </span> */}
+                {/* <span className="mx-4"> {currentItems.length} - {content.length} of {content.length} </span> */}
                 <span className="mx-5"> {pageCount} - {currentItems.length}  of {content.length} </span>
                 <ReactPaginate
                     breakLabel="..."

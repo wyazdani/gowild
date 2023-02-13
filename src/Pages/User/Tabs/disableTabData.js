@@ -88,14 +88,17 @@ const DisableTabData = (props) => {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
     setCurrentItems(
-        content.filter(
+      content.filter(
         (content) =>
           (content.firstName.trim() + " " + content.lastName.trim()).toLowerCase().includes(event.target.value.toLowerCase().trim()) ||
           content.email.toLowerCase().includes(event.target.value.toLowerCase().trim())
       )
     );
+    if (event.target.value.trim() === '') {
+      props.subAdminAllData();
+    }
   };
-    
+   
 
     return (
         <>

@@ -52,32 +52,7 @@ const Login = () => {
                 fcm_token: user_fcm_token,
             })
             .then((res) => {
-                // if(res){
-                //     if (res.status === 200) {
-                //      // toast.success(res.data.message);
-                //      toast.success('Login Successfull!', {
-                //          position: "bottom-right",
-                //          autoClose: 5000,
-                //          hideProgressBar: false,
-                //          closeOnClick: true,
-                //          pauseOnHover: true,
-                //          draggable: true,
-                //          progress: undefined,
-                //          theme: "dark",
-                //      })
-                //  } else  {
-                //     console.log("errrrror")
-                //      toast.error('Unprocessable Entities!', {
-                //          position: "bottom-right",
-                //          autoClose: 5000,
-                //          hideProgressBar: false,
-                //          closeOnClick: true,
-                //          pauseOnHover: true,
-                //          draggable: true,
-                //          progress: undefined,
-                //          theme: "dark",
-                //          });
-                //  }}
+      
                 console.log(res);
                 localStorage.setItem("accessToken", JSON.stringify(res.data.accessToken));
                 localStorage.setItem("refreshToken", JSON.stringify(res.data.refreshToken));
@@ -128,7 +103,7 @@ const Login = () => {
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="loginpassword">
                         <Form.Label>Password</Form.Label>
-                        <Link  to={"/forgetpassword"}  style={{float: "right"}}>Forget Password ?</Link>
+                        <Link  to={"/rigister-email"}  style={{float: "right"}}>Forget Password ?</Link>
                         <InputGroup>
                             <InputGroup.Text id="basic-addon1">
                                 <img src={Lock} alt={"img"}/>
