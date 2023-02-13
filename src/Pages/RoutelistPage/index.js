@@ -13,6 +13,7 @@ import swal from "sweetalert";
 import EditRouteList from "./EditRouteList";
 import ViewRouteList from "./ViewRouteList";
 import profile from "Images/cardsImg.png";
+import {imageUrl} from "../../Helper/Helpers";
 // °
 
 const RouteList = () => {
@@ -144,18 +145,7 @@ const RouteList = () => {
                     />
                   </td>
                   <td>
-                    {content.picture ? (
-                      <img
-                        src={
-                          "https://api.gowild.appscorridor.com" +
-                          content.picture
-                        }
-                        width="80%"
-                        alt={"img"}
-                      />
-                    ) : (
-                      <img src={profile} width="90%" alt={"img"} />
-                    )}
+                    <img src={imageUrl(content.picture,profile)} style={{ width: 100, height: 100 }} alt={"img"} />
                   </td>
                   <td>{content.title}</td>
                   <td>{formatDate(content.createdDate)}</td>

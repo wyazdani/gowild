@@ -20,7 +20,14 @@ const ViewRouteList = (props) => {
   if (props.viewItem === null) {
     return "";
   }
-
+    props.viewItem["startValue"] = {
+      lat: props.viewItem["start"].latitude,
+      lng: props.viewItem["start"].longitude,
+    }
+    props.viewItem["endValue"] = {
+        lat: props.viewItem["end"].latitude,
+        lng: props.viewItem["end"].longitude,
+    }
   function uploadSingleFile(e) {
     let ImagesArray = Object.entries(e.target.files).map((e) =>
       URL.createObjectURL(e[1])
@@ -74,12 +81,12 @@ const ViewRouteList = (props) => {
               title: props.viewItem.title,
               picture: null,
               start: {
-                latitude: props.viewItem["start"].lat,
-                longitude: props.viewItem["start"].lng,
+                latitude: props.viewItem["start"].latitude,
+                longitude: props.viewItem["start"].longitude,
               },
               end: {
-                latitude: props.viewItem["end"].lat,
-                longitude: props.viewItem["end"].lng,
+                latitude: props.viewItem["end"].latitude,
+                longitude: props.viewItem["end"].longitude,
               },
               description: props.viewItem.description,
               role: "",
@@ -192,8 +199,8 @@ const ViewRouteList = (props) => {
                   <Col md={8}>
                     <div className={"img-box"}>
                       <RouteMap
-                        startingPoint={props.viewItem["start"]}
-                        endingPoint={props.viewItem["end"]}
+                        startingPoint={props.viewItem["startValue"]}
+                        endingPoint={props.viewItem["endValue"]}
                         travelMode={"WALKING"}
                         preRenderMarkers={true}
                       />

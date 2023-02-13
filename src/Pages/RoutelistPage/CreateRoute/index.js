@@ -8,7 +8,7 @@ import {
 } from "react";
 import PageTitle from "../../../Components/Pagetitle";
 import { Button, Col, Form, Row } from "react-bootstrap";
-import { ENDPOINT } from "config/constants";
+import {ENDPOINT, GOOGLE_KEY} from "config/constants";
 import AuthService from "services/auth.service";
 import swal from "sweetalert";
 import { ToastContainer, toast } from "react-toastify";
@@ -34,6 +34,7 @@ const CreateRoute = () => {
     endLattitude: "",
     title: "",
     description: "",
+    picture: "",
   });
 
   const [uploadFile, setUploadFile] = useState();
@@ -61,31 +62,39 @@ const CreateRoute = () => {
     let name = event.target.name;
     const value = event.target.value;
     console.log(name);
-    if (name == "startLongtitude") {
-      setStartingPoint({ ...startingPoint, lng: parseFloat(value) });
-      console.log(name + "1");
-    } else if (name == "startLattitude") {
-      setStartingPoint({ ...startingPoint, lat: parseFloat(value) });
-    } else if (name == "endLongtitude") {
-      setEndingPoint({ ...endingPoint, lng: parseFloat(value) });
-    } else if (name == "endLattitude") {
-      setEndingPoint({ ...endingPoint, lat: parseFloat(value) });
-    } else {
-      // const value = event.target.value.replace(/\D/g, "");
-      // const value = event.target.value.replace(/(0|)\D/g, "");
-      setFormData((prevalue) => {
-        return {
-          ...prevalue, // Spread Operator
-          [name]: value,
-        };
-      });
+    switch (name) {
+      case 'startLongtitude':
+        setStartingPoint({ ...startingPoint, lng: parseFloat(value) });
+        break;
+      case 'startLattitude':
+        setStartingPoint({ ...startingPoint, lat: parseFloat(value) });
+        break;
+      case 'startLongtitude':
+        setEndingPoint({ ...endingPoint, lng: parseFloat(value) });
+        break;
+      case 'startLongtitude':
+        setEndingPoint({ ...endingPoint, lat: parseFloat(value) });
+        break;
+      default:
+        setFormData((prevalue) => {
+          return {
+            ...prevalue, // Spread Operator
+            [name]: value,
+          };
+        });
     }
   };
 
   const submitForm = async (event) => {
     event.preventDefault();
-    formData.start = startingPoint;
-    formData.end = endingPoint;
+    formData.start = {
+      latitude: startingPoint.lat,
+      longitude: startingPoint.lng,
+    };
+    formData.end = {
+      latitude: endingPoint.lat,
+      longitude: endingPoint.lng,
+    };
 
     // formData.distance_miles =
     //   directionsData?.routes[0]?.legs[0]?.distance?.value ?? 0;
@@ -104,8 +113,6 @@ const CreateRoute = () => {
     formData.startLocation = "-";
     formData.endLocation = "-";
 
-    console.log(`DUCK`, "startingPoint", JSON.stringify(startingPoint));
-    console.log(`DUCK`, "formData", JSON.stringify(formData));
     console.log(`DUCK`, "historicalData", JSON.stringify(historicalData));
     const mergedState = Object.assign({}, formData, {
       history_ponts: historicalData,
@@ -118,24 +125,35 @@ const CreateRoute = () => {
       mergedState
     )
       .then((res) => {
-        if (res.status === 200) {
-          toast.success("Form data submitted successfully", {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
-        }
-        console.log(res);
-        setId(res.data.id);
 
-        setShowButton(true);
-        navigate("/route-list");
-        setFormData("");
+        let data = new FormData();
+        data.append('file', uploadFile);
+        setId(res.data.id);
+        const url = (ENDPOINT.admin_route.update_pictures).replace(':id',res.data.id);
+        AuthService.postMethod(
+            url,
+            true,
+            data
+        ).then((res) => {
+          if (res.status === 200) {
+            toast.success("Form data submitted successfully", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+            setShowButton(true);
+            navigate("/route-list");
+            setFormData("");
+          }
+        }).catch((err) => {
+          swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+        });
+        console.log(res);
         // event.target.reset();
       })
       .catch((err) => {
@@ -145,9 +163,13 @@ const CreateRoute = () => {
 
   // add historical event
 
-  const handleHistorical = (event, index) => {
-    console.log(`handleHistorical: ${index}`);
-
+  const handleHistorical = (event, index, key) => {
+    console.log(event.target.value)
+    console.log(event.target.name)
+    let dataObject = historicalData[index];
+    console.log(key)
+    dataObject[key] = event.target.value;
+    console.log(dataObject)
     const newRows = [...historicalData];
     newRows[index][event.target.name] = event.target.value;
     setHistoricalData(newRows);
@@ -155,34 +177,28 @@ const CreateRoute = () => {
 
   const updateStartEndPosition = useCallback(
     (startPos, endPos) => {
-      console.log(
-        `updateStartEndPosition: ${JSON.stringify(startPos)} ${JSON.stringify(
-          endPos
-        )}`
-      );
+      // console.log(
+      //   `updateStartEndPosition: ${JSON.stringify(startPos)} ${JSON.stringify(
+      //     endPos
+      //   )}`
+      // );
       setStartingPoint(startPos);
       setEndingPoint(endPos);
-      // if (directionsData == null) {
-      //   axios
-      //     .get("https://maps.googleapis.com/maps/api/directions/json", {
-      //       headers: {
-      //         "Access-Control-Allow-Origin": "*",
-      //       },
-      //       params: {
-      //         origin: "51,0",
-      //         destination: "51.5,-0.1",
-      //         sensor: false,
-      //         key: "AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0",
-      //       },
-      //     })
-      //     .then((response) => {
-      //       console.log(response.data);
-      //       setDirectionsData(response.data);
-      //     })
-      //     .catch((error) => {
-      //       console.error(error);
-      //     });
-      // }
+      /*if (directionsData == null) {
+        const origin = "51,0";
+        const destination = "51.5,-0.1";
+        const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${GOOGLE_KEY}`;
+        const corsAnywhereUrl = `https://cors-proxy.htmldriven.com/?url=${url}`;
+
+        axios.get(corsAnywhereUrl)
+            .then(response => {
+              console.log('Success')
+       setDirectionsData(response.data);
+              // Extract the distance value from the response
+              console.log(response.data)
+            })
+            .catch(error => console.error(error));
+      }*/
     },
     [startingPoint, endingPoint]
   );
@@ -193,13 +209,12 @@ const CreateRoute = () => {
       setHistoricalData([
         ...historicalData,
         {
-          historical_event: {
-            latitude: position.lat ?? 0,
-            longitude: position.lng ?? 0,
-          },
+          latitude: position.lat ?? '',
+          longitude: position.lng ?? '',
           title: "",
           subtitle: "",
           description: "",
+          file: ""
         },
       ]);
     },
@@ -208,21 +223,17 @@ const CreateRoute = () => {
 
   function uploadSingleFile(e) {
     setUploadFile(e.target.files[0]);
-    let ImagesArray = Object.entries(e.target.files).map((e) =>
-      URL.createObjectURL(e[1])
-    );
-    console.log(ImagesArray);
-    setFile([...file, ...ImagesArray]);
     console.log("file", file);
   }
 
-  function uploadSingleFile1(e) {
-    let ImagesArray = Object.entries(e.target.files).map((e) =>
-      URL.createObjectURL(e[1])
-    );
-    console.log(ImagesArray);
-    setFile([...files, ...ImagesArray]);
-    console.log("files", files);
+  function uploadSingleFileHistorical(e, index) {
+    console.log(e.target.name)
+    console.log(e.target.files)
+    const newRows = [...historicalData];
+    newRows[index][e.target.name] = e.target.files;
+    //setHistoricalData(newRows);
+    //setFiles([...files, ...ImagesArray]);
+    //console.log("files", files);
   }
 
   function upload(e) {
@@ -394,26 +405,26 @@ const CreateRoute = () => {
                             <Form.Control
                               type="text"
                               className={"mb-3 mb-md-5"}
-                              name="longtitude"
+                              name="longitude"
                               required
-                              value={data?.historical_event?.longitude}
+                              value={data.longitude}
                               onChange={(e) =>
-                                handleHistorical(e, index, "longtitude")
+                                handleHistorical(e, index, "longitude")
                               }
-                              placeholder="Longtitude"
+                              placeholder="longitude"
                             />
                           </Form.Group>
                           <Form.Group>
                             <Form.Control
                               type="text"
                               className={"mb-3"}
-                              name="lattitude"
+                              name="latitude"
                               required
-                              value={data?.historical_event?.latitude}
+                              value={data?.latitude}
                               onChange={(e) =>
-                                handleHistorical(e, index, "lattitude")
+                                handleHistorical(e, index, "latitude")
                               }
-                              placeholder="Lattitude"
+                              placeholder="latitude"
                             />
                           </Form.Group>
                         </Col>
@@ -477,7 +488,9 @@ const CreateRoute = () => {
                               id={"upload-photo"}
                               disabled={files.length === 1}
                               className=""
-                              onChange={uploadSingleFile1}
+                              onChange={(e) =>
+                                  uploadSingleFileHistorical(e, index)
+                              }
                             />
                             <span>Attach Images</span>
                           </label>

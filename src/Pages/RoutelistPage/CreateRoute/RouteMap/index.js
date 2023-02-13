@@ -52,7 +52,6 @@ export default function RouteMap({
     if (map) {
       const listener = map.addListener("click", (e) => {
         setMarkers((prevMarkers) => {
-          console.log(`prevMarkers.length: ${prevMarkers.length}`);
           let color;
           if (prevMarkers.length === 0) {
             color = "black";
@@ -122,19 +121,16 @@ export default function RouteMap({
       const origin = markers[0].position;
       const destination = markers[1].position;
 
-      console.log(origin);
-      console.log(destination);
-      console.log(travelMode);
+      // console.log(origin);
+      // console.log(destination);
+      // console.log(travelMode);
 
       const request = {
         origin: origin,
         destination: destination,
         travelMode: travelMode,
       };
-
       directionsService.route(request, (result, status) => {
-        console.log(status);
-        console.log(result);
         if (status === "OK") {
           directionsRenderer.setDirections(result);
         }
