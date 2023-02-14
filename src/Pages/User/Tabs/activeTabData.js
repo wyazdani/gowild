@@ -122,7 +122,7 @@ const ActiveTabData = (props) => {
                     </Row>
                 </Form>
             </div>
-            <Table>
+            <Table className="user">
                 <thead>
                     <tr>
                         <th colSpan={0}>
@@ -168,18 +168,18 @@ const ActiveTabData = (props) => {
                                         }
                                     </td>
                                     <td>
-                                        <Dropdown>
+                                    <Dropdown>
                                             <Dropdown.Toggle variant="success" id="dropdown-basic">
                                                 <i className={"far fa-ellipsis-v fa-fw"}></i>
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu>
                                                 <Dropdown.Item href="#/">
-                                                    <i className={"fal fa-ban bg-warning text-white"}></i>
+                                                    <i className={"fal fa-ban text-white active"}></i>
                                                     {content.accountStatus === "active" ? <p className="m-0 p-0" onClick={() => {
-                                                        submitEventForm(content.id)
-                                                    }}>Disable User</p> : <p className="m-0 p-0" onClick={() => {
-                                                        submitEventForm(content.id)
-                                                    }}>Active User</p>}
+                                                       submitEventForm(content.id)
+                                                    }} >Disable User</p> :   <p className="m-0 p-0" onClick={() => {
+                                                       submitEventForm(content.id)
+                                                    }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Active User</p>}   
                                                 </Dropdown.Item>
                                                 <Dropdown.Item href="#/" onClick={
                                                     () => {

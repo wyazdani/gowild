@@ -229,7 +229,7 @@ const logoutNdelete = (headers, data, printConsole = false) => {
 
 
 const errorMessageHandler = (data) => {
-  if (!data || !data.response || !data.response.data || !data.response.data.errors) {
+  if (!data || !data) {
     return 'Please enter the valid data.';
   }
   let error = data.response.data.errors.map(function (value) {

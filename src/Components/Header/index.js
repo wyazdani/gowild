@@ -34,6 +34,7 @@ const Header = () => {
                     <Dropdown.Toggle className={classes.userProfile}>
                         <img src={userImg} alt={"user name"} />
                     </Dropdown.Toggle>
+                    
                     <Dropdown.Menu>
                         <Dropdown.Item href="#/">Action</Dropdown.Item>
                         <Dropdown.Item href="#/">Another action</Dropdown.Item>

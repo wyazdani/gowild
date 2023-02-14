@@ -194,7 +194,7 @@ const AllTabData = (props) => {
                                 </Form.Group>
                             </div>
                         </Col>
-                        <Col md={5} className={"d-md-flex justify-content-end"}>
+                        <Col md={5} className={"d-flex justify-content-between"}>
                             <Button variant={'transparent text-dark'} onClick={handleDownload}>
                                 <span className={'d-inline-block mx-2 mr-5'}>
                                     <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">

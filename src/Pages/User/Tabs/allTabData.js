@@ -111,8 +111,8 @@ const AllTabData = (props) => {
     return (
         <>
             <div className={classes.tableFilter}>
-                <Form>
-                    <Row>
+                <Form >
+                    <Row >
                         <Col md={8}>
                             <div className={"d-md-flex"}>
                                 <Button variant="filter">
@@ -134,7 +134,7 @@ const AllTabData = (props) => {
                     </Row>
                 </Form>
             </div>
-            <Table>
+            <Table className="user">
                 <thead>
                     <tr>
                         <th>
@@ -186,12 +186,12 @@ const AllTabData = (props) => {
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu>
                                                 <Dropdown.Item href="#/">
-                                                    <i className={"fal fa-ban bg-warning text-white"}  style={{backgroundColor:'#FF7374'}}></i>
+                                                    <i className={"fal fa-ban text-white active"}></i>
                                                     {content.accountStatus === "active" ? <p className="m-0 p-0" onClick={() => {
                                                        submitEventForm(content.id)
                                                     }} >Disable User</p> :   <p className="m-0 p-0" onClick={() => {
                                                        submitEventForm(content.id)
-                                                    }}>  <i className={"fal fa-ban bg-warning text-white"}  style={{backgroundColor:'green'}}></i> Active User</p>}   
+                                                    }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Active User</p>}   
                                                 </Dropdown.Item>
                                                 <Dropdown.Item href="#/" onClick={
                                                     () => {

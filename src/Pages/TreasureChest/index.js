@@ -191,7 +191,7 @@ const TreasureChestList = () => {
                                             <Dropdown.Item href="#/" onClick={() => {
                                                 deleteTreasureChests(item.id)
                                             }}>
-                                                <i className={"fal fa-trash bg-danger text-white"}></i>
+                                                <i className={"fal fa-trash  text-white"} style={{backgroundColor:"#FF2113"}}></i>
                                                 Delete
                                             </Dropdown.Item>
                                         </Dropdown.Menu>

@@ -178,7 +178,7 @@ const ViewTreasure = (props) => {
                                                             <Form.Group>
                                                                 <Form.Label className="mt-3"><b>Time</b></Form.Label>
                                                                 <p className={"mb-3"}>
-                                                                    {values.eventTime}
+                                                                    {props.viewItem.eventTime}
                                                                 </p>
                                                             </Form.Group>
                                                         </Col>
