@@ -31,7 +31,7 @@ const Messages = (props) => {
     useEffect(() => {
 
         handleChange(props)
-    }, []);
+    }, [props]);
 
 
     useEffect(() => {
@@ -44,11 +44,9 @@ const Messages = (props) => {
     }, [props, currentItems]);
 
     const handleChange = (props) => {
-        if (ticketId!== ticket?.id){
-            setCurrentItems(props.message?.data.reverse())
-            setTicket(props.rowUser)
-            setTicketId(props.rowUser?.id)
-        }
+        setCurrentItems(props.message?.data.reverse())
+        setTicket(props.rowUser)
+        setTicketId(props.rowUser?.id)
     }
 
     return (
