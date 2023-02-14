@@ -28,7 +28,7 @@ const Inbox = (props) => {
                     {currentItems.map((data) => (
                         <li onClick={props.ticketMessages.bind(null,data.id,data)} key={data.id} className="active">
                             <div className={classes.userImg}>
-                                <img src={imageUrl(data.user?.picture,userImg)} alt="username"/>
+                                <img src={imageUrl(data.user?.picture,userImg)} style={{borderRadius: "50%", width:50, height:50}} alt="username"/>
                             </div>
                             <div className={classes.description}>
                                 <h6>{`${data.user?.firstName} ${data.user?.lastName}`}</h6>

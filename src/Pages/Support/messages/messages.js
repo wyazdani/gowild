@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { Table, Form, Dropdown, Button, Row, Col } from "react-bootstrap";
 import classes from "../index.module.scss";
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,6 +15,7 @@ const Messages = (props) => {
     const [msg, setMsg] = useState('');
     const [ticketId, setTicketId] = useState(null);
     const socket = io(SOCKET_URL);
+    const messagesEndRef = useRef(null);
     const emitEvent = async (id)=> {
         if (msg) {
             socket.emit(ENDPOINT.support.emit_message,{
@@ -29,25 +30,32 @@ const Messages = (props) => {
 
     };
     useEffect(() => {
-
-        handleChange(props)
-    }, [props]);
-
-
-    useEffect(() => {
-        socket.on('msgSupport', (data)=>{
-            setCurrentItems([...currentItems, data.data]);
-
-        })
+        messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        if (props.rowUser?.id !== ticketId) {
+            handleMessages([])
+        }
+        if (currentItems.length < (props.message?.data).length) {
+            handleMessages(props.message?.data)
+        }
 
         handleChange(props)
     }, [props, currentItems]);
+    useEffect(() => {
+        messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        socket.on('msgSupport', (data)=>{
+            handleMessages([...props.message?.data, data.data])
+        })
+        handleChange(props)
+    }, [currentItems, props]);
 
     const handleChange = (props) => {
-        setCurrentItems(props.message?.data.reverse())
         setTicket(props.rowUser)
         setTicketId(props.rowUser?.id)
     }
+    const handleMessages = (messages) => {
+        setCurrentItems(messages)
+    }
+
 
     return (
         <>
@@ -78,6 +86,7 @@ const Messages = (props) => {
                                 </div>
                             </div>
                         ))}
+                        <div ref={messagesEndRef} />
                     </div>
                     <div className={classes.typemsg}>
                         <div className={classes.btngroup}>
