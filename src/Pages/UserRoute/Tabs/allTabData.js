@@ -218,7 +218,7 @@ const AllTabData = (props) => {
                                                         Reject</span>
                                                 </Dropdown.Item>
                                                 : <Dropdown.Item href="#/" onClick={() => approveUser(content.id)}>
-                                                    <span className="imgSpan" style={{ backgroundColor: '#0D5351' }}> <i class="fa fa-check" aria-hidden="true" style={{ marginTop: '3px' }} ></i> &nbsp;&nbsp;  &nbsp; &nbsp; Approve
+                                                    <span className="imgSpan" style={{ backgroundColor: '#0D5351' }}> <i class="fa fa-check" aria-hidden="true" style={{ marginTop: '0px' }} ></i> &nbsp;&nbsp;  &nbsp; &nbsp; Approve
                                                     </span>
                                                     {/* <span className="imgSpan">  </span> */}
                                                 </Dropdown.Item>

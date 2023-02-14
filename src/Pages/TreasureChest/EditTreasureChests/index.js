@@ -174,9 +174,12 @@ const EditTreasure = (props) => {
                 "a_r": "augmented reality",
                 "winnerId": "uuid",
                 "picture": props.editItem.picture,
-                "a_r": "augmented reality"
-
-            }}
+                "a_r": "augmented reality",
+                "sponsor": {
+                        "img": props.editItem.img,
+                        "link":props.editItem.img,
+                    },            
+            }}     
         >
             {({
                 handleSubmit,
@@ -210,16 +213,35 @@ const EditTreasure = (props) => {
                                     <Form.Label><b>Treasure Location</b></Form.Label>
                                     <Form.Control type="text"
                                         name="latitude"
-
-                                        value={values.latitude}
-                                        onChange={handleChange}
-                                        isValid={touched.latitude && !errors.latitude}
+                                        value={values.location.latitude}
+                                        // onChange={handleChange}
+                                        // isValid={touched.latitude && !errors.latitude}
+                                        onChange={(e) => {
+                                            handleChange({
+                                                ...e,
+                                                target: {
+                                                    ...e.target,
+                                                    name: "location.latitude",
+                                                    value: e.target.value,
+                                                },
+                                            });
+                                        }}
                                         className={"mb-3"} placeholder="65.5234°" />
                                     <Form.Control type="text"
                                         name="longitude"
-                                        value={values.longitude}
-                                        onChange={handleChange}
-                                        isValid={touched.longitude && !errors.longitude}
+                                        value={values.location.longitude}
+                                        // onChange={handleChange}
+                                        // isValid={touched.longitude && !errors.longitude}
+                                            onChange={(e) => {
+                                                handleChange({
+                                                    ...e,
+                                                    target: {
+                                                        ...e.target,
+                                                        name: "location.longitude",
+                                                        value: e.target.value,
+                                                    },
+                                                });
+                                            }}
                                         className={"mb-3"} placeholder="1.12378°" />
                                 </Form.Group>
 
@@ -248,12 +270,12 @@ const EditTreasure = (props) => {
                                                                 {fields.map((values, index) => (
                                                                     <div key={index}>
                                                                         <div className="d-flex">
-                                                                            {fields[0].file ? <img src={values.file} width="20%" alt="Preview" /> : ""}
+                                                                            { <img src={"https://api.gowild.appscorridor.com" + props.editItem.sponsor[0].img} width="20%" alt="Preview" />}
                                                                             <input
                                                                                 type="text"
                                                                                 name="link"
                                                                                 required
-                                                                                value={values.link}
+                                                                                value={props.editItem.sponsor[0].link}
                                                                                 // onChange={handleChange}
                                                                                 className={"mb-1 ms-2 mb-md-2"} placeholder="🔗 www.redbull.com"
                                                                                 onChange={event => handleChanges(index, event)}
@@ -295,7 +317,8 @@ const EditTreasure = (props) => {
                                                 </Col>
                                             </Row>
                                         </Col>
-
+                                        {/* <input type="text" value={props.editItem.sponsor[0].link} /> */}
+                                        {/* <img src={"https://api.gowild.appscorridor.com" + props.editItem.sponsor[0].img} width="20%" alt={"img"} /> */}
                                         <Col md={4}>
                                             <Row>
                                                 <Col md={12}>
@@ -342,22 +365,23 @@ const EditTreasure = (props) => {
                                             <Row>
                                                 <Col md={12}>
                                                     <Form.Label className="d-flex "><b>Upload Augmented Reality</b></Form.Label>
-                                                    <label className={"treasureChest_img"} htmlFor="upload-photo">
+                                                    <label className={"treasureChest_img"} htmlFor="upload">
                                                         <img src={img2} width="85%" alt="" />
                                                     </label>
                                                     <Form.Label className="d-flex mt-4 mb-0 "><b>Upload Thumbnail</b></Form.Label>
-                                                    <label className={"fileUpload v2 mb-0"} htmlFor="upload-photo">
+                                                    <label className={"fileUpload mx-5 v2 v3 opacity-0 mb-0 "}  htmlFor="upload-photo">
                                                     <Form.Control
                                                         type="file"
                                                         name="picture"
-                                                        
+                                                        // className="my-5"
                                                         id={"upload-photo"}
                                                         disabled={file.length === 1}
-                                                        className=""
                                                         onChange={uploadSingleFile}
                                                     />
+                                                    
                                                         {/* <span>Attach images of thumbnail</span> */}
                                                     </label>
+                                                    <img src={"https://api.gowild.appscorridor.com" +values.picture} width="60%" alt={"img"} />
                                                     {/* preview image */}
                                                     {/* <img src={"https://api.gowild.appscorridor.com" + values.picture} width="70%" alt={"img"} /> */}
                                                     <div className="form-group previewBox">

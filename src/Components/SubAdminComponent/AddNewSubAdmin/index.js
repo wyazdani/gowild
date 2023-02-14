@@ -102,7 +102,7 @@ const AddSubAdmin = (props) => {
                             errors,
                         }) => (
                             <Form noValidate onSubmit={handleSubmit}>
-                                <Row>
+                                <Row clssName="feedBack">
                                     <Col md={6}>
                                         <div className={classes.box}>
                                             <h3 className={"font-20 text-orange mb-3"}>Perosnal Information</h3>
@@ -161,7 +161,7 @@ const AddSubAdmin = (props) => {
                                                         name="addressOne"
                                                         value={values.addressOne}
                                                         onChange={handleChange}
-                                                        placeholder="Address 1"
+                                                        placeholder="Address"
                                                         // isValid={touched.addressOne && !errors.addressOne}
                                                         isInvalid={!!errors.addressOne && touched.addressOne}
                                                     />
