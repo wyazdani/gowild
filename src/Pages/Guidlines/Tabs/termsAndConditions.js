@@ -21,7 +21,7 @@ const TermsAndConditions = () => {
         // const value = event.target.value.replace(/(0|)\D/g, "");
         setFormData((prevalue) => {
             return {
-                ...prevalue,   // Spread Operator               
+                ...prevalue,   // Spread Operator
                 [name]: value
             }
         })
@@ -31,7 +31,7 @@ const TermsAndConditions = () => {
     const guidlinessWaiverData = async () => {
         await AuthService.getMethod(`${ENDPOINT.admin_guidelines.termsAndConditions_listing}`, true)
             .then((res) => {
-                setFormData(res.data.data)
+                setFormData(res.data?.data)
                 setIsLoader(true);
                 // console.log(res.data.data)
             })
@@ -50,7 +50,7 @@ const TermsAndConditions = () => {
         return AuthService.postMethod(ENDPOINT.admin_guidelines.terms_conditions, true, dataObj)
             .then((res) => {
                 if (res.status === 201) {
-                    toast.success(res.data.message);
+                    toast.success(res.data?.message);
                 }
                 guidlinessWaiverData();
                 console.log(res);
@@ -91,7 +91,7 @@ const TermsAndConditions = () => {
         );
     }
 
-    const date = formData.updatedDate ? new Date(formData.updatedDate) : null;
+    const date = formData?.updatedDate ? new Date(formData?.updatedDate) : null;
     const options = {
       year: 'numeric',
       month: 'long',
@@ -108,7 +108,7 @@ const TermsAndConditions = () => {
                             <Form.Group className={`${classes.formGroup} mb-3`}>
                                 <textarea
                                     name="description"
-                                    value={formData.description}
+                                    value={formData?.description}
                                     onChange={handleChange}
                                 >
                                 </textarea>
@@ -127,7 +127,7 @@ const TermsAndConditions = () => {
                             <li>
                                 <div className={classes.box}>
                                     <time className={"d-block"}>
-                                        {(formatDate(formData.updatedDate))}
+                                        {(formatDate(formData?.updatedDate))}
                                     </time>
                                     <div>Term &amp; Conditions - Updated!</div>
                                 </div>
@@ -135,7 +135,7 @@ const TermsAndConditions = () => {
                             <li>
                                 <div className={classes.box}>
                                     <time className="d-block">
-                                        {(formatDate(formData.updatedDate))}
+                                        {(formatDate(formData?.updatedDate))}
                                     </time>
                                     <div>FAQ</div>
                                 </div>

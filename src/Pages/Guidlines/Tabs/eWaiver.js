@@ -26,7 +26,7 @@ const EWavier = () => {
         // const value = event.target.value.replace(/(0|)\D/g, "");
         setFormData((prevalue) => {
             return {
-                ...prevalue,   // Spread Operator               
+                ...prevalue,   // Spread Operator
                 [name]: value
             }
         })
@@ -36,18 +36,18 @@ const EWavier = () => {
     const guidlinessWaiverData = async () => {
         try {
             // First API call
-         
+
             const res = await AuthService.getMethod(`${ENDPOINT.admin_guidelines.eWaiver_listing}`, true);
-              setFormData(res.data.data)
+              setFormData(res.data?.data)
             // console.log("res", res.data.data);
             // 2nd API call
             const res2 = await AuthService.getMethod(`${ENDPOINT.admin_guidelines.faq_listing}`, true);
-            setFaqData(res2.data.data)
+            setFaqData(res2.data?.data)
             // console.log("res2", res2.data.data);
 
             // // 3rd API call
             const res3 = await AuthService.getMethod(`${ENDPOINT.admin_guidelines.termsAndConditions_listing}`, true);
-            setTermsData(res3.data.data)
+            setTermsData(res3.data?.data)
             setIsLoader(true);
             // console.log("res3", res3.data.data);
 
@@ -62,7 +62,7 @@ const EWavier = () => {
         event.preventDefault();
         const dataObj = {
             "type": "eWaiver",
-            "description": formData.description,
+            "description": formData?.description,
         }
         return AuthService.postMethod(ENDPOINT.admin_guidelines.terms_conditions, true, dataObj)
             .then((res) => {
@@ -102,8 +102,8 @@ const EWavier = () => {
 
 
 
-    const date =  formData.updatedDate ? new Date(formData.updatedDate) : null;
-    
+    const date =  formData?.updatedDate ? new Date(formData?.updatedDate) : null;
+
     const options = {
       year: 'numeric',
       month: 'long',
@@ -130,7 +130,7 @@ const EWavier = () => {
                             <Form.Group className={`${classes.formGroup} mb-3`}>
                                 <textarea
                                     name="description"
-                                    value={formData.description}
+                                    value={formData?.description}
                                     onChange={handleChange}
                                 >
                                 </textarea>
@@ -150,7 +150,7 @@ const EWavier = () => {
                             <li>
                                 <div className={classes.box}>
                                     <time className={"d-block"}>
-                                        {(formatDate(termsData.updatedDate))}
+                                        {(formatDate(termsData?.updatedDate))}
                                     </time>
                                     <div>Term &amp; Conditions - Updated!</div>
                                 </div>
@@ -159,7 +159,7 @@ const EWavier = () => {
                                 <div className={classes.box}>
                                     <time className="d-block">
                                         {/* {(formatDate(faqData.updatedDate))} */}
-                                        {(formatDate(termsData.updatedDate))}
+                                        {(formatDate(termsData?.updatedDate))}
                                     </time>
                                     <div>FAQ</div>
                                 </div>

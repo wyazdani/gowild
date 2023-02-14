@@ -13,7 +13,6 @@ import 'react-toastify/dist/ReactToastify.css';
 const TreasureHuntEWaiver = (props) => {
 
     const [content, setContent] = useState([]);
-    console.log("🚀 ~ file: index.js:16 ~ TreasureHuntEWaiver ~ content", content)
     const [formData, setFormData] = useState({});
     const [faqData, setFaqData] = useState({});
     const [termsData, setTermsData] = useState({});
@@ -26,33 +25,33 @@ const TreasureHuntEWaiver = (props) => {
         // const value = event.target.value.replace(/(0|)\D/g, "");
         setFormData((prevalue) => {
             return {
-                ...prevalue,   // Spread Operator               
+                ...prevalue,   // Spread Operator
                 [name]: value
             }
         })
     }
-   
+
 
 
     const guidlinessWaiverData = async () => {
         try {
             // First API call
-         
+
             const res = await AuthService.getMethod(`${ENDPOINT.admin_guidelines.huntEWaiver_listing}`, true);
-            setFormData(res.data.data)
+            setFormData(res.data?.data)
             // console.log("res", res.data.data);
             // 2nd API call
             const res2 = await AuthService.getMethod(`${ENDPOINT.admin_guidelines.faq_listing}`, true);
-            setFaqData(res2.data.data)
+            setFaqData(res2.data?.data)
             // console.log("res2", res2.data.data);
 
             // // 3rd API call
             const res3 = await AuthService.getMethod(`${ENDPOINT.admin_guidelines.termsAndConditions_listing}`, true);
-            setTermsData(res3.data.data)
+            setTermsData(res3.data?.data)
             setIsLoader(true);
             // // 4th API call
             const res4 = await AuthService.getMethod(`${ENDPOINT.treasure_chests.listing}`, true);
-            setContent(res4.data.data)
+            setContent(res4.data?.data)
             setIsLoader(true);
             // console.log("res4", res3.data.data);
 
@@ -65,12 +64,12 @@ const TreasureHuntEWaiver = (props) => {
         event.preventDefault();
         const dataObj = {
             "type": "huntEWaiver",
-            "description": formData.description,
+            "description": formData?.description,
         }
         return AuthService.postMethod(ENDPOINT.admin_guidelines.terms_conditions, true, dataObj)
             .then((res) => {
                 if (res.status === 201) {
-                    toast.success(res.data.message);
+                    toast.success(res.data?.message);
                 }
                 guidlinessWaiverData();
                 console.log(res);
@@ -102,8 +101,8 @@ const TreasureHuntEWaiver = (props) => {
         return [month, day, year].join('/');
     }
 
-    const date =  formData.updatedDate ? new Date(formData.updatedDate) : null;
-    
+    const date =  formData?.updatedDate ? new Date(formData?.updatedDate) : null;
+
     const options = {
       year: 'numeric',
       month: 'long',
@@ -154,7 +153,7 @@ const TreasureHuntEWaiver = (props) => {
                                     content.map((content) => {
                                         return (
                                             <>
-                                                <option value="1">{content.title}</option>
+                                                <option value="1">{content?.title}</option>
                                             </>
                                         )
                                     })
@@ -166,7 +165,7 @@ const TreasureHuntEWaiver = (props) => {
                             <Form.Group className={`${classes.formGroup} mb-3`}>
                                 <textarea
                                     name="description"
-                                    value={formData.description}
+                                    value={formData?.description}
                                     onChange={handleChange}
                                 >
                                 </textarea>
@@ -185,7 +184,7 @@ const TreasureHuntEWaiver = (props) => {
                             <li>
                                 <div className={classes.box}>
                                     <time className={"d-block"}>
-                                        {(formatDate(termsData.updatedDate))}
+                                        {(formatDate(termsData?.updatedDate))}
                                     </time>
                                     <div>Term &amp; Conditions - Updated!</div>
                                 </div>
@@ -194,7 +193,7 @@ const TreasureHuntEWaiver = (props) => {
                                 <div className={classes.box}>
                                     <time className="d-block">
                                         {/* {(formatDate(faqData.updatedDate))} */}
-                                        {(formatDate(termsData.updatedDate))}
+                                        {(formatDate(termsData?.updatedDate))}
                                     </time>
                                     <div>FAQ</div>
                                 </div>

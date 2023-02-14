@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Faqs = () => {
 
- 
+
     const [formData, setFormData] = useState({});
     const [isLoader, setIsLoader] = useState(false);
 
@@ -21,7 +21,7 @@ const Faqs = () => {
         // const value = event.target.value.replace(/(0|)\D/g, "");
         setFormData((prevalue) => {
             return {
-                ...prevalue,   // Spread Operator               
+                ...prevalue,   // Spread Operator
                 [name]: value
             }
         })
@@ -31,7 +31,7 @@ const Faqs = () => {
     const guidlinessWaiverData = async () => {
         await AuthService.getMethod(`${ENDPOINT.admin_guidelines.faq_listing}`, true)
             .then((res) => {
-                setFormData(res.data.data)
+                setFormData(res.data?.data)
                 setIsLoader(true);
                 // console.log(res.data.data)
             })
@@ -50,7 +50,7 @@ const Faqs = () => {
         return AuthService.postMethod(ENDPOINT.admin_guidelines.terms_conditions, true, dataObj)
             .then((res) => {
                 if (res.status === 201) {
-                    toast.success(res.data.message);
+                    toast.success(res.data?.message);
                 }
                 guidlinessWaiverData();
                 console.log(res);
