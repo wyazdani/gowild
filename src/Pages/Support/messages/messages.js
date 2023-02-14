@@ -52,6 +52,9 @@ const Messages = (props) => {
         setTicket(props.rowUser)
         setTicketId(props.rowUser?.id)
     }
+    const handleImage = (e) => {
+        console.log(e.target.files[0])
+    }
     const handleMessages = (messages) => {
         setCurrentItems(messages)
     }
@@ -90,6 +93,7 @@ const Messages = (props) => {
                     </div>
                     <div className={classes.typemsg}>
                         <div className={classes.btngroup}>
+                            {/*<input type="file" id={"upload-photo"} accept=".jpg,.jpeg,.png" onChange={handleImage}/>*/}
                             <button type="button" className={classes.btn}><i className="fal fa-paperclip"></i></button>
                             <button type="button" className={classes.btn}><i className="fal fa-image"></i></button>
                         </div>
