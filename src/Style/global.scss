@@ -535,9 +535,9 @@ table {
     background-size: 60px;
   }
 }
-.Header_notification__MQwJ3{
-  margin-right: 52px !important;
-}
+// .Header_notification__MQwJ3{
+//   margin-right: 52px !important;
+// }
 .feedBack {
   .invalid-feedback {
     display: none;
@@ -551,6 +551,15 @@ table {
 .user{
   .fa-ban{
     background-color: #FF7374 !important;
+  }
+  .tick{
+    background-color: green;
+    color: #fff;
+  }
+}
+.user1{
+  .fa-ban{
+    background-color: #FEAC71 !important;
   }
   .tick{
     background-color: green;

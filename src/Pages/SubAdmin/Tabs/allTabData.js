@@ -139,7 +139,7 @@ const AllTabData = (props) => {
                     </Row>
                 </Form>
             </div>
-            <Table>
+            <Table className='user1'>
                 <thead>
                     <tr>
                         <th>
@@ -191,14 +191,22 @@ const AllTabData = (props) => {
                                             </Dropdown.Toggle>
 
                                             <Dropdown.Menu>
-                                                <Dropdown.Item href="#/" 
+                                                {/* <Dropdown.Item href="#/" 
                                                 >
-                                                    <i className={"fal fa-ban bg-warning text-white"}></i>
+                                                    <i className={"fal fa-ban text-white"}  style={{backgroundColor:'#FEAC71'}}></i>
                                                     {content.accountStatus === "active" ? <p className="m-0 p-0" onClick={() => {
                                                        submitEventForm(content.id)
                                                     }}>Disable User</p> :  <p className="m-0 p-0" onClick={() => {
                                                        submitEventForm(content.id)
-                                                    }}>Active User</p>}   
+                                                    }}><i class="fa fa-check tick" aria-hidden="true"></i>Active User</p>}   
+                                                </Dropdown.Item> */}
+                                                <Dropdown.Item href="#/">
+                                                    <i className={"fal fa-ban text-white active"}></i>
+                                                    {content.accountStatus === "active" ? <p className="m-0 p-0" onClick={() => {
+                                                       submitEventForm(content.id)
+                                                    }} >Disable User</p> :   <p className="m-0 p-0" onClick={() => {
+                                                       submitEventForm(content.id)
+                                                    }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Active User</p>}   
                                                 </Dropdown.Item>
                                                 <Dropdown.Item href="#/" onClick={
                                                     () => {
@@ -214,7 +222,7 @@ const AllTabData = (props) => {
                                                         props.deleteSubAdmin(content.id)
                                                     }}
                                                 >
-                                                    <i className={"fal fa-trash bg-danger text-white"}></i>
+                                                    <i className={"fal fa-trash text-white"} style={{backgroundColor:"#FF2113"}}></i>
                                                     Delete
                                                 </Dropdown.Item>
                                             </Dropdown.Menu>

@@ -86,7 +86,7 @@ const InActiveTabData = (props) => {
 
   return (
     <>
-      <Table>
+      <Table className="user1">
         <thead>
           <tr>
             <th>
@@ -172,45 +172,30 @@ const InActiveTabData = (props) => {
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
+
                     <Dropdown.Item href="#/">
-                      <i className={"fal fa-ban bg-warning text-white"}></i>
-                      {content.accountStatus === "active" ? (
-                        <p
-                          className="m-0 p-0"
-                          onClick={() => {
-                            submitEventForm(content.id);
-                          }}
-                        >
-                          Disable User
-                        </p>
-                      ) : (
-                        <p
-                          className="m-0 p-0"
-                          onClick={() => {
-                            submitEventForm(content.id);
-                          }}
-                        >
-                          Active User
-                        </p>
-                      )}
+                      <i className={"fal fa-ban text-white active"}></i>
+                      {content.accountStatus === "active" ? <p className="m-0 p-0" onClick={() => {
+                        submitEventForm(content.id)
+                      }} >Disable User</p> : <p className="m-0 p-0" onClick={() => {
+                        submitEventForm(content.id)
+                      }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Active User</p>}
                     </Dropdown.Item>
-                    <Dropdown.Item
-                      href="#/"
-                      onClick={() => {
-                        setEditSubAdmin(true);
-                        setEditItem(content);
-                      }}
-                    >
+                    <Dropdown.Item href="#/" onClick={
+                      () => {
+                        setEditSubAdmin(true)
+                        setEditItem(content)
+                      }
+                    }>
                       <i className={"far fa-pen bg-dark text-white"}></i>
                       Edit User
                     </Dropdown.Item>
-                    <Dropdown.Item
-                      href="#/"
+                    <Dropdown.Item href="#/"
                       onClick={() => {
-                        props.deleteSubAdmin(content.id);
+                        props.deleteSubAdmin(content.id)
                       }}
                     >
-                      <i className={"fal fa-trash bg-danger text-white"}></i>
+                      <i className={"fal fa-trash text-white"} style={{ backgroundColor: "#FF2113" }}></i>
                       Delete
                     </Dropdown.Item>
                   </Dropdown.Menu>
