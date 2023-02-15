@@ -11,6 +11,8 @@ import swal from 'sweetalert';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
+import moment from 'moment';
+
 
 
 const CreateTreasure = () => {
@@ -36,23 +38,24 @@ const CreateTreasure = () => {
             }
         })
     }
-
+  
 
     const submitForm = async (event) => {
         event.preventDefault();
         try {
-            // First API call
+
+            const eventDateTime = moment.utc(`${formData.date} ${formData.time}:00.000`).format("YYYY-MM-DD HH:mm:ss.SSS");
             const dataObj = {
-                "title": formData.title,
-                "description": formData.description,
-                "location": {
-                    "latitude": JSON.parse(formData.latitude),
-                    "longitude": JSON.parse(formData.longitude)
-                },
-                "eventDate": formData.date,
-                "eventTime": formData.time,
-                "no_of_participants": formData.number,
-                "picture": formData.picture
+            "title": formData.title,
+            "description": formData.description,
+            "location": {
+            "latitude": JSON.parse(formData.latitude),
+            "longitude": JSON.parse(formData.longitude)
+            },
+            "eventDate": eventDateTime,
+            "eventTime": formData.time,
+            "no_of_participants": formData.number,
+            "picture": formData.picture
             }
             const res = await AuthService.postMethod(`${ENDPOINT.treasure_chests.listing}`, true, dataObj);
 
@@ -100,6 +103,28 @@ const CreateTreasure = () => {
             swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
         }
     };
+
+    // const submitForm = async (event) => {
+    //     event.preventDefault();
+    //     try {
+    //       const eventDateTime = moment(`${formData.date} ${formData.time}`).utc().format();
+    //       const dataObj = {
+    //         "title": formData.title,
+    //         "description": formData.description,
+    //         "location": {
+    //           "latitude": JSON.parse(formData.latitude),
+    //           "longitude": JSON.parse(formData.longitude)
+    //         },
+    //         "eventDate": eventDateTime,
+    //         "no_of_participants": formData.number,
+    //         "picture": formData.picture
+    //       }
+    //       const res = await AuthService.postMethod(`${ENDPOINT.treasure_chests.listing}`, true, dataObj);
+    //       // rest of the code
+    //     } catch (err) {
+    //       swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+    //     }
+    //   };
 
 
     function uploadSingleFile(e) {
