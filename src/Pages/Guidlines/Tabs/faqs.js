@@ -7,8 +7,30 @@ import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Faq from 'react-faq-component';
 
 const Faqs = () => {
+
+    const data = {
+
+        rows: [
+          {
+            title: "Lorem ipsum dolor sit amet,",
+            content: "Lorem ipsum dolor sit amet, consectetur "
+          },
+          {
+            title: "Nunc maximus, magna at ultricies elementum",
+            content: "Nunc maximus, magna at ultricies elementum, risus turpis vulputate quam."
+          },
+          {
+            title: "Curabitur laoreet, mauris vel blandit fringilla",
+            content: "Curabitur laoreet, mauris vel blandit fringilla, leo elit rhoncus nunc"
+          },
+          {
+            title: "What is the package version",
+            content: "v1.0.5"
+          }]
+      }
 
 
     const [formData, setFormData] = useState({});
@@ -91,6 +113,18 @@ const Faqs = () => {
         );
     }
 
+
+
+
+      const styles = {
+        // bgColor: 'white',
+        titleTextColor: "#898A8D",
+        rowTitleColor: "#898A8D",
+        // rowContentColor: 'grey',
+        // arrowColor: "red",
+    };
+    
+
     // const date = formData.updatedDate ? new Date(formData.updatedDate) : null;
     // const options = {
     //   year: 'numeric',
@@ -106,12 +140,13 @@ const Faqs = () => {
                     <div className={classes.editSection}>
                         <Form >
                             <Form.Group className={`${classes.formGroup} mb-3`}>
-                                <textarea
+                                {/* <textarea
                                     name="description"
                                     // value={formData.description}
                                     onChange={handleChange}
                                 >
-                                </textarea>
+                                </textarea> */}
+                                <Faq data={data}  styles={styles} />
                             </Form.Group>
                             <Form.Group>
                                 <Button variant={"dark"} onClick={submitEventForm}> Save </Button>
