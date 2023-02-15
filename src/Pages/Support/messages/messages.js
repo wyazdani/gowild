@@ -52,6 +52,9 @@ const Messages = (props) => {
         setTicket(props.rowUser)
         setTicketId(props.rowUser?.id)
     }
+    const handleImage = (e) => {
+        console.log(e.target.files[0])
+    }
     const handleMessages = (messages) => {
         setCurrentItems(messages)
     }
@@ -90,8 +93,16 @@ const Messages = (props) => {
                     </div>
                     <div className={classes.typemsg}>
                         <div className={classes.btngroup}>
-                            <button type="button" className={classes.btn}><i className="fal fa-paperclip"></i></button>
-                            <button type="button" className={classes.btn}><i className="fal fa-image"></i></button>
+                            {/*<input type="file" id={"upload-photo"} accept=".jpg,.jpeg,.png" onChange={handleImage}/>*/}
+                            {/*<button type="button" className={classes.btn}><i className="fal fa-paperclip"></i></button>*/}
+                            {/*<button type="button" className={classes.btn}><i className="fal fa-image"></i></button>*/}
+                            <Form.Label htmlFor={'inputAttach'} className={classes.inputAttach}>
+                                <Form.Control id={'inputAttach'} type={'file'} />
+                            </Form.Label>
+                            <Form.Label htmlFor={'inputPicture'} className={classes.inputPicture}>
+                                <Form.Control id={'inputPicture'} type={'file'} accept={".jpg,.jpeg,.png"} onChange={handleImage}/>
+                            </Form.Label>
+
                         </div>
                         <input type="text" className={classes.formcontrol} value={msg}
                                onChange={(e) => setMsg(e.target.value)} placeholder="Type a message"/>

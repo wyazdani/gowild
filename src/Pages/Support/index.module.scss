@@ -326,14 +326,13 @@
     .btngroup{
       left: 0;
       position: absolute;
-      top: 0;
+      top: 4px;
       display: flex;
       align-content: center;
 
       .btn{
         background: transparent;
         color: #ccc;
-
       }
     }
 
@@ -360,5 +359,33 @@
       }
     }
   }
+}
+
+
+.inputAttach,
+.inputPicture{
+  width: 30px;
+  height: 30px;
+  background-repeat: no-repeat;
+  background-size: 25px;
+  background-position: center;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  margin: 5px;
+
+  input[type='file']{
+    position: absolute;
+    width: 100%;
+    top: 0;
+    opacity: 0;
+  }
+}
+
+.inputAttach{
+  background-image: url("../../Images/attchImg.svg");
+}
+.inputPicture{
+  background-image: url("../../Images/uploadImg.svg");
 }
 
