@@ -8,7 +8,7 @@ import {
 } from "react";
 import PageTitle from "../../../Components/Pagetitle";
 import { Button, Col, Form, Row } from "react-bootstrap";
-import {ENDPOINT, GOOGLE_KEY} from "config/constants";
+import { ENDPOINT, GOOGLE_KEY } from "config/constants";
 import AuthService from "services/auth.service";
 import swal from "sweetalert";
 import { ToastContainer, toast } from "react-toastify";
@@ -25,6 +25,7 @@ const CreateRoute = () => {
   const [historicalData, setHistoricalData] = useState([]);
   const [directionsData, setDirectionsData] = useState(null);
   const [inputFields, setInputFields] = useState([]);
+  const [markers, setMarkers] = useState([]);
 
   const [formArray, setFormArray] = useState([{}]);
   const [formData, setFormData] = useState({
@@ -54,23 +55,49 @@ const CreateRoute = () => {
   const [id, setId] = useState();
   console.log("id", id);
 
-  useEffect(() => {
-  }, [startingPoint]);
+  useEffect(() => {}, [startingPoint]);
+
+  const addMarker = useCallback(
+    (e) => {
+      let color;
+      if (markers.length === 0) {
+        color = "black";
+      } else if (markers.length === 1) {
+        color = "red";
+      } else {
+        color = "yellow";
+      }
+
+      setMarkers((prevMarkers) => [
+        ...prevMarkers,
+        {
+          position: {
+            lat: e.latLng.lat(),
+            lng: e.latLng.lng(),
+          },
+          color,
+        },
+      ]);
+    },
+    [markers]
+  );
 
   const handleChange = (event) => {
     let name = event.target.name;
     const value = event.target.value;
+    console.log(name);
+    console.log(value);
     switch (name) {
-      case 'startLongtitude':
+      case "startLongtitude":
         setStartingPoint({ ...startingPoint, lng: parseFloat(value) });
         break;
-      case 'startLattitude':
+      case "startLattitude":
         setStartingPoint({ ...startingPoint, lat: parseFloat(value) });
         break;
-      case 'startLongtitude':
+      case "endLongtitude":
         setEndingPoint({ ...endingPoint, lng: parseFloat(value) });
         break;
-      case 'startLongtitude':
+      case "endLattitude":
         setEndingPoint({ ...endingPoint, lat: parseFloat(value) });
         break;
       default:
@@ -123,34 +150,34 @@ const CreateRoute = () => {
       mergedState
     )
       .then((res) => {
-
         let data = new FormData();
-        data.append('file', uploadFile);
+        data.append("file", uploadFile);
         setId(res.data.id);
-        const url = (ENDPOINT.admin_route.update_pictures).replace(':id',res.data.id);
-        AuthService.postMethod(
-            url,
-            true,
-            data
-        ).then((res) => {
-          if (res.status === 200) {
-            toast.success("Form data submitted successfully", {
-              position: "bottom-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "dark",
-            });
-            setShowButton(true);
-            navigate("/route-list");
-            setFormData("");
-          }
-        }).catch((err) => {
-          swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-        });
+        const url = ENDPOINT.admin_route.update_pictures.replace(
+          ":id",
+          res.data.id
+        );
+        AuthService.postMethod(url, true, data)
+          .then((res) => {
+            if (res.status === 200) {
+              toast.success("Form data submitted successfully", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+              });
+              setShowButton(true);
+              navigate("/route-list");
+              setFormData("");
+            }
+          })
+          .catch((err) => {
+            swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+          });
         console.log(res);
         // event.target.reset();
       })
@@ -180,6 +207,7 @@ const CreateRoute = () => {
 
   const updateStartEndPosition = useCallback(
     (startPos, endPos) => {
+      console.log(updateStartEndPosition);
       // console.log(
       //   `updateStartEndPosition: ${JSON.stringify(startPos)} ${JSON.stringify(
       //     endPos
@@ -212,12 +240,12 @@ const CreateRoute = () => {
       setHistoricalData([
         ...historicalData,
         {
-          latitude: position.lat ?? '',
-          longitude: position.lng ?? '',
+          latitude: position.lat ?? "",
+          longitude: position.lng ?? "",
           title: "",
           subtitle: "",
           description: "",
-          file: ""
+          file: "",
         },
       ]);
     },
@@ -226,7 +254,7 @@ const CreateRoute = () => {
 
   function uploadSingleFile(e) {
     let ImagesArray = Object.entries(e.target.files).map((e) =>
-        URL.createObjectURL(e[1])
+      URL.createObjectURL(e[1])
     );
     console.log(ImagesArray);
     setFile([...files, ...ImagesArray]);
@@ -235,9 +263,8 @@ const CreateRoute = () => {
   }
 
   function uploadSingleFileHistorical(e, index) {
-
-    console.log(e.target.name)
-    console.log(e.target.files)
+    console.log(e.target.name);
+    console.log(e.target.files);
     const newRows = [...historicalData];
     newRows[index][e.target.name] = e.target.files;
     //setHistoricalData(newRows);
@@ -257,7 +284,7 @@ const CreateRoute = () => {
   }
 
   function deleteFileSingle(e) {
-    setUploadFile('');
+    setUploadFile("");
   }
   return (
     <Fragment>
@@ -343,19 +370,19 @@ const CreateRoute = () => {
               <Col md={12} className={"mb-3"}>
                 <div className="form-group previewBox">
                   {file.length > 0 &&
-                      file.map((item, index) => {
-                        return (
-                            <div className={"preview"} key={item}>
-                              <img src={item} alt="" />
-                              <Button
-                                  type="button"
-                                  onClick={() => deleteFile(index)}
-                              >
-                                <i className={"fal fa-times"}></i>
-                              </Button>
-                            </div>
-                        );
-                      })}
+                    file.map((item, index) => {
+                      return (
+                        <div className={"preview"} key={item}>
+                          <img src={item} alt="" />
+                          <Button
+                            type="button"
+                            onClick={() => deleteFile(index)}
+                          >
+                            <i className={"fal fa-times"}></i>
+                          </Button>
+                        </div>
+                      );
+                    })}
                 </div>
               </Col>
               <Form.Group>
@@ -387,6 +414,7 @@ const CreateRoute = () => {
             <Col md={8}>
               <div className={"img-box"}>
                 <RouteMap
+                  markers={markers}
                   startingPoint={startingPoint}
                   endingPoint={endingPoint}
                   travelMode={"WALKING"}
@@ -501,7 +529,7 @@ const CreateRoute = () => {
                               disabled={files.length === 1}
                               className=""
                               onChange={(e) =>
-                                  uploadSingleFileHistorical(e, index)
+                                uploadSingleFileHistorical(e, index)
                               }
                             />
                             <span>Attach Images</span>

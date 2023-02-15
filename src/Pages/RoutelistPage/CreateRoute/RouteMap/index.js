@@ -1,8 +1,9 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useGoogleMaps } from "react-hook-google-maps";
 
 export default function RouteMap({
+  markers,
   startingPoint,
   endingPoint,
   travelMode,
@@ -10,7 +11,6 @@ export default function RouteMap({
   updateStartEndPosition,
   preRenderMarkers = false,
 }) {
-  const [markers, setMarkers] = useState([]);
   const { ref, map, google } = useGoogleMaps(
     "AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0",
     {
@@ -48,30 +48,59 @@ export default function RouteMap({
   //   }
   // }, [preRenderMarkers, google, map]);
 
+  // useEffect(() => {
+  //   console.log("RouteMap");
+  //   console.log(markers);
+  //   if (markers.length > 0) {
+  //     setMarkers((prevMarkers) => {
+  //       let color;
+  //       if (prevMarkers.length === 0) {
+  //         color = "black";
+  //       } else if (prevMarkers.length === 1) {
+  //         color = "red";
+  //       } else {
+  //         color = "yellow";
+  //       }
+
+  //       return [
+  //         ...prevMarkers,
+  //         {
+  //           position: {
+  //             lat: 29.143644,
+  //             lng: 71.25724,
+  //             // lat: e.latLng.lat(),
+  //             // lng: e.latLng.lng(),
+  //           },
+  //           color,
+  //         },
+  //       ];
+  //     });
+  //   }
+  // }, [startingPoint, endingPoint, map, google, markers]);
+
   useEffect(() => {
     if (map) {
       const listener = map.addListener("click", (e) => {
-        setMarkers((prevMarkers) => {
-          let color;
-          if (prevMarkers.length === 0) {
-            color = "black";
-          } else if (prevMarkers.length === 1) {
-            color = "red";
-          } else {
-            color = "yellow";
-          }
-
-          return [
-            ...prevMarkers,
-            {
-              position: {
-                lat: e.latLng.lat(),
-                lng: e.latLng.lng(),
-              },
-              color,
-            },
-          ];
-        });
+        // setMarkers((prevMarkers) => {
+        //   let color;
+        //   if (prevMarkers.length === 0) {
+        //     color = "black";
+        //   } else if (prevMarkers.length === 1) {
+        //     color = "red";
+        //   } else {
+        //     color = "yellow";
+        //   }
+        //   return [
+        //     ...prevMarkers,
+        //     {
+        //       position: {
+        //         lat: e.latLng.lat(),
+        //         lng: e.latLng.lng(),
+        //       },
+        //       color,
+        //     },
+        //   ];
+        // });
       });
 
       if (preRenderMarkers) {
