@@ -29,7 +29,7 @@ const Messages = (props) => {
             })
             setMsg('')
 
-        }else if (file.length>0){
+        } else if (file.length>0){
             let data = new FormData();
             data.append('file', uploadFile);
             await uploadAttachment(id, data)
@@ -42,8 +42,8 @@ const Messages = (props) => {
             .then((res) => {
                 setFile([]);
                 setUploadFile(null)
-                console.log(res.data)
-                handleMessages([...props.message?.data, res.data.data])
+                 socket.emit('supportFileTrigger', res.data.data)
+                // handleMessages([...currentItems, res.data.data])
             })
             .catch((err) => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
@@ -60,17 +60,18 @@ const Messages = (props) => {
 
         handleChange(props)
     }, [props, currentItems]);
+    socket.on('msgSupport', (data)=>{
+        handleMessages([...currentItems, data])
+    })
     useEffect(() => {
         messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-        socket.on('msgSupport', (data)=>{
-            handleMessages([...props.message?.data, data.data])
-        })
         handleChange(props)
     }, [currentItems, props]);
 
     const handleChange = (props) => {
         setTicket(props.rowUser)
         setTicketId(props.rowUser?.id)
+        socket.emit('support_users', {ticket_id:props.rowUser?.id})
     }
     const handleImage = (e) => {
         let ImagesArray = Object.entries(e.target.files).map((e) =>
@@ -124,10 +125,10 @@ const Messages = (props) => {
                                     <img key={data?.id} src={imageUrl(data?.user?.picture,userImg)} alt="username"/>
                                 </div>
                                 <div className={classes.description}>
-                                    {data.message && data.attachment.length===0 && <div className={classes.text}>{data?.message}
+                                    {data?.message && data?.attachment?.length===0 && <div className={classes.text}>{data?.message}
                                         <div className={classes.time}> {new Date(data.createdDate).toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })}</div>
                                     </div>}
-                                    {data.attachment.length>0 && (get_url_extension(imageUrl(data.attachment[0])) ==='png' || get_url_extension(imageUrl(data.attachment[0])) ==='jpg' || get_url_extension(imageUrl(data.attachment[0])) ==='jpeg') &&
+                                    {data?.attachment?.length>0 && (get_url_extension(imageUrl(data.attachment[0])) ==='png' || get_url_extension(imageUrl(data.attachment[0])) ==='jpg' || get_url_extension(imageUrl(data.attachment[0])) ==='jpeg') &&
                                         <div className={classes.text}>
                                             {data?.message}
                                            <div>
@@ -138,7 +139,7 @@ const Messages = (props) => {
                                            </div>
                                             <div className={classes.time}> {new Date(data.createdDate).toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })}</div>
                                     </div>}
-                                    {data.attachment.length>0 && (get_url_extension(imageUrl(data.attachment[0])) ==='pdf' || get_url_extension(imageUrl(data.attachment[0])) ==='txt') &&
+                                    {data?.attachment?.length>0 && (get_url_extension(imageUrl(data.attachment[0])) ==='pdf' || get_url_extension(imageUrl(data.attachment[0])) ==='txt') &&
                                         <div className={classes.text}><a className={'btn btn-file'} href={imageUrl(data.attachment[0])} target = "_blank"><i className={'fas fa-file'}></i> </a>
                                             <div className={classes.time}> {new Date(data.createdDate).toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })}</div>
                                         </div>}
