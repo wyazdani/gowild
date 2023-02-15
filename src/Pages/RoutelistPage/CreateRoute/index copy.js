@@ -55,19 +55,60 @@ const CreateRoute = () => {
   const [id, setId] = useState();
   console.log("id", id);
 
-  // useEffect(() => {
-  //   if (historicalData.length > 0) {
-  //     //console.log(`handleAddRow: ${JSON.stringify(historicalData)}`);
-  //     //console.log(`marker: ${JSON.stringify(markers)}`);
-  //     const newLoc = historicalData.slice(-1)[0];
-  //     console.log(`lastValue: ${JSON.stringify(newLoc)}`);
-  //     addMarker(newLoc.latitude, newLoc.longitude);
-  //   }
-  // }, [historicalData]);
+  useEffect(() => {}, [startingPoint]);
 
-  useEffect(() => {
-    console.log(`marker: ${JSON.stringify(markers)}`);
-  }, [markers]);
+  const addMarker = useCallback(
+    (e) => {
+      let color;
+      if (markers.length === 0) {
+        color = "black";
+      } else if (markers.length === 1) {
+        color = "red";
+      } else {
+        color = "yellow";
+      }
+
+      setMarkers((prevMarkers) => [
+        ...prevMarkers,
+        {
+          position: {
+            lat: e.latLng.lat(),
+            lng: e.latLng.lng(),
+          },
+          color,
+        },
+      ]);
+    },
+    [markers]
+  );
+
+  const handleChange = (event) => {
+    let name = event.target.name;
+    const value = event.target.value;
+    console.log(name);
+    console.log(value);
+    switch (name) {
+      case "startLongtitude":
+        setStartingPoint({ ...startingPoint, lng: parseFloat(value) });
+        break;
+      case "startLattitude":
+        setStartingPoint({ ...startingPoint, lat: parseFloat(value) });
+        break;
+      case "endLongtitude":
+        setEndingPoint({ ...endingPoint, lng: parseFloat(value) });
+        break;
+      case "endLattitude":
+        setEndingPoint({ ...endingPoint, lat: parseFloat(value) });
+        break;
+      default:
+        setFormData((prevalue) => {
+          return {
+            ...prevalue, // Spread Operator
+            [name]: value,
+          };
+        });
+    }
+  };
 
   const submitForm = async (event) => {
     event.preventDefault();
@@ -148,6 +189,7 @@ const CreateRoute = () => {
   // add historical event
 
   const handleHistorical = (event, index) => {
+    const name = event.target.name;
     const newRows = [...historicalData];
     // switch (name) {
     //   case 'longitude':
@@ -192,62 +234,9 @@ const CreateRoute = () => {
     [startingPoint, endingPoint]
   );
 
-  // const addMarker = useCallback(
-  //   (lat, lng) => {
-  //     let color;
-  //     if (markers.length === 0) {
-  //       color = "black";
-  //     } else if (markers.length === 1) {
-  //       color = "red";
-  //     } else {
-  //       color = "yellow";
-  //     }
-
-  //     setMarkers((prevMarkers) => [
-  //       ...prevMarkers,
-  //       {
-  //         position: {
-  //           lat: lat,
-  //           lng: lng,
-  //         },
-  //         color,
-  //       },
-  //     ]);
-  //   },
-  //   [markers]
-  // );
-
-  const addMarker = (lat, lng) => {
-    let color;
-    if (markers.length === 0) {
-      color = "black";
-    } else if (markers.length === 1) {
-      color = "red";
-    } else {
-      color = "yellow";
-    }
-    setMarkers((prevMarkers) => [
-      ...prevMarkers,
-      {
-        position: {
-          lat: lat,
-          lng: lng,
-        },
-        color,
-      },
-    ]);
-  };
-
   const handleAddRow = useCallback(
     (position = 0) => {
-      console.log(position);
-      if (historicalData.length > 0) {
-        //console.log(`handleAddRow: ${JSON.stringify(historicalData)}`);
-        console.log(`marker: ${JSON.stringify(markers)}`);
-        const newLoc = historicalData.slice(-1)[0];
-        console.log(`lastValue: ${JSON.stringify(newLoc)}`);
-        addMarker(newLoc.latitude, newLoc.longitude);
-      }
+      //console.log(`handleAddRow: ${JSON.stringify(position)}`);
       setHistoricalData([
         ...historicalData,
         {
@@ -262,6 +251,16 @@ const CreateRoute = () => {
     },
     [historicalData]
   );
+
+  function uploadSingleFile(e) {
+    let ImagesArray = Object.entries(e.target.files).map((e) =>
+      URL.createObjectURL(e[1])
+    );
+    console.log(ImagesArray);
+    setFile([...files, ...ImagesArray]);
+    setUploadFile(e.target.files[0]);
+    console.log("file", file);
+  }
 
   function uploadSingleFileHistorical(e, index) {
     console.log(e.target.name);
@@ -284,6 +283,9 @@ const CreateRoute = () => {
     console.log(s);
   }
 
+  function deleteFileSingle(e) {
+    setUploadFile("");
+  }
   return (
     <Fragment>
       <PageTitle title="Normal Route" />
@@ -298,7 +300,7 @@ const CreateRoute = () => {
                   endingPoint={endingPoint}
                   travelMode={"WALKING"}
                   handleAddRow={handleAddRow}
-                  //updateStartEndPosition={updateStartEndPosition}
+                  updateStartEndPosition={updateStartEndPosition}
                 />
               </div>
             </Col>
@@ -463,10 +465,7 @@ const CreateRoute = () => {
               ))}
 
               <Button onClick={handleAddRow} ref={addHistoryBtnRef}>
-                Save
-              </Button>
-              <Button onClick={handleAddRow} ref={addHistoryBtnRef}>
-                Save & Add More
+                <i className={"fal fa-plus"}></i>
               </Button>
             </Col>
           </Row>

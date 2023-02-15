@@ -138,8 +138,8 @@ export default function RouteMap({
 
   useEffect(() => {
     if (markers.length >= 3) {
-      console.log("handleAddRow");
-      if (handleAddRow) handleAddRow(markers[markers.length - 1].position);
+      //console.log("handleAddRow");
+      //if (handleAddRow) handleAddRow(markers[markers.length - 1].position);
     }
     if (map && markers.length >= 2) {
       console.log("Calculate Distance");
