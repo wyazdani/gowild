@@ -43,8 +43,10 @@ const CreateTreasure = () => {
     const submitForm = async (event) => {
         event.preventDefault();
         try {
-
-            const eventDateTime = moment.utc(`${formData.date} ${formData.time}:00.000`).format("YYYY-MM-DD HH:mm:ss.SSS");
+            const eventDateTime = moment(`${formData.date} ${formData.time}`, "YYYY-MM-DD HH:mm:ss.SSS");
+            const eventDateTimeUtc = eventDateTime.utc().format();
+            // const eventDateTime = moment.utc(`${formData.date} ${formData.time}::11.111`).format("YYYY-MM-DD HH:mm:ss.SSS");
+            
             const dataObj = {
             "title": formData.title,
             "description": formData.description,
@@ -52,7 +54,7 @@ const CreateTreasure = () => {
             "latitude": JSON.parse(formData.latitude),
             "longitude": JSON.parse(formData.longitude)
             },
-            "eventDate": eventDateTime,
+            "eventDate": eventDateTimeUtc,
             "eventTime": formData.time,
             "no_of_participants": formData.number,
             "picture": formData.picture
