@@ -283,7 +283,6 @@
     }
 
     .text{
-      padding-right: 50px;
 
       .time{
         right: 6px;
@@ -358,6 +357,20 @@
 
       }
     }
+  }
+
+  .fileImg{
+    padding: 5px 25px 5px 5px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+
+
+     img{
+       border-radius: 10px;
+     }
   }
 }
 

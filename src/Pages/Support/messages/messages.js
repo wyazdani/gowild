@@ -3,7 +3,7 @@ import { Table, Form, Dropdown, Button, Row, Col } from "react-bootstrap";
 import classes from "../index.module.scss";
 import 'react-toastify/dist/ReactToastify.css';
 import userImg from "../../../Images/userImg.png";
-import {imageUrl, timeSince} from "../../../Helper/Helpers";
+import {get_url_extension, imageUrl, timeSince} from "../../../Helper/Helpers";
 import io from 'socket.io-client';
 import {ENDPOINT, SOCKET_URL} from "../../../config/constants";
 
@@ -54,6 +54,7 @@ const Messages = (props) => {
     }
     const handleImage = (e) => {
         console.log(e.target.files[0])
+        console.log(ticketId)
     }
     const handleMessages = (messages) => {
         setCurrentItems(messages)
@@ -83,9 +84,24 @@ const Messages = (props) => {
                                     <img key={data?.id} src={imageUrl(data?.user?.picture,userImg)} alt="username"/>
                                 </div>
                                 <div className={classes.description}>
-                                    <div className={classes.text}>{data?.message}
+                                    {data.message && data.attachment.length===0 && <div className={classes.text}>{data?.message}
                                         <div className={classes.time}> {new Date(data.createdDate).toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })}</div>
-                                    </div>
+                                    </div>}
+                                    {data.attachment.length>0 && (get_url_extension(imageUrl(data.attachment[0])) ==='png' || get_url_extension(imageUrl(data.attachment[0])) ==='jpg' || get_url_extension(imageUrl(data.attachment[0])) ==='jpeg') &&
+                                        <div className={classes.text}>
+                                            {data?.message}
+                                           <div>
+                                               <div className={classes.fileImg}>
+                                                   <img key={data?.id} src={imageUrl(data.attachment[0])} style={{maxHeight: '50px',}} alt="username"/>
+                                                   <Button variant={'btnDownload'}><i className={'fal fa-download'}></i> </Button>
+                                               </div>
+                                           </div>
+                                            <div className={classes.time}> {new Date(data.createdDate).toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })}</div>
+                                    </div>}
+                                    {data.attachment.length>0 && (get_url_extension(imageUrl(data.attachment[0])) ==='pdf') &&
+                                        <div className={classes.text}><a className={'btn btn-file'} href={imageUrl(data.attachment[0])} target = "_blank"><i className={'fas fa-file'}></i> </a>
+                                            <div className={classes.time}> {new Date(data.createdDate).toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })}</div>
+                                        </div>}
                                 </div>
                             </div>
                         ))}
@@ -93,9 +109,6 @@ const Messages = (props) => {
                     </div>
                     <div className={classes.typemsg}>
                         <div className={classes.btngroup}>
-                            {/*<input type="file" id={"upload-photo"} accept=".jpg,.jpeg,.png" onChange={handleImage}/>*/}
-                            {/*<button type="button" className={classes.btn}><i className="fal fa-paperclip"></i></button>*/}
-                            {/*<button type="button" className={classes.btn}><i className="fal fa-image"></i></button>*/}
                             <Form.Label htmlFor={'inputAttach'} className={classes.inputAttach}>
                                 <Form.Control id={'inputAttach'} type={'file'} />
                             </Form.Label>
