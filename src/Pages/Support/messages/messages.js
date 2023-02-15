@@ -6,11 +6,14 @@ import userImg from "../../../Images/userImg.png";
 import {get_url_extension, imageUrl, timeSince} from "../../../Helper/Helpers";
 import io from 'socket.io-client';
 import {ENDPOINT, SOCKET_URL} from "../../../config/constants";
+import AuthService from "../../../services/auth.service";
+import swal from "sweetalert";
 
 const Messages = (props) => {
     // const { content } = props;
     const [currentItems, setCurrentItems] = useState([]);
-    const [sendMessage, setSendMessage] = useState([]);
+    const [file, setFile] = useState([]);
+    const [uploadFile, setUploadFile] = useState();
     const [ticket, setTicket] = useState(null);
     const [msg, setMsg] = useState('');
     const [ticketId, setTicketId] = useState(null);
@@ -26,8 +29,25 @@ const Messages = (props) => {
             })
             setMsg('')
 
+        }else if (file.length>0){
+            let data = new FormData();
+            data.append('file', uploadFile);
+            await uploadAttachment(id, data)
         }
 
+    };
+    const uploadAttachment = async (id, data)=> {
+        const url = (ENDPOINT.support.upload_attachment).replace(':id',id);
+        await AuthService.postMethod(url, true,data)
+            .then((res) => {
+                setFile([]);
+                setUploadFile(null)
+                console.log(res.data)
+                handleMessages([...props.message?.data, res.data.data])
+            })
+            .catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
     };
     useEffect(() => {
         messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -53,11 +73,31 @@ const Messages = (props) => {
         setTicketId(props.rowUser?.id)
     }
     const handleImage = (e) => {
-        console.log(e.target.files[0])
-        console.log(ticketId)
+        let ImagesArray = Object.entries(e.target.files).map((e) =>
+            URL.createObjectURL(e[1])
+        );
+        setFile([...file, ...ImagesArray]);
+        setUploadFile(e.target.files[0])
     }
     const handleMessages = (messages) => {
         setCurrentItems(messages)
+    }
+    function deleteFile(e) {
+        const s = file.filter((item, index) => index !== e);
+        setFile(s);
+    }
+    const downloadImage = (url) => {
+        var filename = url.substring(url.lastIndexOf('/')+1);
+        const xhr = new XMLHttpRequest()
+        xhr.open('GET', url)
+        xhr.send()
+        xhr.onload = function () {
+            const blob = new Blob([xhr.response], { type: 'image/png' })
+            const a = document.createElement('a')
+            a.href = URL.createObjectURL(blob)
+            a.download = filename
+            a.click()
+        }
     }
 
 
@@ -93,24 +133,40 @@ const Messages = (props) => {
                                            <div>
                                                <div className={classes.fileImg}>
                                                    <img key={data?.id} src={imageUrl(data.attachment[0])} style={{maxHeight: '50px',}} alt="username"/>
-                                                   <Button variant={'btnDownload'}><i className={'fal fa-download'}></i> </Button>
+                                                   <Button type={"button"} variant={'btnDownload'} onClick={() => downloadImage(imageUrl(data.attachment[0]))}><i className={'fal fa-download'}></i> </Button>
                                                </div>
                                            </div>
                                             <div className={classes.time}> {new Date(data.createdDate).toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })}</div>
                                     </div>}
-                                    {data.attachment.length>0 && (get_url_extension(imageUrl(data.attachment[0])) ==='pdf') &&
+                                    {data.attachment.length>0 && (get_url_extension(imageUrl(data.attachment[0])) ==='pdf' || get_url_extension(imageUrl(data.attachment[0])) ==='txt') &&
                                         <div className={classes.text}><a className={'btn btn-file'} href={imageUrl(data.attachment[0])} target = "_blank"><i className={'fas fa-file'}></i> </a>
                                             <div className={classes.time}> {new Date(data.createdDate).toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })}</div>
                                         </div>}
                                 </div>
                             </div>
                         ))}
+                        <div className="form-group previewBox">
+                            {file.length > 0 &&
+                                file.map((item, index) => {
+                                    return (
+                                        <div className={"preview"} key={item}>
+                                            <img src={item} alt="" />
+                                            <Button
+                                                type="button"
+                                                onClick={() => deleteFile(index)}
+                                            >
+                                                <i className={"fal fa-times"}></i>
+                                            </Button>
+                                        </div>
+                                    );
+                                })}
+                        </div>
                         <div ref={messagesEndRef} />
                     </div>
                     <div className={classes.typemsg}>
                         <div className={classes.btngroup}>
                             <Form.Label htmlFor={'inputAttach'} className={classes.inputAttach}>
-                                <Form.Control id={'inputAttach'} type={'file'} />
+                                <Form.Control id={'inputAttach'} type={'file'} accept={".pdf"} onChange={handleImage} />
                             </Form.Label>
                             <Form.Label htmlFor={'inputPicture'} className={classes.inputPicture}>
                                 <Form.Control id={'inputPicture'} type={'file'} accept={".jpg,.jpeg,.png"} onChange={handleImage}/>
