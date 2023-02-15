@@ -94,8 +94,15 @@ const Messages = (props) => {
                     <div className={classes.typemsg}>
                         <div className={classes.btngroup}>
                             {/*<input type="file" id={"upload-photo"} accept=".jpg,.jpeg,.png" onChange={handleImage}/>*/}
-                            <button type="button" className={classes.btn}><i className="fal fa-paperclip"></i></button>
-                            <button type="button" className={classes.btn}><i className="fal fa-image"></i></button>
+                            {/*<button type="button" className={classes.btn}><i className="fal fa-paperclip"></i></button>*/}
+                            {/*<button type="button" className={classes.btn}><i className="fal fa-image"></i></button>*/}
+                            <Form.Label htmlFor={'inputAttach'} className={classes.inputAttach}>
+                                <Form.Control id={'inputAttach'} type={'file'} />
+                            </Form.Label>
+                            <Form.Label htmlFor={'inputPicture'} className={classes.inputPicture}>
+                                <Form.Control id={'inputPicture'} type={'file'} accept={".jpg,.jpeg,.png"} onChange={handleImage}/>
+                            </Form.Label>
+
                         </div>
                         <input type="text" className={classes.formcontrol} value={msg}
                                onChange={(e) => setMsg(e.target.value)} placeholder="Type a message"/>
