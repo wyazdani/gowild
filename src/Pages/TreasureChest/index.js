@@ -98,7 +98,7 @@ const TreasureChestList = () => {
             </div>
         );
     }
-    
+
   // chekbox select all
     const handleCheckboxChange = (item) => {
         if (selectedItems.includes(item)) {
@@ -107,7 +107,7 @@ const TreasureChestList = () => {
           setSelectedItems([...selectedItems, item]);
         }
       };
-    
+
       const handleSelectAll = () => {
         setSelectedItems(content);
         setIsChecked(!isChecked);
@@ -130,7 +130,7 @@ const TreasureChestList = () => {
                     <thead>
                         <tr>
                             <th>
-                               {isChecked? <Form.Check type="checkbox" onChange={handleSelectAll} /> : <Form.Check type="checkbox" onClick={handleDeselectAll} /> } 
+                               {isChecked? <Form.Check type="checkbox" onChange={handleSelectAll} /> : <Form.Check type="checkbox" onClick={handleDeselectAll} /> }
                             </th>
                             <th></th>
                             <th>Name</th>
@@ -147,10 +147,10 @@ const TreasureChestList = () => {
                                 <td><Form.Check type="checkbox" value={item}
                                     onChange={() => handleCheckboxChange(item)}
                                     checked={selectedItems.includes(item)} /></td>
-                                    
+
                                 <td style={{ width: "10%" }}>
                                    {(item.picture)? <img src={"https://api.gowild.appscorridor.com" + item.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
-                                </td>                             
+                                </td>
                                 <td>{item.title}</td>
                                 <td>{(formatDate(item.createdDate))}</td>
                                 <td> {(formatDate(item.eventDate))}</td>
@@ -177,17 +177,17 @@ const TreasureChestList = () => {
 
                                             </Dropdown.Item>
 
-                                            <Dropdown.Item href="#/"
-                                                onClick={
-                                                    () => {
-                                                        setEditSubAdmin(true)
-                                                        setEditItem(item)
-                                                    }}
+                                            {/*<Dropdown.Item href="#/"*/}
+                                            {/*    onClick={*/}
+                                            {/*        () => {*/}
+                                            {/*            setEditSubAdmin(true)*/}
+                                            {/*            setEditItem(item)*/}
+                                            {/*        }}*/}
 
-                                            >
-                                                <i className={"far fa-pen bg-dark text-white"}></i>
-                                                Edit
-                                            </Dropdown.Item>
+                                            {/*>*/}
+                                            {/*    <i className={"far fa-pen bg-dark text-white"}></i>*/}
+                                            {/*    Edit*/}
+                                            {/*</Dropdown.Item>*/}
                                             <Dropdown.Item href="#/" onClick={() => {
                                                 deleteTreasureChests(item.id)
                                             }}>

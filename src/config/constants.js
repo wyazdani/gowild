@@ -131,8 +131,9 @@ export const ENDPOINT = {
     },
     support :{
         tickets : `${API_URL}/ticket`,
-        ticket_messages : `${API_URL}/ticket-messages/:id?limit=100`,
+        ticket_messages : `${API_URL}/ticket-messages/:id?limit=200`,
         mark_as_complete: `${API_URL}/ticket/:id/status`,
+        upload_attachment: `${API_URL}/ticket-messages/update-file/:id`,
         socket_url: SOCKET_URL,
         emit_message:'msgToAdmin',
         listen_message:'msgSupport'
