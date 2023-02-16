@@ -2,7 +2,7 @@
 export const BASE_URL = "https://api.gowild.appscorridor.com";
 //export const BASE_URL = "http://localhost:3000";
 export const API_URL = `${BASE_URL}/api/v1`;
-export const GOOGLE_KEY='AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0'
+//export const GOOGLE_KEY='AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0'
 export const SOCKET_URL = "https://chat.gowild.appscorridor.com";
 //export const SOCKET_URL = "http://localhost:5000";
 export const KEY =
