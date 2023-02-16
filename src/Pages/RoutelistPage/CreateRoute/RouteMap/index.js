@@ -14,7 +14,7 @@ export default function RouteMap({
   const { ref, map, google } = useGoogleMaps(
     "AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0",
     {
-      zoom: 6,
+      zoom: 3,
       center: startingPoint,
     }
   );
@@ -180,7 +180,7 @@ export default function RouteMap({
     const marker = new window.google.maps.Marker({
       position: position,
       map: map,
-      draggable: true,
+      draggable: false,
       icon: {
         path: "M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z",
         scale: 1,

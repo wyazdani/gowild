@@ -26,6 +26,7 @@ const CreateRoute = () => {
   const [directionsData, setDirectionsData] = useState(null);
   const [inputFields, setInputFields] = useState([]);
   const [markers, setMarkers] = useState([]);
+  const [routesData, setRoutesData] = useState({});
 
   const [formArray, setFormArray] = useState([{}]);
   const [formData, setFormData] = useState({
@@ -69,16 +70,121 @@ const CreateRoute = () => {
     console.log(`marker: ${JSON.stringify(markers)}`);
   }, [markers]);
 
+  useEffect(() => {
+    console.log(`routesData: ${JSON.stringify(routesData)}`);
+  }, [routesData]);
+
+  useEffect(() => {
+    console.log(`historicalData: ${JSON.stringify(historicalData)}`);
+
+    if (historicalData.length > 2) {
+      setRoutesData({
+        start: {
+          latitude: parseFloat(historicalData[0].latitude),
+          longitude: parseFloat(historicalData[0].longitude),
+        },
+        end: {
+          latitude: parseFloat(historicalData[1].latitude),
+          longitude: parseFloat(historicalData[1].longitude),
+        },
+        distance_miles: 0,
+        distance_meters: 0,
+        estimate_time: "-",
+        startLocation: "-",
+        endLocation: "-",
+        title: historicalData[0].title,
+        description: historicalData[0].description,
+        history_ponts: [],
+      });
+      if (historicalData.length >= 3) {
+        // history_ponts;
+        historicalData.slice(2).map((item, index) => {
+          setRoutesData((prevState) => ({
+            ...prevState,
+            history_ponts: [
+              ...prevState.history_ponts,
+              {
+                historical_event: {
+                  latitude: parseFloat(item.latitude),
+                  longitude: parseFloat(item.longitude),
+                },
+                title: item.title,
+                subtitle: item.subtitle,
+                description: item.description,
+              },
+            ],
+          }));
+        });
+      }
+    }
+  }, [historicalData]);
+
   const submitForm = async (event) => {
     event.preventDefault();
-    formData.start = {
-      latitude: startingPoint.lat,
-      longitude: startingPoint.lng,
-    };
-    formData.end = {
-      latitude: endingPoint.lat,
-      longitude: endingPoint.lng,
-    };
+
+    // let routesData = [];
+
+    // console.log("DUCK", "formData", formData);
+    console.log("DUCK", "routesData", routesData);
+    //return;
+    // if (historicalData.length > 2) {
+    //   routesData.start = {
+    //     latitude: historicalData[0].latitude,
+    //     longitude: historicalData[0].longitude,
+    //   };
+    //   routesData.end = {
+    //     latitude: historicalData[1].latitude,
+    //     longitude: historicalData[1].longitude,
+    //   };
+
+    //   // FUCK THIS Direction API
+    //   // const origin = routesData.start.toString();
+    //   // const destination = routesData.end.toString();
+    //   // //const url = `http://cors.appscorridor.com?url=https://maps.googleapis.com/maps/api/directions/json?origin=${historicalData[0].longitude},${historicalData[0].latitude}&destination=${historicalData[1].longitude},${historicalData[1].latitude}&key=${GOOGLE_KEY}`;
+    //   // const url = `https://maps.googleapis.com/maps/api/directions/json?origin=51,0&destination=51.5,-0.1&sensor=false&key=AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0`;
+
+    //   // console.log("DUCK", "url", url);
+
+    //   // axios
+    //   //   .get(url, {
+    //   //     "Access-Control-Allow-Origin": "*",
+    //   //   })
+    //   //   .then((response) => {
+    //   //     console.log("Success");
+    //   //     setDirectionsData(response.data);
+    //   //     // Extract the distance value from the response
+    //   //     console.log(response.data);
+    //   //   })
+    //   //   .catch((error) => console.error(error));
+
+    //   routesData.distance_miles = 0;
+    //   routesData.distance_meters = 0;
+    //   routesData.estimate_time = "-";
+    //   routesData.startLocation = "-";
+    //   routesData.endLocation = "-";
+    //   routesData.history_ponts = [];
+    //   if (historicalData.length >= 3) {
+    //     // history_ponts;
+    //     historicalData.slice(2).map((item, index) => {
+    //       routesData.history_ponts.push({
+    //         historical_event: {
+    //           latitude: item.latitude,
+    //           longitude: item.longitude,
+    //         },
+    //         title: item.title,
+    //         subtitle: item.subtitle,
+    //         description: item.description,
+    //       });
+    //     });
+    //   }
+    // }
+
+    // console.log("DUCK", "routesData", routesData);
+    // setFormData(routesData);
+
+    // setTimeout(() => {
+    //   console.log("DUCK", "formData", JSON.stringify(formData));
+    // }, 2000);
 
     // formData.distance_miles =
     //   directionsData?.routes[0]?.legs[0]?.distance?.value ?? 0;
@@ -91,22 +197,10 @@ const CreateRoute = () => {
     // formData.endLocation =
     //   directionsData?.routes[0]?.legs[0]?.end_address ?? "-";
 
-    formData.distance_miles = 0;
-    formData.distance_meters = 0;
-    formData.estimate_time = "-";
-    formData.startLocation = "-";
-    formData.endLocation = "-";
-
-    console.log(`DUCK`, "historicalData", JSON.stringify(historicalData));
-    const mergedState = Object.assign({}, formData, {
-      history_ponts: historicalData,
-    });
-    console.log(`DUCK`, "mergeArray", JSON.stringify(mergedState));
-
     return AuthService.postMethod(
       ENDPOINT.admin_route.listing,
       true,
-      mergedState
+      routesData
     )
       .then((res) => {
         let data = new FormData();
@@ -192,51 +286,51 @@ const CreateRoute = () => {
     [startingPoint, endingPoint]
   );
 
-  // const addMarker = useCallback(
-  //   (lat, lng) => {
-  //     let color;
-  //     if (markers.length === 0) {
-  //       color = "black";
-  //     } else if (markers.length === 1) {
-  //       color = "red";
-  //     } else {
-  //       color = "yellow";
-  //     }
+  const addMarker = useCallback(
+    (lat, lng) => {
+      let color;
+      if (markers.length === 0) {
+        color = "black";
+      } else if (markers.length === 1) {
+        color = "red";
+      } else {
+        color = "yellow";
+      }
 
-  //     setMarkers((prevMarkers) => [
-  //       ...prevMarkers,
-  //       {
-  //         position: {
-  //           lat: lat,
-  //           lng: lng,
-  //         },
-  //         color,
-  //       },
-  //     ]);
-  //   },
-  //   [markers]
-  // );
-
-  const addMarker = (lat, lng) => {
-    let color;
-    if (markers.length === 0) {
-      color = "black";
-    } else if (markers.length === 1) {
-      color = "red";
-    } else {
-      color = "yellow";
-    }
-    setMarkers((prevMarkers) => [
-      ...prevMarkers,
-      {
-        position: {
-          lat: lat,
-          lng: lng,
+      setMarkers((prevMarkers) => [
+        ...prevMarkers,
+        {
+          position: {
+            lat: parseFloat(lat),
+            lng: parseFloat(lng),
+          },
+          color,
         },
-        color,
-      },
-    ]);
-  };
+      ]);
+    },
+    [markers]
+  );
+
+  // const addMarker = (lat, lng) => {
+  //   let color;
+  //   if (markers.length === 0) {
+  //     color = "black";
+  //   } else if (markers.length === 1) {
+  //     color = "red";
+  //   } else {
+  //     color = "yellow";
+  //   }
+  //   setMarkers((prevMarkers) => [
+  //     ...prevMarkers,
+  //     {
+  //       position: {
+  //         lat: lat,
+  //         lng: lng,
+  //       },
+  //       color,
+  //     },
+  //   ]);
+  // };
 
   const handleAddRow = useCallback(
     (position = 0) => {
@@ -298,7 +392,7 @@ const CreateRoute = () => {
                   endingPoint={endingPoint}
                   travelMode={"WALKING"}
                   handleAddRow={handleAddRow}
-                  //updateStartEndPosition={updateStartEndPosition}
+                  updateStartEndPosition={updateStartEndPosition}
                 />
               </div>
             </Col>
@@ -306,7 +400,7 @@ const CreateRoute = () => {
           <Row>
             <Col md={12}>
               <div className={"d-md-flex item-center-between pt-5"}>
-                <h3 className={"my-2 fw-bold"}>Historical</h3>
+                <h3 className={"my-2 fw-bold"}>Routes</h3>
                 <Button onClick={handleAddRow} ref={addHistoryBtnRef}>
                   <i className={"fal fa-plus"}></i> Add Routes
                 </Button>
@@ -320,7 +414,13 @@ const CreateRoute = () => {
                       <Row>
                         <Col md={6}>
                           <Form.Group>
-                            <Form.Label>Historical Event</Form.Label>
+                            <Form.Label>
+                              {index === 0
+                                ? "Starting Longitude"
+                                : index === 1
+                                ? "Ending Longitude"
+                                : "Historical Event"}
+                            </Form.Label>
                             <Form.Control
                               type="text"
                               className={"mb-3 mb-md-5"}
@@ -334,6 +434,15 @@ const CreateRoute = () => {
                             />
                           </Form.Group>
                           <Form.Group>
+                            {index <= 1 && (
+                              <Form.Label>
+                                {index === 0
+                                  ? "Starting Latitude"
+                                  : index === 1
+                                  ? "Ending Latitude"
+                                  : ""}
+                              </Form.Label>
+                            )}
                             <Form.Control
                               type="text"
                               className={"mb-3"}
@@ -362,20 +471,22 @@ const CreateRoute = () => {
                               placeholder="Historical Item"
                             />
                           </Form.Group>
-                          <Form.Group>
-                            <Form.Label>Sub-Title</Form.Label>
-                            <Form.Control
-                              type="text"
-                              className={"mb-3"}
-                              name="subTitle"
-                              required
-                              value={data?.subTitle}
-                              onChange={(e) =>
-                                handleHistorical(e, index, "subTitle")
-                              }
-                              placeholder="Write something here..."
-                            />
-                          </Form.Group>
+                          {index > 1 && (
+                            <Form.Group>
+                              <Form.Label>Sub-Title</Form.Label>
+                              <Form.Control
+                                type="text"
+                                className={"mb-3"}
+                                name="subTitle"
+                                required
+                                value={data?.subTitle}
+                                onChange={(e) =>
+                                  handleHistorical(e, index, "subTitle")
+                                }
+                                placeholder="Write something here..."
+                              />
+                            </Form.Group>
+                          )}
                         </Col>
                         <Col md={12}>
                           <Form.Group>
@@ -462,7 +573,15 @@ const CreateRoute = () => {
                 </div>
               ))}
 
-              <Button onClick={handleAddRow} ref={addHistoryBtnRef}>
+              <Button
+                onClick={() => {
+                  if (historicalData.length > 0) {
+                    const newLoc = historicalData.slice(-1)[0];
+                    addMarker(newLoc.latitude, newLoc.longitude);
+                  }
+                }}
+                ref={addHistoryBtnRef}
+              >
                 Save
               </Button>
               <Button onClick={handleAddRow} ref={addHistoryBtnRef}>
