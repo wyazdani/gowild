@@ -8,6 +8,7 @@ import io from 'socket.io-client';
 import {ENDPOINT, SOCKET_URL} from "../../../config/constants";
 import AuthService from "../../../services/auth.service";
 import swal from "sweetalert";
+import socket from "../socket/socket";
 
 const Messages = (props) => {
     // const { content } = props;
@@ -17,7 +18,6 @@ const Messages = (props) => {
     const [ticket, setTicket] = useState(null);
     const [msg, setMsg] = useState('');
     const [ticketId, setTicketId] = useState(null);
-    const socket = io(SOCKET_URL);
     const messagesEndRef = useRef(null);
     const emitEvent = async (id)=> {
         if (msg) {
@@ -62,10 +62,16 @@ const Messages = (props) => {
             setCurrentItems([...props.message?.data])
         }
         socket.on('msgSupport', (data)=>{
-            //setCurrentItems([...currentItems, data.data])
-            setCurrentItems((prevState) => [...prevState, data.data]);
+            setCurrentItems((prevState) => {
+                if (prevState.some((obj) => obj.id === data.data.id)){
+                    return prevState
+                }else {
+                    return    [...prevState, data.data]
+                }
+            });
         })
         handleChange(props)
+
     }, [props, currentItems]);
 
     // useEffect(() => {
