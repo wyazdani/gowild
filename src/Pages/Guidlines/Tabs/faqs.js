@@ -27,6 +27,7 @@ const Faqs = () => {
         })
     }
 
+    
 
     const guidlinessWaiverData = async () => {
         await AuthService.getMethod(`${ENDPOINT.admin_guidelines.faq_listing}`, true)

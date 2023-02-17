@@ -8,20 +8,29 @@ import {imageUrl, timeSince} from "../../../Helper/Helpers";
 const Inbox = (props) => {
     // const { content } = props;
     const [currentItems, setCurrentItems] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         if (props){
             setCurrentItems(props.inbox?.data)
         }
     }, []);
-
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+        setCurrentItems(
+            (props.inbox?.data).filter(
+                (content) =>
+                    (content.user?.firstName.trim() + " " + content.user?.lastName.trim()).toLowerCase().includes(event.target.value.toLowerCase().trim())
+            )
+        );
+    };
     return (
         <>
 
             <div className={classes.messageListSidebar}>
                 <form className={`${classes.searchform}`}>
                     <div className="form-group">
-                        <input type="search" className="form-control" placeholder="Search Message" />
+                        <input type="search" className="form-control" placeholder="Search Message" value={searchTerm} onChange={handleSearch} />
                     </div>
                 </form>
                 <ul>
