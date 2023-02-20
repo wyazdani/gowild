@@ -106,27 +106,7 @@ const CreateTreasure = () => {
         }
     };
 
-    // const submitForm = async (event) => {
-    //     event.preventDefault();
-    //     try {
-    //       const eventDateTime = moment(`${formData.date} ${formData.time}`).utc().format();
-    //       const dataObj = {
-    //         "title": formData.title,
-    //         "description": formData.description,
-    //         "location": {
-    //           "latitude": JSON.parse(formData.latitude),
-    //           "longitude": JSON.parse(formData.longitude)
-    //         },
-    //         "eventDate": eventDateTime,
-    //         "no_of_participants": formData.number,
-    //         "picture": formData.picture
-    //       }
-    //       const res = await AuthService.postMethod(`${ENDPOINT.treasure_chests.listing}`, true, dataObj);
-    //       // rest of the code
-    //     } catch (err) {
-    //       swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-    //     }
-    //   };
+
 
 
     function uploadSingleFile(e) {
