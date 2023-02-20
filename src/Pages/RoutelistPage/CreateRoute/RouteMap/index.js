@@ -102,7 +102,6 @@ export default function RouteMap({
         //   ];
         // });
       });
-
       if (preRenderMarkers) {
         const directionsService = new google.maps.DirectionsService();
         const directionsRenderer = new google.maps.DirectionsRenderer();
@@ -143,6 +142,8 @@ export default function RouteMap({
     }
     if (map && markers.length >= 2) {
       console.log("Calculate Distance");
+      console.log('markers',markers);
+      console.log('length',markers.length);
       const directionsService = new google.maps.DirectionsService();
       const directionsRenderer = new google.maps.DirectionsRenderer();
       directionsRenderer.setMap(map);
@@ -166,8 +167,14 @@ export default function RouteMap({
       });
 
       if (updateStartEndPosition) updateStartEndPosition(origin, destination);
+
     }
   }, [map, markers, travelMode]);
+  useEffect(() => {
+    console.log('Reaches Here')
+    console.log(`Markers ${JSON.stringify(markers)}`)
+  }, [markers])
+
 
   const Marker = ({
     index,

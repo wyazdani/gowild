@@ -27,6 +27,22 @@ const CreateRoute = () => {
   const [inputFields, setInputFields] = useState([]);
   const [markers, setMarkers] = useState([]);
   const [routesData, setRoutesData] = useState({});
+  const [customRoutesData, setCustomRoutesData] = useState({
+    title: "",
+    description: "",
+    startLatitude:'',
+    startLongitude:'',
+    endLatitude:'',
+    endLongitude:'',
+    distance_miles: 0,
+    distance_meters: 0,
+    estimate_time: '',
+    route_path: '',
+    startLocation: '',
+    endLocation: '',
+    picture: "",
+    addedToMap: false,
+  }) // For Testing Purpose
 
   const [formArray, setFormArray] = useState([{}]);
   const [formData, setFormData] = useState({
@@ -56,16 +72,6 @@ const CreateRoute = () => {
   const [id, setId] = useState();
   console.log("id", id);
 
-  // useEffect(() => {
-  //   if (historicalData.length > 0) {
-  //     //console.log(`handleAddRow: ${JSON.stringify(historicalData)}`);
-  //     //console.log(`marker: ${JSON.stringify(markers)}`);
-  //     const newLoc = historicalData.slice(-1)[0];
-  //     console.log(`lastValue: ${JSON.stringify(newLoc)}`);
-  //     addMarker(newLoc.latitude, newLoc.longitude);
-  //   }
-  // }, [historicalData]);
-
   useEffect(() => {
     console.log(`marker: ${JSON.stringify(markers)}`);
   }, [markers]);
@@ -76,7 +82,6 @@ const CreateRoute = () => {
 
   useEffect(() => {
     console.log(`historicalData: ${JSON.stringify(historicalData)}`);
-
     if (historicalData.length > 2) {
       setRoutesData({
         start: {
@@ -118,7 +123,6 @@ const CreateRoute = () => {
       }
     }
   }, [historicalData]);
-
   const submitForm = async (event) => {
     event.preventDefault();
 
@@ -243,23 +247,23 @@ const CreateRoute = () => {
 
   const handleHistorical = (event, index) => {
     const newRows = [...historicalData];
-    // switch (name) {
-    //   case 'longitude':
-    //     newRows[index][event.target.name] = parseFloat(event.target.value);
-    //     break;
-    //   case 'latitude':
-    //     newRows[index][event.target.name] = parseFloat(event.target.value);
-    //     break;
-    //   default:
-    //     newRows[index][event.target.name] = event.target.value;
-    // }
     newRows[index][event.target.name] = event.target.value;
     setHistoricalData(newRows);
+  };
+  const handleCustomRoute = (event) => {
+    const {name, value} = event.target;
+    setCustomRoutesData((prevState) => {
+      return {
+        ...prevState,
+        [name]: value,
+      };
+    });
   };
 
   const updateStartEndPosition = useCallback(
     (startPos, endPos) => {
       console.log(updateStartEndPosition);
+      console.log(markers)
       // console.log(
       //   `updateStartEndPosition: ${JSON.stringify(startPos)} ${JSON.stringify(
       //     endPos
@@ -287,7 +291,7 @@ const CreateRoute = () => {
   );
 
   const addMarker = useCallback(
-    (lat, lng) => {
+    (lat, lng, rang='') => {
       let color;
       if (markers.length === 0) {
         color = "black";
@@ -296,7 +300,9 @@ const CreateRoute = () => {
       } else {
         color = "yellow";
       }
-
+      if (rang){
+        color = rang;
+      }
       setMarkers((prevMarkers) => [
         ...prevMarkers,
         {
@@ -310,27 +316,6 @@ const CreateRoute = () => {
     },
     [markers]
   );
-
-  // const addMarker = (lat, lng) => {
-  //   let color;
-  //   if (markers.length === 0) {
-  //     color = "black";
-  //   } else if (markers.length === 1) {
-  //     color = "red";
-  //   } else {
-  //     color = "yellow";
-  //   }
-  //   setMarkers((prevMarkers) => [
-  //     ...prevMarkers,
-  //     {
-  //       position: {
-  //         lat: lat,
-  //         lng: lng,
-  //       },
-  //       color,
-  //     },
-  //   ]);
-  // };
 
   const handleAddRow = useCallback(
     (position = 0) => {
@@ -357,11 +342,56 @@ const CreateRoute = () => {
     [historicalData]
   );
 
+  const addRouteToMap = () => {
+    const startLatitude = customRoutesData.startLatitude;
+    const startLongitude = customRoutesData.startLongitude;
+    const endLatitude = customRoutesData.endLatitude;
+    const endLongitude = customRoutesData.endLongitude;
+    if (!customRoutesData.addedToMap && startLatitude && startLongitude && endLatitude && endLongitude){
+
+      addMarker(startLatitude, startLongitude, 'black')
+      addMarker(endLatitude, endLongitude, 'red')
+    }
+    else if (customRoutesData.addedToMap && startLatitude && startLongitude && endLatitude && endLongitude){
+      updateRouteMap(startLatitude, startLongitude, 'black', 0)
+      updateRouteMap(endLatitude, endLongitude, 'red', 1)
+    }
+    if (!customRoutesData.addedToMap) {
+      setCustomRoutesData((prevState) => {
+        return {
+          ...prevState,
+          ['addedToMap']: true,
+        };
+      });
+    }
+
+
+  }
+  const updateRouteMap = (lat,lng,color, index) => {
+    const newRows = [...markers];
+    newRows[index] = {
+      position: {
+        lat: parseFloat(lat),
+        lng: parseFloat(lng),
+      },
+      color,
+    };
+    setMarkers(newRows);
+  };
   function uploadSingleFileHistorical(e, index) {
     console.log(e.target.name);
     console.log(e.target.files);
     const newRows = [...historicalData];
     newRows[index][e.target.name] = e.target.files;
+    //setHistoricalData(newRows);
+    //setFiles([...files, ...ImagesArray]);
+    //console.log("files", files);
+  }
+  function uploadSingleFile(e) {
+    console.log(e.target.name);
+    console.log(e.target.files[0]);
+    // const newRows = [...historicalData];
+    // newRows[index][e.target.name] = e.target.files;
     //setHistoricalData(newRows);
     //setFiles([...files, ...ImagesArray]);
     //console.log("files", files);
@@ -407,6 +437,179 @@ const CreateRoute = () => {
               </div>
               <hr />
 
+              <div>
+                <Row>
+                  <Col md={8}>
+                    <Row>
+                      <Col md={6}>
+                        <Form.Group>
+                          <Form.Label>
+                            Starting Longitude
+                          </Form.Label>
+                          <Form.Control
+                              type="text"
+                              className={"mb-3 mb-md-5"}
+                              name="startLongitude"
+                              required
+                              value={customRoutesData.startLongitude}
+                              onChange={handleCustomRoute}
+                              placeholder="longitude"
+                          />
+                        </Form.Group>
+                        <Form.Group>
+                          <Form.Label>
+                            Starting Latitude
+                          </Form.Label>
+                          <Form.Control
+                              type="text"
+                              className={"mb-3"}
+                              name="startLatitude"
+                              required
+                              value={customRoutesData.startLatitude}
+                              onChange={handleCustomRoute}
+                              placeholder="latitude"
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col md={6}>
+                        <Form.Group>
+                          <Form.Label>
+                            Ending Longitude
+                          </Form.Label>
+                          <Form.Control
+                              type="text"
+                              className={"mb-3 mb-md-5"}
+                              name="endLongitude"
+                              required
+                              value={customRoutesData.endLongitude}
+                              onChange={handleCustomRoute}
+                              placeholder="longitude"
+                          />
+                        </Form.Group>
+                        <Form.Group>
+                          <Form.Label>
+                            Ending Latitude
+                          </Form.Label>
+                          <Form.Control
+                              type="text"
+                              className={"mb-3"}
+                              name="endLatitude"
+                              required
+                              value={customRoutesData.endLatitude}
+                              onChange={handleCustomRoute}
+                              placeholder="latitude"
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col md={6}>
+                        <Form.Group>
+                          <Form.Label>Title</Form.Label>
+                          <Form.Control
+                              type="text"
+                              className={"mb-3"}
+                              name="title"
+                              required
+                              value={customRoutesData.title}
+                              onChange={handleCustomRoute}
+                              placeholder="My Race Title"
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col md={6}>
+                        <Form.Label></Form.Label>
+                        <Form.Group>
+
+                          {customRoutesData.addedToMap
+                              ? <Button disabled={true} type="button" className={"w-100"}>
+                                Generate
+                              </Button>
+                              : <Button  type="button" className={"w-100"} onClick={addRouteToMap}>
+                                Generate
+                              </Button>
+                          }
+                        </Form.Group>
+                      </Col>
+                      <Col md={12}>
+                        <Form.Group>
+                          <Form.Label>Description</Form.Label>
+                          <Form.Control
+                              as="textarea"
+                              className={"mb-3"}
+                              name="description"
+                              required
+                              value={customRoutesData.description}
+                              onChange={handleCustomRoute}
+                              placeholder="Write something here..."
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col md={4}>
+                    <Row>
+                      <Col md={12} className={"mb-3"}>
+                        <label
+                            className={"fileUpload v2"}
+                            htmlFor="upload-photo"
+                        >
+                          <Form.Control
+                              type="file"
+                              id={"upload-photo"}
+                              disabled={files.length === 1}
+                              className=""
+                              onChange={(e) =>
+                                  uploadSingleFile(e)
+                              }
+                          />
+                          <span>Attach Images</span>
+                        </label>
+                      </Col>
+                      <Col md={12} className={"mb-3"}>
+                        <div className="form-group previewBox">
+                          {files.length > 0 &&
+                              files.map((item, index) => {
+                                return (
+                                    <div className={"preview"} key={item}>
+                                      <img src={item} alt="" />
+                                      <Button
+                                          type="button"
+                                          onClick={() => deleteFile(index)}
+                                      >
+                                        <i className={"fal fa-times"}></i>
+                                      </Button>
+                                    </div>
+                                );
+                              })}
+                        </div>
+                      </Col>
+                      <Col md={12} className={"mb-3 text-center"}>
+                        <button
+                            type="button"
+                            className="btn btn-primary btn-block w-50"
+                            onClick={upload}
+                        >
+                          Upload
+                        </button>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col md={12} className={"mb-3 text-center"}>
+                    <Form.Group>
+                      {showButton ? (
+                          <Button
+                              type="submit"
+                              className={"mt-3"}
+                              style={{ width: "25%" }}
+                          >
+                            Save
+                          </Button>
+                      ) : (
+                          ""
+                      )}
+                    </Form.Group>
+                  </Col>
+                </Row>
+              </div>
               {historicalData.map((data, index) => (
                 <div key={index}>
                   <Row>
@@ -415,11 +618,7 @@ const CreateRoute = () => {
                         <Col md={6}>
                           <Form.Group>
                             <Form.Label>
-                              {index === 0
-                                ? "Starting Longitude"
-                                : index === 1
-                                ? "Ending Longitude"
-                                : "Historical Event"}
+                              Historical Event
                             </Form.Label>
                             <Form.Control
                               type="text"
@@ -434,15 +633,9 @@ const CreateRoute = () => {
                             />
                           </Form.Group>
                           <Form.Group>
-                            {index <= 1 && (
-                              <Form.Label>
-                                {index === 0
-                                  ? "Starting Latitude"
-                                  : index === 1
-                                  ? "Ending Latitude"
-                                  : ""}
-                              </Form.Label>
-                            )}
+                            <Form.Label>
+
+                            </Form.Label>
                             <Form.Control
                               type="text"
                               className={"mb-3"}
@@ -471,22 +664,20 @@ const CreateRoute = () => {
                               placeholder="Historical Item"
                             />
                           </Form.Group>
-                          {index > 1 && (
-                            <Form.Group>
-                              <Form.Label>Sub-Title</Form.Label>
-                              <Form.Control
+                          <Form.Group>
+                            <Form.Label>Sub-Title</Form.Label>
+                            <Form.Control
                                 type="text"
                                 className={"mb-3"}
                                 name="subTitle"
                                 required
                                 value={data?.subTitle}
                                 onChange={(e) =>
-                                  handleHistorical(e, index, "subTitle")
+                                    handleHistorical(e, index, "subTitle")
                                 }
                                 placeholder="Write something here..."
-                              />
-                            </Form.Group>
-                          )}
+                            />
+                          </Form.Group>
                         </Col>
                         <Col md={12}>
                           <Form.Group>
