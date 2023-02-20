@@ -15,6 +15,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import RouteMap from "./RouteMap";
+import Accordion from 'react-bootstrap/Accordion';
 import axios from "axios";
 
 const CreateRoute = () => {
@@ -24,6 +25,7 @@ const CreateRoute = () => {
   const [files, setFiles] = useState([]);
   const [historicalData, setHistoricalData] = useState([]);
   const [directionsData, setDirectionsData] = useState(null);
+  const [accordionActiveKey, setAccordionActiveKey] = useState('0');
   const [inputFields, setInputFields] = useState([]);
   const [markers, setMarkers] = useState([]);
   const [routesData, setRoutesData] = useState({});
@@ -122,7 +124,7 @@ const CreateRoute = () => {
         });
       }
     }
-  }, [historicalData]);
+  }, [historicalData, accordionActiveKey]);
   const submitForm = async (event) => {
     event.preventDefault();
 
@@ -319,14 +321,6 @@ const CreateRoute = () => {
 
   const handleAddRow = useCallback(
     (position = 0) => {
-      console.log(position);
-      if (historicalData.length > 0) {
-        //console.log(`handleAddRow: ${JSON.stringify(historicalData)}`);
-        console.log(`marker: ${JSON.stringify(markers)}`);
-        const newLoc = historicalData.slice(-1)[0];
-        console.log(`lastValue: ${JSON.stringify(newLoc)}`);
-        addMarker(newLoc.latitude, newLoc.longitude);
-      }
       setHistoricalData([
         ...historicalData,
         {
@@ -336,10 +330,13 @@ const CreateRoute = () => {
           subtitle: "",
           description: "",
           file: "",
+          addedToMap: false,
+          imageIndex: '',
         },
       ]);
+      setAccordionActiveKey(`${historicalData.length}`)
     },
-    [historicalData]
+    [historicalData, accordionActiveKey]
   );
 
   const addRouteToMap = () => {
@@ -356,17 +353,26 @@ const CreateRoute = () => {
       updateRouteMap(startLatitude, startLongitude, 'black', 0)
       updateRouteMap(endLatitude, endLongitude, 'red', 1)
     }
-    if (!customRoutesData.addedToMap) {
-      setCustomRoutesData((prevState) => {
-        return {
-          ...prevState,
-          ['addedToMap']: true,
-        };
-      });
+    if (!customRoutesData.addedToMap && startLatitude && startLongitude && endLatitude && endLongitude) {
+      updateCustomRouteKey('addedToMap', true)
     }
-
-
   }
+
+  const addHistoricalToMap = (index) => {
+    const latitude = historicalData[index].latitude;
+    const longitude = historicalData[index].longitude;
+    if (latitude && longitude){
+      addMarker(latitude, longitude, 'yellow')
+    }
+    if (!historicalData[index].addedToMap && latitude && longitude) {
+      updateHistoricalRouteKey(index,'addedToMap', true)
+    }
+  }
+  const updateHistoricalRouteKey = (index, key, value) => {
+    const newRows = [...historicalData];
+    newRows[index][key] = value;
+    setHistoricalData(newRows);
+  };
   const updateRouteMap = (lat,lng,color, index) => {
     const newRows = [...markers];
     newRows[index] = {
@@ -379,22 +385,22 @@ const CreateRoute = () => {
     setMarkers(newRows);
   };
   function uploadSingleFileHistorical(e, index) {
-    console.log(e.target.name);
-    console.log(e.target.files);
+    console.log('In Hostorical')
+    let ImagesArray = Object.entries(e.target.files).map((e) =>
+        URL.createObjectURL(e[1])
+    );
     const newRows = [...historicalData];
-    newRows[index][e.target.name] = e.target.files;
-    //setHistoricalData(newRows);
-    //setFiles([...files, ...ImagesArray]);
-    //console.log("files", files);
+    newRows[index]['file'] = e.target.files[0];
+    newRows[index]['imageIndex'] = files.length;
+    setHistoricalData(newRows);
+    setFiles([...files, ...ImagesArray]);
   }
   function uploadSingleFile(e) {
-    console.log(e.target.name);
-    console.log(e.target.files[0]);
-    // const newRows = [...historicalData];
-    // newRows[index][e.target.name] = e.target.files;
-    //setHistoricalData(newRows);
-    //setFiles([...files, ...ImagesArray]);
-    //console.log("files", files);
+    let ImagesArray = Object.entries(e.target.files).map((e) =>
+        URL.createObjectURL(e[1])
+    );
+    setFile([...ImagesArray]);
+    updateCustomRouteKey('picture', e.target.files[0])
   }
 
   function upload(e) {
@@ -402,10 +408,35 @@ const CreateRoute = () => {
     console.log(file);
   }
 
+  const updateCustomRouteKey = (key, value) => {
+    setCustomRoutesData((prevState) => {
+      return {
+        ...prevState,
+        [key]: value
+      };
+    });
+  }
   function deleteFile(e) {
     const s = file.filter((item, index) => index !== e);
     setFile(s);
-    console.log(s);
+    updateCustomRouteKey('picture', '')
+  }
+
+  const deleteHistoricalFile = (index, imageIndex) => {
+    const newRows = [...historicalData];
+    const newFiles = [...files];
+    newRows[index]['file'] = '';
+    for (const row of newRows){
+      if (row.imageIndex === imageIndex){
+        row.imageIndex = '';
+      }
+      if (row.imageIndex > imageIndex){
+        row.imageIndex--;
+      }
+    }
+    newFiles.splice(imageIndex,1)
+    setHistoricalData(newRows);
+    setFiles([...newFiles]);
   }
 
   return (
@@ -431,9 +462,6 @@ const CreateRoute = () => {
             <Col md={12}>
               <div className={"d-md-flex item-center-between pt-5"}>
                 <h3 className={"my-2 fw-bold"}>Routes</h3>
-                <Button onClick={handleAddRow} ref={addHistoryBtnRef}>
-                  <i className={"fal fa-plus"}></i> Add Routes
-                </Button>
               </div>
               <hr />
 
@@ -555,7 +583,7 @@ const CreateRoute = () => {
                           <Form.Control
                               type="file"
                               id={"upload-photo"}
-                              disabled={files.length === 1}
+                              disabled={file.length === 1}
                               className=""
                               onChange={(e) =>
                                   uploadSingleFile(e)
@@ -564,10 +592,10 @@ const CreateRoute = () => {
                           <span>Attach Images</span>
                         </label>
                       </Col>
-                      <Col md={12} className={"mb-3"}>
+                      <Col md={12} className={"mb-3 text-center"}>
                         <div className="form-group previewBox">
-                          {files.length > 0 &&
-                              files.map((item, index) => {
+                          {file.length > 0 &&
+                              file.map((item, index) => {
                                 return (
                                     <div className={"preview"} key={item}>
                                       <img src={item} alt="" />
@@ -582,14 +610,10 @@ const CreateRoute = () => {
                               })}
                         </div>
                       </Col>
-                      <Col md={12} className={"mb-3 text-center"}>
-                        <button
-                            type="button"
-                            className="btn btn-primary btn-block w-50"
-                            onClick={upload}
-                        >
-                          Upload
-                        </button>
+                      <Col md={12} className={"mb-3"}>
+                      <Button onClick={handleAddRow} ref={addHistoryBtnRef}>
+                        <i className={"fal fa-plus"}></i> Add Historical Routes
+                      </Button>
                       </Col>
                     </Row>
                   </Col>
@@ -610,174 +634,169 @@ const CreateRoute = () => {
                   </Col>
                 </Row>
               </div>
+
+
+
+            <Accordion defaultActiveKey={accordionActiveKey}>
               {historicalData.map((data, index) => (
-                <div key={index}>
-                  <Row>
-                    <Col md={8}>
-                      <Row>
-                        <Col md={6}>
-                          <Form.Group>
-                            <Form.Label>
-                              Historical Event
-                            </Form.Label>
-                            <Form.Control
-                              type="text"
-                              className={"mb-3 mb-md-5"}
-                              name="longitude"
-                              required
-                              value={data.longitude}
-                              onChange={(e) =>
-                                handleHistorical(e, index, "longitude")
-                              }
-                              placeholder="longitude"
-                            />
-                          </Form.Group>
-                          <Form.Group>
-                            <Form.Label>
+                  <Accordion.Item eventKey={`${index}`}>
+                    <Accordion.Header>{`Historical Route ${index +1}` }</Accordion.Header>
+                    <Accordion.Body>
+                      <div key={index}>
+                        <Row>
+                          <Col md={8}>
+                            <Row>
+                              <Col md={6}>
+                                <Form.Group>
+                                  <Form.Label>
+                                    Historical Event
+                                  </Form.Label>
+                                  <Form.Control
+                                      type="text"
+                                      className={"mb-3 mb-md-5"}
+                                      name="longitude"
+                                      required
+                                      value={data.longitude}
+                                      onChange={(e) =>
+                                          handleHistorical(e, index, "longitude")
+                                      }
+                                      placeholder="longitude"
+                                  />
+                                </Form.Group>
+                                <Form.Group>
+                                  <Form.Label>
 
-                            </Form.Label>
-                            <Form.Control
-                              type="text"
-                              className={"mb-3"}
-                              name="latitude"
-                              required
-                              value={data?.latitude}
-                              onChange={(e) =>
-                                handleHistorical(e, index, "latitude")
-                              }
-                              placeholder="latitude"
-                            />
-                          </Form.Group>
-                        </Col>
-                        <Col md={6}>
-                          <Form.Group>
-                            <Form.Label>Title</Form.Label>
-                            <Form.Control
-                              type="text"
-                              className={"mb-3"}
-                              name="title"
-                              required
-                              value={data?.title}
-                              onChange={(e) =>
-                                handleHistorical(e, index, "title")
-                              }
-                              placeholder="Historical Item"
-                            />
-                          </Form.Group>
-                          <Form.Group>
-                            <Form.Label>Sub-Title</Form.Label>
-                            <Form.Control
-                                type="text"
-                                className={"mb-3"}
-                                name="subTitle"
-                                required
-                                value={data?.subTitle}
-                                onChange={(e) =>
-                                    handleHistorical(e, index, "subTitle")
-                                }
-                                placeholder="Write something here..."
-                            />
-                          </Form.Group>
-                        </Col>
-                        <Col md={12}>
-                          <Form.Group>
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control
-                              as="textarea"
-                              className={"mb-3"}
-                              name="description"
-                              required
-                              value={data?.description}
-                              onChange={(e) =>
-                                handleHistorical(e, index, "description")
-                              }
-                              placeholder="Write something here..."
-                            />
-                          </Form.Group>
-                        </Col>
-                      </Row>
-                    </Col>
-                    <Col md={4}>
-                      <Row>
-                        <Col md={12} className={"mb-3"}>
-                          <label
-                            className={"fileUpload v2"}
-                            htmlFor="upload-photo"
-                          >
-                            <Form.Control
-                              type="file"
-                              id={"upload-photo"}
-                              disabled={files.length === 1}
-                              className=""
-                              onChange={(e) =>
-                                uploadSingleFileHistorical(e, index)
-                              }
-                            />
-                            <span>Attach Images</span>
-                          </label>
-                        </Col>
-                        <Col md={12} className={"mb-3"}>
-                          <div className="form-group previewBox">
-                            {files.length > 0 &&
-                              files.map((item, index) => {
-                                return (
-                                  <div className={"preview"} key={item}>
-                                    <img src={item} alt="" />
-                                    <Button
-                                      type="button"
-                                      onClick={() => deleteFile(index)}
-                                    >
-                                      <i className={"fal fa-times"}></i>
-                                    </Button>
-                                  </div>
-                                );
-                              })}
-                          </div>
-                        </Col>
-                        <Col md={12} className={"mb-3 text-center"}>
-                          <button
-                            type="button"
-                            className="btn btn-primary btn-block w-50"
-                            onClick={upload}
-                          >
-                            Upload
-                          </button>
-                        </Col>
-                      </Row>
-                    </Col>
-                    <Col md={12} className={"mb-3 text-center"}>
-                      <Form.Group>
-                        {showButton ? (
-                          <Button
-                            type="submit"
-                            className={"mt-3"}
-                            style={{ width: "25%" }}
-                          >
-                            Save
-                          </Button>
-                        ) : (
-                          ""
-                        )}
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                </div>
+                                  </Form.Label>
+                                  <Form.Control
+                                      type="text"
+                                      className={"mb-3"}
+                                      name="latitude"
+                                      required
+                                      value={data?.latitude}
+                                      onChange={(e) =>
+                                          handleHistorical(e, index, "latitude")
+                                      }
+                                      placeholder="latitude"
+                                  />
+                                </Form.Group>
+                              </Col>
+                              <Col md={6}>
+                                <Form.Group>
+                                  <Form.Label>Title</Form.Label>
+                                  <Form.Control
+                                      type="text"
+                                      className={"mb-3"}
+                                      name="title"
+                                      required
+                                      value={data?.title}
+                                      onChange={(e) =>
+                                          handleHistorical(e, index, "title")
+                                      }
+                                      placeholder="Historical Item"
+                                  />
+                                </Form.Group>
+                                <Form.Group>
+                                  <Form.Label>Sub-Title</Form.Label>
+                                  <Form.Control
+                                      type="text"
+                                      className={"mb-3"}
+                                      name="subTitle"
+                                      required
+                                      value={data?.subTitle}
+                                      onChange={(e) =>
+                                          handleHistorical(e, index, "subTitle")
+                                      }
+                                      placeholder="Write something here..."
+                                  />
+                                </Form.Group>
+                              </Col>
+                              <Col md={12}>
+                                <Form.Label></Form.Label>
+                                <Form.Group>
+                                  {data.addedToMap
+                                      ? <Button disabled={true} type="button" className={"w-100"}>
+                                        Generate
+                                      </Button>
+                                      : <Button  type="button" className={"w-100"} onClick={() => addHistoricalToMap(index)}>
+                                        Generate
+                                      </Button>
+                                  }
+                                </Form.Group>
+                              </Col>
+                              <Col md={12}>
+                                <Form.Group>
+                                  <Form.Label>Description</Form.Label>
+                                  <Form.Control
+                                      as="textarea"
+                                      className={"mb-3"}
+                                      name="description"
+                                      required
+                                      value={data?.description}
+                                      onChange={(e) =>
+                                          handleHistorical(e, index, "description")
+                                      }
+                                      placeholder="Write something here..."
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                          </Col>
+                          <Col md={4}>
+                            <Row>
+                              <Col md={12} className={"mb-3"}>
+                                <label
+                                    className={"fileUpload v2"}
+                                    htmlFor={`upload-photo${index}`}
+                                >
+                                  <Form.Control
+                                      type="file"
+                                      id={`upload-photo${index}`}
+                                      className=""
+                                      onChange={(e) =>
+                                          uploadSingleFileHistorical(e, index)
+                                      }
+                                  />
+                                  <span>Attach Images</span>
+                                </label>
+                              </Col>
+                              <Col md={12} className={"mb-3"}>
+                                <div className="form-group previewBox">
+                                  {files.length > 0 && files[data.imageIndex] &&
+                                      <div className={"preview"} key={files[data.imageIndex]}>
+                                        <img src={files[data.imageIndex]} alt="" />
+                                        <Button
+                                            type="button"
+                                            onClick={() => deleteHistoricalFile(index, data.imageIndex)}
+                                        >
+                                          <i className={"fal fa-times"}></i>
+                                        </Button>
+                                      </div>}
+                                </div>
+                              </Col>
+                            </Row>
+                          </Col>
+                          <Col md={12} className={"mb-3 text-center"}>
+                            <Form.Group>
+                              {showButton ? (
+                                  <Button
+                                      type="submit"
+                                      className={"mt-3"}
+                                      style={{ width: "25%" }}
+                                  >
+                                    Save
+                                  </Button>
+                              ) : (
+                                  ""
+                              )}
+                            </Form.Group>
+                          </Col>
+                        </Row>
+                      </div>
+                    </Accordion.Body>
+                  </Accordion.Item>
+
               ))}
-
-              <Button
-                onClick={() => {
-                  if (historicalData.length > 0) {
-                    const newLoc = historicalData.slice(-1)[0];
-                    addMarker(newLoc.latitude, newLoc.longitude);
-                  }
-                }}
-                ref={addHistoryBtnRef}
-              >
-                Save
-              </Button>
-              <Button onClick={handleAddRow} ref={addHistoryBtnRef}>
-                Save & Add More
-              </Button>
+            </Accordion>
             </Col>
           </Row>
 
