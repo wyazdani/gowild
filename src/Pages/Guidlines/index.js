@@ -10,7 +10,7 @@ import EWaiver from "./Tabs/eWaiver";
 const Guidlines =(props) => {
     return(
         <>
-            <PageTitle title={"Guidlines"} />
+            <PageTitle title={"Guidelines"} />
             <section className={"section"}>
                 <Tabs
                     defaultActiveKey="termsandconditions"

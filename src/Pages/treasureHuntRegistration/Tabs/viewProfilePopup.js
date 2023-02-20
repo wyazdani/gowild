@@ -138,7 +138,7 @@ const ViewProfilePopup = (props) => {
                                 <Row className="backGroundColor">
                                     <Col md={6}>
                                         <div className={classes.box}>
-                                            <h3 className={"font-20 text-orange mb-3"}>Perosnal Data</h3>
+                                            <h3 className={"font-20 text-orange mb-3"}>Personal Data</h3>
                                             <Row>
                                                 <Col md={12} className={"mb-3"}>
                                                     <Form.Label className={"text-orange mb-0"}>Event Name</Form.Label>

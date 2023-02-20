@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Table, Form, Dropdown } from "react-bootstrap";
+import React, { useState, useEffect } from 'react';
+import { Table, Form, Dropdown, Button, Row, Col } from "react-bootstrap";
 import classes from "./index.module.scss";
 import AuthService from "../../../services/auth.service";
 import { ENDPOINT } from "../../../config/constants";
@@ -10,6 +10,7 @@ import profile from "Images/routelist.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditSubAmdin from "Components/SubAdminComponent/EditSubAdmin";
+import AddSubAdmin from "../../../Components/SubAdminComponent/AddNewSubAdmin";
 
 const InActiveTabData = (props) => {
   const { content } = props;
@@ -27,7 +28,7 @@ const InActiveTabData = (props) => {
 
   const [modalShow, setModalShow] = useState(false);
   const [modalShowView, setModalShowView] = useState(false);
-  const [search, setSearch] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [itemsPerPage, setItemsPerPage] = useState(10);
   // const itemsPerPage = 3;
 
@@ -84,8 +85,51 @@ const InActiveTabData = (props) => {
     setIsChecked(!isChecked);
   };
 
+
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    setCurrentItems(
+      content.filter(
+        (content) =>
+          (content.firstName.trim() + " " + content.lastName.trim()).toLowerCase().includes(event.target.value.toLowerCase().trim()) ||
+          content.email.toLowerCase().includes(event.target.value.toLowerCase().trim())
+      )
+    );
+    if (event.target.value.trim() === '') {
+      props.subAdminAllData();
+    }
+  };
+
   return (
     <>
+      <div className={classes.tableFilter}>
+        <Form>
+          <Row>
+            <Col md={8}>
+              <div className={"d-md-flex"}>
+                <Button variant="filter">
+                  <i className={"fas fa-filter"}></i>
+                  Filter
+                </Button>
+                <Form.Group className={classes.searchForm}>
+                  <Form.Control type="search" placeholder="Search Users by Name, Email or Date" value={searchTerm} onChange={handleSearch} />
+                </Form.Group>
+              </div>
+            </Col>
+            <Col md={4} className={"d-md-flex justify-content-end"}>
+              <Button onClick={() => setAddAdmin(true)}>
+                Add New
+              </Button>
+              <AddSubAdmin
+                subAdminAllData={props.subAdminAllData}
+                show={addAdmin}
+                onHide={() => setAddAdmin(false)}
+              />
+            </Col>
+          </Row>
+        </Form>
+      </div>
       <Table className="user1">
         <thead>
           <tr>
@@ -179,7 +223,7 @@ const InActiveTabData = (props) => {
                         submitEventForm(content.id)
                       }} >Disable User</p> : <p className="m-0 p-0" onClick={() => {
                         submitEventForm(content.id)
-                      }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Active User</p>}
+                      }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Activate User</p>}
                     </Dropdown.Item>
                     <Dropdown.Item href="#/" onClick={
                       () => {
@@ -208,17 +252,15 @@ const InActiveTabData = (props) => {
       <div className="result_pagination">
         <span> Rows per page: &nbsp; </span>
         <select onChange={handleRowsPerPageChange} value={itemsPerPage}>
-          <option value={5}>5</option>
+
+          <option value={10}>10</option>
           <option value={25}>25</option>
           <option value={50}>50</option>
           <option value={75}>75</option>
-        </select>{" "}
-        <i className="fa fa-sort-desc" aria-hidden="true"></i>
+        </select> <i className="fa fa-sort-desc" aria-hidden="true"></i>
+
         {/* <span className="mx-4"> {currentItems.length} - {content.length} of {content.length} </span> */}
-        <span className="mx-5">
-          {" "}
-          {pageCount} - {currentItems.length} of {content.length}{" "}
-        </span>
+        <span className="mx-5"> {pageCount - 1} - {currentItems.length}  of {content.length} </span>
         <ReactPaginate
           breakLabel="..."
           nextLabel="  >"
@@ -228,12 +270,16 @@ const InActiveTabData = (props) => {
           rowsPerPage={itemsPerPage}
           previousLabel="<"
           renderOnZeroPageCount={null}
+          breakClassName={"break-me"}
           containerClassName="pagination"
+          subContainerClassName={"pages pagination"}
           pageLinkClassName="page-num"
           previousLinkClassName="page-num"
           nextLinkClassName="page-num"
           activeLinkClassName="active"
+
         />
+
       </div>
 
 

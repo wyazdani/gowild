@@ -56,35 +56,35 @@ const AllTabData = (props) => {
     };
 
 
-       
-  // chekbox select all
-  const handleCheckboxChange = (content) => {
-    if (selectedItems.includes(content)) {
-      setSelectedItems(selectedItems.filter((i) => i !== content));
-    } else {
-      setSelectedItems([...selectedItems, content]);
+
+    // chekbox select all
+    const handleCheckboxChange = (content) => {
+        if (selectedItems.includes(content)) {
+            setSelectedItems(selectedItems.filter((i) => i !== content));
+        } else {
+            setSelectedItems([...selectedItems, content]);
+        }
+    };
+
+    const handleSelectAll = () => {
+        setSelectedItems(content);
+        setIsChecked(!isChecked);
     }
-  };
 
-  const handleSelectAll = () => {
-    setSelectedItems(content);
-    setIsChecked(!isChecked);
-  }
-
-  const handleDeselectAll = () => {
-    setSelectedItems([]);
-    setIsChecked(!isChecked);
-  };
+    const handleDeselectAll = () => {
+        setSelectedItems([]);
+        setIsChecked(!isChecked);
+    };
 
 
     const submitEventForm = async (id) => {
         // console.log("1233"+id);
-        return  AuthService.postMethod(`${ENDPOINT.sub_admin.active_inactive}${id}/status`, true)
+        return AuthService.postMethod(`${ENDPOINT.sub_admin.active_inactive}${id}/status`, true)
             .then((res) => {
                 if (res.status === 201) {
                     toast.success(res.data.message);
                 }
-                 props.subAdminAllData()
+                props.subAdminAllData()
                 console.log(res);
             })
             .catch((err) => {
@@ -95,21 +95,21 @@ const AllTabData = (props) => {
 
 
 
-      const handleSearch = (event) => {
+    const handleSearch = (event) => {
         setSearchTerm(event.target.value);
         setCurrentItems(
-          content.filter(
-            (content) =>
-              (content.firstName.trim() + " " + content.lastName.trim()).toLowerCase().includes(event.target.value.toLowerCase().trim()) ||
-              content.email.toLowerCase().includes(event.target.value.toLowerCase().trim())
-          )
+            content.filter(
+                (content) =>
+                    (content.firstName.trim() + " " + content.lastName.trim()).toLowerCase().includes(event.target.value.toLowerCase().trim()) ||
+                    content.email.toLowerCase().includes(event.target.value.toLowerCase().trim())
+            )
         );
         if (event.target.value.trim() === '') {
-          props.subAdminAllData();
+            props.subAdminAllData();
         }
-      };
-      
- 
+    };
+
+
     return (
         <>
             <div className={classes.tableFilter}>
@@ -122,7 +122,7 @@ const AllTabData = (props) => {
                                     Filter
                                 </Button>
                                 <Form.Group className={classes.searchForm}>
-                                    <Form.Control type="search" placeholder="Search Users by Name, Email or Date" value={searchTerm} onChange={handleSearch}  />
+                                    <Form.Control type="search" placeholder="Search Users by Name, Email or Date" value={searchTerm} onChange={handleSearch} />
                                 </Form.Group>
                             </div>
                         </Col>
@@ -156,42 +156,42 @@ const AllTabData = (props) => {
                     {
 
                         currentItems.map((content) => (
-                                <tr>
+                            <tr>
                                 <td><Form.Check type="checkbox" value={content}
                                     onChange={() => handleCheckboxChange(content)}
                                     checked={selectedItems.includes(content)} /></td>
-                                    <td>
-                                        <div className={"d-flex"}>
-                                            <div className={classes.userImg}>
-                                            {(content.picture)? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
-                                            </div>
-                                            <div className={classes.description}>
-                                                <h4 className={"font-16 mb-0"}>{content.firstName + " " + content.lastName}</h4>
-                                                <div className={"text-muted text text-lowercase"}>{content.email}</div>
-                                            </div>
+                                <td>
+                                    <div className={"d-flex"}>
+                                        <div className={classes.userImg}>
+                                            {(content.picture) ? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} /> : <img src={profile} width="100%" alt={"img"} />}
                                         </div>
-                                    </td>
-                                    <td>
-                                        { content.onlineStatus
-                                            ? <span class={`${classes.tag} text-danger ${classes.active} `}>Active</span>
-                                            : <span class={`${classes.tag} ${classes.inactive} text-default `}>Inactive </span>
-                                        }
-                                    </td>
-                                    <td>{content.firstName}</td>
-                                    <td>
-                                        {content.accountStatus === "active"
-                                            ? <span class="text-success ">  <b>ACTIVE</b></span>
-                                            : <span class="text-danger"> <b>DISABLED</b> </span>
-                                        }
-                                    </td>
-                                    <td>
-                                        <Dropdown>
-                                            <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                                <i className={"far fa-ellipsis-v fa-fw"}></i>
-                                            </Dropdown.Toggle>
+                                        <div className={classes.description}>
+                                            <h4 className={"font-16 mb-0"}>{content.firstName + " " + content.lastName}</h4>
+                                            <div className={"text-muted text text-lowercase"}>{content.email}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    {content.onlineStatus
+                                        ? <span class={`${classes.tag} text-danger ${classes.active} `}>Active</span>
+                                        : <span class={`${classes.tag} ${classes.inactive} text-default `}>Inactive </span>
+                                    }
+                                </td>
+                                <td>{content.firstName}</td>
+                                <td>
+                                    {content.accountStatus === "active"
+                                        ? <span class="text-success ">  <b>ACTIVE</b></span>
+                                        : <span class="text-danger"> <b>DISABLED</b> </span>
+                                    }
+                                </td>
+                                <td>
+                                    <Dropdown>
+                                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                            <i className={"far fa-ellipsis-v fa-fw"}></i>
+                                        </Dropdown.Toggle>
 
-                                            <Dropdown.Menu>
-                                                {/* <Dropdown.Item href="#/" 
+                                        <Dropdown.Menu>
+                                            {/* <Dropdown.Item href="#/" 
                                                 >
                                                     <i className={"fal fa-ban text-white"}  style={{backgroundColor:'#FEAC71'}}></i>
                                                     {content.accountStatus === "active" ? <p className="m-0 p-0" onClick={() => {
@@ -200,36 +200,36 @@ const AllTabData = (props) => {
                                                        submitEventForm(content.id)
                                                     }}><i class="fa fa-check tick" aria-hidden="true"></i>Active User</p>}   
                                                 </Dropdown.Item> */}
-                                                <Dropdown.Item href="#/">
-                                                    <i className={"fal fa-ban text-white active"}></i>
-                                                    {content.accountStatus === "active" ? <p className="m-0 p-0" onClick={() => {
-                                                       submitEventForm(content.id)
-                                                    }} >Disable User</p> :   <p className="m-0 p-0" onClick={() => {
-                                                       submitEventForm(content.id)
-                                                    }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Active User</p>}   
-                                                </Dropdown.Item>
-                                                <Dropdown.Item href="#/" onClick={
-                                                    () => {
-                                                        setEditSubAdmin(true)
-                                                        setEditItem(content)
-                                                    }
-                                                }>
-                                                    <i className={"far fa-pen bg-dark text-white"}></i>
-                                                    Edit User
-                                                </Dropdown.Item>
-                                                <Dropdown.Item href="#/"
-                                                    onClick={() => {
-                                                        props.deleteSubAdmin(content.id)
-                                                    }}
-                                                >
-                                                    <i className={"fal fa-trash text-white"} style={{backgroundColor:"#FF2113"}}></i>
-                                                    Delete
-                                                </Dropdown.Item>
-                                            </Dropdown.Menu>
-                                        </Dropdown>
-                                    </td>
-                                </tr>
-                            ))
+                                            <Dropdown.Item href="#/">
+                                                <i className={"fal fa-ban text-white active"}></i>
+                                                {content.accountStatus === "active" ? <p className="m-0 p-0" onClick={() => {
+                                                    submitEventForm(content.id)
+                                                }} >Disable User</p> : <p className="m-0 p-0" onClick={() => {
+                                                    submitEventForm(content.id)
+                                                }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Activate User</p>}
+                                            </Dropdown.Item>
+                                            <Dropdown.Item href="#/" onClick={
+                                                () => {
+                                                    setEditSubAdmin(true)
+                                                    setEditItem(content)
+                                                }
+                                            }>
+                                                <i className={"far fa-pen bg-dark text-white"}></i>
+                                                Edit User
+                                            </Dropdown.Item>
+                                            <Dropdown.Item href="#/"
+                                                onClick={() => {
+                                                    props.deleteSubAdmin(content.id)
+                                                }}
+                                            >
+                                                <i className={"fal fa-trash text-white"} style={{ backgroundColor: "#FF2113" }}></i>
+                                                Delete
+                                            </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </td>
+                            </tr>
+                        ))
                     }
                 </tbody>
             </Table>
@@ -244,7 +244,7 @@ const AllTabData = (props) => {
                 </select> <i className="fa fa-sort-desc" aria-hidden="true"></i>
 
                 {/* <span className="mx-4"> {currentItems.length} - {content.length} of {content.length} </span> */}
-                <span className="mx-5"> {pageCount-1} - {currentItems.length}  of {content.length} </span>
+                <span className="mx-5"> {pageCount - 1} - {currentItems.length}  of {content.length} </span>
                 <ReactPaginate
                     breakLabel="..."
                     nextLabel="  >"
@@ -263,7 +263,7 @@ const AllTabData = (props) => {
                     activeLinkClassName="active"
 
                 />
-  
+
             </div>
             <EditSubAdmin
                 subAdminAllData={props.subAdminAllData}
