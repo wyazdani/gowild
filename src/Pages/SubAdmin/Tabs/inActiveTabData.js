@@ -223,7 +223,7 @@ const InActiveTabData = (props) => {
                         submitEventForm(content.id)
                       }} >Disable User</p> : <p className="m-0 p-0" onClick={() => {
                         submitEventForm(content.id)
-                      }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Active User</p>}
+                      }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Activate User</p>}
                     </Dropdown.Item>
                     <Dropdown.Item href="#/" onClick={
                       () => {
