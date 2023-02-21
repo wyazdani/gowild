@@ -700,11 +700,11 @@ const CreateRoute = () => {
                                       <Form.Control
                                           type="text"
                                           className={"mb-3"}
-                                          name="subTitle"
+                                          name="subtitle"
                                           required
-                                          value={data?.subTitle}
+                                          value={data?.subtitle}
                                           onChange={(e) =>
-                                              handleHistorical(e, index, "subTitle")
+                                              handleHistorical(e, index, "subtitle")
                                           }
                                           placeholder="Write something here..."
                                       />

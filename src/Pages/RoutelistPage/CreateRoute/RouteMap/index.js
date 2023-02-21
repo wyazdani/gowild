@@ -79,6 +79,7 @@ export default function RouteMap({
   // }, [startingPoint, endingPoint, map, google, markers]);
 
   useEffect(() => {
+    console.log('markers', markers)
     if (map) {
       const listener = map.addListener("click", (e) => {
         // setMarkers((prevMarkers) => {
@@ -136,6 +137,7 @@ export default function RouteMap({
   }, [map, google]);
 
   useEffect(() => {
+    console.log('markers', markers)
     if (markers.length >= 3) {
       //console.log("handleAddRow");
       //if (handleAddRow) handleAddRow(markers[markers.length - 1].position);
@@ -170,10 +172,6 @@ export default function RouteMap({
 
     }
   }, [map, markers, travelMode]);
-  useEffect(() => {
-    console.log('Reaches Here')
-    console.log(`Markers ${JSON.stringify(markers)}`)
-  }, [markers])
 
 
   const Marker = ({

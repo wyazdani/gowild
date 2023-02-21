@@ -40,7 +40,6 @@ const RouteList = () => {
       .then((res) => {
         setContent(res.data.data);
         setIsLoader(true);
-        console.log("response data", res.data.data);
       })
       .catch((err) => {
         swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
@@ -135,7 +134,7 @@ const RouteList = () => {
             {content
               .sort((a, b) => (a.name < b.name ? -1 : 1))
               .map((content) => (
-                <tr>
+                <tr key={content.id}>
                   <td>
                     <Form.Check
                       type="checkbox"

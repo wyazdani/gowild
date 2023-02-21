@@ -199,8 +199,8 @@ const ViewRouteList = (props) => {
                   <Col md={8}>
                     <div className={"img-box"}>
                       <RouteMap
-                        startingPoint={props.viewItem["startValue"]}
-                        endingPoint={props.viewItem["endValue"]}
+                        startingPoint={`${props.viewItem.start.latitude},${props.viewItem.start.longitude}`}
+                        endingPoint={`${props.viewItem.end.latitude},${props.viewItem.end.longitude}`}
                         travelMode={"WALKING"}
                         preRenderMarkers={true}
                       />
