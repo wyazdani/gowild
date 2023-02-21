@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, InputGroup, Button } from "react-bootstrap";
 import classes from "../index.module.scss";
-import emailsvg from "../../../Images/email.svg";
+import emailsvg from "../../../Images/email1.svg";
 import Lock from "../../../Images/Lock.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { ENDPOINT } from "config/constants";
