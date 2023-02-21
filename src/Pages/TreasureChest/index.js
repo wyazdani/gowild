@@ -22,7 +22,7 @@ const TreasureChestList = () => {
 
     const navigate = useNavigate();
     const goToCreateRoute = () => {
-        navigate('/treasure-list/create');
+        navigate('/treasure-chests-list/create');
     };
     const goToEditRoute = () => {
         navigate('/treasure-list/edit');

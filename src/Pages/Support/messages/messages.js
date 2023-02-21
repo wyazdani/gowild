@@ -9,6 +9,7 @@ import {ENDPOINT, SOCKET_URL} from "../../../config/constants";
 import AuthService from "../../../services/auth.service";
 import swal from "sweetalert";
 import socket from "../socket/socket";
+import pdfImg from "../../../Images/pdf.svg";
 
 const Messages = (props) => {
     // const { content } = props;
@@ -163,8 +164,8 @@ const Messages = (props) => {
                             {file.length > 0 &&
                                 file.map((item, index) => {
                                     return (
-                                        <div className={"preview"} key={item}>
-                                            <img src={item} alt="" />
+                                        <div className={`preview ${classes.previewImg}`} key={item}>
+                                            <img src={item}  alt="img" />
                                             <Button
                                                 type="button"
                                                 onClick={() => deleteFile(index)}
@@ -188,7 +189,7 @@ const Messages = (props) => {
 
                         </div>
                         <input type="text" className={classes.formcontrol} value={msg}
-                               onChange={(e) => setMsg(e.target.value)} placeholder="Type a message"/>
+                               onChange={(e) => setMsg(e.target.value)} placeholder="Write your message here"/>
                         <button className={`${classes.btn} ${classes.btnSend}`} onClick={emitEvent.bind(null,ticket?.id)} type="button"><i className="fas fa-paper-plane"></i>
                         </button>
                     </div>

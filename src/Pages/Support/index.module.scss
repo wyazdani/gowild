@@ -30,6 +30,23 @@
   border-right: 1px solid rgba(0, 0, 0, 0.05);
   background: #fff;
 
+  form {
+    input[type='search']{
+      border-radius: 0;
+      border: none;
+      height: 70px;
+      line-height: 70px;
+      padding: 0 50px 0 15px;
+      background-position: calc(100% - 10px) center;
+
+      &::placeholder{
+        color: #000;
+        font-size: 18px;
+        font-weight: bold;
+      }
+    }
+  }
+
   ul{
     list-style: none;
     margin: 0;
@@ -365,6 +382,17 @@
         border-radius: 50%;
         background: #FF7851;
         color: #fff;
+
+        i{
+         &:before{
+           background: url("../../Images/paperplan.svg") no-repeat;
+           content: '';
+           width: 20px;
+           height: 20px;
+           background-size: 20px;
+           display: block;
+         }
+        }
 
       }
     }

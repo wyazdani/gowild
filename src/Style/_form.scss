@@ -95,6 +95,14 @@ textarea {
   }
 }
 
+select,
+.form-select{
+  padding-right: 40px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 
 textarea.form-control,
 textarea{

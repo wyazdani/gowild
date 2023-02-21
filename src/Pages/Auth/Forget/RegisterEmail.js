@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, InputGroup, Button } from "react-bootstrap";
 import classes from "../index.module.scss";
-import emailsvg from "../../../Images/email.svg";
+import emailsvg from "../../../Images/email1.svg";
 import Lock from "../../../Images/Lock.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { ENDPOINT } from "config/constants";
@@ -72,7 +72,7 @@ const RegisterEmail = () => {
                 //  noValidate validated={validated}
                  >
                     <Form.Group className="mb-3" controlId="loginemail">
-                        <Form.Label>Email address</Form.Label>
+                        <Form.Label>Email Address</Form.Label>
                         <InputGroup>
                             <InputGroup.Text id="basic-addon1">
                                 <img src={emailsvg} alt={"goWild"} align={"img"}/>

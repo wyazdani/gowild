@@ -30,12 +30,12 @@ const Inbox = (props) => {
             <div className={classes.messageListSidebar}>
                 <form className={`${classes.searchform}`}>
                     <div className="form-group">
-                        <input type="search" className="form-control" placeholder="Search Message" value={searchTerm} onChange={handleSearch} />
+                        <input type="search" className="form-control" placeholder="Messages" value={searchTerm} onChange={handleSearch} />
                     </div>
                 </form>
                 <ul>
                     {currentItems.map((data) => (
-                        <li onClick={props.ticketMessages.bind(null,data.id,data)} key={data.id} className="active">
+                        <li onClick={props.ticketMessages.bind(null,data.id,data)} key={data.id}>
                             <div className={classes.userImg}>
                                 <img src={imageUrl(data.user?.picture,userImg)} style={{borderRadius: "50%", width:50, height:50}} alt="username"/>
                             </div>
