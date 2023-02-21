@@ -127,11 +127,42 @@ const CreateRoute = () => {
   }, [historicalData, accordionActiveKey]);
   const submitForm = async (event) => {
     event.preventDefault();
-
+    const payloadHistorical = [];
+    for (const data of historicalData) {
+      payloadHistorical.push({
+        historical_event: {
+          latitude: data.latitude,
+          longitude: data.longitude,
+        },
+        title: data.title,
+        subtitle: data.subtitle,
+        description: data.description,
+      })
+    }
     // let routesData = [];
+    const routeData = {
+      title: customRoutesData.title,
+      description: customRoutesData.description,
+      distance_miles: customRoutesData.distance_miles,
+      distance_meters: customRoutesData.distance_meters,
+      estimate_time: '-',
+      route_path: customRoutesData.route_path,
+      startLocation: '-',
+      endLocation: '-',
+      start: {
+        latitude: customRoutesData.startLatitude,
+        longitude: customRoutesData.startLongitude,
+      },
+      end: {
+        latitude: customRoutesData.endLatitude,
+        longitude: customRoutesData.endLongitude,
+      },
+      historical_route: payloadHistorical
+    }
 
     // console.log("DUCK", "formData", formData);
-    console.log("DUCK", "routesData", routesData);
+    console.log("DUCK", "customRoutesData", customRoutesData);
+    console.log("DUCK", "historicalData", historicalData);
     //return;
     // if (historicalData.length > 2) {
     //   routesData.start = {
@@ -206,38 +237,61 @@ const CreateRoute = () => {
     return AuthService.postMethod(
       ENDPOINT.admin_route.listing,
       true,
-      routesData
+        routeData
     )
       .then((res) => {
+
+        // if (res.data?.historical_route && res.data?.historical_route.length> 0) {
+        //
+        //   for (const [i,event] in res.data?.historical_route) {
+        //
+        //     const url = ENDPOINT.historical_event.add_image.replace(
+        //         ":id",
+        //         event.id
+        //     );
+        //     let data = new FormData();
+        //
+        //     data.append("file", historicalData[i].file);
+        //     console.log(url)
+        //     console.log(historicalData[i].file)
+        //     AuthService.postMethod(url, true, data)
+        //         .then((res) => {
+        //           console.log('Success Historical Route Image Upload')
+        //         })
+        //   }
+        //
+        // }
         let data = new FormData();
-        data.append("file", uploadFile);
+        data.append("file", customRoutesData.picture);
         setId(res.data.id);
         const url = ENDPOINT.admin_route.update_pictures.replace(
-          ":id",
-          res.data.id
+            ":id",
+            res.data.id
         );
         AuthService.postMethod(url, true, data)
           .then((res) => {
             if (res.status === 200) {
-              toast.success("Form data submitted successfully", {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-              });
-              setShowButton(true);
-              navigate("/route-list");
-              setFormData("");
-            }
+
+                toast.success("Form data submitted successfully", {
+                  position: "bottom-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "dark",
+                });
+                setShowButton(true);
+                navigate("/route-list");
+                setFormData("");
+              }
           })
           .catch((err) => {
             swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
           });
         console.log(res);
+
         // event.target.reset();
       })
       .catch((err) => {
@@ -274,11 +328,11 @@ const CreateRoute = () => {
       setStartingPoint(startPos);
       setEndingPoint(endPos);
       /*if (directionsData == null) {
-        const origin = "51,0";
-        const destination = "51.5,-0.1";
+        const origin = `${startPos.lat}, ${startPos.lng}`;
+        const destination = `${endPos.lat}, ${endPos.lng}`;
         const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${GOOGLE_KEY}`;
-        const corsAnywhereUrl = `https://cors-proxy.htmldriven.com/?url=${url}`;
-
+        const corsAnywhereUrl = `http://localhost:8080/${url}`;
+console.log(corsAnywhereUrl)
         axios.get(corsAnywhereUrl)
             .then(response => {
               console.log('Success')
