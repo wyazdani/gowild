@@ -69,7 +69,7 @@ const ForgetPassword = () => {
                 <p className={"font-18 mb-5"}>Enter your detail below</p>
                 <Form noValidate validated={validated}>
                     <Form.Group className="mb-3" controlId="loginemail">
-                        <Form.Label>Email address</Form.Label>
+                        <Form.Label>Email Address</Form.Label>
                         <InputGroup>
                             <InputGroup.Text id="basic-addon1">
                                 <img src={emailsvg} alt={"goWild"} align={"img"}/>

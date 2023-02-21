@@ -111,7 +111,7 @@ const RouteList = () => {
       <PageTitle title="Normal Route" />
       <section className={"section"}>
         <div className={"d-md-flex item-center-between mb-3"}>
-          <h4 className={"my-2"}>Route List</h4>
+          <h4 className={"my-2"}>Route Lists</h4>
           <Button onClick={goToCreateRoute}>Create</Button>
         </div>
         <Table>

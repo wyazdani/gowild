@@ -66,6 +66,11 @@ const routes = [
     layout: MainLayout
   },
   {
+    path: "/treasure-chests-list/create",
+    component: CreateTreasure,
+    layout: MainLayout,
+  },
+  {
     path: "/route-list",
     component: RouteList,
     layout: MainLayout,
@@ -75,11 +80,7 @@ const routes = [
     component: CreateRoute,
     layout: MainLayout,
   },
-  {
-    path: "/treasure-list/create",
-    component: CreateTreasure,
-    layout: MainLayout,
-  },
+
   // {
   //   path: "/treasure-list/edit",
   //   component: EditTreasure,
