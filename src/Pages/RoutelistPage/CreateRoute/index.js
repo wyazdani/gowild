@@ -547,16 +547,16 @@ const CreateRoute = () => {
 
                 <div>
                   <Row>
-                    <Col md={8}>
+                    <Col lg={8}>
                       <Row>
-                        <Col md={6}>
+                        <Col lg={6}>
                           <Form.Group>
                             <Form.Label>
                               Starting Longitude
                             </Form.Label>
                             <Form.Control
                                 type="text"
-                                className={"mb-3 mb-md-5"}
+                                className={"mb-3"}
                                 name="startLongitude"
                                 required
                                 value={customRoutesData.startLongitude}
@@ -579,14 +579,14 @@ const CreateRoute = () => {
                             />
                           </Form.Group>
                         </Col>
-                        <Col md={6}>
+                        <Col lg={6}>
                           <Form.Group>
                             <Form.Label>
                               Ending Longitude
                             </Form.Label>
                             <Form.Control
                                 type="text"
-                                className={"mb-3 mb-md-5"}
+                                className={"mb-3"}
                                 name="endLongitude"
                                 required
                                 value={customRoutesData.endLongitude}
@@ -609,7 +609,7 @@ const CreateRoute = () => {
                             />
                           </Form.Group>
                         </Col>
-                        <Col md={6}>
+                        <Col md={12}>
                           <Form.Group>
                             <Form.Label>Title</Form.Label>
                             <Form.Control
@@ -621,20 +621,6 @@ const CreateRoute = () => {
                                 onChange={handleCustomRoute}
                                 placeholder="My Race Title"
                             />
-                          </Form.Group>
-                        </Col>
-                        <Col md={6}>
-                          <Form.Label></Form.Label>
-                          <Form.Group>
-
-                            {customRoutesData.addedToMap
-                                ? <Button disabled={true} type="button" className={"w-100"}>
-                                  Generate
-                                </Button>
-                                : <Button  type="button" className={"w-100"} onClick={addRouteToMap}>
-                                  Generate
-                                </Button>
-                            }
                           </Form.Group>
                         </Col>
                         <Col md={12}>
@@ -651,11 +637,22 @@ const CreateRoute = () => {
                             />
                           </Form.Group>
                         </Col>
+                        <Col md={12}>
+                          <Form.Group className={'d-flex justify-content-end'}>
+                            {customRoutesData.addedToMap
+                                ? <Button disabled={true} type="button" className={""}>
+                                  Generate Route
+                                </Button>
+                                : <Button  type="button" className={""} onClick={addRouteToMap}>
+                                  Generate Route
+                                </Button>
+                            }
+                          </Form.Group>
+                        </Col>
                       </Row>
                     </Col>
-                    <Col md={4}>
-                      <Row>
-                        <Col md={12} className={"mb-3"}>
+                    <Col lg={4}>
+                        <Form.Group md={12} className={"mb-3"}>
                           <label
                               className={"fileUpload v2"}
                               htmlFor="upload-photo"
@@ -671,8 +668,6 @@ const CreateRoute = () => {
                             />
                             <span>Attach Images</span>
                           </label>
-                        </Col>
-                        <Col md={12} className={"mb-3 text-center"}>
                           <div className="form-group previewBox">
                             {file.length > 0 &&
                                 file.map((item, index) => {
@@ -689,14 +684,16 @@ const CreateRoute = () => {
                                   );
                                 })}
                           </div>
-                        </Col>
-                        <Col md={12} className={"mb-3"}>
-                          <Button onClick={handleAddRow} ref={addHistoryBtnRef}>
-                            <i className={"fal fa-plus"}></i> Add Historical Routes
-                          </Button>
-                        </Col>
-                      </Row>
+                        </Form.Group>
                     </Col>
+                    <Col md={12}>
+                      <hr className={'my-5'} />
+                    </Col>
+                    <div md={12} className={"mb-3 d-flex justify-content-end"}>
+                      <Button onClick={handleAddRow} ref={addHistoryBtnRef}>
+                        <i className={"fal fa-plus"}></i> Add Historical Routes
+                      </Button>
+                    </div>
                     <Col md={12} className={"mb-3 text-center"}>
                       <Form.Group>
                         {showButton ? (
@@ -714,9 +711,6 @@ const CreateRoute = () => {
                     </Col>
                   </Row>
                 </div>
-
-
-
                 <Accordion defaultActiveKey={accordionActiveKey}>
                   {historicalData.map((data, index) => (
                       <Accordion.Item eventKey={`${index}`}>
@@ -724,16 +718,16 @@ const CreateRoute = () => {
                         <Accordion.Body>
                           <div key={index}>
                             <Row>
-                              <Col md={8}>
+                              <Col lg={8}>
                                 <Row>
-                                  <Col md={6}>
+                                  <Col lg={6}>
                                     <Form.Group>
                                       <Form.Label>
-                                        Historical Event
+                                        Longitude
                                       </Form.Label>
                                       <Form.Control
                                           type="text"
-                                          className={"mb-3 mb-md-5"}
+                                          className={"mb-3"}
                                           name="longitude"
                                           required
                                           value={data.longitude}
@@ -744,9 +738,7 @@ const CreateRoute = () => {
                                       />
                                     </Form.Group>
                                     <Form.Group>
-                                      <Form.Label>
-
-                                      </Form.Label>
+                                      <Form.Label>Latitude</Form.Label>
                                       <Form.Control
                                           type="text"
                                           className={"mb-3"}
@@ -760,7 +752,7 @@ const CreateRoute = () => {
                                       />
                                     </Form.Group>
                                   </Col>
-                                  <Col md={6}>
+                                  <Col lg={6}>
                                     <Form.Group>
                                       <Form.Label>Title</Form.Label>
                                       <Form.Control
@@ -791,19 +783,6 @@ const CreateRoute = () => {
                                     </Form.Group>
                                   </Col>
                                   <Col md={12}>
-                                    <Form.Label></Form.Label>
-                                    <Form.Group>
-                                      {data.addedToMap
-                                          ? <Button disabled={true} type="button" className={"w-100"}>
-                                            Generate
-                                          </Button>
-                                          : <Button  type="button" className={"w-100"} onClick={() => addHistoricalToMap(index)}>
-                                            Generate
-                                          </Button>
-                                      }
-                                    </Form.Group>
-                                  </Col>
-                                  <Col md={12}>
                                     <Form.Group>
                                       <Form.Label>Description</Form.Label>
                                       <Form.Control
@@ -819,9 +798,21 @@ const CreateRoute = () => {
                                       />
                                     </Form.Group>
                                   </Col>
+                                  <Col md={12}>
+                                    <Form.Group className={'d-flex justify-content-end'}>
+                                      {data.addedToMap
+                                          ? <Button disabled={true} type="button">
+                                            Generate
+                                          </Button>
+                                          : <Button  type="button" onClick={() => addHistoricalToMap(index)}>
+                                            Generate
+                                          </Button>
+                                      }
+                                    </Form.Group>
+                                  </Col>
                                 </Row>
                               </Col>
-                              <Col md={4}>
+                              <Col lg={4}>
                                 <Row>
                                   <Col md={12} className={"mb-3"}>
                                     <label
@@ -893,8 +884,8 @@ const CreateRoute = () => {
                 theme="dark"
             />
           </section>
-          <Form.Group>
-            <Button type="submit" className={"w-100"}>
+          <Form.Group className={'py-3 d-flex justify-content-center'}>
+            <Button type="submit" className={"w-50"}>
               Save
             </Button>
           </Form.Group>
