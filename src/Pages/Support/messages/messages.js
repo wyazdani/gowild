@@ -9,7 +9,7 @@ import {ENDPOINT, SOCKET_URL} from "../../../config/constants";
 import AuthService from "../../../services/auth.service";
 import swal from "sweetalert";
 import socket from "../socket/socket";
-import pdfImg from "../../../Images/pdf.svg";
+import pdfImg from "Images/pdf.svg";
 
 const Messages = (props) => {
     // const { content } = props;
@@ -90,8 +90,17 @@ const Messages = (props) => {
         let ImagesArray = Object.entries(e.target.files).map((e) =>
             URL.createObjectURL(e[1])
         );
-        setFile([...file, ...ImagesArray]);
+        if (e.target.files[0].type === 'application/pdf') {
+            setFile(['pdf']);
+        }else{
+            setFile(ImagesArray);
+        }
         setUploadFile(e.target.files[0])
+    }
+    const _handleKeyDown = async (e) => {
+        if (e.key === 'Enter') {
+            await emitEvent( ticket?.id)
+        }
     }
     const handleMessages = (messages) => {
         setCurrentItems(messages)
@@ -165,7 +174,8 @@ const Messages = (props) => {
                                 file.map((item, index) => {
                                     return (
                                         <div className={`preview ${classes.previewImg}`} key={item}>
-                                            <img src={item}  alt="img" />
+                                            {item === 'pdf' && <img src={pdfImg}  alt="img" />}
+                                            {item !== 'pdf' && <img src={item}  alt="img" />}
                                             <Button
                                                 type="button"
                                                 onClick={() => deleteFile(index)}
@@ -189,7 +199,7 @@ const Messages = (props) => {
 
                         </div>
                         <input type="text" className={classes.formcontrol} value={msg}
-                               onChange={(e) => setMsg(e.target.value)} placeholder="Write your message here"/>
+                               onChange={(e) => setMsg(e.target.value)} onKeyDown={_handleKeyDown} placeholder="Write your message here"/>
                         <button className={`${classes.btn} ${classes.btnSend}`} onClick={emitEvent.bind(null,ticket?.id)} type="button"><i className="fas fa-paper-plane"></i>
                         </button>
                     </div>
