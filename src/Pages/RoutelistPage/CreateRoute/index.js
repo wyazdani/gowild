@@ -131,8 +131,8 @@ const CreateRoute = () => {
     for (const data of historicalData) {
       payloadHistorical.push({
         historical_event: {
-          latitude: data.latitude,
-          longitude: data.longitude,
+          latitude: parseFloat(data.latitude),
+          longitude: parseFloat(data.longitude),
         },
         title: data.title,
         subtitle: data.subtitle,
@@ -140,22 +140,32 @@ const CreateRoute = () => {
       })
     }
     // let routesData = [];
+    // formData.distance_miles =
+    //     directionsData?.routes[0]?.legs[0]?.distance?.value ?? 0;
+    // formData.distance_meters =
+    //     directionsData?.routes[0]?.legs[0]?.duration?.value ?? 0;
+    // formData.estimate_time =
+    //     directionsData?.routes[0]?.legs[0]?.distance?.text ?? "-";
+    // formData.startLocation =
+    //     directionsData?.routes[0]?.legs[0]?.start_address ?? "-";
+    // formData.endLocation =
+    //     directionsData?.routes[0]?.legs[0]?.end_address ?? "-";
     const routeData = {
       title: customRoutesData.title,
       description: customRoutesData.description,
-      distance_miles: customRoutesData.distance_miles,
-      distance_meters: customRoutesData.distance_meters,
-      estimate_time: '-',
+      distance_miles: directionsData?.routes[0]?.legs[0]?.distance?.value ?? 0,
+      distance_meters: directionsData?.routes[0]?.legs[0]?.duration?.value ?? 0,
+      estimate_time: directionsData?.routes[0]?.legs[0]?.distance?.text ?? "-",
       route_path: customRoutesData.route_path,
-      startLocation: '-',
-      endLocation: '-',
+      startLocation: directionsData?.routes[0]?.legs[0]?.start_address ?? "-",
+      endLocation: directionsData?.routes[0]?.legs[0]?.end_address ?? "-",
       start: {
-        latitude: customRoutesData.startLatitude,
-        longitude: customRoutesData.startLongitude,
+        latitude: parseFloat(customRoutesData.startLatitude),
+        longitude: parseFloat(customRoutesData.startLongitude),
       },
       end: {
-        latitude: customRoutesData.endLatitude,
-        longitude: customRoutesData.endLongitude,
+        latitude: parseFloat(customRoutesData.endLatitude),
+        longitude: parseFloat(customRoutesData.endLongitude),
       },
       historical_route: payloadHistorical
     }
@@ -223,16 +233,7 @@ const CreateRoute = () => {
     //   console.log("DUCK", "formData", JSON.stringify(formData));
     // }, 2000);
 
-    // formData.distance_miles =
-    //   directionsData?.routes[0]?.legs[0]?.distance?.value ?? 0;
-    // formData.distance_meters =
-    //   directionsData?.routes[0]?.legs[0]?.duration?.value ?? 0;
-    // formData.estimate_time =
-    //   directionsData?.routes[0]?.legs[0]?.distance?.text ?? "-";
-    // formData.startLocation =
-    //   directionsData?.routes[0]?.legs[0]?.start_address ?? "-";
-    // formData.endLocation =
-    //   directionsData?.routes[0]?.legs[0]?.end_address ?? "-";
+
 
     return AuthService.postMethod(
         ENDPOINT.admin_route.listing,
@@ -255,7 +256,7 @@ const CreateRoute = () => {
               data.append("file", historicalData[i].file);
               console.log(url)
               console.log(historicalData[i].file)
-              if (historicalData[i].file){
+              if (historicalData[i]?.file){
                 AuthService.postMethod(url, true, data)
                     .then((res) => {
                       console.log('Success Historical Route Image Upload')
@@ -275,32 +276,45 @@ const CreateRoute = () => {
               ":id",
               res.data.id
           );
-          AuthService.postMethod(url, true, data)
-              .then((res) => {
-                if (res.status === 200) {
+          if (customRoutesData.picture) {
+            AuthService.postMethod(url, true, data)
+                .then((res) => {
+                  if (res.status === 200) {
 
-                  toast.success("Form data submitted successfully", {
-                    position: "bottom-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "dark",
-                  });
-                  setShowButton(true);
-                  navigate("/route-list");
-                  setFormData("");
-                }
-              })
-              .catch((err) => {
-                deleteRoute()
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-              });
-          console.log(res);
-
-          // event.target.reset();
+                    toast.success("Form data submitted successfully", {
+                      position: "bottom-right",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "dark",
+                    });
+                    setShowButton(true);
+                    navigate("/route-list");
+                    setFormData("");
+                  }
+                })
+                .catch((err) => {
+                  deleteRoute()
+                  swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+                });
+          }else {
+            toast.success("Form data submitted successfully", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+            setShowButton(true);
+            navigate("/route-list");
+            setFormData("");
+          }
         })
         .catch((err) => {
           deleteRoute()
@@ -344,13 +358,6 @@ const CreateRoute = () => {
 
   const updateStartEndPosition = useCallback(
       (startPos, endPos) => {
-        console.log(updateStartEndPosition);
-        console.log(markers)
-        // console.log(
-        //   `updateStartEndPosition: ${JSON.stringify(startPos)} ${JSON.stringify(
-        //     endPos
-        //   )}`
-        // );
         setStartingPoint(startPos);
         setEndingPoint(endPos);
         if (directionsData == null) {
@@ -358,13 +365,9 @@ const CreateRoute = () => {
           const destination = `${endPos.lat}, ${endPos.lng}`;
           const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${GOOGLE_KEY}`;
           const corsAnywhereUrl = `https://cors.appscorridor.com/${url}`;
-  console.log(corsAnywhereUrl)
           axios.get(corsAnywhereUrl)
               .then(response => {
-                console.log('Success')
-         setDirectionsData(response.data);
-                // Extract the distance value from the response
-                console.log(response.data)
+                setDirectionsData(response.data);
               })
               .catch(error => console.error(error));
         }
