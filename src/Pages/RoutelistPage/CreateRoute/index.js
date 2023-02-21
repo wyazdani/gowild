@@ -241,26 +241,27 @@ const CreateRoute = () => {
     )
       .then((res) => {
 
-        // if (res.data?.historical_route && res.data?.historical_route.length> 0) {
-        //
-        //   for (const [i,event] in res.data?.historical_route) {
-        //
-        //     const url = ENDPOINT.historical_event.add_image.replace(
-        //         ":id",
-        //         event.id
-        //     );
-        //     let data = new FormData();
-        //
-        //     data.append("file", historicalData[i].file);
-        //     console.log(url)
-        //     console.log(historicalData[i].file)
-        //     AuthService.postMethod(url, true, data)
-        //         .then((res) => {
-        //           console.log('Success Historical Route Image Upload')
-        //         })
-        //   }
-        //
-        // }
+        if (res.data?.historical_route && res.data?.historical_route.length> 0) {
+
+          for (let i =0;i<res.data?.historical_route.length;i++) {
+            console.log('i',i)
+            console.log('event',res.data?.historical_route[i])
+            const url = ENDPOINT.historical_event.add_image.replace(
+                ":id",
+                res.data?.historical_route[i].id
+            );
+            let data = new FormData();
+
+            data.append("file", historicalData[i].file);
+            console.log(url)
+            console.log(historicalData[i].file)
+            AuthService.postMethod(url, true, data)
+                .then((res) => {
+                  console.log('Success Historical Route Image Upload')
+                })
+          }
+
+        }
         let data = new FormData();
         data.append("file", customRoutesData.picture);
         setId(res.data.id);
@@ -288,6 +289,7 @@ const CreateRoute = () => {
               }
           })
           .catch((err) => {
+            deleteRoute()
             swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
           });
         console.log(res);
@@ -295,10 +297,28 @@ const CreateRoute = () => {
         // event.target.reset();
       })
       .catch((err) => {
+        deleteRoute()
         swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+
       });
   };
 
+  const deleteRoute = () => {
+    if (id){
+      ENDPOINT.route.delete.id = id;
+      setId(null)
+      AuthService.deleteMethod(
+          ENDPOINT.route.delete.url + ENDPOINT.route.delete.id,
+          true
+      )
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.log('Deleted Successfully')
+          });
+    }
+  }
   // add historical event
 
   const handleHistorical = (event, index) => {
