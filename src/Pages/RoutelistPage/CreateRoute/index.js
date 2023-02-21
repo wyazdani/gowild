@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import RouteMap from "./RouteMap";
 import Accordion from 'react-bootstrap/Accordion';
 import axios from "axios";
+import {object, string} from "yup";
 
 const CreateRoute = () => {
   const addHistoryBtnRef = useRef(null);
@@ -47,6 +48,7 @@ const CreateRoute = () => {
   }) // For Testing Purpose
 
   const [formArray, setFormArray] = useState([{}]);
+  const [validated, setValidated] = useState(false);
   const [formData, setFormData] = useState({
     startLongtitude: "",
     startLattitude: "",
@@ -72,7 +74,11 @@ const CreateRoute = () => {
 
   // store id when user submit form
   const [id, setId] = useState();
-  console.log("id", id);
+
+  const schema = object().shape({
+    title: string().required(),
+    description: string().required()
+  });
 
   useEffect(() => {
     console.log(`marker: ${JSON.stringify(markers)}`);
@@ -127,200 +133,128 @@ const CreateRoute = () => {
   }, [historicalData, accordionActiveKey]);
   const submitForm = async (event) => {
     event.preventDefault();
-    const payloadHistorical = [];
-    setShowButton(false);
-    for (const data of historicalData) {
-      payloadHistorical.push({
-        historical_event: {
-          latitude: parseFloat(data.latitude),
-          longitude: parseFloat(data.longitude),
-        },
-        title: data.title,
-        subtitle: data.subtitle,
-        description: data.description,
-      })
-    }
-    // let routesData = [];
-    // formData.distance_miles =
-    //     directionsData?.routes[0]?.legs[0]?.distance?.value ?? 0;
-    // formData.distance_meters =
-    //     directionsData?.routes[0]?.legs[0]?.duration?.value ?? 0;
-    // formData.estimate_time =
-    //     directionsData?.routes[0]?.legs[0]?.distance?.text ?? "-";
-    // formData.startLocation =
-    //     directionsData?.routes[0]?.legs[0]?.start_address ?? "-";
-    // formData.endLocation =
-    //     directionsData?.routes[0]?.legs[0]?.end_address ?? "-";
-    const routeData = {
-      title: customRoutesData.title,
-      description: customRoutesData.description,
-      distance_miles: directionsData?.routes[0]?.legs[0]?.distance?.value ?? 0,
-      distance_meters: directionsData?.routes[0]?.legs[0]?.duration?.value ?? 0,
-      estimate_time: directionsData?.routes[0]?.legs[0]?.distance?.text ?? "-",
-      route_path: customRoutesData.route_path,
-      startLocation: directionsData?.routes[0]?.legs[0]?.start_address ?? "-",
-      endLocation: directionsData?.routes[0]?.legs[0]?.end_address ?? "-",
-      start: {
-        latitude: parseFloat(customRoutesData.startLatitude),
-        longitude: parseFloat(customRoutesData.startLongitude),
-      },
-      end: {
-        latitude: parseFloat(customRoutesData.endLatitude),
-        longitude: parseFloat(customRoutesData.endLongitude),
-      },
-      historical_route: payloadHistorical
-    }
-
-    // console.log("DUCK", "formData", formData);
-    console.log("DUCK", "customRoutesData", customRoutesData);
-    console.log("DUCK", "historicalData", historicalData);
-    //return;
-    // if (historicalData.length > 2) {
-    //   routesData.start = {
-    //     latitude: historicalData[0].latitude,
-    //     longitude: historicalData[0].longitude,
-    //   };
-    //   routesData.end = {
-    //     latitude: historicalData[1].latitude,
-    //     longitude: historicalData[1].longitude,
-    //   };
-
-    //   // FUCK THIS Direction API
-    //   // const origin = routesData.start.toString();
-    //   // const destination = routesData.end.toString();
-    //   // //const url = `http://cors.appscorridor.com?url=https://maps.googleapis.com/maps/api/directions/json?origin=${historicalData[0].longitude},${historicalData[0].latitude}&destination=${historicalData[1].longitude},${historicalData[1].latitude}&key=${GOOGLE_KEY}`;
-    //   // const url = `https://maps.googleapis.com/maps/api/directions/json?origin=51,0&destination=51.5,-0.1&sensor=false&key=AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0`;
-
-    //   // console.log("DUCK", "url", url);
-
-    //   // axios
-    //   //   .get(url, {
-    //   //     "Access-Control-Allow-Origin": "*",
-    //   //   })
-    //   //   .then((response) => {
-    //   //     console.log("Success");
-    //   //     setDirectionsData(response.data);
-    //   //     // Extract the distance value from the response
-    //   //     console.log(response.data);
-    //   //   })
-    //   //   .catch((error) => console.error(error));
-
-    //   routesData.distance_miles = 0;
-    //   routesData.distance_meters = 0;
-    //   routesData.estimate_time = "-";
-    //   routesData.startLocation = "-";
-    //   routesData.endLocation = "-";
-    //   routesData.history_ponts = [];
-    //   if (historicalData.length >= 3) {
-    //     // history_ponts;
-    //     historicalData.slice(2).map((item, index) => {
-    //       routesData.history_ponts.push({
-    //         historical_event: {
-    //           latitude: item.latitude,
-    //           longitude: item.longitude,
-    //         },
-    //         title: item.title,
-    //         subtitle: item.subtitle,
-    //         description: item.description,
-    //       });
-    //     });
-    //   }
-    // }
-
-    // console.log("DUCK", "routesData", routesData);
-    // setFormData(routesData);
-
-    // setTimeout(() => {
-    //   console.log("DUCK", "formData", JSON.stringify(formData));
-    // }, 2000);
-
-
-
-    return AuthService.postMethod(
-        ENDPOINT.admin_route.listing,
-        true,
-        routeData
-    )
-        .then((res) => {
-
-          if (res.data?.historical_route && res.data?.historical_route.length> 0) {
-
-            for (let i =0;i<res.data?.historical_route.length;i++) {
-              const url = ENDPOINT.historical_event.add_image.replace(
-                  ":id",
-                  res.data?.historical_route[i].id
-              );
-              let data = new FormData();
-
-              data.append("file", historicalData[i].file);
-              if (historicalData[i]?.file){
-                AuthService.postMethod(url, true, data)
-                    .then((res) => {
-                      console.log('Success Historical Route Image Upload')
-                    }).catch((err) => {
-                  setShowButton(true);
-                  deleteRoute()
-                  swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-                });
-              }
-
-            }
-
-          }
-          let data = new FormData();
-          data.append("file", customRoutesData.picture);
-          setId(res.data.id);
-          const url = ENDPOINT.admin_route.update_pictures.replace(
-              ":id",
-              res.data.id
-          );
-          if (customRoutesData.picture) {
-            AuthService.postMethod(url, true, data)
-                .then((res) => {
-                  if (res.status === 200) {
-
-                    toast.success("Form data submitted successfully", {
-                      position: "bottom-right",
-                      autoClose: 5000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "dark",
-                    });
-                    setShowButton(true);
-                    navigate("/route-list");
-                    setFormData("");
-                  }
-                })
-                .catch((err) => {
-                  setShowButton(true);
-                  deleteRoute()
-                  swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-                });
-          }else {
-            toast.success("Form data submitted successfully", {
-              position: "bottom-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "dark",
-            });
-            setShowButton(true);
-            navigate("/route-list");
-            setFormData("");
-          }
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+      setValidated(true);
+    } else {
+      const payloadHistorical = [];
+      setShowButton(false);
+      for (const data of historicalData) {
+        payloadHistorical.push({
+          historical_event: {
+            latitude: parseFloat(data.latitude),
+            longitude: parseFloat(data.longitude),
+          },
+          title: data.title,
+          subtitle: data.subtitle,
+          description: data.description,
         })
-        .catch((err) => {
-          setShowButton(true);
-          deleteRoute()
-          swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+      }
+      const routeData = {
+        title: customRoutesData.title,
+        description: customRoutesData.description,
+        distance_miles: directionsData?.routes[0]?.legs[0]?.distance?.value ?? 0,
+        distance_meters: directionsData?.routes[0]?.legs[0]?.duration?.value ?? 0,
+        estimate_time: directionsData?.routes[0]?.legs[0]?.distance?.text ?? "-",
+        route_path: customRoutesData.route_path,
+        startLocation: directionsData?.routes[0]?.legs[0]?.start_address ?? "-",
+        endLocation: directionsData?.routes[0]?.legs[0]?.end_address ?? "-",
+        start: {
+          latitude: parseFloat(customRoutesData.startLatitude),
+          longitude: parseFloat(customRoutesData.startLongitude),
+        },
+        end: {
+          latitude: parseFloat(customRoutesData.endLatitude),
+          longitude: parseFloat(customRoutesData.endLongitude),
+        },
+        historical_route: payloadHistorical
+      }
+      console.log("DUCK", "customRoutesData", customRoutesData);
+      console.log("DUCK", "historicalData", historicalData);
+      return AuthService.postMethod(
+          ENDPOINT.admin_route.listing,
+          true,
+          routeData
+      )
+          .then((res) => {
+            if (res.data?.historical_route && res.data?.historical_route.length> 0) {
+              for (let i =0;i<res.data?.historical_route.length;i++) {
+                const url = ENDPOINT.historical_event.add_image.replace(
+                    ":id",
+                    res.data?.historical_route[i].id
+                );
+                let data = new FormData();
+                data.append("file", historicalData[i].file);
+                if (historicalData[i]?.file){
+                  AuthService.postMethod(url, true, data)
+                      .then((res) => {
+                        console.log('Success Historical Route Image Upload')
+                      }).catch((err) => {
+                    setShowButton(true);
+                    deleteRoute()
+                    swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+                  });
+                }
+              }
+            }
+            let data = new FormData();
+            data.append("file", customRoutesData.picture);
+            setId(res.data.id);
+            const url = ENDPOINT.admin_route.update_pictures.replace(
+                ":id",
+                res.data.id
+            );
+            if (customRoutesData.picture) {
+              AuthService.postMethod(url, true, data)
+                  .then((res) => {
+                    if (res.status === 200) {
+                      toast.success("Form data submitted successfully", {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                      });
+                      setShowButton(true);
+                      navigate("/route-list");
+                      setFormData("");
+                    }
+                  })
+                  .catch((err) => {
+                    setShowButton(true);
+                    deleteRoute()
+                    swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+                  });
+            }else {
+              toast.success("Form data submitted successfully", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+              });
+              setShowButton(true);
+              navigate("/route-list");
+              setFormData("");
+            }
+          })
+          .catch((err) => {
+            setShowButton(true);
+            deleteRoute()
+            swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+          });
+    }
 
-        });
+
+
   };
 
   const deleteRoute = () => {
@@ -525,7 +459,7 @@ const CreateRoute = () => {
   return (
       <Fragment>
         <PageTitle title="Normal Route" />
-        <Form onSubmit={submitForm}>
+        <Form onSubmit={submitForm} noValidate validated={validated}>
           <section className={"section"}>
             <Row>
               <Col md={12}>
@@ -566,7 +500,11 @@ const CreateRoute = () => {
                                 onChange={handleCustomRoute}
                                 placeholder="longitude"
                             />
+                            <Form.Control.Feedback type="invalid">
+                              Field is required.
+                            </Form.Control.Feedback>
                           </Form.Group>
+
                           <Form.Group>
                             <Form.Label>
                               Starting Latitude
