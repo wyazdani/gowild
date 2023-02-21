@@ -58,7 +58,7 @@ const CreateRoute = () => {
   });
 
   const [uploadFile, setUploadFile] = useState();
-  const [showButton, setShowButton] = useState(false);
+  const [showButton, setShowButton] = useState(true);
 
   const [startingPoint, setStartingPoint] = useState({
     lat: 0,
@@ -128,6 +128,7 @@ const CreateRoute = () => {
   const submitForm = async (event) => {
     event.preventDefault();
     const payloadHistorical = [];
+    setShowButton(false);
     for (const data of historicalData) {
       payloadHistorical.push({
         historical_event: {
@@ -245,8 +246,6 @@ const CreateRoute = () => {
           if (res.data?.historical_route && res.data?.historical_route.length> 0) {
 
             for (let i =0;i<res.data?.historical_route.length;i++) {
-              console.log('i',i)
-              console.log('event',res.data?.historical_route[i])
               const url = ENDPOINT.historical_event.add_image.replace(
                   ":id",
                   res.data?.historical_route[i].id
@@ -254,13 +253,12 @@ const CreateRoute = () => {
               let data = new FormData();
 
               data.append("file", historicalData[i].file);
-              console.log(url)
-              console.log(historicalData[i].file)
               if (historicalData[i]?.file){
                 AuthService.postMethod(url, true, data)
                     .then((res) => {
                       console.log('Success Historical Route Image Upload')
                     }).catch((err) => {
+                  setShowButton(true);
                   deleteRoute()
                   swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
                 });
@@ -297,6 +295,7 @@ const CreateRoute = () => {
                   }
                 })
                 .catch((err) => {
+                  setShowButton(true);
                   deleteRoute()
                   swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
                 });
@@ -317,6 +316,7 @@ const CreateRoute = () => {
           }
         })
         .catch((err) => {
+          setShowButton(true);
           deleteRoute()
           swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
 
@@ -698,19 +698,6 @@ const CreateRoute = () => {
                       </Button>
                     </div>
                     <Col md={12} className={"mb-3 text-center"}>
-                      <Form.Group>
-                        {showButton ? (
-                            <Button
-                                type="submit"
-                                className={"mt-3"}
-                                style={{ width: "25%" }}
-                            >
-                              Save
-                            </Button>
-                        ) : (
-                            ""
-                        )}
-                      </Form.Group>
                     </Col>
                   </Row>
                 </div>
@@ -849,21 +836,6 @@ const CreateRoute = () => {
                                   </Col>
                                 </Row>
                               </Col>
-                              <Col md={12} className={"mb-3 text-center"}>
-                                <Form.Group>
-                                  {showButton ? (
-                                      <Button
-                                          type="submit"
-                                          className={"mt-3"}
-                                          style={{ width: "25%" }}
-                                      >
-                                        Save
-                                      </Button>
-                                  ) : (
-                                      ""
-                                  )}
-                                </Form.Group>
-                              </Col>
                             </Row>
                           </div>
                         </Accordion.Body>
@@ -888,9 +860,16 @@ const CreateRoute = () => {
             />
           </section>
           <Form.Group className={'py-3 d-flex justify-content-center'}>
-            <Button type="submit" className={"w-50"}>
-              Save
-            </Button>
+            {showButton ? (
+                <Button
+                    type="submit"
+                    className={"w-50"}
+                >
+                  Save
+                </Button>
+            ) : (
+                ""
+            )}
           </Form.Group>
         </Form>
       </Fragment>
