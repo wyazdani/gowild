@@ -20,6 +20,7 @@ const ViewRouteList = (props) => {
   if (props.viewItem === null) {
     return "";
   }
+
     props.viewItem["startValue"] = {
       lat: props.viewItem["start"].latitude,
       lng: props.viewItem["start"].longitude,
@@ -28,7 +29,34 @@ const ViewRouteList = (props) => {
         lat: props.viewItem["end"].latitude,
         lng: props.viewItem["end"].longitude,
     }
-  function uploadSingleFile(e) {
+  const historicalRoutes = props.viewItem?.historicalEvents;
+
+    let markerData = []
+    markerData.push({
+        position: {
+            lat: parseFloat(props.viewItem?.start.latitude),
+            lng: parseFloat(props.viewItem?.start.longitude),
+        },
+        color:'black'
+    },{
+        position: {
+            lat: parseFloat(props.viewItem?.end.latitude),
+            lng: parseFloat(props.viewItem?.end.longitude),
+        },
+        color:'red'
+    })
+    for (const route of historicalRoutes){
+        markerData.push({
+            position: {
+                lat: parseFloat(route.historical_event.latitude),
+                lng: parseFloat(route.historical_event.longitude),
+            },
+            color:'yellow'
+        })
+    }
+    props.viewItem["markers"] = markerData;
+    console.log(`markers: ${JSON.stringify(props.viewItem["markers"])}`);
+    function uploadSingleFile(e) {
     let ImagesArray = Object.entries(e.target.files).map((e) =>
       URL.createObjectURL(e[1])
     );
@@ -199,10 +227,10 @@ const ViewRouteList = (props) => {
                   <Col md={8}>
                     <div className={"img-box"}>
                       <RouteMap
-                        startingPoint={`${props.viewItem.start.latitude},${props.viewItem.start.longitude}`}
-                        endingPoint={`${props.viewItem.end.latitude},${props.viewItem.end.longitude}`}
+                        startingPoint={props.viewItem["startValue"]}
+                        endingPoint={props.viewItem["endValue"]}
                         travelMode={"WALKING"}
-                        preRenderMarkers={true}
+                        markers={props.viewItem["markers"]}
                       />
                     </div>
                   </Col>

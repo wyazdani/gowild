@@ -157,7 +157,7 @@ const CreateRoute = () => {
         description: customRoutesData.description,
         distance_miles: directionsData?.routes[0]?.legs[0]?.distance?.value ?? 0,
         distance_meters: directionsData?.routes[0]?.legs[0]?.duration?.value ?? 0,
-        estimate_time: directionsData?.routes[0]?.legs[0]?.distance?.text ?? "-",
+        estimate_time: directionsData?.routes[0]?.legs[0]?.duration?.text ?? "-",
         route_path: customRoutesData.route_path,
         startLocation: directionsData?.routes[0]?.legs[0]?.start_address ?? "-",
         endLocation: directionsData?.routes[0]?.legs[0]?.end_address ?? "-",
@@ -301,6 +301,7 @@ const CreateRoute = () => {
           const corsAnywhereUrl = `https://cors.appscorridor.com/${url}`;
           axios.get(corsAnywhereUrl)
               .then(response => {
+                console.log(response.data)
                 setDirectionsData(response.data);
               })
               .catch(error => console.error(error));

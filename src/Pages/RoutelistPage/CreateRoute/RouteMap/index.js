@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect, useCallback } from "react";
 import { useGoogleMaps } from "react-hook-google-maps";
+import {GOOGLE_KEY} from "../../../../config/constants";
 
 export default function RouteMap({
   markers,
@@ -12,7 +13,7 @@ export default function RouteMap({
   preRenderMarkers = false,
 }) {
   const { ref, map, google } = useGoogleMaps(
-    "AIzaSyAoyevYqWkjKEJjq6vPXzfhulxkIecZhX0",
+    GOOGLE_KEY,
     {
       zoom: 3,
       center: startingPoint,
@@ -79,7 +80,7 @@ export default function RouteMap({
   // }, [startingPoint, endingPoint, map, google, markers]);
 
   useEffect(() => {
-    console.log('markers', markers)
+
     if (map) {
       const listener = map.addListener("click", (e) => {
         // setMarkers((prevMarkers) => {
@@ -104,6 +105,7 @@ export default function RouteMap({
         // });
       });
       if (preRenderMarkers) {
+        console.log('preRenderMarkers')
         const directionsService = new google.maps.DirectionsService();
         const directionsRenderer = new google.maps.DirectionsRenderer();
         directionsRenderer.setMap(map);
@@ -137,11 +139,6 @@ export default function RouteMap({
   }, [map, google]);
 
   useEffect(() => {
-    console.log('markers', markers)
-    if (markers.length >= 3) {
-      //console.log("handleAddRow");
-      //if (handleAddRow) handleAddRow(markers[markers.length - 1].position);
-    }
     if (map && markers.length >= 2) {
       console.log("Calculate Distance");
       console.log('markers',markers);
@@ -182,18 +179,21 @@ export default function RouteMap({
     onPositionChange,
     onRemove,
   }) => {
-    const marker = new window.google.maps.Marker({
-      position: position,
-      map: map,
-      draggable: false,
-      icon: {
-        path: "M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z",
-        scale: 1,
-        fillColor: color,
-        fillOpacity: 1,
-        strokeWeight: 0,
-      },
-    });
+    setTimeout(function () {
+      const marker = new window.google.maps.Marker({
+        position: position,
+        map: map,
+        draggable: false,
+        icon: {
+          path: "M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z",
+          scale: 1,
+          fillColor: color,
+          fillOpacity: 1,
+          strokeWeight: 0,
+        },
+      });
+    }, 500);
+
 
     return null;
   };
