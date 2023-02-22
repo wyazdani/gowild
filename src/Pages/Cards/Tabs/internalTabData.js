@@ -85,8 +85,8 @@ const InternalTabData = () => {
                         <td>{alltabdata.source}</td>
                         <td>
                             {alltabdata.status
-                                ? <span class="text-success">Active</span>
-                                : <span class="text-danger">InActive</span>
+                                ? <span className="text-success">Active</span>
+                                : <span className="text-danger">InActive</span>
                             }
                         </td>
                         <td>

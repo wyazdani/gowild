@@ -149,7 +149,7 @@ const InActiveTabData = (props) => {
         </thead>
         <tbody>
           {currentItems.map((content) => (
-            <tr>
+            <tr key={content.id}>
               <td>
                 <Form.Check
                   type="checkbox"
@@ -184,12 +184,12 @@ const InActiveTabData = (props) => {
               </td>
               <td>
                 {content.onlineStatus ? (
-                  <span class={`${classes.tag} text-danger ${classes.active} `}>
+                  <span className={`${classes.tag} text-danger ${classes.active} `}>
                     Active
                   </span>
                 ) : (
                   <span
-                    class={`${classes.tag} ${classes.inactive} text-default `}
+                      className={`${classes.tag} ${classes.inactive} text-default `}
                   >
                     Inactive{" "}
                   </span>
@@ -198,12 +198,12 @@ const InActiveTabData = (props) => {
               <td>{content.firstName}</td>
               <td>
                 {content.accountStatus === "active" ? (
-                  <span class="text-success ">
+                  <span className="text-success ">
                     {" "}
                     <b>ACTIVE</b>
                   </span>
                 ) : (
-                  <span class="text-danger">
+                  <span className="text-danger">
                     {" "}
                     <b>DISABLED</b>{" "}
                   </span>
@@ -223,7 +223,7 @@ const InActiveTabData = (props) => {
                         submitEventForm(content.id)
                       }} >Disable User</p> : <p className="m-0 p-0" onClick={() => {
                         submitEventForm(content.id)
-                      }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Activate User</p>}
+                      }}> <i className="fa fa-check tick" aria-hidden="true"></i>  Activate User</p>}
                     </Dropdown.Item>
                     <Dropdown.Item href="#/" onClick={
                       () => {

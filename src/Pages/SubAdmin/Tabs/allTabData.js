@@ -156,7 +156,7 @@ const AllTabData = (props) => {
                     {
 
                         currentItems.map((content) => (
-                            <tr>
+                            <tr key={content.id}>
                                 <td><Form.Check type="checkbox" value={content}
                                     onChange={() => handleCheckboxChange(content)}
                                     checked={selectedItems.includes(content)} /></td>
@@ -173,15 +173,15 @@ const AllTabData = (props) => {
                                 </td>
                                 <td>
                                     {content.onlineStatus
-                                        ? <span class={`${classes.tag} text-danger ${classes.active} `}>Active</span>
-                                        : <span class={`${classes.tag} ${classes.inactive} text-default `}>Inactive </span>
+                                        ? <span className={`${classes.tag} text-danger ${classes.active} `}>Active</span>
+                                        : <span className={`${classes.tag} ${classes.inactive} text-default `}>Inactive </span>
                                     }
                                 </td>
                                 <td>{content.firstName}</td>
                                 <td>
                                     {content.accountStatus === "active"
-                                        ? <span class="text-success ">  <b>ACTIVE</b></span>
-                                        : <span class="text-danger"> <b>DISABLED</b> </span>
+                                        ? <span className="text-success ">  <b>ACTIVE</b></span>
+                                        : <span className="text-danger"> <b>DISABLED</b> </span>
                                     }
                                 </td>
                                 <td>
@@ -191,14 +191,14 @@ const AllTabData = (props) => {
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu>
-                                            {/* <Dropdown.Item href="#/" 
+                                            {/* <Dropdown.Item href="#/"
                                                 >
                                                     <i className={"fal fa-ban text-white"}  style={{backgroundColor:'#FEAC71'}}></i>
                                                     {content.accountStatus === "active" ? <p className="m-0 p-0" onClick={() => {
                                                        submitEventForm(content.id)
                                                     }}>Disable User</p> :  <p className="m-0 p-0" onClick={() => {
                                                        submitEventForm(content.id)
-                                                    }}><i class="fa fa-check tick" aria-hidden="true"></i>Active User</p>}   
+                                                    }}><i class="fa fa-check tick" aria-hidden="true"></i>Active User</p>}
                                                 </Dropdown.Item> */}
                                             <Dropdown.Item href="#/">
                                                 <i className={"fal fa-ban text-white active"}></i>
@@ -206,7 +206,7 @@ const AllTabData = (props) => {
                                                     submitEventForm(content.id)
                                                 }} >Disable User</p> : <p className="m-0 p-0" onClick={() => {
                                                     submitEventForm(content.id)
-                                                }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Activate User</p>}
+                                                }}> <i className="fa fa-check tick" aria-hidden="true"></i>  Activate User</p>}
                                             </Dropdown.Item>
                                             <Dropdown.Item href="#/" onClick={
                                                 () => {
