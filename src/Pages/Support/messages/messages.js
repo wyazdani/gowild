@@ -135,7 +135,7 @@ const Messages = (props) => {
                         <div className={classes.description}>
                             <h6>{`${ticket?.user?.firstName} ${ticket?.user?.lastName}`}</h6>
                             <small className={classes.text}>{ticket?.user?.email}</small>
-                            <p>{ticket?.id}</p>
+                            <small className={'text-danger d-block'}>{ticket?.id}</small>
                         </div>
                     </div>
 
