@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_URL, ENDPOINT } from "config/constants";
+import swal from "sweetalert";
 
 //Get Method
 const getMethod = async (endpoint, authentication=true, data, printConsole = false) => {
@@ -40,14 +41,15 @@ const postMethod = async (endpoint, authentication=true, data=null, printConsole
             }
         }
         }
-        
+
     }
     return await axios.post(endpoint,data, header)
         .then((res) => {
             return res
         })
         .catch((error) => {
-            console.error(error)
+
+            swal("Error", `${errorMessageHandlerSubAdmin(error)}`, "error");
         })
 }
 // Delete Method
@@ -117,7 +119,7 @@ const sendAuthData = (endpoint, headers, data, printConsole = false) => {
 };
 
 
-// localStorage.getItem("accessToken", "Bearer "+JSON.stringify(`${token}`)), 
+// localStorage.getItem("accessToken", "Bearer "+JSON.stringify(`${token}`)),
 
 
 const dashboardHomeData = async (endpoint, headers, data, printConsole = false) => {
@@ -260,7 +262,8 @@ const errorMessageHandlerLogin = (data) => {
 }
 // this error is showing by create sub admin in sub admin page
 const errorMessageHandlerSubAdmin = (data) => {
-  if (!data || !data.response || !data.response.data || !data.response.data.errors) {
+    console.log(data.response.data.errors)
+  if (!data?.response?.data?.errors) {
     return 'Email already Exists! Please try another one';
   }
   let error = data.response.data.errors.map(function (value) {
@@ -272,7 +275,7 @@ const errorMessageHandlerSubAdmin = (data) => {
 
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { 
+export default {
     sendAuthData,
     logout,
     forgetPassword,

@@ -21,8 +21,8 @@ const AddSubAdmin = (props) => {
         firstName: string().required(),
         lastName: string().required(),
         email: string().lowercase().required(),
-        
-        userName: string().required(),
+
+        username: string().required(),
         addressOne: string().required(),
        // phoneNo: string().required(),
         birthDate: string().required(),
@@ -34,12 +34,12 @@ const AddSubAdmin = (props) => {
     //     return re.test(String(email).toLowerCase());
     //   }
 
-            
+
 
     const handleSubmit = async (data) => {
         return await AuthService.postMethod(ENDPOINT.sub_admin.add_user, true, data)
             .then((res) => {
-                   if (res.status === 201) {
+                   if (res?.status === 201) {
                     toast.success('Created form successfully!', {
                         position: "bottom-right",
                         autoClose: 5000,
@@ -50,16 +50,17 @@ const AddSubAdmin = (props) => {
                         progress: undefined,
                         theme: "dark",
                         });
+                       props.subAdminAllData()
+                       setTimeout(() => {
+                           setAddAdmin(props.onHide);
+                       }, 1000);
+                       console.log(res);
                 }
 
-                props.subAdminAllData()
-                setTimeout(() => {
-                    setAddAdmin(props.onHide);
-                  }, 1000);
-                console.log(res);
+
             })
             .catch((err) => {
-                swal("Error", `${AuthService.errorMessageHandlerSubAdmin(err)}`, "error");
+                swal("Error", `Something Went Wrong`, "error");
             });
     }
 
@@ -67,8 +68,8 @@ const AddSubAdmin = (props) => {
    /* useEffect(() => {
         handleSubmit();
     }, []);*/
-    
-    
+
+
     return (
         <>
             <Modal
@@ -86,7 +87,7 @@ const AddSubAdmin = (props) => {
                             firstName: '',
                             lastName: '',
                             email: '',
-                            userName: '',
+                            username: '',
                             addressOne: '',
                             birthDate: '',
                            // phoneNo: '',
@@ -102,7 +103,7 @@ const AddSubAdmin = (props) => {
                             errors,
                         }) => (
                             <Form noValidate onSubmit={handleSubmit}>
-                                <Row clssName="feedBack">
+                                <Row className="feedBack">
                                     <Col md={6}>
                                         <div className={classes.box}>
                                             <h3 className={"font-20 text-orange mb-3"}>Perosnal Information</h3>
@@ -153,7 +154,7 @@ const AddSubAdmin = (props) => {
                                                         {errors.birthDate}
                                                     </Form.Control.Feedback>
                                                 </Col>
-                                          
+
                                                 <Col md={6} className={"mb-3"}>
                                                     <Form.Label className={"text-orange mb-0"}>Location</Form.Label>
                                                     <Form.Control
@@ -196,11 +197,11 @@ const AddSubAdmin = (props) => {
                                                     <Form.Label className={"text-orange mb-0"}>Username</Form.Label>
                                                     <Form.Control
                                                         type="text"
-                                                        name="userName"
-                                                        value={values.useName}
+                                                        name="username"
+                                                        value={values.username}
                                                         onChange={handleChange}
                                                         placeholder="Enter Username"
-                                                        isValid={touched.userName && !errors.userName}
+                                                        isValid={touched.username && !errors.username}
 
                                                     />
                                                 </Col>
@@ -229,7 +230,7 @@ const AddSubAdmin = (props) => {
 
                 </Modal.Body>
             </Modal>
-     
+
         </>
     )
 }
