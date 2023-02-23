@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect, useCallback } from "react";
 import { useGoogleMaps } from "react-hook-google-maps";
-import {GOOGLE_KEY} from "../../../../config/constants";
+import {GOOGLE_KEY} from "../../../config/constants";
 
 export default function RouteMap({
   markers,

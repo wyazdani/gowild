@@ -1,5 +1,5 @@
 import React from 'react';
-import classes from  './index.module.scss';
+import classes from './index.module.scss';
 
 const Marker = (props) => {
     const { img, name, id } = props;

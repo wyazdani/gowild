@@ -11,7 +11,7 @@ import rectangle from "Images/Rectangle.png";
 import moment from "moment";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import RouteMap from "../CreateRoute/RouteMap";
+import RouteMap from "../RouteMap";
 
 const ViewRouteList = (props) => {
   const navigate = useNavigate();

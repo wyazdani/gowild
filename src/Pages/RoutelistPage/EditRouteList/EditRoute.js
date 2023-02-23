@@ -19,7 +19,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import axios from "axios";
 import {object, string} from "yup";
 
-const CreateRoute = () => {
+const EditRoute = () => {
   const addHistoryBtnRef = useRef(null);
   const navigate = useNavigate();
   const [file, setFile] = useState([]);
@@ -815,4 +815,4 @@ const CreateRoute = () => {
   );
 };
 
-export default CreateRoute;
+export default EditRoute;
