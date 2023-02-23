@@ -19,141 +19,65 @@ export default function RouteMap({
       center: startingPoint,
     }
   );
+  const [oldMarkers, setOldMarkers] = useState([]);
+  const [directions, setDirections] = useState(null);
+  const [mapMarkers, setMapMarkers] = useState([]);
 
   // useEffect(() => {
-  //   if (preRenderMarkers) {
-  //     const directionsService = new google.maps.DirectionsService();
-  //     const directionsRenderer = new google.maps.DirectionsRenderer();
-  //     directionsRenderer.setMap(map);
-
-  //     const origin = startingPoint;
-  //     const destination = endingPoint;
-
-  //     console.log(origin);
-  //     console.log(destination);
-  //     console.log(travelMode);
-
-  //     const request = {
-  //       origin: origin,
-  //       destination: destination,
-  //       travelMode: travelMode,
-  //     };
-
-  //     directionsService.route(request, (result, status) => {
-  //       console.log(status);
-  //       console.log(result);
-  //       if (status === "OK") {
-  //         directionsRenderer.setDirections(result);
-  //       }
-  //     });
+  //   if (map) {
+  //     if (preRenderMarkers) {
+  //       console.log('preRenderMarkers')
+  //       const directionsService = new google.maps.DirectionsService();
+  //       const directionsRenderer = new google.maps.DirectionsRenderer();
+  //       directionsRenderer.setMap(map);
+  //
+  //       const origin = startingPoint;
+  //       const destination = endingPoint;
+  //
+  //       console.log(origin);
+  //       console.log(destination);
+  //       console.log(travelMode);
+  //
+  //       const request = {
+  //         origin: origin,
+  //         destination: destination,
+  //         travelMode: travelMode,
+  //       };
+  //
+  //       directionsService.route(request, (result, status) => {
+  //         console.log(status);
+  //         console.log(result);
+  //         if (status === "OK") {
+  //           directionsRenderer.setDirections(result);
+  //         }
+  //       });
+  //     }
   //   }
-  // }, [preRenderMarkers, google, map]);
+  // }, [map, google]);
+  useEffect(() => {
+    setMapMarkers(markers)
 
-  // useEffect(() => {
-  //   console.log("RouteMap");
-  //   console.log(markers);
-  //   if (markers.length > 0) {
-  //     setMarkers((prevMarkers) => {
-  //       let color;
-  //       if (prevMarkers.length === 0) {
-  //         color = "black";
-  //       } else if (prevMarkers.length === 1) {
-  //         color = "red";
-  //       } else {
-  //         color = "yellow";
-  //       }
-
-  //       return [
-  //         ...prevMarkers,
-  //         {
-  //           position: {
-  //             lat: 29.143644,
-  //             lng: 71.25724,
-  //             // lat: e.latLng.lat(),
-  //             // lng: e.latLng.lng(),
-  //           },
-  //           color,
-  //         },
-  //       ];
-  //     });
-  //   }
-  // }, [startingPoint, endingPoint, map, google, markers]);
+  } );
+  useEffect(() => {
+    console.log('Hello')
+    //setOldMarkers([]);
+  }, [oldMarkers]);
 
   useEffect(() => {
-
-    if (map) {
-      const listener = map.addListener("click", (e) => {
-        // setMarkers((prevMarkers) => {
-        //   let color;
-        //   if (prevMarkers.length === 0) {
-        //     color = "black";
-        //   } else if (prevMarkers.length === 1) {
-        //     color = "red";
-        //   } else {
-        //     color = "yellow";
-        //   }
-        //   return [
-        //     ...prevMarkers,
-        //     {
-        //       position: {
-        //         lat: e.latLng.lat(),
-        //         lng: e.latLng.lng(),
-        //       },
-        //       color,
-        //     },
-        //   ];
-        // });
-      });
-      if (preRenderMarkers) {
-        console.log('preRenderMarkers')
-        const directionsService = new google.maps.DirectionsService();
-        const directionsRenderer = new google.maps.DirectionsRenderer();
-        directionsRenderer.setMap(map);
-
-        const origin = startingPoint;
-        const destination = endingPoint;
-
-        console.log(origin);
-        console.log(destination);
-        console.log(travelMode);
-
-        const request = {
-          origin: origin,
-          destination: destination,
-          travelMode: travelMode,
-        };
-
-        directionsService.route(request, (result, status) => {
-          console.log(status);
-          console.log(result);
-          if (status === "OK") {
-            directionsRenderer.setDirections(result);
-          }
-        });
-      }
-
-      return () => {
-        google.maps.event.removeListener(listener);
-      };
-    }
-  }, [map, google]);
-
-  useEffect(() => {
-    if (map && markers.length >= 2) {
+    clearMap()
+    console.log('Called')
+    console.log('markers Length', mapMarkers.length)
+    if (map && mapMarkers.length >= 2) {
       console.log("Calculate Distance");
-      console.log('markers',markers);
-      console.log('length',markers.length);
+      console.log('markers',mapMarkers);
+      console.log('length',mapMarkers.length);
       const directionsService = new google.maps.DirectionsService();
       const directionsRenderer = new google.maps.DirectionsRenderer();
+      setDirections(directionsRenderer)
       directionsRenderer.setMap(map);
 
-      const origin = markers[0].position;
-      const destination = markers[1].position;
-
-      // console.log(origin);
-      // console.log(destination);
-      // console.log(travelMode);
-
+      const origin = mapMarkers[0].position;
+      const destination = mapMarkers[1].position;
       const request = {
         origin: origin,
         destination: destination,
@@ -168,9 +92,22 @@ export default function RouteMap({
       if (updateStartEndPosition) updateStartEndPosition(origin, destination);
 
     }
-  }, [map, markers, travelMode]);
+  }, [map,mapMarkers, travelMode]);
 
 
+  const clearMap = () => {
+    if (oldMarkers.length> 0){
+      console.log('oldMarkers Length',oldMarkers.length)
+      console.log('markers',mapMarkers.length)
+      oldMarkers.forEach(marker => {
+        marker.setMap(null);
+      });
+      if (directions){
+        directions.setMap(null);
+      }
+      setOldMarkers([])
+    }
+  }
   const Marker = ({
     index,
     position,
@@ -192,7 +129,8 @@ export default function RouteMap({
           strokeWeight: 0,
         },
       });
-    }, 500);
+      setOldMarkers((prevState) => [...prevState, marker]);
+    }, 100);
 
 
     return null;
@@ -202,7 +140,7 @@ export default function RouteMap({
     <>
       <div style={{ height: "100vh", width: "100%" }}>
         <div ref={ref} style={{ height: "100vh", width: "100%" }} />
-        {markers.map((marker, index) => (
+        {mapMarkers.length>0 && mapMarkers.map((marker, index) => (
           <Marker
             key={index}
             position={marker.position}

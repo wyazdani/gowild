@@ -18,8 +18,9 @@ import RouteMap from "../RouteMap";
 import Accordion from 'react-bootstrap/Accordion';
 import axios from "axios";
 import {object, string} from "yup";
+import {imageUrl} from "../../../Helper/Helpers";
 
-const EditRoute = () => {
+const EditRoute = (props) => {
   const addHistoryBtnRef = useRef(null);
   const navigate = useNavigate();
   const [file, setFile] = useState([]);
@@ -27,9 +28,9 @@ const EditRoute = () => {
   const [historicalData, setHistoricalData] = useState([]);
   const [directionsData, setDirectionsData] = useState(null);
   const [accordionActiveKey, setAccordionActiveKey] = useState('0');
-  const [inputFields, setInputFields] = useState([]);
   const [markers, setMarkers] = useState([]);
-  const [routesData, setRoutesData] = useState({});
+  const [editData, setEditData] = useState([]);
+  const [addedToMap, setAddedToMap] = useState(false);
   const [customRoutesData, setCustomRoutesData] = useState({
     title: "",
     description: "",
@@ -44,22 +45,11 @@ const EditRoute = () => {
     startLocation: '',
     endLocation: '',
     picture: "",
+    image: "",
     addedToMap: false,
   }) // For Testing Purpose
 
-  const [formArray, setFormArray] = useState([{}]);
   const [validated, setValidated] = useState(false);
-  const [formData, setFormData] = useState({
-    startLongtitude: "",
-    startLattitude: "",
-    endLongtitude: "",
-    endLattitude: "",
-    title: "",
-    description: "",
-    picture: "",
-  });
-
-  const [uploadFile, setUploadFile] = useState();
   const [showButton, setShowButton] = useState(true);
 
   const [startingPoint, setStartingPoint] = useState({
@@ -75,62 +65,75 @@ const EditRoute = () => {
   // store id when user submit form
   const [id, setId] = useState();
 
-  const schema = object().shape({
-    title: string().required(),
-    description: string().required()
+  useEffect(() => {
+    setEditData(props.editItem)
+    setId(props.editItem?.id)
+    if (!addedToMap){
+      setCustomRoutesData({
+        title: props.editItem?.title,
+        description: props.editItem?.description,
+        startLatitude: props.editItem?.start?.latitude,
+        startLongitude: props.editItem?.start?.longitude,
+        endLatitude:props.editItem?.end?.latitude,
+        endLongitude:props.editItem?.end?.longitude,
+        distance_miles: props.editItem?.distance_miles,
+        distance_meters: props.editItem?.distance_meters,
+        estimate_time: props.editItem?.estimate_time,
+        route_path: '',
+        startLocation: props.editItem?.startLocation,
+        endLocation: props.editItem?.endLocation,
+        picture: "",
+        image: props.editItem?.picture,
+        addedToMap: false
+      })
+    }
+
+    console.log(`marker: ${JSON.stringify(markers)}`);
+  }, [markers, editData]);
+useEffect(() => {
+  setMarkers([]);
+}, [addedToMap]);
+
+  useEffect(() => {
+
+    console.log(`customRoutesData: ${JSON.stringify(customRoutesData)}`);
+    if (!addedToMap){
+      const initialPositions = markers;
+      initialPositions[0] = {
+        position: {
+          lat: parseFloat(props.editItem?.start.latitude),
+          lng: parseFloat(props.editItem?.start.longitude),
+        },
+        color:'black'
+      };
+      initialPositions[1] = {
+        position: {
+          lat: parseFloat(props.editItem?.end.latitude),
+          lng: parseFloat(props.editItem?.end.longitude),
+        },
+        color:'red',
+      };
+      for(const event of props.editItem?.historicalEvents) {
+        initialPositions.push({
+          position: {
+            lat: parseFloat(event.historical_event.latitude),
+            lng: parseFloat(event.historical_event.longitude),
+          },
+          color:'yellow',
+        })
+      }
+      setMarkers(initialPositions);
+    }
+
+
+
   });
 
   useEffect(() => {
-    console.log(`marker: ${JSON.stringify(markers)}`);
-  }, [markers]);
 
-  useEffect(() => {
-    console.log(`routesData: ${JSON.stringify(routesData)}`);
-  }, [routesData]);
-
-  useEffect(() => {
     console.log(`historicalData: ${JSON.stringify(historicalData)}`);
-    if (historicalData.length > 2) {
-      setRoutesData({
-        start: {
-          latitude: parseFloat(historicalData[0].latitude),
-          longitude: parseFloat(historicalData[0].longitude),
-        },
-        end: {
-          latitude: parseFloat(historicalData[1].latitude),
-          longitude: parseFloat(historicalData[1].longitude),
-        },
-        distance_miles: 0,
-        distance_meters: 0,
-        estimate_time: "-",
-        startLocation: "-",
-        endLocation: "-",
-        title: historicalData[0].title,
-        description: historicalData[0].description,
-        history_ponts: [],
-      });
-      if (historicalData.length >= 3) {
-        // history_ponts;
-        historicalData.slice(2).map((item, index) => {
-          setRoutesData((prevState) => ({
-            ...prevState,
-            history_ponts: [
-              ...prevState.history_ponts,
-              {
-                historical_event: {
-                  latitude: parseFloat(item.latitude),
-                  longitude: parseFloat(item.longitude),
-                },
-                title: item.title,
-                subtitle: item.subtitle,
-                description: item.description,
-              },
-            ],
-          }));
-        });
-      }
-    }
-  }, [historicalData, accordionActiveKey]);
+
+  }, [historicalData]);
   const submitForm = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -222,7 +225,6 @@ const EditRoute = () => {
                       });
                       setShowButton(true);
                       navigate("/route-list");
-                      setFormData("");
                     }
                   })
                   .catch((err) => {
@@ -243,7 +245,6 @@ const EditRoute = () => {
               });
               setShowButton(true);
               navigate("/route-list");
-              setFormData("");
             }
           })
           .catch((err) => {
@@ -294,6 +295,7 @@ const EditRoute = () => {
       (startPos, endPos) => {
         setStartingPoint(startPos);
         setEndingPoint(endPos);
+        console.log('startingPoint',startingPoint)
         if (directionsData == null) {
           const origin = `${startPos.lat}, ${startPos.lng}`;
           const destination = `${endPos.lat}, ${endPos.lng}`;
@@ -358,24 +360,49 @@ const EditRoute = () => {
   );
 
   const addRouteToMap = () => {
-    const startLatitude = customRoutesData.startLatitude;
-    const startLongitude = customRoutesData.startLongitude;
-    const endLatitude = customRoutesData.endLatitude;
-    const endLongitude = customRoutesData.endLongitude;
-    if (!customRoutesData.addedToMap && startLatitude && startLongitude && endLatitude && endLongitude){
+    //clearRoutes()
+    const oldValues = markers;
+    console.log('oldValues',oldValues)
+    setAddedToMap(true)
+    setTimeout(function () {
+      setMarkers([])
 
-      addMarker(startLatitude, startLongitude, 'black')
-      addMarker(endLatitude, endLongitude, 'red')
-    }
-    else if (customRoutesData.addedToMap && startLatitude && startLongitude && endLatitude && endLongitude){
-      updateRouteMap(startLatitude, startLongitude, 'black', 0)
-      updateRouteMap(endLatitude, endLongitude, 'red', 1)
-    }
-    if (!customRoutesData.addedToMap && startLatitude && startLongitude && endLatitude && endLongitude) {
-      updateCustomRouteKey('addedToMap', true)
-    }
+    }, 1000);
+
+    setTimeout(function () {
+      const startLatitude = customRoutesData.startLatitude;
+      const startLongitude = customRoutesData.startLongitude;
+      const endLatitude = customRoutesData.endLatitude;
+      const endLongitude = customRoutesData.endLongitude;
+      if (startLatitude && startLongitude && endLatitude && endLongitude){
+        const newRows = [...oldValues];
+        newRows[0] = {
+          position: {
+            lat: parseFloat(startLatitude),
+            lng: parseFloat(startLongitude),
+          },
+          color: 'black'
+        };
+        newRows[1] = {
+          position: {
+            lat: parseFloat(endLatitude),
+            lng: parseFloat(endLongitude),
+          },
+          color: 'red'
+        };
+        setMarkers(newRows);
+        // updateRouteMap(oldValues,startLatitude, startLongitude, 'black', 0)
+        // updateRouteMap(oldValues,endLatitude, endLongitude, 'red', 1)
+      }
+    },1500);
+
+
   }
 
+  const clearRoutes = () => {
+    setMarkers([]);
+    setAddedToMap(true)
+  }
   const addHistoricalToMap = (index) => {
     const latitude = historicalData[index].latitude;
     const longitude = historicalData[index].longitude;
@@ -391,8 +418,8 @@ const EditRoute = () => {
     newRows[index][key] = value;
     setHistoricalData(newRows);
   };
-  const updateRouteMap = (lat,lng,color, index) => {
-    const newRows = [...markers];
+  const updateRouteMap = (oldValues,lat,lng,color, index) => {
+    const newRows = [...oldValues];
     newRows[index] = {
       position: {
         lat: parseFloat(lat),
@@ -401,6 +428,8 @@ const EditRoute = () => {
       color,
     };
     setMarkers(newRows);
+
+
   };
   function uploadSingleFileHistorical(e, index) {
     console.log('In Hostorical')
@@ -604,6 +633,7 @@ const EditRoute = () => {
                                 id={"upload-photo"}
                                 disabled={file.length === 1}
                                 className=""
+                                accept={".jpg,.jpeg,.png"}
                                 onChange={(e) =>
                                     uploadSingleFile(e)
                                 }
@@ -625,6 +655,10 @@ const EditRoute = () => {
                                       </div>
                                   );
                                 })}
+                            {file.length === 0 && customRoutesData.image &&
+                                <div className={"preview"} key={customRoutesData.image}>
+                                  <img src={imageUrl(customRoutesData.image)} alt="" />
+                                </div>}
                           </div>
                         </Form.Group>
                     </Col>
