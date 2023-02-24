@@ -90,7 +90,6 @@ const EditRoute = (props) => {
       const historicalEditData = [];
       for (let i =0;i<(props.editItem?.historicalEvents.length);i++) {
         const hData = props.editItem?.historicalEvents[i];
-        console.log(hData)
         historicalEditData[i] = {
           latitude: hData.historical_event.latitude,
           id: hData.id,
@@ -364,7 +363,6 @@ useEffect(() => {
   );
 
   const addRouteToMap = () => {
-    //clearRoutes()
     const oldValues = markers;
     setAddedToMap(true)
     setTimeout(function () {
@@ -402,18 +400,18 @@ useEffect(() => {
 
   const clearRoutes = () => {
     setMarkers([]);
-    setAddedToMap(true)
   }
   const addHistoricalToMap = (index) => {
     const latitude = historicalData[index].latitude;
     const longitude = historicalData[index].longitude;
     const oldMarkers = markers;
     if (latitude && longitude){
-
+      setAddedToMap(true)
+      setTimeout(function () {
+        clearRoutes()
+      } , 1000)
       if (oldMarkers[index+2]) {
-        setTimeout(function () {
-          clearRoutes()
-        } , 1000)
+
         setTimeout(function () {
           oldMarkers[index+2] = {
             position: {
@@ -424,10 +422,18 @@ useEffect(() => {
           }
           setMarkers(oldMarkers)
         } , 1500)
-
-
       }else {
-        addMarker(latitude, longitude, 'yellow')
+        setTimeout(function () {
+          oldMarkers[markers.length] = {
+            position: {
+              lat: parseFloat(latitude),
+              lng: parseFloat(longitude),
+            },
+            color: 'yellow'
+          }
+          setMarkers(oldMarkers)
+        } , 1500)
+        //addMarker(latitude, longitude, 'yellow')
       }
 
     }
