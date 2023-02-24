@@ -181,7 +181,7 @@ useEffect(() => {
         distance_miles: directionsData?.routes[0]?.legs[0]?.distance?.value ?? 0,
         distance_meters: directionsData?.routes[0]?.legs[0]?.duration?.value ?? 0,
         estimate_time: directionsData?.routes[0]?.legs[0]?.duration?.text ?? "-",
-        route_path: customRoutesData.route_path,
+        route_path: directionsData?.routes[0]?.overview_polyline?.points ?? "-",
         startLocation: directionsData?.routes[0]?.legs[0]?.start_address ?? "-",
         endLocation: directionsData?.routes[0]?.legs[0]?.end_address ?? "-",
         start: {
@@ -220,7 +220,6 @@ useEffect(() => {
                         console.log('Success Historical Route Image Upload')
                       }).catch((err) => {
                     setShowButton(true);
-                    deleteRoute()
                     swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
                   });
                 }
@@ -249,12 +248,12 @@ useEffect(() => {
                       });
                       setShowButton(true);
                       navigate("/route-list");
+                      props.refresh()
                       props.hidePopup()
                     }
                   })
                   .catch((err) => {
                     setShowButton(true);
-                    deleteRoute()
                     swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
                   });
             }else {
@@ -270,37 +269,17 @@ useEffect(() => {
               });
               setShowButton(true);
               navigate("/route-list");
+              props.refresh()
               props.hidePopup()
             }
           })
           .catch((err) => {
+            console.log('err',err)
             setShowButton(true);
-            deleteRoute()
             swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
           });
     }
-
-
-
   };
-
-  const deleteRoute = () => {
-    if (id){
-      ENDPOINT.route.delete.id = id;
-      setId(null)
-      AuthService.deleteMethod(
-          ENDPOINT.route.delete.url + ENDPOINT.route.delete.id,
-          true
-      )
-          .then((res) => {
-            console.log(res.data);
-          })
-          .catch((err) => {
-            console.log('Deleted Successfully')
-          });
-    }
-  }
-  // add historical event
 
   const handleHistorical = (event, index) => {
     const newRows = [...historicalData];
@@ -321,7 +300,6 @@ useEffect(() => {
       (startPos, endPos) => {
         setStartingPoint(startPos);
         setEndingPoint(endPos);
-        console.log('startingPoint',startingPoint)
         if (directionsData == null) {
           const origin = `${startPos.lat}, ${startPos.lng}`;
           const destination = `${endPos.lat}, ${endPos.lng}`;
@@ -329,7 +307,6 @@ useEffect(() => {
           const corsAnywhereUrl = `https://cors.appscorridor.com/${url}`;
           axios.get(corsAnywhereUrl)
               .then(response => {
-                console.log(response.data)
                 setDirectionsData(response.data);
               })
               .catch(error => console.error(error));
@@ -477,7 +454,6 @@ useEffect(() => {
 
   };
   function uploadSingleFileHistorical(e, index) {
-    console.log('In Hostorical')
     let ImagesArray = Object.entries(e.target.files).map((e) =>
         URL.createObjectURL(e[1])
     );
@@ -493,11 +469,6 @@ useEffect(() => {
     );
     setFile([...ImagesArray]);
     updateCustomRouteKey('picture', e.target.files[0])
-  }
-
-  function upload(e) {
-    e.preventDefault();
-    console.log(file);
   }
 
   const updateCustomRouteKey = (key, value) => {

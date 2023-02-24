@@ -65,6 +65,7 @@ const RouteList = () => {
     routeListData();
   }, []);
 
+
   // convert date format to month / day / year
   function formatDate(date) {
     var d = new Date(date),
@@ -91,6 +92,10 @@ const RouteList = () => {
     setSelectedItems(content);
     setIsChecked(!isChecked);
   };
+
+  const refreshPage = () => {
+    routeListData();
+  }
 
   const handleDeselectAll = () => {
     setSelectedItems([]);
@@ -206,6 +211,7 @@ const RouteList = () => {
         show={editSubAdmin}
         onHide={() => setEditSubAdmin(false)}
         editItem={editItem}
+        refresh={refreshPage}
       />
 
       <ViewRouteList

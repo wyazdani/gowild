@@ -158,7 +158,7 @@ const CreateRoute = () => {
         distance_miles: directionsData?.routes[0]?.legs[0]?.distance?.value ?? 0,
         distance_meters: directionsData?.routes[0]?.legs[0]?.duration?.value ?? 0,
         estimate_time: directionsData?.routes[0]?.legs[0]?.duration?.text ?? "-",
-        route_path: customRoutesData.route_path,
+        route_path: directionsData?.routes[0]?.overview_polyline?.points ?? "-",
         startLocation: directionsData?.routes[0]?.legs[0]?.start_address ?? "-",
         endLocation: directionsData?.routes[0]?.legs[0]?.end_address ?? "-",
         start: {

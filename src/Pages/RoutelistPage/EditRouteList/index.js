@@ -22,8 +22,6 @@ const EditRouteList = (props) => {
     const [values, setvalues] = useState({})
     const { editItem, ...other } = props;
 
-
-    console.log(props)
     const schema = object().shape({
     title: string().required(),
     description: string().required(),
@@ -115,9 +113,8 @@ return (
     <Button variant="close" onClick={props.onHide}><i className={"fal fa-times"}></i> </Button>
     <Modal.Body>
         <section className={"section"}>
-            <EditRoute editItem={props.editItem} hidePopup={props.onHide} />
+            <EditRoute editItem={props.editItem} hidePopup={props.onHide} refresh={props.refresh} />
         </section>
-
     </Modal.Body>
 </Modal>
 </>
