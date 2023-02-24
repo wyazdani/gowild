@@ -178,7 +178,7 @@ useEffect(() => {
       const routeData = {
         title: customRoutesData.title,
         description: customRoutesData.description,
-        distance_miles: directionsData?.routes[0]?.legs[0]?.distance?.value ?? 0,
+        distance_miles: (directionsData?.routes[0]?.legs[0]?.distance?.value * 0.000621371) ?? 0,
         distance_meters: directionsData?.routes[0]?.legs[0]?.duration?.value ?? 0,
         estimate_time: directionsData?.routes[0]?.legs[0]?.duration?.text ?? "-",
         route_path: directionsData?.routes[0]?.overview_polyline?.points ?? "-",
