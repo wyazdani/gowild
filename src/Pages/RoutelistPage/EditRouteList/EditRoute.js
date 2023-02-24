@@ -86,6 +86,25 @@ const EditRoute = (props) => {
         image: props.editItem?.picture,
         addedToMap: false
       })
+
+      const historicalEditData = [];
+      for (let i =0;i<(props.editItem?.historicalEvents.length);i++) {
+        const hData = props.editItem?.historicalEvents[i];
+        console.log(hData)
+        historicalEditData[i] = {
+          latitude: hData.historical_event.latitude,
+          id: hData.id,
+          longitude: hData.historical_event.longitude,
+          title: hData.title,
+          subtitle: hData.subtitle,
+          description: hData.description,
+          file: "",
+          addedToMap: false,
+          imageIndex: '',
+          image: hData.image
+        }
+      }
+      setHistoricalData(historicalEditData);
     }
 
     console.log(`marker: ${JSON.stringify(markers)}`);
@@ -113,14 +132,14 @@ useEffect(() => {
         },
         color:'red',
       };
-      for(const event of props.editItem?.historicalEvents) {
-        initialPositions.push({
+      for (let i =2;i<(props.editItem?.historicalEvents.length+2);i++) {
+        initialPositions[i] = {
           position: {
-            lat: parseFloat(event.historical_event.latitude),
-            lng: parseFloat(event.historical_event.longitude),
+            lat: parseFloat(props.editItem?.historicalEvents[i-2].historical_event.latitude),
+            lng: parseFloat(props.editItem?.historicalEvents[i-2].historical_event.longitude),
           },
           color:'yellow',
-        })
+        };
       }
       setMarkers(initialPositions);
     }
@@ -151,6 +170,7 @@ useEffect(() => {
             longitude: parseFloat(data.longitude),
           },
           title: data.title,
+          id: data.id,
           subtitle: data.subtitle,
           description: data.description,
         })
@@ -176,17 +196,21 @@ useEffect(() => {
       }
       console.log("DUCK", "customRoutesData", customRoutesData);
       console.log("DUCK", "historicalData", historicalData);
-      return AuthService.postMethod(
-          ENDPOINT.admin_route.listing,
+      const postRouteUrl = ENDPOINT.admin_route.update.replace(
+          ":id",
+          id
+      );
+      return AuthService.patchMethod(
+          postRouteUrl,
           true,
           routeData
       )
           .then((res) => {
-            if (res.data?.historical_route && res.data?.historical_route.length> 0) {
-              for (let i =0;i<res.data?.historical_route.length;i++) {
+            if (res.data?.data?.historicalEvents && res.data?.data?.historicalEvents.length> 0) {
+              for (let i =0;i<res.data?.data?.historicalEvents.length;i++) {
                 const url = ENDPOINT.historical_event.add_image.replace(
                     ":id",
-                    res.data?.historical_route[i].id
+                    res.data?.data?.historicalEvents[i].id
                 );
                 let data = new FormData();
                 data.append("file", historicalData[i].file);
@@ -204,10 +228,10 @@ useEffect(() => {
             }
             let data = new FormData();
             data.append("file", customRoutesData.picture);
-            setId(res.data.id);
+            //setId(res.data.id);
             const url = ENDPOINT.admin_route.update_pictures.replace(
                 ":id",
-                res.data.id
+                id
             );
             if (customRoutesData.picture) {
               AuthService.postMethod(url, true, data)
@@ -225,6 +249,7 @@ useEffect(() => {
                       });
                       setShowButton(true);
                       navigate("/route-list");
+                      props.hidePopup()
                     }
                   })
                   .catch((err) => {
@@ -245,6 +270,7 @@ useEffect(() => {
               });
               setShowButton(true);
               navigate("/route-list");
+              props.hidePopup()
             }
           })
           .catch((err) => {
@@ -352,6 +378,7 @@ useEffect(() => {
             file: "",
             addedToMap: false,
             imageIndex: '',
+            image: ''
           },
         ]);
         setAccordionActiveKey(`${historicalData.length}`)
@@ -362,7 +389,6 @@ useEffect(() => {
   const addRouteToMap = () => {
     //clearRoutes()
     const oldValues = markers;
-    console.log('oldValues',oldValues)
     setAddedToMap(true)
     setTimeout(function () {
       setMarkers([])
@@ -391,8 +417,6 @@ useEffect(() => {
           color: 'red'
         };
         setMarkers(newRows);
-        // updateRouteMap(oldValues,startLatitude, startLongitude, 'black', 0)
-        // updateRouteMap(oldValues,endLatitude, endLongitude, 'red', 1)
       }
     },1500);
 
@@ -406,12 +430,33 @@ useEffect(() => {
   const addHistoricalToMap = (index) => {
     const latitude = historicalData[index].latitude;
     const longitude = historicalData[index].longitude;
+    const oldMarkers = markers;
     if (latitude && longitude){
-      addMarker(latitude, longitude, 'yellow')
+
+      if (oldMarkers[index+2]) {
+        setTimeout(function () {
+          clearRoutes()
+        } , 1000)
+        setTimeout(function () {
+          oldMarkers[index+2] = {
+            position: {
+              lat: parseFloat(latitude),
+              lng: parseFloat(longitude),
+            },
+            color: 'yellow'
+          }
+          setMarkers(oldMarkers)
+        } , 1500)
+
+
+      }else {
+        addMarker(latitude, longitude, 'yellow')
+      }
+
     }
-    if (!historicalData[index].addedToMap && latitude && longitude) {
-      updateHistoricalRouteKey(index,'addedToMap', true)
-    }
+    // if (!historicalData[index].addedToMap && latitude && longitude) {
+    //   updateHistoricalRouteKey(index,'addedToMap', true)
+    // }
   }
   const updateHistoricalRouteKey = (index, key, value) => {
     const newRows = [...historicalData];
@@ -786,6 +831,7 @@ useEffect(() => {
                                           type="file"
                                           id={`upload-photo${index}`}
                                           className=""
+                                          accept={".jpg,.jpeg,.png"}
                                           onChange={(e) =>
                                               uploadSingleFileHistorical(e, index)
                                           }
@@ -804,6 +850,10 @@ useEffect(() => {
                                             >
                                               <i className={"fal fa-times"}></i>
                                             </Button>
+                                          </div>}
+                                      {!files[data.imageIndex] && data.image &&
+                                          <div className={"preview"} key={data.image}>
+                                            <img src={imageUrl(data.image)} alt="" />
                                           </div>}
                                     </div>
                                   </Col>

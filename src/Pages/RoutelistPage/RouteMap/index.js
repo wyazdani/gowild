@@ -117,19 +117,22 @@ export default function RouteMap({
     onRemove,
   }) => {
     setTimeout(function () {
-      const marker = new window.google.maps.Marker({
-        position: position,
-        map: map,
-        draggable: false,
-        icon: {
-          path: "M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z",
-          scale: 1,
-          fillColor: color,
-          fillOpacity: 1,
-          strokeWeight: 0,
-        },
-      });
-      setOldMarkers((prevState) => [...prevState, marker]);
+      if (oldMarkers.length<100) {
+        const marker = new window.google.maps.Marker({
+          position: position,
+          map: map,
+          draggable: false,
+          icon: {
+            path: "M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z",
+            scale: 1,
+            fillColor: color,
+            fillOpacity: 1,
+            strokeWeight: 0,
+          },
+        });
+        setOldMarkers((prevState) => [...prevState, marker]);
+      }
+
     }, 100);
 
 

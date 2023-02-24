@@ -68,6 +68,7 @@ export const ENDPOINT = {
 
     admin_route: {
         listing: `${API_URL}/admin/route`,
+        update: `${API_URL}/admin/route/:id`,
         update_pictures: `${API_URL}/admin/route/:id/update-picture`,
         approve: `${API_URL}/admin/route/`,
         reject: `${API_URL}/admin/route/`,

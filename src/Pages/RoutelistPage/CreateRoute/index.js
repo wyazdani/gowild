@@ -603,6 +603,7 @@ const CreateRoute = () => {
                                 type="file"
                                 id={"upload-photo"}
                                 disabled={file.length === 1}
+                                accept={".jpg,.jpeg,.png"}
                                 className=""
                                 onChange={(e) =>
                                     uploadSingleFile(e)
@@ -752,6 +753,7 @@ const CreateRoute = () => {
                                           type="file"
                                           id={`upload-photo${index}`}
                                           className=""
+                                          accept={".jpg,.jpeg,.png"}
                                           onChange={(e) =>
                                               uploadSingleFileHistorical(e, index)
                                           }

@@ -89,7 +89,7 @@ const patchMethod = async (endpoint, authentication=true, data=null, printConsol
             return res
         })
         .catch((error) => {
-            console.error(error)
+            swal("Error", `${errorMessageHandlerSubAdmin(error)}`, "error");
         })
 }
 

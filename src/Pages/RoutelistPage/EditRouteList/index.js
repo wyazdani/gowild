@@ -115,7 +115,7 @@ return (
     <Button variant="close" onClick={props.onHide}><i className={"fal fa-times"}></i> </Button>
     <Modal.Body>
         <section className={"section"}>
-            <EditRoute editItem={props.editItem}  />
+            <EditRoute editItem={props.editItem} hidePopup={props.onHide} />
         </section>
 
     </Modal.Body>
