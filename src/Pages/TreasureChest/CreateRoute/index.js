@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useRef } from "react";
+import {React, useState, useEffect, useRef, useCallback} from "react";
 import PageTitle from "../../../Components/Pagetitle";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import map1 from "Images/map1.jpg";
@@ -12,6 +12,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import moment from 'moment';
+import RouteMap from "../../RoutelistPage/RouteMap";
 
 
 
@@ -24,29 +25,57 @@ const CreateTreasure = () => {
     const [formData, setFormData] = useState({});
     const [uploadFile, setUploadFile] = useState({});
     const [uploadFiles, setUploadFiles] = useState({});
+    const [startingPoint, setStartingPoint] = useState({
+        lat: 0,
+        lng: 0,
+    });
+    const [markers, setMarkers] = useState([]);
+    const [fields, setFields] = useState([{ sponsor: '', file: null, imgLink: '' }]);
+    const [show, setShow] = useState(false);
+    const [id, setId] = useState(null);
 
+    const addMarker = useCallback(
+        (lat, lng) => {
 
+            setMarkers([{
+                position: {
+                    lat: parseFloat(lat),
+                    lng: parseFloat(lng),
+                },
+                color: "black"
+            }]);
+        },
+        [markers]
+    );
+    useEffect(() => {
+        if (formData.longitude && formData.latitude) {
+            addMarker(formData.latitude, formData.longitude)
+        }
 
+    }, [formData]);
+    useEffect(() => {
+        console.log('fields', fields)
+        console.log('id', id)
+    },[fields, id]);
     const handleChange = (event) => {
-        
         let value = event.target.value;
         let name = event.target.name;
         setFormData((prevalue) => {
             return {
-                ...prevalue,   // Spread Operator               
+                ...prevalue,   // Spread Operator
                 [name]: value
             }
         })
+
     }
-  
+
 
     const submitForm = async (event) => {
         event.preventDefault();
-        try {
             const eventDateTime = moment(`${formData.date} ${formData.time}`, "YYYY-MM-DD HH:mm:ss.SSS");
             const eventDateTimeUtc = eventDateTime.utc().format();
             // const eventDateTime = moment.utc(`${formData.date} ${formData.time}::11.111`).format("YYYY-MM-DD HH:mm:ss.SSS");
-            
+
             const dataObj = {
             "title": formData.title,
             "description": formData.description,
@@ -59,51 +88,57 @@ const CreateTreasure = () => {
             "no_of_participants": formData.number,
             "picture": formData.picture
             }
-            const res = await AuthService.postMethod(`${ENDPOINT.treasure_chests.listing}`, true, dataObj);
-
-            if (res.status === 201) {
-                toast.success('Form data submitted successfully', {
-                    position: "bottom-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "dark",
+            await AuthService.postMethod(`${ENDPOINT.treasure_chests.listing}`, true, dataObj).then(async (res) => {
+                setId(res.data.id)
+                const dataArray = new FormData();
+                dataArray.append("file", uploadFile.uploadFile);
+                await AuthService.postMethod(`${ENDPOINT.treasure_chests.update_picture}${res.data.id}/update-picture`, true, dataArray, false, true).then(async (res) => {
+                }).catch((err) => {
+                    swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
                 });
-            }
+                for (const sponsor of fields) {
+                    const linkObj = {
+                        "treasure_chest": res.data.id,
+                        "link": sponsor.sponsor,
+                    }
+                    await AuthService.postMethod(`${ENDPOINT.admin_sponsor.sponsor}`, true, linkObj).then(async (resData) => {
+
+                        if (sponsor.imgLink) {
+                            const dataArray1 = new FormData();
+                            dataArray1.append("file", sponsor.imgLink);
+                            await AuthService.postMethod(`${ENDPOINT.admin_sponsor.sponsor_img}${resData.data.id}/update-image`, true, dataArray1, false, true).then(async (res) => {
+                            }).catch((err) => {
+                                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+                            });
+                        }
+
+                    }).catch((err) => {
+                        swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+                    });
+                }
+            }).catch((err) => {
+                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+            });
+
+        toast.success('Form data submitted successfully', {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+        });
+        navigate('/treasure-chests-list');
+
+
 
             // 2nd API call
-            console.log(res.data);
-            const dataArray = new FormData();
-            dataArray.append("file", uploadFile.uploadFile);
-            const res2 = await AuthService.postMethod(`${ENDPOINT.treasure_chests.update_picture}${res.data.id}/update-picture`, true, dataArray, false, true);
-            console.log("res2", res2.data);
 
-            // 3rd API call
-            const linkObj = {
-                "treasure_chest": res.data.id,
-                "link": formData.link,
-            }
-            const res3 = await AuthService.postMethod(`${ENDPOINT.admin_sponsor.sponsor}`, true, linkObj);
-            console.log("res3", res3.data);
-            // 4th API call
 
-            // setFormData("");
-            // event.target.reset();
-            // console.log(res.data);
-            const dataArray1 = new FormData();
-            dataArray1.append("file", uploadFiles.uploadFiles);
-            const res4 = await AuthService.postMethod(`${ENDPOINT.admin_sponsor.sponsor_img}${res3.data.id}/update-image`, true, dataArray1, false, true);
-            setTimeout(() => {
-                navigate('/treasure-chests-list');
-            }, 1000);
-            console.log("res4", res4.data);
 
-        } catch (err) {
-            swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
-        }
+
     };
 
 
@@ -130,8 +165,7 @@ const CreateTreasure = () => {
     }
 
 
-    const [fields, setFields] = useState([{ sponsor: '', file: null, imgLink: '' }]);
-    const [show, setShow] = useState(false);
+
 
     const handleAddField = () => {
         setFields([...fields, { sponsor: '', file: null, imgLink: '' }]);
@@ -145,29 +179,16 @@ const CreateTreasure = () => {
     };
 
     const handleChanges = (index, event) => {
-
-        let value = event.target.value;
-        let name = event.target.name;
-        setFormData((prevalue) => {
-            return {
-                ...prevalue,   // Spread Operator               
-                [name]: value
-            }
-        })
-
-
-        setUploadFiles({ uploadFiles: event.target.files[0] })
-        console.log("uploadFiles", event.target.files[0])
-
+console.log('Reaches Here')
         const newFields = [...fields];
         if (event.target.name === 'file') {
             newFields[index][event.target.name] = URL.createObjectURL(event.target.files[0]);
+            newFields[index]['imgLink'] = event.target.files[0];
         } else {
             newFields[index][event.target.name] = event.target.value;
         }
         setFields(newFields);
     };
-
     return (
         <>
             <PageTitle title="Treasure Chest" />
@@ -209,7 +230,11 @@ const CreateTreasure = () => {
                         </Col>
                         <Col md={8}>
                             <div className={"img-box"}>
-                                <img src={map1} alt={"img"} />
+                                <RouteMap
+                                    startingPoint={startingPoint}
+                                    travelMode={"WALKING"}
+                                    markers={markers}
+                                />
                             </div>
                         </Col>
 
@@ -230,12 +255,12 @@ const CreateTreasure = () => {
                                                                 {fields.map((formData, index) => (
                                                                     <div key={index}>
                                                                         <div className="d-flex">
-                                                                            {fields[0].file ? <img src={formData.file} width="10%" alt="Preview" /> : ""}
+                                                                            {formData.file ? <img src={formData.file} width="10%" alt="Preview" /> : ""}
                                                                             <input
                                                                                 type="text"
-                                                                                name="link"
+                                                                                name="sponsor"
                                                                                 required
-                                                                                value={formData.link}
+                                                                                value={formData.sponsor}
                                                                                 // onChange={handleChange}
                                                                                 className={"mb-1 ms-2 mb-md-2"} placeholder="🔗 www.redbull.com"
                                                                                 onChange={event => handleChanges(index, event)}
@@ -371,7 +396,7 @@ const CreateTreasure = () => {
                 </Form>
 
 
-          
+
             </section>
         </>
     )

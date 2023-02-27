@@ -11,11 +11,12 @@ export default function RouteMap({
   handleAddRow,
   updateStartEndPosition,
   preRenderMarkers = false,
+  zoom = 3,
 }) {
   const { ref, map, google } = useGoogleMaps(
     GOOGLE_KEY,
     {
-      zoom: 3,
+      zoom: zoom,
       center: startingPoint,
     }
   );
@@ -65,12 +66,10 @@ export default function RouteMap({
 
   useEffect(() => {
     clearMap()
-    console.log('Called')
-    console.log('markers Length', mapMarkers.length)
     if (map && mapMarkers.length >= 2) {
-      console.log("Calculate Distance");
-      console.log('markers',mapMarkers);
-      console.log('length',mapMarkers.length);
+      // console.log("Calculate Distance");
+      // console.log('markers',mapMarkers);
+      // console.log('length',mapMarkers.length);
       const directionsService = new google.maps.DirectionsService();
       const directionsRenderer = new google.maps.DirectionsRenderer();
       setDirections(directionsRenderer)
@@ -97,8 +96,8 @@ export default function RouteMap({
 
   const clearMap = () => {
     if (oldMarkers.length> 0){
-      console.log('oldMarkers Length',oldMarkers.length)
-      console.log('markers',mapMarkers.length)
+      // console.log('oldMarkers Length',oldMarkers.length)
+      // console.log('markers',mapMarkers.length)
       oldMarkers.forEach(marker => {
         marker.setMap(null);
       });

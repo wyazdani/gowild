@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
 import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
-import classes from "../index.module.scss";
-import AuthService from "../../../services/auth.service";
-import { ENDPOINT } from "../../../config/constants";
-import swal from "sweetalert";
-import { Formik } from 'formik';
-import { object, string } from 'yup';
-import { useNavigate } from "react-router-dom";
-import map1 from "Images/map1.jpg";
 import rectangle from "Images/Rectangle.png";
-import moment from 'moment';
 import img2 from "Images/chestcpAsset .png";
+import RouteMap from "../../RoutelistPage/RouteMap";
+import {imageUrl} from "../../../Helper/Helpers";
 
 
 
@@ -20,40 +13,10 @@ const ViewTreasure = (props) => {
 
     const [file, setFile] = useState([]);
 
-    /* Logging the props.viewItem to the console ... all data base on id seprate. */
-    console.log(props.viewItem)
 
     if (props.viewItem === null) {
         return "";
     }
-
-
-    function uploadSingleFile(e) {
-
-        let ImagesArray = Object.entries(e.target.files).map((e) =>
-            URL.createObjectURL(e[1])
-        );
-        console.log(ImagesArray);
-        setFile([...file, ...ImagesArray]);
-        console.log("file", file);
-
-        const filess = e.target.files[0];
-        const fileType = filess.type;
-        if (fileType !== 'image/jpeg' && fileType !== 'image/png' && fileType !== 'image/gif' && fileType !== 'image/jpg') {
-            setError('Invalid file type. Only jpg, jpeg, png, and gif are accepted.');
-            return;
-        }
-        setSelectedFile(filess);
-        setError(null);
-    }
-
-
-
-    function upload(e) {
-        e.preventDefault();
-        console.log(file);
-    }
-
     function deleteFile(e) {
         const s = file.filter((item, index) => index !== e);
         setFile(s);
@@ -86,54 +49,49 @@ const ViewTreasure = (props) => {
             >
                 <Button variant="close" onClick={props.onHide}><i className={"fal fa-times"}></i> </Button>
                 <Modal.Body>
-                    <Formik
-                        initialValues={{
-                            // title: props.viewItem.title,
-                            // description: props.viewItem.description,
-                            // latitude: props.viewItem.location.latitude,
-                            // longitude: props.viewItem.location.longitude,
-                            // eventDate: props.viewItem.eventDate,
-                            // "eventTime": props.viewItem.eventTime,
-                            // "status": "pending",
-                            // "no_of_participants": props.viewItem.no_of_participants,
-                            // "a_r": "augmented reality",
-                            // "picture": props.viewItem.picture,
-                        }}
-                    >
-                        {({
+                    <section className={"section"}>
+                        <Form>
+                            <Row className="backGroundColor">
+                                <Col md={4}>
+                                    <Form.Group className={'mb-3'}>
+                                        <Form.Label> <b>Title</b> </Form.Label>
+                                        <Form.Control disabled value={props.viewItem.title} style={{border:'none'}} />
+                                    </Form.Group>
+                                    <Form.Group className={'mb-3'}>
+                                        <Form.Label><b>Description</b></Form.Label>
+                                        <Form.Control as={"textarea"}
+                                                      disabled value={props.viewItem.description}
+                                                      style={{border:'none'}}
+                                        />
+                                    </Form.Group>
+                                    <Form.Group className={'mb-3'}>
+                                        <Form.Label><b>Treasure Location</b></Form.Label>
+                                        <Form.Control className={'mb-2'} disabled value={props.viewItem.location.latitude} style={{border:'none'}}  />
+                                        <Form.Control disabled value={props.viewItem.location.longitude} style={{border:'none'}}  />
+                                    </Form.Group>
+                                </Col>
+                                <Col md={8}>
 
-                            handleChange,
-                            values,
-                            touched,
-                            isValid,
-                            errors,
-                        }) => (
-                            <section className={"section"}>
-                                <Form>
-                                    <Row className="backGroundColor">
-                                        <Col md={4}>
-                                            <Form.Group className={'mb-3'}>
-                                                <Form.Label> <b>Title</b> </Form.Label>
-                                                <Form.Control disabled value={props.viewItem.title} style={{border:'none'}} />
-                                            </Form.Group>
-                                            <Form.Group className={'mb-3'}>
-                                                <Form.Label><b>Description</b></Form.Label>
-                                                <Form.Control as={"textarea"}
-                                                 disabled value={props.viewItem.description}
-                                                 style={{border:'none'}} 
-                                                />
-                                            </Form.Group>
-                                            <Form.Group className={'mb-3'}>
-                                                <Form.Label><b>Treasure Location</b></Form.Label>
-                                                <Form.Control className={'mb-2'} disabled value={props.viewItem.location.latitude} style={{border:'none'}}  />
-                                                <Form.Control disabled value={props.viewItem.location.longitude} style={{border:'none'}}  />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col md={8}>
-                                            <div className={"img-box"}>
-                                                <img src={map1} alt={"img"} />
-                                            </div>
-                                        </Col>
+                                    <div className={"img-box"}>
+                                        <RouteMap
+                                            startingPoint={{
+      lat: props.viewItem["location"]?.latitude,
+      lng: props.viewItem["location"]?.longitude,
+    }}
+                                            endingPoint={props.viewItem["endValue"]}
+                                            travelMode={"WALKING"}
+                                            markers={[{
+                                                position: {
+                                                    lat: parseFloat(props.viewItem["location"]?.latitude),
+                                                    lng: parseFloat(props.viewItem["location"]?.longitude),
+                                                },
+                                                color:'black'
+                                            }]
+                                            }
+                                            zoom={15}
+                                        />
+                                    </div>
+                                </Col>
 
                                 <Col md={12}>
 
@@ -145,30 +103,26 @@ const ViewTreasure = (props) => {
                                                         <Col md={6}>
                                                             <Form.Group>
                                                                 <Form.Label className="mt-3"><b>Sponsors</b></Form.Label>
-                                                                <div className="d-flex">
-                                                               
-                                                                    {(props.viewItem.sponsor[0].img)? <img src={"https://api.gowild.appscorridor.com" + props.viewItem.sponsor[0].img} width="20%" alt={"img"} /> :  <img src={rectangle} width="20%" alt={"img"} /> }
-                                                                
-                                                                    <Form.Control disabled type="text" className={"mb-1 ms-2 mb-md-2"} 
-                                                                    value={props.viewItem.sponsor[0].link}
-                                                                    placeholder="🔗 www.redbull.com" style={{ marginBottom: '0px !important',border:'none' }} />
+                                                                    {props.viewItem?.sponsor.map((formData, index) => (
+                                                                        <div key={index} className="d-flex">
+                                                                            <img src={imageUrl(formData.img,rectangle)} width="20%" alt={"img"} />
+                                                                            <Form.Control disabled type="text" className={"mb-1 ms-2 mb-md-2"}
+                                                                                          value={formData.link}
+                                                                                          placeholder="🔗 www.redbull.com" style={{ marginBottom: '0px !important',border:'none' }} />
+                                                                        </div>
 
-                                                                </div>
-
+                                                                    ))}
                                                             </Form.Group>
                                                         </Col>
                                                         <Col md={5}>
                                                             <Form.Group>
                                                                 <Form.Label className="mt-3"><b>Event Date</b></Form.Label>
                                                                 <Form.Group>
-
                                                                     <p className={"mb-3"}>
                                                                         {(formatDate(props.viewItem.eventDate))}
                                                                     </p>
-
                                                                 </Form.Group>
                                                             </Form.Group>
-
                                                         </Col>
                                                         <Col md={1}>
                                                         </Col>
@@ -205,7 +159,7 @@ const ViewTreasure = (props) => {
                                                     </label> <br />
                                                     <Form.Label className="mt-2"><b>Uploaded Thumbnail</b></Form.Label>
                                                     <p className="text-danger"> {error}</p>
-                                                    <img src={"https://api.gowild.appscorridor.com" +props.viewItem.picture} width="70%" alt={"img"} />
+                                                    <img src={imageUrl(props.viewItem.picture)} width="70%" alt={"img"} />
                                                     {/* <img src={values.picture} width="100%" alt="" /> */}
                                                     <p></p>
 
@@ -240,11 +194,9 @@ const ViewTreasure = (props) => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                    </Row>
-                                </Form>
-                            </section>
-                        )}
-                    </Formik>
+                            </Row>
+                        </Form>
+                    </section>
 
                 </Modal.Body>
             </Modal>

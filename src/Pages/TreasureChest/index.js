@@ -12,6 +12,7 @@ import EditTreasure from './EditTreasureChests';
 import ViewRoute from 'Pages/UserRoute/viewRoute';
 import ViewTreasure from './ViewRoute';
 import profile from "Images/cardsImg.png";
+import {imageUrl} from "../../Helper/Helpers";
 
 
 
@@ -143,13 +144,13 @@ const TreasureChestList = () => {
                     </thead>
                     <tbody>
                         {content.map((item) => (
-                            <tr>
+                            <tr key={item.id}>
                                 <td><Form.Check type="checkbox" value={item}
                                     onChange={() => handleCheckboxChange(item)}
                                     checked={selectedItems.includes(item)} /></td>
 
                                 <td style={{ width: "10%" }}>
-                                   {(item.picture)? <img src={"https://api.gowild.appscorridor.com" + item.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
+                                    <img src={imageUrl(item.picture, profile)} width="100%" alt={"img"} />
                                 </td>
                                 <td>{item.title}</td>
                                 <td>{(formatDate(item.createdDate))}</td>
