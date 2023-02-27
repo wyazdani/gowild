@@ -1,6 +1,29 @@
 // Base64 to Image
-import { BASE_URL} from "../config/constants";
+import {BASE_URL} from "../config/constants";
+import moment from 'moment';
 
+function groupedDays(messages) {
+  return messages.reduce((acc, el, i) => {
+    const messageDay = moment(el.createdDate).format('YYYY-MM-DD');
+    if (acc[messageDay]) {
+      return { ...acc, [messageDay]: acc[messageDay].concat([el]) };
+    }
+    return { ...acc, [messageDay]: [el] };
+  }, {});
+}
+
+export function generateItems(messages) {
+  const days = groupedDays(messages);
+  const sortedDays = Object.keys(days).sort(
+      (x, y) => moment(y, 'YYYY-MM-DD').unix() - moment(x, 'YYYY-MM-DD').unix()
+  );
+  return sortedDays.reduce((acc, date) => {
+    const sortedMessages = days[date].sort(
+        (x, y) => new Date(y.createdDate) - new Date(x.createdDate)
+    );
+    return acc.concat([...sortedMessages, {type: 'day', date, id: date}]);
+  }, []);
+}
 export function imageUrl(str, image='') {
   if (!str){
     return image;

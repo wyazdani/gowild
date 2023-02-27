@@ -131,47 +131,27 @@ const CreateTreasure = () => {
             theme: "dark",
         });
         navigate('/treasure-chests-list');
-
-
-
-            // 2nd API call
-
-
-
-
     };
-
-
-
-
     function uploadSingleFile(e) {
-        // setUploadFile(e.target.files[0])
         setUploadFile({ uploadFile: e.target.files[0] })
         console.log("uploadFile", e.target.files[0])
 
         let ImagesArray = Object.entries(e.target.files).map((e) =>
             URL.createObjectURL(e[1])
         );
-        console.log(ImagesArray);
         setFile([...file, ...ImagesArray]);
-        // console.log("file", file);
     }
 
     //   add input field
     function deleteFile(e) {
         const s = file.filter((item, index) => index !== e);
         setFile(s);
-        console.log(s);
     }
-
-
-
 
     const handleAddField = () => {
         setFields([...fields, { sponsor: '', file: null, imgLink: '' }]);
         setShow(true);
     };
-
     const handleRemoveField = index => {
         const newFields = [...fields];
         newFields.splice(index, 1);
@@ -179,7 +159,6 @@ const CreateTreasure = () => {
     };
 
     const handleChanges = (index, event) => {
-console.log('Reaches Here')
         const newFields = [...fields];
         if (event.target.name === 'file') {
             newFields[index][event.target.name] = URL.createObjectURL(event.target.files[0]);

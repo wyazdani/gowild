@@ -15,12 +15,14 @@ const Support =(props) => {
     const [message, setMessage] = useState([]);
     const [rowUser, setRowUser] = useState(null);
     const [isLoader, setIsLoader] = useState(false);
+    const [selectedChat, setSelectedChat] = useState("");
 
     const supportTickets  = async () => {
         await AuthService.getMethod(ENDPOINT.support.tickets, true,)
             .then(async (res) => {
                 setInbox(res.data)
                 if (res.data?.data.length > 0) {
+                    setSelectedChat(res.data.data[0].id)
                     await ticketMessages(res.data.data[0].id, res.data.data[0])
                 }
             })
@@ -29,6 +31,7 @@ const Support =(props) => {
             });
     };
     const ticketMessages = async (id, row)=> {
+        setSelectedChat(id)
         const url = (ENDPOINT.support.ticket_messages).replace(':id',id);
         await AuthService.getMethod(url, true,)
             .then((res) => {
@@ -46,6 +49,10 @@ const Support =(props) => {
          supportTickets()
     }, []);
 
+    useEffect( () => {
+        //console.log('Selected Chat', selectedChat)
+    }, [selectedChat]);
+
     if (!isLoader) {
         return (
             <div className='loader'>
@@ -58,7 +65,7 @@ const Support =(props) => {
             <PageTitle title={"Support"} />
             <section className={"section"}>
                 <div className={classes.supportblock}>
-                    <Inbox inbox={inbox} ticketMessages={ticketMessages}  />
+                    <Inbox inbox={inbox} ticketMessages={ticketMessages} selectedChat={selectedChat}  />
                     <Messages message={message} rowUser={rowUser}/>
                 </div>
             </section>

@@ -9,12 +9,12 @@ const Inbox = (props) => {
     // const { content } = props;
     const [currentItems, setCurrentItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [selected, setSelected] = useState("");
 
     useEffect(() => {
-        if (props){
-            setCurrentItems(props.inbox?.data)
-        }
-    }, []);
+        setSelected(props.selectedChat)
+        setCurrentItems(props.inbox?.data)
+    },[props]);
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
         setCurrentItems(
@@ -35,7 +35,7 @@ const Inbox = (props) => {
                 </form>
                 <ul>
                     {currentItems.map((data) => (
-                        <li onClick={props.ticketMessages.bind(null,data.id,data)} key={data.id}>
+                        <li onClick={props.ticketMessages.bind(null,data.id,data)} key={data.id} className={`${selected === data.id ? `${classes.active}` : ''}`}>
                             <div className={classes.userImg}>
                                 <img src={imageUrl(data.user?.picture,userImg)} style={{borderRadius: "50%", width:50, height:50}} alt="username"/>
                             </div>

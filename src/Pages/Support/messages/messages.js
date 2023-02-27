@@ -3,7 +3,7 @@ import { Table, Form, Dropdown, Button, Row, Col } from "react-bootstrap";
 import classes from "../index.module.scss";
 import 'react-toastify/dist/ReactToastify.css';
 import userImg from "../../../Images/userImg.png";
-import {get_url_extension, imageUrl, timeSince} from "../../../Helper/Helpers";
+import {generateItems, get_url_extension, imageUrl, timeSince} from "../../../Helper/Helpers";
 import io from 'socket.io-client';
 import {ENDPOINT, SOCKET_URL} from "../../../config/constants";
 import AuthService from "../../../services/auth.service";
@@ -60,8 +60,10 @@ const Messages = (props) => {
             socket.emit('support_users', {ticket_id:props.rowUser?.id})
         }
         if (currentItems.length < (props.message?.data).length) {
-            setCurrentItems([...props.message?.data])
+            const dateFormatted = generateItems(props.message?.data);
+            setCurrentItems([...dateFormatted.reverse()])
         }
+        console.log('Messages', generateItems(props.message?.data))
         socket.on('msgSupport', (data)=>{
             setCurrentItems((prevState) => {
                 if (prevState.some((obj) => obj.id === data.data.id)){
@@ -74,6 +76,11 @@ const Messages = (props) => {
         handleChange(props)
 
     }, [props, currentItems]);
+
+
+    useEffect(() => {
+        messagesEndRef.current.scrollIntoView({ behavior: "auto" });
+    }, [uploadFile]);
 
     // useEffect(() => {
     //     messagesEndRef.current.scrollIntoView({ behavior: "auto" });
@@ -135,7 +142,7 @@ const Messages = (props) => {
                         <div className={classes.description}>
                             <h6>{`${ticket?.user?.firstName} ${ticket?.user?.lastName}`}</h6>
                             <small className={classes.text}>{ticket?.user?.email}</small>
-                            <small className={'text-danger d-block'}>{ticket?.id}</small>
+                            <small className={'text-orange d-block'}>#{ticket?.id}</small>
                         </div>
                     </div>
 
@@ -143,31 +150,38 @@ const Messages = (props) => {
                 <div className={classes.mesgs}>
                     <div className={classes.msghistory}>
                         {currentItems.map((data) => (
-                            <div key={data?.id} className={data?.role==='user'?classes.incoming:classes.outgoing}>
-                                <div className={classes.userImg}>
-                                    <img key={data.id} src={imageUrl(data?.user?.picture,userImg)} alt="username"/>
-                                </div>
-                                <div className={classes.description}>
-                                    {data.message && data.attachment?.length===0 && <div className={classes.text}>{data?.message}
-                                        <div className={classes.time}> {new Date(data.createdDate).toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })}</div>
-                                    </div>}
-                                    {data.attachment?.length>0 && (get_url_extension(imageUrl(data.attachment[0])) ==='png' || get_url_extension(imageUrl(data.attachment[0])) ==='jpg' || get_url_extension(imageUrl(data.attachment[0])) ==='jpeg') &&
-                                        <div className={classes.text}>
-                                            {data?.message}
-                                           <div>
-                                               <div className={classes.fileImg}>
-                                                   <img key={data?.id} src={imageUrl(data.attachment[0])} style={{maxHeight: '50px',}} alt="username"/>
-                                                   <Button type={"button"} variant={'btnDownload'} onClick={() => downloadImage(imageUrl(data.attachment[0]))}><i className={'fal fa-download'}></i> </Button>
-                                               </div>
-                                           </div>
-                                            <div className={classes.time}> {new Date(data.createdDate).toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })}</div>
-                                    </div>}
-                                    {data.attachment?.length>0 && (get_url_extension(imageUrl(data.attachment[0])) ==='pdf' || get_url_extension(imageUrl(data.attachment[0])) ==='txt') &&
-                                        <div className={classes.text}><a className={'btn btn-file'} href={imageUrl(data.attachment[0])} target = "_blank"><i className={'fas fa-file'}></i> </a>
+                            <div key={data?.id}>
+                                {data?.type==='day' && <div className={classes.timeSpan}>
+                                    <time>{new Date(data.date).toLocaleDateString("en-GB", { year: 'numeric', month: 'long', day: 'numeric'})}</time>
+                                </div>}
+                                {data?.type !== 'day' && <div  className={data?.role==='user'?classes.incoming:classes.outgoing}>
+                                    <div className={classes.userImg}>
+                                        <img key={data.id} src={imageUrl(data?.user?.picture,userImg)} alt="username"/>
+                                    </div>
+                                    <div className={classes.description}>
+                                        {data.message && data.attachment?.length===0 && <div className={classes.text}>{data?.message}
                                             <div className={classes.time}> {new Date(data.createdDate).toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })}</div>
                                         </div>}
-                                </div>
+                                        {data.attachment?.length>0 && (get_url_extension(imageUrl(data.attachment[0])) ==='png' || get_url_extension(imageUrl(data.attachment[0])) ==='jpg' || get_url_extension(imageUrl(data.attachment[0])) ==='jpeg') &&
+                                            <div className={classes.text}>
+                                                {data?.message}
+                                                <div>
+                                                    <div className={classes.fileImg}>
+                                                        <img key={data?.id} src={imageUrl(data.attachment[0])} style={{maxHeight: '50px',}} alt="username"/>
+                                                        <Button type={"button"} variant={'btnDownload'} onClick={() => downloadImage(imageUrl(data.attachment[0]))}><i className={'fal fa-download'}></i> </Button>
+                                                    </div>
+                                                </div>
+                                                <div className={classes.time}> {new Date(data.createdDate).toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })}</div>
+                                            </div>}
+                                        {data.attachment?.length>0 && (get_url_extension(imageUrl(data.attachment[0])) ==='pdf' || get_url_extension(imageUrl(data.attachment[0])) ==='txt') &&
+                                            <div className={classes.text}><a className={'btn btn-file'} href={imageUrl(data.attachment[0])} target = "_blank"><img src={pdfImg} width={'28'} alt="img" /> </a>
+                                                <div className={classes.time}> {new Date(data.createdDate).toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })}</div>
+                                            </div>}
+                                    </div>
+                                </div>}
+
                             </div>
+
                         ))}
                         <div className="form-group previewBox">
                             {file.length > 0 &&
