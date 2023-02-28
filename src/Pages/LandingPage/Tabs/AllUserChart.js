@@ -33,7 +33,6 @@ import moment from 'moment';
 //   { name: 'Dec', sales: 3490 },
 // ];
 
-
 const AllUserChart = (props) => {
 
   // // const [state, setState] = useState([]);
@@ -62,7 +61,7 @@ const AllUserChart = (props) => {
   // }, [])
 
 
-  
+
 
   // if (!isLoader) {
   //   return (
@@ -73,26 +72,43 @@ const AllUserChart = (props) => {
   // }
 
 
+
+
   return (
-    <>
-      <div className="BarChart p-3">
-        <ResponsiveContainer width="100%" aspect={2}>
-          <BarChart
-            data={props.content}
-            margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-          >
-            <CartesianGrid stroke="#ccc" strokeDasharray="3 3" />
-            <XAxis dataKey="date"  tickFormatter={(date) => moment(date).format("M-D-YYYY")} />
-            <YAxis />
-            <Tooltip />
-            {/* <Legend /> */}
-            <Bar type="monotone" dataKey="count" barSize={50} fill="#FF7851" />
-            {/* <Bar type="monotone" dataKey="email" barSize={20} fill="#FF7851" /> */}
-          
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-    </>
+      <>
+        <div className="BarChart p-3">
+          <ResponsiveContainer width="100%" aspect={3}>
+            <BarChart
+                data={props.content}
+                margin={{ top: 60, right: 0, left: 0, bottom: 30 }}
+                barSize={20}
+            >
+              <CartesianGrid stroke="#DFE2E5" strokeDasharray="3 3" />
+              <XAxis
+                  dataKey="date"
+                  tickFormatter={(date) => moment(date).format("M-D-YYYY")}
+                  fontSize="12px"
+              />
+              <YAxis
+                  fontSize="12px"
+              />
+              <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'rgba(255,255,255,0.95)',
+                    border: 'none',
+                    boxShadow: '0 0 10px -5px rgba(0,0,0,0.5)',
+                    fontSize: '12px',
+                    borderRadius: '5px',
+                    color: "#000",
+                  }}
+              />
+              <Legend />
+              <Bar type="monotone" dataKey="count" fill="#FF7851" />
+              <text x="45%" y="0" dominantBaseline="hanging" textAnchor="top"  width='100%' fontSize="20" fontWeight="bold">January 2019</text>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </>
   )
 }
 

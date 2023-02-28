@@ -200,7 +200,7 @@ const AllTabData = (props) => {
                                 </td>
                                 <td>
                                     {content.status === 'approved' ? <span class="text-success text-uppercase"><b>Approved</b></span>
-                                        : content.status === 'pending' ? <span class="text-warning  text-uppercase"><b>Pending</b></span>
+                                        : content.status === 'pending' ? <span class="text-warningOrange  text-uppercase"><b>Pending</b></span>
                                             : <span class="text-danger text-uppercase"><b>Rejected</b></span>
                                     }
                                 </td>
