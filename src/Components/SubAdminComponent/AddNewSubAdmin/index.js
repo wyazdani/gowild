@@ -4,7 +4,7 @@ import classes from "../index.module.scss";
 import AuthService from "../../../services/auth.service";
 import { ENDPOINT } from "../../../config/constants";
 import swal from "sweetalert";
-import { Formik } from 'formik';
+import {ErrorMessage, Formik} from 'formik';
 import { object, string } from 'yup';
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
@@ -20,7 +20,7 @@ const AddSubAdmin = (props) => {
     const schema = object().shape({
         firstName: string().required(),
         lastName: string().required(),
-        email: string().lowercase().required(),
+        email: string().lowercase().required().email(),
 
         username: string().required(),
         addressOne: string().required(),
@@ -189,9 +189,9 @@ const AddSubAdmin = (props) => {
                                                         // isValid={touched.email && !errors.email}
                                                         isInvalid={!!errors.email && touched.email}
                                                     />
-                                                    <Form.Control.Feedback type="invalid">
-                                                        {errors.email}
-                                                    </Form.Control.Feedback>
+                                                    <div  className={'invalid'}>
+                                                        <ErrorMessage name="email" />
+                                                    </div>
                                                 </Col>
                                                 <Col md={12} className={"mb-3"}>
                                                     <Form.Label className={"text-orange mb-0"}>Username</Form.Label>
