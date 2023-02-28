@@ -14,6 +14,7 @@ import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {imageUrl} from "../../../Helper/Helpers";
 
 
 const ApproveTabData = (props) => {
@@ -23,7 +24,7 @@ const ApproveTabData = (props) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedItems, setSelectedItems] = useState([]);
     const [isChecked, setIsChecked] = useState(true);
-    
+
     const [editItem, setEditItem] = useState(null);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
@@ -81,7 +82,7 @@ const ApproveTabData = (props) => {
 
     };
 
-        
+
     const rejectUser = async (id) => {
         const objData = {
             "status": "disapprove"
@@ -190,7 +191,7 @@ const ApproveTabData = (props) => {
                             <td>
                                 <div className={"d-flex"}>
                                 <div className={classes.userImg}>
-                                    {(content.user.picture)? <img src={"https://api.gowild.appscorridor.com" + content.user.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
+                                    {(content.user.picture)? <img src={imageUrl(content.user.picture)} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
                                     </div>
                                     <div className={classes.description}>
                                         <h4 className={"font-16 mb-0"}>{content.user.firstName + " " + content.user.lastName}</h4>

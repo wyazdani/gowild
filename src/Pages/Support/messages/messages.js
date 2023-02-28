@@ -63,7 +63,6 @@ const Messages = (props) => {
             const dateFormatted = generateItems(props.message?.data);
             setCurrentItems([...dateFormatted.reverse()])
         }
-        console.log('Messages', generateItems(props.message?.data))
         socket.on('msgSupport', (data)=>{
             setCurrentItems((prevState) => {
                 if (prevState.some((obj) => obj.id === data.data.id)){
@@ -118,16 +117,15 @@ const Messages = (props) => {
     }
     const downloadImage = (url) => {
         var filename = url.substring(url.lastIndexOf('/')+1);
-        const xhr = new XMLHttpRequest()
-        xhr.open('GET', url)
-        xhr.send()
-        xhr.onload = function () {
-            const blob = new Blob([xhr.response], { type: 'image/png' })
-            const a = document.createElement('a')
-            a.href = URL.createObjectURL(blob)
-            a.download = filename
-            a.click()
-        }
+        fetch(url)
+            .then(response => response.blob())
+            .then(blob => {
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = filename;
+                link.click();
+            })
+            .catch(console.error);
     }
 
 

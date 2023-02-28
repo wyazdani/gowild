@@ -10,6 +10,7 @@ import AuthService from "../../../services/auth.service";
 import { ENDPOINT } from "../../../config/constants";
 import swal from "sweetalert";
 import ViewProfilePopup from "../UserComponent/ViewProfile/viewProfilePopup";
+import {imageUrl} from "../../../Helper/Helpers";
 
 const DisableTabData = (props) => {
     const { content } = props;
@@ -65,7 +66,7 @@ const DisableTabData = (props) => {
 
     };
 
-    
+
   // chekbox select all
   const handleCheckboxChange = (content) => {
     if (selectedItems.includes(content)) {
@@ -98,7 +99,7 @@ const DisableTabData = (props) => {
       props.subAdminAllData();
     }
   };
-   
+
 
     return (
         <>
@@ -143,7 +144,7 @@ const DisableTabData = (props) => {
                                     <td>
                                         <div className={"d-flex"}>
                                             <div className={classes.userImg}>
-                                            {(content.picture)? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
+                                            {(content.picture)? <img src={imageUrl(content.picture)} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
                                             </div>
                                             <div className={classes.description}>
                                                 <h4 className={"font-16 mb-0"}>{content.firstName + " " + content.lastName}</h4>
@@ -176,7 +177,7 @@ const DisableTabData = (props) => {
                                                        submitEventForm(content.id)
                                                     }} >Disable User</p> :   <p className="m-0 p-0" onClick={() => {
                                                        submitEventForm(content.id)
-                                                    }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Activate User</p>}   
+                                                    }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Activate User</p>}
                                                 </Dropdown.Item>
                                                 <Dropdown.Item href="#/" onClick={
                                                     () => {
@@ -225,7 +226,7 @@ const DisableTabData = (props) => {
 
                 />
             </div>
-   
+
             <ViewProfilePopup
                subAdminAllData={props.subAdminAllData}
                 show={modalShowView}

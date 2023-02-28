@@ -21,10 +21,9 @@ const EditSubAmdin = (props) => {
         location: string().required(),
         //phoneNo: string().required(),
         birthDate: string().required(),
-        password:  string().required(),
     });
 
-    
+
     const handleSubmit = async  (data) => {
         ENDPOINT.sub_admin.edit_user.id = props.editItem.id;
         delete data['email']
@@ -46,7 +45,7 @@ const EditSubAmdin = (props) => {
                 console.log(res);
                 props.subAdminAllData();
                 setTimeout(() => {
-                    setAddAdmin(props.onHide);          
+                    setAddAdmin(props.onHide);
                   }, 1000);
             })
             .catch((err) => {

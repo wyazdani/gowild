@@ -52,8 +52,11 @@ const Login = () => {
                 fcm_token: user_fcm_token,
             })
             .then((res) => {
-      
+
                 console.log(res);
+                if (res.data?.user?.role?.name === 'user') {
+                    throw new Error('User Not Authorized')
+                }
                 localStorage.setItem("accessToken", JSON.stringify(res.data.accessToken));
                 localStorage.setItem("refreshToken", JSON.stringify(res.data.refreshToken));
                 //localStorage.setItem("token", JSON.stringify(res.data.user));

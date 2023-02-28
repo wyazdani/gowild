@@ -10,6 +10,7 @@ import accessHeader from "services/headers/access-header";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ViewProfilePopup from "../UserComponent/ViewProfile/viewProfilePopup";
+import {imageUrl} from "../../../Helper/Helpers";
 
 
 
@@ -20,7 +21,7 @@ const ActiveTabData = (props) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedItems, setSelectedItems] = useState([]);
     const [isChecked, setIsChecked] = useState(true);
-    
+
     const [modalShow, setModalShow] = useState(false);
     const [modalShowView, setModalShowView] = useState(false);
     const [search, setSearch] = useState("");
@@ -101,7 +102,7 @@ const ActiveTabData = (props) => {
     }
   };
 
-    
+
 
     return (
         <>
@@ -146,7 +147,7 @@ const ActiveTabData = (props) => {
                                     <td>
                                         <div className={"d-flex"}>
                                             <div className={classes.userImg}>
-                                            {(content.picture)? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
+                                            {(content.picture)? <img src={imageUrl(content.picture)} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
                                             </div>
                                             <div className={classes.description}>
                                                 <h4 className={"font-16 mb-0"}>{content.firstName +" "+ content.lastName}</h4>
@@ -179,7 +180,7 @@ const ActiveTabData = (props) => {
                                                        submitEventForm(content.id)
                                                     }} >Disable User</p> :   <p className="m-0 p-0" onClick={() => {
                                                        submitEventForm(content.id)
-                                                    }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Activate User</p>}   
+                                                    }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Activate User</p>}
                                                 </Dropdown.Item>
                                                 <Dropdown.Item href="#/" onClick={
                                                     () => {

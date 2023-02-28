@@ -12,6 +12,7 @@ import accessHeader from "services/headers/access-header";
 import swal from 'sweetalert';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {imageUrl} from "../../../Helper/Helpers";
 
 
 const AllTabData = (props) => {
@@ -158,7 +159,7 @@ const AllTabData = (props) => {
                                     <td>
                                         <div className={"d-flex"}>
                                             <div className={classes.userImg}>
-                                            {(content.picture)? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
+                                            {(content.picture)? <img src={imageUrl(content.picture)} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
                                             </div>
                                             <div className={classes.description}>
                                                 <h4 className={"font-16 mb-0"}>{content.firstName + " " + content.lastName}</h4>
@@ -191,7 +192,7 @@ const AllTabData = (props) => {
                                                        submitEventForm(content.id)
                                                     }} >Disable User</p> :   <p className="m-0 p-0" onClick={() => {
                                                        submitEventForm(content.id)
-                                                    }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Activate User</p>}   
+                                                    }}> <i class="fa fa-check tick" aria-hidden="true"></i>  Activate User</p>}
                                                 </Dropdown.Item>
                                                 <Dropdown.Item href="#/" onClick={
                                                     () => {
@@ -251,7 +252,7 @@ const AllTabData = (props) => {
                 subAdminAllData={props.subAdminAllData}
                 show={modalShow}
                 onHide={() => setModalShow(false)}
-                
+
             />
 
             <ViewProfilePopup
@@ -262,7 +263,7 @@ const AllTabData = (props) => {
 
             />
 
-      
+
 
         </>
     )

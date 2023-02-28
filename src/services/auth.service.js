@@ -252,7 +252,11 @@ const errorMessageHandlerDate = (data) => {
 }
 // this error is showing by wrong email or password in login page
 const errorMessageHandlerLogin = (data) => {
-  if (!data || !data.response || !data.response.data || !data.response.data.errors) {
+    console.log('data',data)
+    if (typeof data === 'string') {
+        return data;
+    }
+  if (!data?.response?.data?.errors) {
     return 'Email Address and/or Password is Incorrect';
   }
   let error = data.response.data.errors.map(function (value) {

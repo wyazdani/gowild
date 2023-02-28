@@ -11,6 +11,7 @@ import map1 from "Images/map1.jpg";
 import rectangle from "Images/Rectangle.png";
 import moment from 'moment';
 import img2 from "Images/chestcpAsset .png";
+import {imageUrl} from "../../../Helper/Helpers";
 
 const EditTreasure = (props) => {
 
@@ -106,7 +107,7 @@ const EditTreasure = (props) => {
         let name = event.target.name;
         setFormData((prevalue) => {
             return {
-                ...prevalue,   // Spread Operator               
+                ...prevalue,   // Spread Operator
                 [name]: value
             }
         })
@@ -174,12 +175,11 @@ const EditTreasure = (props) => {
                 "a_r": "augmented reality",
                 "winnerId": "uuid",
                 "picture": props.editItem.picture,
-                "a_r": "augmented reality",
                 "sponsor": {
                         "img": props.editItem.img,
                         "link":props.editItem.img,
-                    },            
-            }}     
+                    },
+            }}
         >
             {({
                 handleSubmit,
@@ -255,7 +255,7 @@ const EditTreasure = (props) => {
                             <Col md={12}>
                                 <div className={"pt-5"}>
                                 </div>
-                         
+
                                 <Row>
                                 <Col md={12}>
                                     <Row>
@@ -270,7 +270,7 @@ const EditTreasure = (props) => {
                                                                 {fields.map((values, index) => (
                                                                     <div key={index}>
                                                                         <div className="d-flex">
-                                                                            { <img src={"https://api.gowild.appscorridor.com" + props.editItem.sponsor[0].img} width="20%" alt="Preview" />}
+                                                                            { <img src={imageUrl(props.editItem.sponsor[0].img)} width="20%" alt="Preview" />}
                                                                             <input
                                                                                 type="text"
                                                                                 name="link"
@@ -378,10 +378,10 @@ const EditTreasure = (props) => {
                                                         disabled={file.length === 1}
                                                         onChange={uploadSingleFile}
                                                     />
-                                                    
+
                                                         {/* <span>Attach images of thumbnail</span> */}
                                                     </label>
-                                                    <img src={"https://api.gowild.appscorridor.com" +values.picture} width="60%" alt={"img"} />
+                                                    <img src={imageUrl(values.picture)} width="60%" alt={"img"} />
                                                     {/* preview image */}
                                                     {/* <img src={"https://api.gowild.appscorridor.com" + values.picture} width="70%" alt={"img"} /> */}
                                                     <div className="form-group previewBox">

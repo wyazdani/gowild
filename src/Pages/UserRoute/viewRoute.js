@@ -10,6 +10,7 @@ import AuthService from "../../services/auth.service";
 import { ENDPOINT } from "../../config/constants";
 import swal from "sweetalert";
 import { useNavigate , useParams} from "react-router-dom";
+import {imageUrl} from "../../Helper/Helpers";
 
 const ViewRoute = (props) => {
 
@@ -48,7 +49,7 @@ const ViewRoute = (props) => {
     }
 
 
- 
+
     const approveUser = async () => {
         // console.log("1233"+id);
         return AuthService.postMethod(`${ENDPOINT.admin_route.approve}${id}/approve`, true)
@@ -92,7 +93,7 @@ const ViewRoute = (props) => {
             <section className={"section"}>
                 <div className={classes.mapBox}>
                     {/* <img src={mapImg} alt={"map-img"} /> */}
-                    {(user.picture) ? <img src={"https://api.gowild.appscorridor.com" + user.picture} width="100%" alt={"img"} /> : <img src={userImg} width="100%" alt={"img"} />}
+                    {(user.picture) ? <img src={imageUrl(user.picture)} width="100%" alt={"img"} /> : <img src={userImg} width="100%" alt={"img"} />}
                 </div>
                 <ul className={classes.mapDetail}>
                     <li>
@@ -111,7 +112,7 @@ const ViewRoute = (props) => {
                     <li>
                         <div className={classes.userInfo}>
                             <div className={classes.userImg}>
-                                {(user.userPicture) ? <img src={"https://api.gowild.appscorridor.com" + user.userPicture} width="100%" alt={"img"} /> : <img src={userImg} width="100%" alt={"img"} />}
+                                {(user.userPicture) ? <img src={imageUrl(user.userPicture)} width="100%" alt={"img"} /> : <img src={userImg} width="100%" alt={"img"} />}
                             </div>
                             <h6>{user.firstName +" "+ user.lastName}</h6>
                         </div>
@@ -122,7 +123,7 @@ const ViewRoute = (props) => {
                     <Button variant={"success m-3"} onClick={approveUser}>Approve</Button>
                 </div>
             </section>
-    
+
         </>
     )
 }

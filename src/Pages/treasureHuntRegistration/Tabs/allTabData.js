@@ -15,6 +15,7 @@ import profile from "Images/Ellipse 768.png";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PushNotificationPopup from "../pushNotificationPopup";
+import {imageUrl} from "../../../Helper/Helpers";
 
 
 const AllTabData = (props) => {
@@ -25,7 +26,7 @@ const AllTabData = (props) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedItems, setSelectedItems] = useState([]);
     const [isChecked, setIsChecked] = useState(true);
-    
+
     const [editItem, setEditItem] = useState(null);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
@@ -40,7 +41,7 @@ const AllTabData = (props) => {
     useEffect(() => {
         const endOffset = itemOffset + itemsPerPage;
         setCurrentItems(content.slice(itemOffset, endOffset));
-        
+
         setPageCount(Math.ceil(content.length / itemsPerPage));
     }, [itemOffset, itemsPerPage, content]);
 
@@ -54,7 +55,7 @@ const AllTabData = (props) => {
         setItemsPerPage(parseInt(event.target.value))
     };
 
-    
+
     const approveUser = async (id) => {
         const objData = {
             "status": "processing"
@@ -85,7 +86,7 @@ const AllTabData = (props) => {
 
     };
 
-        
+
     const rejectUser = async (id) => {
         const objData = {
             "status": "disapprove"
@@ -239,7 +240,7 @@ const AllTabData = (props) => {
                             <td>
                                 <div className={"d-flex"}>
                                     <div className={classes.userImg}>
-                                    {(content.user.picture)? <img src={"https://api.gowild.appscorridor.com" + content.user.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
+                                    {(content.user.picture)? <img src={imageUrl(content.user.picture)} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
                                     </div>
                                     <div className={classes.description}>
                                         <h4 className={"font-16 mb-0"}>{content.user.firstName +" "+ content.user.lastName}</h4>
@@ -252,7 +253,7 @@ const AllTabData = (props) => {
                             </td>
                             <td>
                                 {content.treasure_chest.status === "pending"
-                                    ?  <span class={`${classes.tag} ${classes.inactive}`}>Inactive</span> 
+                                    ?  <span class={`${classes.tag} ${classes.inactive}`}>Inactive</span>
                                     :  <span class={`${classes.tag} ${classes.active}`}>Active</span>
                                 }
                             </td>
@@ -328,7 +329,7 @@ const AllTabData = (props) => {
 
                 />
             </div>
-        
+
 
             <ViewProfilePopup
                 userRouteAllData={props.userRouteAllData}

@@ -12,6 +12,7 @@ import profile from "Images/Ellipse 768.png";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link , useNavigate} from 'react-router-dom';
+import {imageUrl} from "../../../Helper/Helpers";
 
 const AllTabData = (props) => {
 
@@ -79,8 +80,8 @@ const AllTabData = (props) => {
 
     };
 
-   
-    
+
+
     const rejectUser = async (id) => {
         // console.log("1233"+id);
         return AuthService.postMethod(`${ENDPOINT.admin_route.reject}${id}/reject`, true)
@@ -98,7 +99,7 @@ const AllTabData = (props) => {
     };
 
 
-    
+
       // chekbox select all
   const handleCheckboxChange = (content) => {
     if (selectedItems.includes(content)) {
@@ -117,7 +118,7 @@ const AllTabData = (props) => {
     setSelectedItems([]);
     setIsChecked(!isChecked);
   };
-    
+
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -177,7 +178,7 @@ const AllTabData = (props) => {
                             <td>
                                 <div className={"d-flex"}>
                                     <div className={classes.userImg}>
-                                    {(content.picture)? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
+                                    {(content.picture)? <img src={imageUrl(content.picture)} width="100%" alt={"img"} /> :  <img src={profile} width="100%" alt={"img"} /> }
                                     </div>
                                     <div className={classes.description}>
                                         <h4 className={"font-16 mb-0"}>{content.user?.firstName + " " + content.user?.lastName}</h4>

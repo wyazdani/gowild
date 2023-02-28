@@ -199,21 +199,27 @@ const AddSubAdmin = (props) => {
                                                         type="text"
                                                         name="username"
                                                         value={values.username}
+                                                        required
                                                         onChange={handleChange}
                                                         placeholder="Enter Username"
-                                                        isValid={touched.username && !errors.username}
+                                                        isInvalid={!!errors.username && touched.username}
 
                                                     />
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {errors.username}
+                                                    </Form.Control.Feedback>
                                                 </Col>
                                                 <Col md={12} className={"mb-3"}>
                                                     <Form.Label className={"text-orange mb-0"}>Temporary Password</Form.Label>
                                                     <Form.Control
                                                         type="password"
                                                         name="password"
+                                                        required
                                                         value={values.password}
                                                         onChange={handleChange}
                                                         placeholder="*******"
-                                                        isValid={touched.password && !errors.password}
+                                                        //isValid={touched.password && !errors.password}
+                                                        isInvalid={!!errors.password && touched.password}
 
                                                     />
                                                 </Col>

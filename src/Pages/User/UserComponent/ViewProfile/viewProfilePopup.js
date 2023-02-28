@@ -11,6 +11,7 @@ import { Formik } from 'formik';
 import { object, string } from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {imageUrl} from "../../../../Helper/Helpers";
 
 
 
@@ -72,7 +73,7 @@ const ViewProfilePopup = (props) => {
             });
 
     };
-    
+
     const rejectUser = async (id) => {
         // console.log("1233"+id);
         return  AuthService.postMethod(`${ENDPOINT.admin_user.rejects}${id}/reject`, true)
@@ -197,7 +198,7 @@ const ViewProfilePopup = (props) => {
                                                 isValid={touched.birthDate && !errors.birthDate}
                                             /> : <p className="mt-2"> 02/08/2002 </p>
                                        }
-                                       
+
                                         </Col>
                                     </Row>
                                 </div>
@@ -205,10 +206,10 @@ const ViewProfilePopup = (props) => {
                             <Col md={6}>
                                 <div className={`${classes.box} h-100`}>
                                 <div className={classes.imgBox}>
-                                        {(props.editItem.frontImage)? <img src={"https://api.gowild.appscorridor.com" + props.editItem.frontImage} width="100%" alt={"card1"} /> :  <img src={card1} width="100%" alt={"img"} /> }
+                                        {(props.editItem.frontImage)? <img src={imageUrl(props.editItem.frontImage)} width="100%" alt={"card1"} /> :  <img src={card1} width="100%" alt={"img"} /> }
                                     </div>
                                     <div className={classes.imgBox}>
-                                    {(props.editItem.backImage)? <img src={"https://api.gowild.appscorridor.com" + props.editItem.backImage} width="100%" alt={"card2"} /> :  <img src={card2} width="100%" alt={"img"} /> }
+                                    {(props.editItem.backImage)? <img src={imageUrl(props.editItem.backImage)} width="100%" alt={"card2"} /> :  <img src={card2} width="100%" alt={"img"} /> }
                                     </div>
                                 </div>
                             </Col>
@@ -226,7 +227,7 @@ const ViewProfilePopup = (props) => {
                     </Formik>
                 </Modal.Body>
             </Modal>
-    
+
         </>
     )
 }

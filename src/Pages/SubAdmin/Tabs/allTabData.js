@@ -11,6 +11,7 @@ import ReactPaginate from 'react-paginate';
 import profile from "Images/routelist.png";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {imageUrl} from "../../../Helper/Helpers";
 
 const AllTabData = (props) => {
 
@@ -163,7 +164,7 @@ const AllTabData = (props) => {
                                 <td>
                                     <div className={"d-flex"}>
                                         <div className={classes.userImg}>
-                                            {(content.picture) ? <img src={"https://api.gowild.appscorridor.com" + content.picture} width="100%" alt={"img"} /> : <img src={profile} width="100%" alt={"img"} />}
+                                            {(content.picture) ? <img src={imageUrl(content.picture)} width="100%" alt={"img"} /> : <img src={profile} width="100%" alt={"img"} />}
                                         </div>
                                         <div className={classes.description}>
                                             <h4 className={"font-16 mb-0"}>{content.firstName + " " + content.lastName}</h4>
@@ -177,7 +178,7 @@ const AllTabData = (props) => {
                                         : <span className={`${classes.tag} ${classes.inactive} text-default `}>Inactive </span>
                                     }
                                 </td>
-                                <td>{content.firstName}</td>
+                                <td>{content.username}</td>
                                 <td>
                                     {content.accountStatus === "active"
                                         ? <span className="text-success ">  <b>ACTIVE</b></span>

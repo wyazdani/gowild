@@ -11,6 +11,7 @@ import { Formik } from 'formik';
 import { object, string } from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {imageUrl} from "../../../Helper/Helpers";
 
 
 
@@ -204,10 +205,10 @@ const ViewProfilePopup = (props) => {
                                     <Col md={6}>
                                         <div className={`${classes.box} h-100`}>
                                             <div className={classes.imgBox}>
-                                                {(props.editItem.user.frontImage) ? <img src={"https://api.gowild.appscorridor.com" + props.editItem.user.frontImage} width="100%" alt={"card1"} /> : <img src={card1} width="100%" alt={"img"} />}
+                                                {(props.editItem.user.frontImage) ? <img src={imageUrl(props.editItem.user.frontImage)} width="100%" alt={"card1"} /> : <img src={card1} width="100%" alt={"img"} />}
                                             </div>
                                             <div className={classes.imgBox}>
-                                                {(props.editItem.user.backImage) ? <img src={"https://api.gowild.appscorridor.com" + props.editItem.user.backImage} width="100%" alt={"card2"} /> : <img src={card2} width="100%" alt={"img"} />}
+                                                {(props.editItem.user.backImage) ? <img src={imageUrl(props.editItem.user.backImage)} width="100%" alt={"card2"} /> : <img src={card2} width="100%" alt={"img"} />}
                                             </div>
                                         </div>
                                     </Col>

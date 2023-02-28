@@ -43,9 +43,9 @@ const Inbox = (props) => {
                                 <h6>{`${data.user?.firstName} ${data.user?.lastName}`}</h6>
                                 {data.message && <div className="text-muted">
                                     <time>{timeSince(Date.parse(data.message?.createdDate))}</time>
-                                    <div className={classes.text}>
-                                        {data.message?.message}
-                                    </div>
+                                    {/*<div className={classes.text}>*/}
+                                    {/*    {data.message?.message}*/}
+                                    {/*</div>*/}
                                 </div>}
 
                                 {data.unread_message_count>0 && <span className={classes.counter}>{data.unread_message_count}</span>}

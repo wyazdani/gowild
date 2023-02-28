@@ -11,6 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditSubAmdin from "Components/SubAdminComponent/EditSubAdmin";
 import AddSubAdmin from "../../../Components/SubAdminComponent/AddNewSubAdmin";
+import {imageUrl} from "../../../Helper/Helpers";
 
 const InActiveTabData = (props) => {
   const { content } = props;
@@ -164,8 +165,7 @@ const InActiveTabData = (props) => {
                     {content.picture ? (
                       <img
                         src={
-                          "https://api.gowild.appscorridor.com" +
-                          content.picture
+                          imageUrl(content.picture)
                         }
                         width="100%"
                         alt={"img"}
@@ -195,7 +195,7 @@ const InActiveTabData = (props) => {
                   </span>
                 )}
               </td>
-              <td>{content.firstName}</td>
+              <td>{content.username}</td>
               <td>
                 {content.accountStatus === "active" ? (
                   <span className="text-success ">
