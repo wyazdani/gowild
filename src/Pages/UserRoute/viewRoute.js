@@ -11,6 +11,7 @@ import { ENDPOINT } from "../../config/constants";
 import swal from "sweetalert";
 import { useNavigate , useParams} from "react-router-dom";
 import {imageUrl} from "../../Helper/Helpers";
+import RouteMap from "../RoutelistPage/RouteMap";
 
 const ViewRoute = (props) => {
 
@@ -92,8 +93,33 @@ const ViewRoute = (props) => {
             <PageTitle title="Wall Street" />
             <section className={"section"}>
                 <div className={classes.mapBox}>
+                    <div className={"img-box"}>
+                        <RouteMap
+                            startingPoint={{
+                                lat: user.start.latitude,
+                                lng: user.start.longitude,
+                            }}
+                            travelMode={"WALKING"}
+                            markers={[{
+                                position: {
+                                    lat: parseFloat(user.start.latitude),
+                                    lng: parseFloat(user.start.longitude),
+                                },
+                                color:'black'
+                            },
+                            {
+                                position: {
+                                    lat: parseFloat(user.end.latitude),
+                                    lng: parseFloat(user.end.longitude),
+                                },
+                                color:'red'
+                            }]
+                            }
+                            zoom={18}
+                        />
+                    </div>
                     {/* <img src={mapImg} alt={"map-img"} /> */}
-                    {(user.picture) ? <img src={imageUrl(user.picture)} width="100%" alt={"img"} /> : <img src={userImg} width="100%" alt={"img"} />}
+                    {/*{(user.picture) ? <img src={imageUrl(user.picture)} width="100%" alt={"img"} /> : <img src={userImg} width="100%" alt={"img"} />}*/}
                 </div>
                 <ul className={classes.mapDetail}>
                     <li>
