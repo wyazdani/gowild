@@ -39,7 +39,7 @@ const LandingPage = () => {
                     date: moment(item.date).format('MM-DD-YYYY')
                 })));
                 // 2nd online user data
-                setOnlineContent(res.data?.activeUsers.map(item => ({
+                setOnlineContent(res.data?.onlineUsers.map(item => ({
                     ...item,
                     date: moment(item.date).format('MM-DD-YYYY')
                 })));
