@@ -17,7 +17,7 @@ const EditSubAmdin = (props) => {
         firstName: string().required(),
         lastName: string().required(),
         email: string().required(),
-        userName: string().required(),
+        username: string().required(),
         location: string().required(),
         //phoneNo: string().required(),
         birthDate: string().required(),
@@ -74,7 +74,7 @@ const EditSubAmdin = (props) => {
                             firstName: props.editItem.firstName,
                             lastName: props.editItem.lastName,
                             email: props.editItem.email,
-                            userName: props.editItem.username,
+                            username: props.editItem.username,
                             location: props.editItem.location,
                             birthDate: props.editItem.dateOfBirth,
                             //phoneNo: props.editItem.phoneNo,
@@ -100,10 +100,12 @@ const EditSubAmdin = (props) => {
                                                     <Form.Control
                                                         type="text"
                                                         name="firstName"
+                                                        required
                                                         value={values.firstName}
                                                         onChange={handleChange}
                                                         placeholder="Enter First Name"
                                                         isValid={touched.firstName && !errors.firstName}
+                                                        isInvalid={!!errors.firstName && touched.firstName}
                                                     />
                                                 </Col>
                                                 <Col md={12} className={"mb-3"}>
@@ -111,10 +113,12 @@ const EditSubAmdin = (props) => {
                                                     <Form.Control
                                                         type="text"
                                                         name="lastName"
+                                                        required
                                                         value={values.lastName}
                                                         onChange={handleChange}
                                                         placeholder="Enter Last name"
                                                         isValid={touched.lastName && !errors.lastName}
+                                                        isInvalid={!!errors.lastName && touched.lastName}
                                                     />
                                                 </Col>
                                                 <Col md={6} className={"mb-3"}>
@@ -122,10 +126,12 @@ const EditSubAmdin = (props) => {
                                                     <Form.Control
                                                         type="date"
                                                         name="birthDate"
+                                                        required
                                                         value={values.birthDate}
                                                         onChange={handleChange}
                                                         placeholder="00/00/0000"
                                                         isValid={touched.birthDate && !errors.birthDate}
+                                                        isInvalid={!!errors.birthDate && touched.birthDate}
 
                                                     />
                                                 </Col>
@@ -148,9 +154,10 @@ const EditSubAmdin = (props) => {
                                                         name="location"
                                                         value={values.location}
                                                         onChange={handleChange}
+                                                        required
                                                         placeholder="Address"
                                                         isValid={touched.location && !errors.location}
-
+                                                        isInvalid={!!errors.location && touched.location}
                                                     />
                                                 </Col>
                                             </Row>
@@ -177,11 +184,13 @@ const EditSubAmdin = (props) => {
                                                     <Form.Label className={"text-orange mb-0"}>Username</Form.Label>
                                                     <Form.Control
                                                         type="text"
-                                                        name="userName"
-                                                        value={values.userName}
+                                                        name="username"
+                                                        required
+                                                        value={values.username}
                                                         onChange={handleChange}
                                                         placeholder="Enter Username"
-                                                        isValid={touched.userName && !errors.userName}
+                                                        isValid={touched.username && !errors.username}
+                                                        isInvalid={!!errors.username && touched.username}
 
                                                     />
                                                 </Col>

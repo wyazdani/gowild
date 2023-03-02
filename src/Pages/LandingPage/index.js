@@ -34,17 +34,17 @@ const LandingPage = () => {
             .then((res) => {
                 // console.log("🚀 ~ file: index.js:35 ~ .then ~ res", res.data.onlineUsers)
                 // 1st all user data
-                setContent(res.data.newUsers.map(item => ({
+                setContent(res.data?.newUsers.map(item => ({
                     ...item,
                     date: moment(item.date).format('MM-DD-YYYY')
                 })));
                 // 2nd online user data
-                setOnlineContent(res.data.onlineUsers.map(item => ({
+                setOnlineContent(res.data?.activeUsers.map(item => ({
                     ...item,
                     date: moment(item.date).format('MM-DD-YYYY')
                 })));
                 // // 3rd banned user data
-                setBannedContent(res.data.bannedUsers.map(item => ({
+                setBannedContent(res.data?.bannedUsers.map(item => ({
                     ...item,
                     date: moment(item.date).format('MM-DD-YYYY')
                 })));
