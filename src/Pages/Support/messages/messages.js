@@ -33,6 +33,8 @@ const Messages = (props) => {
         } else if (file.length>0){
             let data = new FormData();
             data.append('file', uploadFile);
+            setFile([]);
+            setUploadFile(null)
             await uploadAttachment(id, data)
         }
     };
@@ -44,8 +46,7 @@ const Messages = (props) => {
         const url = (ENDPOINT.support.upload_attachment).replace(':id',id);
         await AuthService.postMethod(url, true,data)
             .then((res) => {
-                setFile([]);
-                setUploadFile(null)
+
                 socket.emit('supportFileTrigger', res.data)
             })
             .catch((err) => {
