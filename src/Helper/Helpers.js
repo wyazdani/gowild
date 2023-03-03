@@ -62,3 +62,27 @@ export function timeSince(date) {
 export function get_url_extension( url ) {
   return url.split(/[#?]/)[0].split('.').pop().trim();
 }
+
+export function isFloat(value) {
+  return /^-?\d*(\.\d+)?$/.test(value);
+}
+
+export function isNumeric(value) {
+  return /^-?(0|\d+(\.\d*)?|\.\d+|\d+\.)$/.test(value);
+}
+
+export function isNumericValue(value) {
+  if (isNumeric(value)) {
+    return value
+  } else {
+    if (isNumeric(value.slice(0,-1))) {
+      return value.slice(0,-1)
+    } else {
+      return 'E'
+    }
+  }
+}
+
+export function isDecimal(value) {
+  return /^\d+(\.\d+)?$/.test(value);
+}

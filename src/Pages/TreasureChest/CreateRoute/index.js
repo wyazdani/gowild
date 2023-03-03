@@ -13,6 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import moment from 'moment';
 import RouteMap from "../../RoutelistPage/RouteMap";
+import {isDecimal, isFloat, isNumeric, isNumericValue} from "../../../Helper/Helpers";
 
 
 
@@ -58,6 +59,7 @@ const CreateTreasure = () => {
         console.log('id', id)
     },[fields, id]);
     const handleChange = (event) => {
+
         let value = event.target.value;
         let name = event.target.name;
         setFormData((prevalue) => {
@@ -67,6 +69,19 @@ const CreateTreasure = () => {
             }
         })
 
+
+    }
+    const isNumericHandle = (event) => {
+        console.log(event.target.name)
+        console.log(isNumeric(event.target.value))
+        let value = isNumericValue(event.target.value)
+        let name = event.target.name;
+        setFormData((prevalue) => {
+            return {
+                ...prevalue,   // Spread Operator
+                [name]: value
+            }
+        })
     }
 
 
@@ -159,6 +174,7 @@ const CreateTreasure = () => {
     };
 
     const handleChanges = (index, event) => {
+
         const newFields = [...fields];
         if (event.target.name === 'file') {
             newFields[index][event.target.name] = URL.createObjectURL(event.target.files[0]);
@@ -196,13 +212,13 @@ const CreateTreasure = () => {
                                     name="latitude"
                                     required
                                     value={formData.latitude}
-                                    onChange={handleChange}
+                                    onChange={isNumericHandle}
                                     className={"mb-3"} placeholder="65.5234°" />
                                 <Form.Control type="text"
                                     name="longitude"
                                     required
                                     value={formData.longitude}
-                                    onChange={handleChange}
+                                    onChange={isNumericHandle}
                                     className={"mb-3"} placeholder="1.12378°" />
                             </Form.Group>
 

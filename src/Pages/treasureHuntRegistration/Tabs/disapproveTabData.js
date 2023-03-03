@@ -13,6 +13,7 @@ import swal from 'sweetalert';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {imageUrl} from "../../../Helper/Helpers";
+import Pagination from "../../../Components/Pagination/Pagination";
 
 
 const DisapproveTabData = (props) => {
@@ -41,14 +42,12 @@ const DisapproveTabData = (props) => {
     }, [itemOffset, itemsPerPage, content]);
 
 
-    const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % content.length;
-        setItemOffset(newOffset);
-    };
-
-    const handleRowsPerPageChange = (event) => {
-        setItemsPerPage(parseInt(event.target.value))
-    };
+    const handlePagination = (offset) => {
+        setCurrentItems(content.slice(offset, (offset + itemsPerPage)));
+    }
+    const handleItemsPerPage = (value) => {
+        setItemsPerPage(parseInt(value))
+    }
 
 
     const approveUser = async (id) => {
@@ -180,7 +179,7 @@ const DisapproveTabData = (props) => {
                 </thead>
                 <tbody>
                     {currentItems.map((content) => (
-                            <tr>
+                            <tr key={content.id}>
                                 <td><Form.Check type="checkbox" value={content}
                                     onChange={() => handleCheckboxChange(content)}
                                     checked={selectedItems.includes(content)} />
@@ -247,36 +246,7 @@ const DisapproveTabData = (props) => {
                 </tbody>
             </Table>
 
-            <div className="result_pagination">
-                <span> Rows per page: &nbsp; </span>
-                <select onChange={handleRowsPerPageChange} value={itemsPerPage}>
-                    {/* <option>{currentItems.length}</option> */}
-                    {/* {currentItems.length === 4 ? null  :<option value={4}>4</option>} */}
-                    <option value={10}>10</option>
-                    <option value={25}>25</option>
-                    <option value={50}>50</option>
-                    <option value={75}>75</option>
-                </select> <i className="fa fa-sort-desc" aria-hidden="true"></i>
-
-                {/* <span className="mx-4"> {currentItems.length} - {content.length} of {content.length} </span> */}
-                <span className="mx-5"> {pageCount} - {currentItems.length}  of {content.length} </span>
-                <ReactPaginate
-                    breakLabel="..."
-                    nextLabel="  >"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={2}
-                    pageCount={pageCount}
-                    rowsPerPage={itemsPerPage}
-                    previousLabel="<"
-                    renderOnZeroPageCount={null}
-                    containerClassName="pagination"
-                    pageLinkClassName="page-num"
-                    previousLinkClassName="page-num"
-                    nextLinkClassName="page-num"
-                    activeLinkClassName="active"
-
-                />
-            </div>
+            <Pagination onPageChange={handlePagination} pageSize={itemsPerPage} totalRecords={content.length} handlePageSize={handleItemsPerPage}/>
 
 
             <AddSubAdmin
