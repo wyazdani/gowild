@@ -4,21 +4,22 @@ import { useGoogleMaps } from "react-hook-google-maps";
 import {GOOGLE_KEY} from "../../../config/constants";
 
 export default function RouteMap({
-  markers,
-  startingPoint,
-  endingPoint,
-  travelMode,
-  handleAddRow,
-  updateStartEndPosition,
-  preRenderMarkers = false,
-  zoom = 3,
-}) {
+                                   markers,
+                                   startingPoint,
+                                   endingPoint,
+                                   travelMode,
+                                   handleAddRow,
+                                   updateStartEndPosition,
+                                   preRenderMarkers = false,
+                                   zoom = 3,
+                                   panIn = false
+                                 }) {
   const { ref, map, google } = useGoogleMaps(
-    GOOGLE_KEY,
-    {
-      zoom: zoom,
-      center: startingPoint,
-    }
+      GOOGLE_KEY,
+      {
+        zoom: zoom,
+        center: startingPoint,
+      }
   );
   const [oldMarkers, setOldMarkers] = useState([]);
   const [directions, setDirections] = useState(null);
@@ -108,13 +109,13 @@ export default function RouteMap({
     }
   }
   const Marker = ({
-    index,
-    position,
-    map,
-    color,
-    onPositionChange,
-    onRemove,
-  }) => {
+                    index,
+                    position,
+                    map,
+                    color,
+                    onPositionChange,
+                    onRemove,
+                  }) => {
     setTimeout(function () {
       if (oldMarkers.length<100) {
         const marker = new window.google.maps.Marker({
@@ -129,6 +130,10 @@ export default function RouteMap({
             strokeWeight: 0,
           },
         });
+        if (panIn) {
+          map.setZoom(17);
+          map.panTo(marker.position);
+        }
         setOldMarkers((prevState) => [...prevState, marker]);
       }
 
@@ -139,18 +144,18 @@ export default function RouteMap({
   };
 
   return (
-    <>
-      <div style={{ height: "100vh", width: "100%" }}>
-        <div ref={ref} style={{ height: "100vh", width: "100%" }} />
-        {mapMarkers.length>0 && mapMarkers.map((marker, index) => (
-          <Marker
-            key={index}
-            position={marker.position}
-            map={map}
-            color={marker.color}
-          />
-        ))}
-      </div>
-    </>
+      <>
+        <div style={{ height: "100vh", width: "100%" }}>
+          <div ref={ref} style={{ height: "100vh", width: "100%" }} />
+          {mapMarkers.length>0 && mapMarkers.map((marker, index) => (
+              <Marker
+                  key={index}
+                  position={marker.position}
+                  map={map}
+                  color={marker.color}
+              />
+          ))}
+        </div>
+      </>
   );
 }

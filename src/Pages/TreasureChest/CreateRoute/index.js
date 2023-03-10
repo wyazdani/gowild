@@ -229,6 +229,7 @@ const CreateTreasure = () => {
                                     startingPoint={startingPoint}
                                     travelMode={"WALKING"}
                                     markers={markers}
+                                    panIn={true}
                                 />
                             </div>
                         </Col>

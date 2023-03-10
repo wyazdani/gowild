@@ -30,6 +30,7 @@ const CreateRoute = () => {
   const [inputFields, setInputFields] = useState([]);
   const [markers, setMarkers] = useState([]);
   const [routesData, setRoutesData] = useState({});
+  const [validRouteFlag, setValidRouteFlag] = useState(false);
   const [customRoutesData, setCustomRoutesData] = useState({
     title: "",
     description: "",
@@ -138,7 +139,10 @@ const CreateRoute = () => {
       event.preventDefault();
       event.stopPropagation();
       setValidated(true);
-    } else {
+    } else if(!validRouteFlag) {
+      swal("Error", 'Invalid Route Entered', "error");
+    }
+    else {
       const payloadHistorical = [];
       setShowButton(false);
       for (const data of historicalData) {
@@ -301,8 +305,19 @@ const CreateRoute = () => {
           const corsAnywhereUrl = `https://cors.appscorridor.com/${url}`;
           axios.get(corsAnywhereUrl)
               .then(response => {
-                console.log(response.data)
-                setDirectionsData(response.data);
+                if (response.data.status === "ZERO_RESULTS") {
+                  setMarkers([])
+                  setTimeout(() => {
+                    setMarkers([])
+                  }, 1000);
+                  updateCustomRouteKey('addedToMap', false)
+                  setValidRouteFlag(false)
+                  swal("Error", 'Invalid Route Entered', "error");
+                }else {
+                  setValidRouteFlag(true)
+                  setDirectionsData(response.data);
+                }
+
               })
               .catch(error => console.error(error));
         }
