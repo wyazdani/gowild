@@ -303,28 +303,27 @@ useEffect(() => {
       (startPos, endPos) => {
         setStartingPoint(startPos);
         setEndingPoint(endPos);
-        if (directionsData == null) {
-          const origin = `${startPos.lat}, ${startPos.lng}`;
-          const destination = `${endPos.lat}, ${endPos.lng}`;
-          const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${GOOGLE_KEY}`;
-          const corsAnywhereUrl = `https://cors.appscorridor.com/${url}`;
-          axios.get(corsAnywhereUrl)
-              .then(response => {
-                if (response.data.status === "ZERO_RESULTS") {
+        const origin = `${startPos.lat}, ${startPos.lng}`;
+        const destination = `${endPos.lat}, ${endPos.lng}`;
+        const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${GOOGLE_KEY}`;
+        const corsAnywhereUrl = `https://cors.appscorridor.com/${url}`;
+        axios.get(corsAnywhereUrl)
+            .then(response => {
+              if (response.data.status === "ZERO_RESULTS") {
+                setMarkers([])
+                setTimeout(() => {
                   setMarkers([])
-                  setTimeout(() => {
-                    setMarkers([])
-                  }, 1000);
-                  updateCustomRouteKey('addedToMap', false)
-                  setValidRouteFlag(false)
-                  swal("Error", 'Invalid Route Entered', "error");
-                }else {
-                  setValidRouteFlag(true)
-                  setDirectionsData(response.data);
-                }
-              })
-              .catch(error => console.error(error));
-        }
+                }, 1000);
+                updateCustomRouteKey('addedToMap', false)
+                setValidRouteFlag(false)
+                swal("Error", 'Invalid Route Entered', "error");
+              }else {
+                setValidRouteFlag(true)
+                console.log(response.data)
+                setDirectionsData(response.data);
+              }
+            })
+            .catch(error => console.error(error));
       },
       [startingPoint, endingPoint]
   );
