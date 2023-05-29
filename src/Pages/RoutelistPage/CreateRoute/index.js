@@ -18,8 +18,32 @@ import RouteMap from "../RouteMap";
 import Accordion from 'react-bootstrap/Accordion';
 import axios from "axios";
 import {object, string} from "yup";
-
+import RouteMapBox from "../MapBox";
 const CreateRoute = () => {
+
+  const coordinates = [
+    [-122.483696, 37.833818],
+    [-122.483482, 37.833174],
+    [-122.483396, 37.8327],
+    [-122.483568, 37.832056],
+    [-122.48404, 37.831141],
+    [-122.48404, 37.830497],
+    [-122.483482, 37.82992],
+    [-122.483568, 37.829548],
+    [-122.48507, 37.829446],
+    [-122.4861, 37.828802],
+    [-122.486958, 37.82931],
+    [-122.487001, 37.830802],
+    [-122.487516, 37.831683],
+    [-122.488031, 37.832158],
+    [-122.488889, 37.832971],
+    [-122.489876, 37.832632],
+    [-122.490434, 37.832937],
+    [-122.49125, 37.832429],
+    [-122.491636, 37.832564],
+    [-122.492237, 37.833378],
+    [-122.493782, 37.833683]
+  ]
   const addHistoryBtnRef = useRef(null);
   const navigate = useNavigate();
   const [file, setFile] = useState([]);
@@ -454,7 +478,10 @@ const CreateRoute = () => {
     setFile(s);
     updateCustomRouteKey('picture', '')
   }
-
+  const findMiddleElement = (arr) => {
+    const middleIndex = Math.floor(arr.length / 2);
+    return arr[middleIndex];
+  };
   const deleteHistoricalFile = (index, imageIndex) => {
     const newRows = [...historicalData];
     const newFiles = [...files];
@@ -479,14 +506,8 @@ const CreateRoute = () => {
           <section className={"section"}>
             <Row>
               <Col md={12}>
-                <div className={"mapImgBox"}>
-                  <RouteMap
-                      markers={markers}
-                      startingPoint={startingPoint}
-                      endingPoint={endingPoint}
-                      travelMode={"WALKING"}
-                      handleAddRow={handleAddRow}
-                      updateStartEndPosition={updateStartEndPosition}
+                <div className={"mapImgBox"} id="map-container">
+                  <RouteMapBox coordinates={coordinates} center={findMiddleElement(coordinates)} zoom={15}
                   />
                 </div>
               </Col>
@@ -501,41 +522,51 @@ const CreateRoute = () => {
                 <div>
                   <Row>
                     <Col lg={8}>
-                      <Row>
-                        <Col lg={6}>
-                          <Form.Group>
-                            <Form.Label>
-                              Starting Longitude
-                            </Form.Label>
-                            <Form.Control
-                                type="text"
-                                className={"mb-3"}
-                                name="startLongitude"
-                                required
-                                value={customRoutesData.startLongitude}
-                                onChange={handleCustomRoute}
-                                placeholder="longitude"
-                            />
-                            <Form.Control.Feedback type="invalid">
-                              Field is required.
-                            </Form.Control.Feedback>
-                          </Form.Group>
+                      <div className={'addBtnRow'}>
+                        <Row>
+                          <Col lg={6}>
+                            <Form.Group>
+                              <Form.Label>
+                                Starting Longitude
+                              </Form.Label>
+                              <Form.Control
+                                  type="text"
+                                  className={"mb-3"}
+                                  name="startLongitude"
+                                  required
+                                  value={customRoutesData.startLongitude}
+                                  onChange={handleCustomRoute}
+                                  placeholder="longitude"
+                              />
+                              <Form.Control.Feedback type="invalid">
+                                Field is required.
+                              </Form.Control.Feedback>
+                            </Form.Group>
+                          </Col>
+                          <Col lg={6}>
+                            <Form.Group>
+                              <Form.Label>
+                                Starting Latitude
+                              </Form.Label>
+                              <Form.Control
+                                  type="text"
+                                  className={"mb-3"}
+                                  name="startLatitude"
+                                  required
+                                  value={customRoutesData.startLatitude}
+                                  onChange={handleCustomRoute}
+                                  placeholder="latitude"
+                              />
+                            </Form.Group>
+                          </Col>
+                        </Row>
+                        <div className={'btnGroup'}>
+                          <Button><i className={"fal fa-plus"}></i></Button>
+                          <Button className={'delete'}><i className={"fal fa-times"}></i></Button>
+                        </div>
+                      </div>
 
-                          <Form.Group>
-                            <Form.Label>
-                              Starting Latitude
-                            </Form.Label>
-                            <Form.Control
-                                type="text"
-                                className={"mb-3"}
-                                name="startLatitude"
-                                required
-                                value={customRoutesData.startLatitude}
-                                onChange={handleCustomRoute}
-                                placeholder="latitude"
-                            />
-                          </Form.Group>
-                        </Col>
+                      <Row>
                         <Col lg={6}>
                           <Form.Group>
                             <Form.Label>

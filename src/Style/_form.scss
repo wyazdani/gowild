@@ -428,4 +428,32 @@ input[type='search']{
   background-position: 12px 14px;
   padding-left: 50px;
 }
+.addBtnRow{
+  position: relative;
+  padding: 0 120px 0 0;
+
+  .btnGroup{
+    position: absolute;
+    bottom: 15px;
+    right: 0;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 15px;
+    overflow: hidden;
+    width: 105px;
+
+    button{
+      border-radius: 0;
+      margin: 1px;
+      padding: 0;
+      width: 50px;
+      border: none;
+      flex: 1 0 auto;
+
+      &.delete{
+        background: #f00;
+      }
+    }
+  }
+}
 
