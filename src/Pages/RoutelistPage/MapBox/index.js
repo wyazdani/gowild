@@ -1,20 +1,42 @@
-import React, {useEffect} from "react";
+import 'mapbox-gl/dist/mapbox-gl.css';
+import React, {useEffect, useRef} from "react";
 import mapboxgl from 'mapbox-gl';
 mapboxgl.accessToken = 'pk.eyJ1Ijoid3lhemRhbmkiLCJhIjoiY2xmdDhvemN4MGR2NjNuc2NhYW9xZzlkaiJ9.osl4j8gDf_Mw6jrvEE98FA';
+
 export default function RouteMapBox({
                                         coordinates,
-                                        zoom = 14,
-                                        center
+                                        zoom = 6,
+                                        center,
+                                        historicalCoordinates = []
                                     }) {
-    const mapContainer = React.useRef(null);
+    const mapContainer = useRef(null);
+    const mapInstance = useRef(null);
     useEffect(() => {
-        const map = new mapboxgl.Map({
-            container: mapContainer.current.id,
-// Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-            style: 'mapbox://styles/mapbox/outdoors-v12',
-            center: center,
-            zoom: zoom
-        });
+
+        if (coordinates.length === 0) {
+            zoom = 5;
+        }
+        // if (mapInstance.current) {
+        //     mapInstance.current.remove();
+        // }
+        if (!mapInstance.current) {
+            mapInstance.current = new mapboxgl.Map({
+                container: mapContainer.current,
+                style: 'mapbox://styles/mapbox/streets-v12',
+                center: center,
+                zoom: zoom
+            });
+        } else {
+
+            mapInstance.current.remove();
+
+            mapInstance.current = new mapboxgl.Map({
+                container: mapContainer.current,
+                style: 'mapbox://styles/mapbox/streets-v12',
+                center: center,
+                zoom: zoom
+            });
+        }
 
         const featureList = [];
         featureList.push({
@@ -25,17 +47,21 @@ export default function RouteMapBox({
                 'coordinates': coordinates
             }
         });
-        coordinates.forEach((coordinate) => {
-            featureList.push({
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': coordinate
-                }
-            });
-        });
-        map.on('load', () => {
-            map.addSource('route', {
+
+        mapInstance.current.on('load', () => {
+            coordinates.map((coordinate) =>
+
+                new mapboxgl.Marker({color:'#fffff'})
+                    .setLngLat(coordinate)
+                    .addTo(mapInstance.current)
+            );
+            historicalCoordinates.map((coordinate) =>
+
+                new mapboxgl.Marker({color:'#ffff80'})
+                    .setLngLat(coordinate)
+                    .addTo(mapInstance.current)
+            );
+            mapInstance.current.addSource('route', {
                 'type': 'geojson',
                 'data': {
                     'type': 'FeatureCollection',
@@ -43,7 +69,7 @@ export default function RouteMapBox({
 
                 }
             });
-            map.addLayer({
+            mapInstance.current.addLayer({
                 'id': 'route',
                 'type': 'line',
                 'source': 'route',
@@ -57,7 +83,7 @@ export default function RouteMapBox({
                 },
                 'filter': ['==', '$type', 'LineString']
             });
-            map.addLayer({
+            mapInstance.current.addLayer({
                 'id': 'markers',
                 'type': 'circle',
                 'source': 'route',
@@ -67,14 +93,20 @@ export default function RouteMapBox({
                 },
                 'filter': ['==', '$type', 'Point']
             });
+
         })
-    },[]);
+        return () => {
+            if (mapInstance.current) {
+                mapInstance.current.off('load');
+                mapInstance.current.remove();
+                mapInstance.current = null;
+            }
+        };
+    },[coordinates]);
 
     return (
         <>
-            <div style={{ height: "100vh", width: "100%" }}>
-                <div id="map" ref={mapContainer} style={{ height: "100vh", width: "100%" }} />
-            </div>
+            <div id="map" ref={mapContainer} style={{ width: '100%', height: '400px' }} />
         </>
     );
 }

@@ -12,7 +12,9 @@ import moment from "moment";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import RouteMap from "../RouteMap";
-
+import RouteMapBox from "../MapBox";
+import polyline from '@mapbox/polyline';
+import mapboxgl from "mapbox-gl";
 const ViewRouteList = (props) => {
   const navigate = useNavigate();
   const [file, setFile] = useState([]);
@@ -29,8 +31,9 @@ const ViewRouteList = (props) => {
         lat: props.viewItem["end"].latitude,
         lng: props.viewItem["end"].longitude,
     }
+  console.log(props.viewItem)
   const historicalRoutes = props.viewItem?.historicalEvents;
-
+    const coordinates = polyline.decode(props.viewItem?.route_path,6);
     let markerData = []
     markerData.push({
         position: {
@@ -45,15 +48,13 @@ const ViewRouteList = (props) => {
         },
         color:'red'
     })
-    for (const route of historicalRoutes){
-        markerData.push({
-            position: {
-                lat: parseFloat(route.historical_event.latitude),
-                lng: parseFloat(route.historical_event.longitude),
-            },
-            color:'yellow'
-        })
-    }
+    const historicalCoordinates = [];
+    historicalRoutes.map((coordinate) =>
+        historicalCoordinates.push([coordinate.historical_event?.longitude, coordinate.historical_event?.latitude])
+    );
+
+    console.log('historicalCoordinates',historicalCoordinates);
+    console.log('coordinates',coordinates);
     props.viewItem["markers"] = markerData;
     console.log(`markers: ${JSON.stringify(props.viewItem["markers"])}`);
     function uploadSingleFile(e) {
@@ -75,7 +76,10 @@ const ViewRouteList = (props) => {
     setFile(s);
     console.log(s);
   }
-
+    const findMiddleElement = (arr) => {
+        const middleIndex = Math.floor(arr.length / 2);
+        return arr[middleIndex];
+    };
   // convert date format to month / day / year
   function formatDate(date) {
     var d = new Date(date),
@@ -226,12 +230,8 @@ const ViewRouteList = (props) => {
                   </Col>
                   <Col md={8}>
                     <div className={"img-box"}>
-                      <RouteMap
-                        startingPoint={props.viewItem["startValue"]}
-                        endingPoint={props.viewItem["endValue"]}
-                        travelMode={"WALKING"}
-                        markers={props.viewItem["markers"]}
-                      />
+                        <RouteMapBox coordinates={coordinates} center={findMiddleElement(coordinates)} zoom={15} historicalCoordinates={historicalCoordinates}
+                        />
                     </div>
                   </Col>
                 </Row>

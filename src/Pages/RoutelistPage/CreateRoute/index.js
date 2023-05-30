@@ -19,36 +19,27 @@ import Accordion from 'react-bootstrap/Accordion';
 import axios from "axios";
 import {object, string} from "yup";
 import RouteMapBox from "../MapBox";
+import polyline from '@mapbox/polyline';
+import {point as turfPoint, distance as turfDistance} from '@turf/turf';
 const CreateRoute = () => {
 
-  const coordinates = [
-    [-122.483696, 37.833818],
-    [-122.483482, 37.833174],
-    [-122.483396, 37.8327],
-    [-122.483568, 37.832056],
-    [-122.48404, 37.831141],
-    [-122.48404, 37.830497],
-    [-122.483482, 37.82992],
-    [-122.483568, 37.829548],
-    [-122.48507, 37.829446],
-    [-122.4861, 37.828802],
-    [-122.486958, 37.82931],
-    [-122.487001, 37.830802],
-    [-122.487516, 37.831683],
-    [-122.488031, 37.832158],
-    [-122.488889, 37.832971],
-    [-122.489876, 37.832632],
-    [-122.490434, 37.832937],
-    [-122.49125, 37.832429],
-    [-122.491636, 37.832564],
-    [-122.492237, 37.833378],
-    [-122.493782, 37.833683]
-  ]
   const addHistoryBtnRef = useRef(null);
   const navigate = useNavigate();
   const [file, setFile] = useState([]);
   const [files, setFiles] = useState([]);
+  const [coordinates, setCoordinates] = useState([]);
+  const [historicalCoordinates, setHistoricalCoordinates] = useState([]);
   const [historicalData, setHistoricalData] = useState([]);
+  const [coordinatesData, setCoordinatesData] = useState([
+    {
+      lat:'',
+      lng:''
+    },
+    {
+      lat:'',
+      lng:''
+    }
+  ]);
   const [directionsData, setDirectionsData] = useState(null);
   const [accordionActiveKey, setAccordionActiveKey] = useState('0');
   const [inputFields, setInputFields] = useState([]);
@@ -114,6 +105,17 @@ const CreateRoute = () => {
   }, [routesData]);
 
   useEffect(() => {
+    console.log(`coordinatesData: ${JSON.stringify(coordinatesData)}`);
+  }, [coordinatesData]);
+
+  useEffect(() => {
+    console.log(`coordinates: ${JSON.stringify(coordinates)}`);
+  }, [coordinates]);
+  useEffect(() => {
+    console.log(`historicalCoordinates: ${JSON.stringify(historicalCoordinates)}`);
+  }, [historicalCoordinates]);
+
+  useEffect(() => {
     console.log(`historicalData: ${JSON.stringify(historicalData)}`);
     if (historicalData.length > 2) {
       setRoutesData({
@@ -163,8 +165,6 @@ const CreateRoute = () => {
       event.preventDefault();
       event.stopPropagation();
       setValidated(true);
-    } else if(!validRouteFlag) {
-      swal("Error", 'Invalid Route Entered', "error");
     }
     else {
       const payloadHistorical = [];
@@ -180,22 +180,49 @@ const CreateRoute = () => {
           description: data.description,
         })
       }
+      let prevPoint = [];
+      let meterDistance = 0;
+
+      coordinates.forEach(point => {
+        if(prevPoint.length>0) {
+          const turfPoint1 = turfPoint(prevPoint);
+          const turfPoint2 = turfPoint(point);
+          const options = { units: 'meters' };
+          const distance = turfDistance(turfPoint1, turfPoint2, options);
+          meterDistance = meterDistance + distance;
+          prevPoint = point;
+        } else {
+          prevPoint = point;
+        }
+
+      });
+      const averageHikingSpeedKmPerHour = 4;
+      const conversionFactor = 0.62137119;
+      const averageHikingSpeedMilesPerHour = averageHikingSpeedKmPerHour * conversionFactor;
+      let mileDistance = meterDistance * 0.00062137;
+      const estimatedTime = mileDistance / averageHikingSpeedMilesPerHour;
+      const encodedPolylines = polyline.encode(coordinates,6);
+      console.log(coordinates,'coordinates');
+      console.log(estimatedTime,'estimatedTime');
+      console.log(encodedPolylines,'encodedPolylines');
+      console.log(mileDistance,'mileDistance');
+      console.log(meterDistance,'meterDistance');
       const routeData = {
         title: customRoutesData.title,
         description: customRoutesData.description,
-        distance_miles: (directionsData?.routes[0]?.legs[0]?.distance?.value * 0.000621371) ?? 0,
-        distance_meters: directionsData?.routes[0]?.legs[0]?.duration?.value ?? 0,
-        estimate_time: directionsData?.routes[0]?.legs[0]?.duration?.text ?? "-",
-        route_path: directionsData?.routes[0]?.overview_polyline?.points ?? "-",
-        startLocation: directionsData?.routes[0]?.legs[0]?.start_address ?? "-",
-        endLocation: directionsData?.routes[0]?.legs[0]?.end_address ?? "-",
+        distance_miles: Math.round(mileDistance),
+        distance_meters: Math.ceil(meterDistance),
+        estimate_time: Math.ceil(estimatedTime*60),
+        route_path: encodedPolylines,
+        startLocation: "-",
+        endLocation: "-",
         start: {
-          latitude: parseFloat(customRoutesData.startLatitude),
-          longitude: parseFloat(customRoutesData.startLongitude),
+          latitude: parseFloat(coordinates[0][1]),
+          longitude: parseFloat(coordinates[0][0]),
         },
         end: {
-          latitude: parseFloat(customRoutesData.endLatitude),
-          longitude: parseFloat(customRoutesData.endLongitude),
+          latitude: parseFloat(coordinates[1][1]),
+          longitude: parseFloat(coordinates[1][0]),
         },
         historical_route: payloadHistorical
       }
@@ -317,6 +344,11 @@ const CreateRoute = () => {
       };
     });
   };
+  const handleCoordinates = (event, index) => {
+    const newRows = [...coordinatesData];
+    newRows[index][event.target.name] = event.target.value;
+    setCoordinatesData(newRows);
+  };
 
   const updateStartEndPosition = useCallback(
       (startPos, endPos) => {
@@ -395,36 +427,51 @@ const CreateRoute = () => {
       },
       [historicalData, accordionActiveKey]
   );
+  const handleAddCoordinates= useCallback(
+      (position = 0) => {
+        setCoordinatesData([
+            ...coordinatesData,
+          {
+            lat: '',
+            lng: ''
+          }
+        ])
+      },
+      [coordinatesData]
+  );
+  const handleRemoveCoordinates = useCallback(
+      (index) => {
+        setCoordinatesData((prevData) =>
+            prevData.filter((data, i) => i !== index)
+        );
+      },
+      [coordinatesData]
+  );
 
   const addRouteToMap = () => {
-    const startLatitude = customRoutesData.startLatitude;
-    const startLongitude = customRoutesData.startLongitude;
-    const endLatitude = customRoutesData.endLatitude;
-    const endLongitude = customRoutesData.endLongitude;
-    if (!customRoutesData.addedToMap && startLatitude && startLongitude && endLatitude && endLongitude){
-
-      addMarker(startLatitude, startLongitude, 'black')
-      addMarker(endLatitude, endLongitude, 'red')
-    }
-    else if (customRoutesData.addedToMap && startLatitude && startLongitude && endLatitude && endLongitude){
-      updateRouteMap(startLatitude, startLongitude, 'black', 0)
-      updateRouteMap(endLatitude, endLongitude, 'red', 1)
-    }
-    if (!customRoutesData.addedToMap && startLatitude && startLongitude && endLatitude && endLongitude) {
-      updateCustomRouteKey('addedToMap', true)
-    }
+    const dataCoordinates = [];
+    coordinatesData.map((data, index) => (
+        dataCoordinates.push([parseFloat(data.lng),parseFloat(data.lat)])
+    ))
+    setCoordinates(dataCoordinates);
   }
-
-  const addHistoricalToMap = (index) => {
-    const latitude = historicalData[index].latitude;
-    const longitude = historicalData[index].longitude;
-    if (latitude && longitude){
-      addMarker(latitude, longitude, 'yellow')
-    }
-    if (!historicalData[index].addedToMap && latitude && longitude) {
-      updateHistoricalRouteKey(index,'addedToMap', true)
-    }
+  const addHistoricalToMap = () => {
+    const dataCoordinates = [];
+    historicalData.map((data, index) => (
+        dataCoordinates.push([parseFloat(data.longitude),parseFloat(data.latitude)])
+    ))
+    setHistoricalCoordinates(dataCoordinates);
   }
+  // const addHistoricalToMap = (index) => {
+  //   const latitude = historicalData[index].latitude;
+  //   const longitude = historicalData[index].longitude;
+  //   if (latitude && longitude){
+  //     addMarker(latitude, longitude, 'yellow')
+  //   }
+  //   if (!historicalData[index].addedToMap && latitude && longitude) {
+  //     updateHistoricalRouteKey(index,'addedToMap', true)
+  //   }
+  // }
   const updateHistoricalRouteKey = (index, key, value) => {
     const newRows = [...historicalData];
     newRows[index][key] = value;
@@ -507,7 +554,7 @@ const CreateRoute = () => {
             <Row>
               <Col md={12}>
                 <div className={"mapImgBox"} id="map-container">
-                  <RouteMapBox coordinates={coordinates} center={findMiddleElement(coordinates)} zoom={15}
+                  <RouteMapBox coordinates={coordinates} center={findMiddleElement(coordinates)} zoom={15} historicalCoordinates={historicalCoordinates}
                   />
                 </div>
               </Col>
@@ -522,20 +569,41 @@ const CreateRoute = () => {
                 <div>
                   <Row>
                     <Col lg={8}>
-                      <div className={'addBtnRow'}>
-                        <Row>
+                      {coordinatesData.map((data, index) => (
+                      <div key={index} className={'addBtnRow'}>
+                        <Row >
                           <Col lg={6}>
                             <Form.Group>
                               <Form.Label>
-                                Starting Longitude
+                                Latitude
                               </Form.Label>
                               <Form.Control
                                   type="text"
                                   className={"mb-3"}
-                                  name="startLongitude"
+                                  name="lat"
                                   required
-                                  value={customRoutesData.startLongitude}
-                                  onChange={handleCustomRoute}
+                                  value={data.lat}
+                                  onChange={(e) =>
+                                      handleCoordinates(e, index, "lat")
+                                  }
+                                  placeholder="latitude"
+                              />
+                            </Form.Group>
+                          </Col>
+                          <Col lg={6}>
+                            <Form.Group>
+                              <Form.Label>
+                                Longitude
+                              </Form.Label>
+                              <Form.Control
+                                  type="text"
+                                  className={"mb-3"}
+                                  name="lng"
+                                  required
+                                  value={data.lng}
+                                  onChange={(e) =>
+                                      handleCoordinates(e, index, "lng")
+                                  }
                                   placeholder="longitude"
                               />
                               <Form.Control.Feedback type="invalid">
@@ -543,60 +611,18 @@ const CreateRoute = () => {
                               </Form.Control.Feedback>
                             </Form.Group>
                           </Col>
-                          <Col lg={6}>
-                            <Form.Group>
-                              <Form.Label>
-                                Starting Latitude
-                              </Form.Label>
-                              <Form.Control
-                                  type="text"
-                                  className={"mb-3"}
-                                  name="startLatitude"
-                                  required
-                                  value={customRoutesData.startLatitude}
-                                  onChange={handleCustomRoute}
-                                  placeholder="latitude"
-                              />
-                            </Form.Group>
-                          </Col>
                         </Row>
                         <div className={'btnGroup'}>
-                          <Button><i className={"fal fa-plus"}></i></Button>
-                          <Button className={'delete'}><i className={"fal fa-times"}></i></Button>
+                          {index === 0 && <Button onClick={handleAddCoordinates}><i className={"fal fa-plus"}></i></Button> }
+                          {index !== 0 && index !== 1 && (
+                              <Button onClick={() => handleRemoveCoordinates(index)} className={'delete'}>
+                                <i className={"fal fa-times"}></i>
+                              </Button>
+                          )}
                         </div>
                       </div>
-
+                      ))}
                       <Row>
-                        <Col lg={6}>
-                          <Form.Group>
-                            <Form.Label>
-                              Ending Longitude
-                            </Form.Label>
-                            <Form.Control
-                                type="text"
-                                className={"mb-3"}
-                                name="endLongitude"
-                                required
-                                value={customRoutesData.endLongitude}
-                                onChange={handleCustomRoute}
-                                placeholder="longitude"
-                            />
-                          </Form.Group>
-                          <Form.Group>
-                            <Form.Label>
-                              Ending Latitude
-                            </Form.Label>
-                            <Form.Control
-                                type="text"
-                                className={"mb-3"}
-                                name="endLatitude"
-                                required
-                                value={customRoutesData.endLatitude}
-                                onChange={handleCustomRoute}
-                                placeholder="latitude"
-                            />
-                          </Form.Group>
-                        </Col>
                         <Col md={12}>
                           <Form.Group>
                             <Form.Label>Title</Form.Label>
@@ -689,7 +715,7 @@ const CreateRoute = () => {
                 </div>
                 <Accordion defaultActiveKey={accordionActiveKey}>
                   {historicalData.map((data, index) => (
-                      <Accordion.Item eventKey={`${index}`}>
+                      <Accordion.Item eventKey={`${index}`} key={index}>
                         <Accordion.Header>{`Historical Route ${index +1}` }</Accordion.Header>
                         <Accordion.Body>
                           <div key={index}>
