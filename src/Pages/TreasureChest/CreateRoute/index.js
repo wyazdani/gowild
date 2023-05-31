@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import moment from 'moment';
 import RouteMap from "../../RoutelistPage/RouteMap";
 import {isDecimal, isFloat, isNumeric, isNumericValue} from "../../../Helper/Helpers";
+import RouteMapBox from "../../RoutelistPage/MapBox";
 
 
 
@@ -24,6 +25,8 @@ const CreateTreasure = () => {
 
     const [file, setFile] = useState([]);
     const [formData, setFormData] = useState({});
+    const [marker, setMarker] = useState([]);
+    const [center, setCenter] = useState([0,0]);
     const [uploadFile, setUploadFile] = useState({});
     const [uploadFiles, setUploadFiles] = useState({});
     const [startingPoint, setStartingPoint] = useState({
@@ -50,7 +53,9 @@ const CreateTreasure = () => {
     );
     useEffect(() => {
         if (formData.longitude && formData.latitude) {
-            addMarker(formData.latitude, formData.longitude)
+
+            setMarker( [[parseFloat(formData.longitude),parseFloat(formData.latitude)]])
+            setCenter( [parseFloat(formData.longitude),parseFloat(formData.latitude)])
         }
 
     }, [formData]);
@@ -225,11 +230,10 @@ const CreateTreasure = () => {
                         </Col>
                         <Col md={8}>
                             <div className={"img-box"}>
-                                <RouteMap
-                                    startingPoint={startingPoint}
-                                    travelMode={"WALKING"}
-                                    markers={markers}
-                                    panIn={true}
+                                <RouteMapBox
+                                    coordinates={marker}
+                                    zoom={15}
+                                    center={center}
                                 />
                             </div>
                         </Col>

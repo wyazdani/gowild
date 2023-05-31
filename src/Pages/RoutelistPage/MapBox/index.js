@@ -13,6 +13,8 @@ export default function RouteMapBox({
     const mapInstance = useRef(null);
     useEffect(() => {
 
+        console.log('coordinates',coordinates)
+        console.log('historicalCoordinates',historicalCoordinates)
         if (coordinates.length === 0) {
             zoom = 5;
         }

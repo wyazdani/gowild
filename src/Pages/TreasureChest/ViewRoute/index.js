@@ -4,6 +4,7 @@ import rectangle from "Images/Rectangle.png";
 import img2 from "Images/chestcpAsset .png";
 import RouteMap from "../../RoutelistPage/RouteMap";
 import {imageUrl} from "../../../Helper/Helpers";
+import RouteMapBox from "../../RoutelistPage/MapBox";
 
 
 
@@ -14,9 +15,12 @@ const ViewTreasure = (props) => {
     const [file, setFile] = useState([]);
 
 
+
     if (props.viewItem === null) {
         return "";
     }
+    const marker = [[props.viewItem.location.longitude,props.viewItem.location.latitude]]
+    const center = [props.viewItem.location.longitude,props.viewItem.location.latitude]
     function deleteFile(e) {
         const s = file.filter((item, index) => index !== e);
         setFile(s);
@@ -73,23 +77,15 @@ const ViewTreasure = (props) => {
                                 <Col md={8}>
 
                                     <div className={"img-box"}>
-                                        <RouteMap
-                                            startingPoint={{
-      lat: props.viewItem["location"]?.latitude,
-      lng: props.viewItem["location"]?.longitude,
-    }}
-                                            endingPoint={props.viewItem["endValue"]}
-                                            travelMode={"WALKING"}
-                                            markers={[{
-                                                position: {
-                                                    lat: parseFloat(props.viewItem["location"]?.latitude),
-                                                    lng: parseFloat(props.viewItem["location"]?.longitude),
-                                                },
-                                                color:'black'
-                                            }]
-                                            }
-                                            zoom={15}
-                                        />
+                                        <Col md={8}>
+                                            <div className={"img-box"}>
+                                                <RouteMapBox
+                                                    coordinates={marker}
+                                                    zoom={15}
+                                                    center={center}
+                                                />
+                                            </div>
+                                        </Col>
                                     </div>
                                 </Col>
 
