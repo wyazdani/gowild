@@ -18,35 +18,19 @@ import RouteMap from "../RouteMap";
 import Accordion from 'react-bootstrap/Accordion';
 import axios from "axios";
 import {object, string} from "yup";
-import RouteMapBox from "../MapBox";
-import polyline from '@mapbox/polyline';
-import {point as turfPoint, distance as turfDistance} from '@turf/turf';
 import {imageUrl} from "../../../Helper/Helpers";
-const EditRoute = (props) => {
 
+const EditRoute = (props) => {
   const addHistoryBtnRef = useRef(null);
   const navigate = useNavigate();
   const [file, setFile] = useState([]);
   const [files, setFiles] = useState([]);
-  const [coordinates, setCoordinates] = useState([]);
-  const [historicalCoordinates, setHistoricalCoordinates] = useState([]);
   const [historicalData, setHistoricalData] = useState([]);
-  const [editData, setEditData] = useState([]);
-  const [coordinatesData, setCoordinatesData] = useState([
-    {
-      lat:'',
-      lng:''
-    },
-    {
-      lat:'',
-      lng:''
-    }
-  ]);
   const [directionsData, setDirectionsData] = useState(null);
   const [accordionActiveKey, setAccordionActiveKey] = useState('0');
-  const [inputFields, setInputFields] = useState([]);
   const [markers, setMarkers] = useState([]);
-  const [routesData, setRoutesData] = useState({});
+  const [editData, setEditData] = useState([]);
+  const [addedToMap, setAddedToMap] = useState(false);
   const [validRouteFlag, setValidRouteFlag] = useState(false);
   const [customRoutesData, setCustomRoutesData] = useState({
     title: "",
@@ -62,22 +46,11 @@ const EditRoute = (props) => {
     startLocation: '',
     endLocation: '',
     picture: "",
+    image: "",
     addedToMap: false,
   }) // For Testing Purpose
 
-  const [formArray, setFormArray] = useState([{}]);
   const [validated, setValidated] = useState(false);
-  const [formData, setFormData] = useState({
-    startLongtitude: "",
-    startLattitude: "",
-    endLongtitude: "",
-    endLattitude: "",
-    title: "",
-    description: "",
-    picture: "",
-  });
-
-  const [uploadFile, setUploadFile] = useState();
   const [showButton, setShowButton] = useState(true);
 
   const [startingPoint, setStartingPoint] = useState({
@@ -93,83 +66,92 @@ const EditRoute = (props) => {
   // store id when user submit form
   const [id, setId] = useState();
 
-  const schema = object().shape({
-    title: string().required(),
-    description: string().required()
+  useEffect(() => {
+    setEditData(props.editItem)
+    setId(props.editItem?.id)
+    if (!addedToMap){
+      setCustomRoutesData({
+        title: props.editItem?.title,
+        description: props.editItem?.description,
+        startLatitude: props.editItem?.start?.latitude,
+        startLongitude: props.editItem?.start?.longitude,
+        endLatitude:props.editItem?.end?.latitude,
+        endLongitude:props.editItem?.end?.longitude,
+        distance_miles: props.editItem?.distance_miles,
+        distance_meters: props.editItem?.distance_meters,
+        estimate_time: props.editItem?.estimate_time,
+        route_path: '',
+        startLocation: props.editItem?.startLocation,
+        endLocation: props.editItem?.endLocation,
+        picture: "",
+        image: props.editItem?.picture,
+        addedToMap: false
+      })
+
+      const historicalEditData = [];
+      for (let i =0;i<(props.editItem?.historicalEvents.length);i++) {
+        const hData = props.editItem?.historicalEvents[i];
+        historicalEditData[i] = {
+          latitude: hData.historical_event.latitude,
+          id: hData.id,
+          longitude: hData.historical_event.longitude,
+          title: hData.title,
+          subtitle: hData.subtitle,
+          description: hData.description,
+          file: "",
+          addedToMap: false,
+          imageIndex: '',
+          image: hData.image
+        }
+      }
+      setHistoricalData(historicalEditData);
+    }
+
+    console.log(`marker: ${JSON.stringify(markers)}`);
+  }, [markers, editData]);
+useEffect(() => {
+  setMarkers([]);
+}, [addedToMap]);
+
+  useEffect(() => {
+
+    console.log(`customRoutesData: ${JSON.stringify(customRoutesData)}`);
+    if (!addedToMap){
+      const initialPositions = markers;
+      initialPositions[0] = {
+        position: {
+          lat: parseFloat(props.editItem?.start.latitude),
+          lng: parseFloat(props.editItem?.start.longitude),
+        },
+        color:'black'
+      };
+      initialPositions[1] = {
+        position: {
+          lat: parseFloat(props.editItem?.end.latitude),
+          lng: parseFloat(props.editItem?.end.longitude),
+        },
+        color:'red',
+      };
+      for (let i =2;i<(props.editItem?.historicalEvents.length+2);i++) {
+        initialPositions[i] = {
+          position: {
+            lat: parseFloat(props.editItem?.historicalEvents[i-2].historical_event.latitude),
+            lng: parseFloat(props.editItem?.historicalEvents[i-2].historical_event.longitude),
+          },
+          color:'yellow',
+        };
+      }
+      setMarkers(initialPositions);
+    }
+
+
+
   });
 
   useEffect(() => {
-    console.log(`routesData: ${JSON.stringify(routesData)}`);
-  }, [routesData]);
 
-  useEffect(() => {
-    console.log(`coordinatesData: ${JSON.stringify(coordinatesData)}`);
-  }, [coordinatesData]);
-
-  useEffect(() => {
-    console.log(`coordinates: ${JSON.stringify(coordinates)}`);
-  }, [coordinates]);
-  useEffect(() => {
-    console.log(`historicalCoordinates: ${JSON.stringify(historicalCoordinates)}`);
-  }, [historicalCoordinates]);
-  useEffect(() => {
-    const decodedCoordinates = polyline.decode(props.editItem.route_path,6);
-    const coordinatesEditData = [];
-    decodedCoordinates.map((coordinate) =>
-        coordinatesEditData.push({
-          lat:coordinate[1],
-          lng:coordinate[0]})
-    );
-    setCustomRoutesData({
-      title: props.editItem?.title,
-      description: props.editItem?.description,
-      startLatitude: props.editItem?.start?.latitude,
-      startLongitude: props.editItem?.start?.longitude,
-      endLatitude:props.editItem?.end?.latitude,
-      endLongitude:props.editItem?.end?.longitude,
-      distance_miles: props.editItem?.distance_miles,
-      distance_meters: props.editItem?.distance_meters,
-      estimate_time: props.editItem?.estimate_time,
-      route_path: '',
-      startLocation: props.editItem?.startLocation,
-      endLocation: props.editItem?.endLocation,
-      picture: "",
-      image: props.editItem?.picture,
-      addedToMap: false
-    })
-    const historicalEditData = [];
-    for (let i =0;i<(props.editItem?.historicalEvents.length);i++) {
-      const hData = props.editItem?.historicalEvents[i];
-      historicalEditData[i] = {
-        latitude: hData.historical_event.latitude,
-        id: hData.id,
-        longitude: hData.historical_event.longitude,
-        title: hData.title,
-        subtitle: hData.subtitle,
-        description: hData.description,
-        file: "",
-        addedToMap: false,
-        imageIndex: '',
-        image: hData.image
-      }
-    }
-    setHistoricalData(historicalEditData);
-
-    setCoordinatesData(coordinatesEditData);
-    setCoordinates(decodedCoordinates);
-    const historicalData = props.editItem?.historicalEvents;
-    const historicalCoordinatesData = [];
-    historicalData.map((coordinate) =>
-        historicalCoordinatesData.push([coordinate.historical_event?.longitude, coordinate.historical_event?.latitude])
-    );
-    setHistoricalCoordinates(historicalCoordinatesData);
-    setEditData(props.editItem)
-    setId(props.editItem?.id)
-
-  }, []);
-
-  useEffect(() => {
     console.log(`historicalData: ${JSON.stringify(historicalData)}`);
+
   }, [historicalData]);
   const submitForm = async (event) => {
     event.preventDefault();
@@ -178,6 +160,8 @@ const EditRoute = (props) => {
       event.preventDefault();
       event.stopPropagation();
       setValidated(true);
+    } else if(!validRouteFlag) {
+      swal("Error", 'Invalid Route Entered', "error");
     }
     else {
       const payloadHistorical = [];
@@ -194,52 +178,31 @@ const EditRoute = (props) => {
           description: data.description,
         })
       }
-      let prevPoint = [];
-      let meterDistance = 0;
-
-      coordinates.forEach(point => {
-        if(prevPoint.length>0) {
-          const turfPoint1 = turfPoint(prevPoint);
-          const turfPoint2 = turfPoint(point);
-          const options = { units: 'meters' };
-          const distance = turfDistance(turfPoint1, turfPoint2, options);
-          meterDistance = meterDistance + distance;
-          prevPoint = point;
-        } else {
-          prevPoint = point;
-        }
-
-      });
-      const averageHikingSpeedKmPerHour = 4;
-      const conversionFactor = 0.62137119;
-      const averageHikingSpeedMilesPerHour = averageHikingSpeedKmPerHour * conversionFactor;
-      let mileDistance = meterDistance * 0.00062137;
-      const estimatedTime = mileDistance / averageHikingSpeedMilesPerHour;
-      const encodedPolylines = polyline.encode(coordinates,6);
       const routeData = {
         title: customRoutesData.title,
         description: customRoutesData.description,
-        distance_miles: Math.round(mileDistance),
-        distance_meters: Math.ceil(meterDistance),
-        estimate_time: Math.ceil(estimatedTime*60),
-        route_path: encodedPolylines,
-        startLocation: "-",
-        endLocation: "-",
+        distance_miles: (directionsData?.routes[0]?.legs[0]?.distance?.value * 0.000621371) ?? 0,
+        distance_meters: directionsData?.routes[0]?.legs[0]?.duration?.value ?? 0,
+        estimate_time: directionsData?.routes[0]?.legs[0]?.duration?.text ?? "-",
+        route_path: directionsData?.routes[0]?.overview_polyline?.points ?? "-",
+        startLocation: directionsData?.routes[0]?.legs[0]?.start_address ?? "-",
+        endLocation: directionsData?.routes[0]?.legs[0]?.end_address ?? "-",
         start: {
-          latitude: parseFloat(coordinates[0][1]),
-          longitude: parseFloat(coordinates[0][0]),
+          latitude: parseFloat(customRoutesData.startLatitude),
+          longitude: parseFloat(customRoutesData.startLongitude),
         },
         end: {
-          latitude: parseFloat(coordinates[1][1]),
-          longitude: parseFloat(coordinates[1][0]),
+          latitude: parseFloat(customRoutesData.endLatitude),
+          longitude: parseFloat(customRoutesData.endLongitude),
         },
         historical_route: payloadHistorical
-      };
+      }
+      console.log("DUCK", "customRoutesData", customRoutesData);
+      console.log("DUCK", "historicalData", historicalData);
       const postRouteUrl = ENDPOINT.admin_route.update.replace(
           ":id",
           id
       );
-      console.log('routeData',routeData)
       return AuthService.patchMethod(
           postRouteUrl,
           true,
@@ -252,10 +215,9 @@ const EditRoute = (props) => {
                     ":id",
                     res.data?.data?.historicalEvents[i].id
                 );
-
+                let data = new FormData();
+                data.append("file", historicalData[i].file);
                 if (historicalData[i]?.file){
-                  let data = new FormData();
-                  data.append("file", historicalData[i].file);
                   AuthService.postMethod(url, true, data)
                       .then((res) => {
                         console.log('Success Historical Route Image Upload')
@@ -320,28 +282,7 @@ const EditRoute = (props) => {
             swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
           });
     }
-
-
-
   };
-
-  const deleteRoute = () => {
-    if (id){
-      ENDPOINT.route.delete.id = id;
-      setId(null)
-      AuthService.deleteMethod(
-          ENDPOINT.route.delete.url + ENDPOINT.route.delete.id,
-          true
-      )
-          .then((res) => {
-            console.log(res.data);
-          })
-          .catch((err) => {
-            console.log('Deleted Successfully')
-          });
-    }
-  }
-  // add historical event
 
   const handleHistorical = (event, index) => {
     const newRows = [...historicalData];
@@ -357,39 +298,32 @@ const EditRoute = (props) => {
       };
     });
   };
-  const handleCoordinates = (event, index) => {
-    const newRows = [...coordinatesData];
-    newRows[index][event.target.name] = event.target.value;
-    setCoordinatesData(newRows);
-  };
 
   const updateStartEndPosition = useCallback(
       (startPos, endPos) => {
         setStartingPoint(startPos);
         setEndingPoint(endPos);
-        if (directionsData == null) {
-          const origin = `${startPos.lat}, ${startPos.lng}`;
-          const destination = `${endPos.lat}, ${endPos.lng}`;
-          const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${GOOGLE_KEY}`;
-          const corsAnywhereUrl = `https://cors.appscorridor.com/${url}`;
-          axios.get(corsAnywhereUrl)
-              .then(response => {
-                if (response.data.status === "ZERO_RESULTS") {
+        const origin = `${startPos.lat}, ${startPos.lng}`;
+        const destination = `${endPos.lat}, ${endPos.lng}`;
+        const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${GOOGLE_KEY}`;
+        const corsAnywhereUrl = `https://cors.appscorridor.com/${url}`;
+        axios.get(corsAnywhereUrl)
+            .then(response => {
+              if (response.data.status === "ZERO_RESULTS") {
+                setMarkers([])
+                setTimeout(() => {
                   setMarkers([])
-                  setTimeout(() => {
-                    setMarkers([])
-                  }, 1000);
-                  updateCustomRouteKey('addedToMap', false)
-                  setValidRouteFlag(false)
-                  swal("Error", 'Invalid Route Entered', "error");
-                }else {
-                  setValidRouteFlag(true)
-                  setDirectionsData(response.data);
-                }
-
-              })
-              .catch(error => console.error(error));
-        }
+                }, 1000);
+                updateCustomRouteKey('addedToMap', false)
+                setValidRouteFlag(false)
+                swal("Error", 'Invalid Route Entered', "error");
+              }else {
+                setValidRouteFlag(true)
+                console.log(response.data)
+                setDirectionsData(response.data);
+              }
+            })
+            .catch(error => console.error(error));
       },
       [startingPoint, endingPoint]
   );
@@ -434,64 +368,100 @@ const EditRoute = (props) => {
             file: "",
             addedToMap: false,
             imageIndex: '',
+            image: ''
           },
         ]);
         setAccordionActiveKey(`${historicalData.length}`)
       },
       [historicalData, accordionActiveKey]
   );
-  const handleAddCoordinates= useCallback(
-      (position = 0) => {
-        setCoordinatesData([
-          ...coordinatesData,
-          {
-            lat: '',
-            lng: ''
-          }
-        ])
-      },
-      [coordinatesData]
-  );
-  const handleRemoveCoordinates = useCallback(
-      (index) => {
-        setCoordinatesData((prevData) =>
-            prevData.filter((data, i) => i !== index)
-        );
-      },
-      [coordinatesData]
-  );
 
   const addRouteToMap = () => {
-    const dataCoordinates = [];
-    coordinatesData.map((data, index) => (
-        dataCoordinates.push([parseFloat(data.lng),parseFloat(data.lat)])
-    ))
-    setCoordinates(dataCoordinates);
+    const oldValues = markers;
+    setAddedToMap(true)
+    setTimeout(function () {
+      setMarkers([])
+
+    }, 1000);
+
+    setTimeout(function () {
+      const startLatitude = customRoutesData.startLatitude;
+      const startLongitude = customRoutesData.startLongitude;
+      const endLatitude = customRoutesData.endLatitude;
+      const endLongitude = customRoutesData.endLongitude;
+      if (startLatitude && startLongitude && endLatitude && endLongitude){
+        const newRows = [...oldValues];
+        newRows[0] = {
+          position: {
+            lat: parseFloat(startLatitude),
+            lng: parseFloat(startLongitude),
+          },
+          color: 'black'
+        };
+        newRows[1] = {
+          position: {
+            lat: parseFloat(endLatitude),
+            lng: parseFloat(endLongitude),
+          },
+          color: 'red'
+        };
+        setMarkers(newRows);
+      }
+    },1500);
+
+
   }
-  const addHistoricalToMap = () => {
-    const dataCoordinates = [];
-    historicalData.map((data, index) => (
-        dataCoordinates.push([parseFloat(data.longitude),parseFloat(data.latitude)])
-    ))
-    setHistoricalCoordinates(dataCoordinates);
+
+  const clearRoutes = () => {
+    setMarkers([]);
   }
-  // const addHistoricalToMap = (index) => {
-  //   const latitude = historicalData[index].latitude;
-  //   const longitude = historicalData[index].longitude;
-  //   if (latitude && longitude){
-  //     addMarker(latitude, longitude, 'yellow')
-  //   }
-  //   if (!historicalData[index].addedToMap && latitude && longitude) {
-  //     updateHistoricalRouteKey(index,'addedToMap', true)
-  //   }
-  // }
+  const addHistoricalToMap = (index) => {
+    const latitude = historicalData[index].latitude;
+    const longitude = historicalData[index].longitude;
+    const oldMarkers = markers;
+    if (latitude && longitude){
+      setAddedToMap(true)
+      setTimeout(function () {
+        clearRoutes()
+      } , 1000)
+      if (oldMarkers[index+2]) {
+
+        setTimeout(function () {
+          oldMarkers[index+2] = {
+            position: {
+              lat: parseFloat(latitude),
+              lng: parseFloat(longitude),
+            },
+            color: 'yellow'
+          }
+          setMarkers(oldMarkers)
+        } , 1500)
+      }else {
+        setTimeout(function () {
+          oldMarkers[markers.length] = {
+            position: {
+              lat: parseFloat(latitude),
+              lng: parseFloat(longitude),
+            },
+            color: 'yellow'
+          }
+          setMarkers(oldMarkers)
+        } , 1500)
+        //addMarker(latitude, longitude, 'yellow')
+      }
+
+    }
+    // if (!historicalData[index].addedToMap && latitude && longitude) {
+    //   updateHistoricalRouteKey(index,'addedToMap', true)
+    // }
+  }
   const updateHistoricalRouteKey = (index, key, value) => {
     const newRows = [...historicalData];
     newRows[index][key] = value;
     setHistoricalData(newRows);
   };
-  const updateRouteMap = (lat,lng,color, index) => {
-    const newRows = [...markers];
+  const updateRouteMap = (oldValues,lat,lng,color, index) => {
+    const newRows = [...oldValues];
     newRows[index] = {
       position: {
         lat: parseFloat(lat),
@@ -500,9 +470,10 @@ const EditRoute = (props) => {
       color,
     };
     setMarkers(newRows);
+
+
   };
   function uploadSingleFileHistorical(e, index) {
-    console.log('In Hostorical')
     let ImagesArray = Object.entries(e.target.files).map((e) =>
         URL.createObjectURL(e[1])
     );
@@ -520,11 +491,6 @@ const EditRoute = (props) => {
     updateCustomRouteKey('picture', e.target.files[0])
   }
 
-  function upload(e) {
-    e.preventDefault();
-    console.log(file);
-  }
-
   const updateCustomRouteKey = (key, value) => {
     setCustomRoutesData((prevState) => {
       return {
@@ -538,10 +504,7 @@ const EditRoute = (props) => {
     setFile(s);
     updateCustomRouteKey('picture', '')
   }
-  const findMiddleElement = (arr) => {
-    const middleIndex = Math.floor(arr.length / 2);
-    return arr[middleIndex];
-  };
+
   const deleteHistoricalFile = (index, imageIndex) => {
     const newRows = [...historicalData];
     const newFiles = [...files];
@@ -566,8 +529,14 @@ const EditRoute = (props) => {
           <section className={"section"}>
             <Row>
               <Col md={12}>
-                <div className={"mapImgBox"} id="map-container">
-                  <RouteMapBox coordinates={coordinates} center={findMiddleElement(coordinates)} zoom={15} historicalCoordinates={historicalCoordinates}
+                <div className={"mapImgBox"}>
+                  <RouteMap
+                      markers={markers}
+                      startingPoint={startingPoint}
+                      endingPoint={endingPoint}
+                      travelMode={"WALKING"}
+                      handleAddRow={handleAddRow}
+                      updateStartEndPosition={updateStartEndPosition}
                   />
                 </div>
               </Col>
@@ -582,60 +551,71 @@ const EditRoute = (props) => {
                 <div>
                   <Row>
                     <Col lg={8}>
-                      {coordinatesData.map((data, index) => (
-                          <div key={index} className={'addBtnRow'}>
-                            <Row >
-                              <Col lg={6}>
-                                <Form.Group>
-                                  <Form.Label>
-                                    Latitude
-                                  </Form.Label>
-                                  <Form.Control
-                                      type="text"
-                                      className={"mb-3"}
-                                      name="lat"
-                                      required
-                                      value={data.lat}
-                                      onChange={(e) =>
-                                          handleCoordinates(e, index, "lat")
-                                      }
-                                      placeholder="latitude"
-                                  />
-                                </Form.Group>
-                              </Col>
-                              <Col lg={6}>
-                                <Form.Group>
-                                  <Form.Label>
-                                    Longitude
-                                  </Form.Label>
-                                  <Form.Control
-                                      type="text"
-                                      className={"mb-3"}
-                                      name="lng"
-                                      required
-                                      value={data.lng}
-                                      onChange={(e) =>
-                                          handleCoordinates(e, index, "lng")
-                                      }
-                                      placeholder="longitude"
-                                  />
-                                  <Form.Control.Feedback type="invalid">
-                                    Field is required.
-                                  </Form.Control.Feedback>
-                                </Form.Group>
-                              </Col>
-                            </Row>
-                            <div className={'btnGroup'}>
-                              {index === 0 && <Button onClick={handleAddCoordinates}><i className={"fal fa-plus"}></i></Button> }
-                              {index !== 0 && index !== 1 && (
-                                  <Button onClick={() => handleRemoveCoordinates(index)} className={'delete'}>
-                                    <i className={"fal fa-times"}></i>
-                                  </Button>
-                              )}
-                            </div>
-                          </div>
-                      ))}
                       <Row>
+                        <Col lg={6}>
+                          <Form.Group>
+                            <Form.Label>
+                              Starting Longitude
+                            </Form.Label>
+                            <Form.Control
+                                type="text"
+                                className={"mb-3"}
+                                name="startLongitude"
+                                required
+                                value={customRoutesData.startLongitude}
+                                onChange={handleCustomRoute}
+                                placeholder="longitude"
+                            />
+                            <Form.Control.Feedback type="invalid">
+                              Field is required.
+                            </Form.Control.Feedback>
+                          </Form.Group>
+
+                          <Form.Group>
+                            <Form.Label>
+                              Starting Latitude
+                            </Form.Label>
+                            <Form.Control
+                                type="text"
+                                className={"mb-3"}
+                                name="startLatitude"
+                                required
+                                value={customRoutesData.startLatitude}
+                                onChange={handleCustomRoute}
+                                placeholder="latitude"
+                            />
+                          </Form.Group>
+                        </Col>
+                        <Col lg={6}>
+                          <Form.Group>
+                            <Form.Label>
+                              Ending Longitude
+                            </Form.Label>
+                            <Form.Control
+                                type="text"
+                                className={"mb-3"}
+                                name="endLongitude"
+                                required
+                                value={customRoutesData.endLongitude}
+                                onChange={handleCustomRoute}
+                                placeholder="longitude"
+                            />
+                          </Form.Group>
+                          <Form.Group>
+                            <Form.Label>
+                              Ending Latitude
+                            </Form.Label>
+                            <Form.Control
+                                type="text"
+                                className={"mb-3"}
+                                name="endLatitude"
+                                required
+                                value={customRoutesData.endLatitude}
+                                onChange={handleCustomRoute}
+                                placeholder="latitude"
+                            />
+                          </Form.Group>
+                        </Col>
                         <Col md={12}>
                           <Form.Group>
                             <Form.Label>Title</Form.Label>
@@ -679,44 +659,44 @@ const EditRoute = (props) => {
                       </Row>
                     </Col>
                     <Col lg={4}>
-                      <Form.Group md={12} className={"mb-3"}>
-                        <label
-                            className={"fileUpload v2"}
-                            htmlFor="upload-photo"
-                        >
-                          <Form.Control
-                              type="file"
-                              id={"upload-photo"}
-                              disabled={file.length === 1}
-                              accept={".jpg,.jpeg,.png"}
-                              className=""
-                              onChange={(e) =>
-                                  uploadSingleFile(e)
-                              }
-                          />
-                          <span>Attach Images</span>
-                        </label>
-                        <div className="form-group previewBox">
-                          {file.length > 0 &&
-                              file.map((item, index) => {
-                                return (
-                                    <div className={"preview"} key={item}>
-                                      <img src={item} alt="" />
-                                      <Button
-                                          type="button"
-                                          onClick={() => deleteFile(index)}
-                                      >
-                                        <i className={"fal fa-times"}></i>
-                                      </Button>
-                                    </div>
-                                );
-                              })}
-                          {file.length === 0 && customRoutesData.image &&
-                              <div className={"preview"} key={customRoutesData.image}>
-                                <img src={imageUrl(customRoutesData.image)} alt="" />
-                              </div>}
-                        </div>
-                      </Form.Group>
+                        <Form.Group md={12} className={"mb-3"}>
+                          <label
+                              className={"fileUpload v2"}
+                              htmlFor="upload-photo"
+                          >
+                            <Form.Control
+                                type="file"
+                                id={"upload-photo"}
+                                disabled={file.length === 1}
+                                className=""
+                                accept={".jpg,.jpeg,.png"}
+                                onChange={(e) =>
+                                    uploadSingleFile(e)
+                                }
+                            />
+                            <span>Attach Images</span>
+                          </label>
+                          <div className="form-group previewBox">
+                            {file.length > 0 &&
+                                file.map((item, index) => {
+                                  return (
+                                      <div className={"preview"} key={item}>
+                                        <img src={item} alt="" />
+                                        <Button
+                                            type="button"
+                                            onClick={() => deleteFile(index)}
+                                        >
+                                          <i className={"fal fa-times"}></i>
+                                        </Button>
+                                      </div>
+                                  );
+                                })}
+                            {file.length === 0 && customRoutesData.image &&
+                                <div className={"preview"} key={customRoutesData.image}>
+                                  <img src={imageUrl(customRoutesData.image)} alt="" />
+                                </div>}
+                          </div>
+                        </Form.Group>
                     </Col>
                     <Col md={12}>
                       <hr className={'my-5'} />
@@ -732,7 +712,7 @@ const EditRoute = (props) => {
                 </div>
                 <Accordion defaultActiveKey={accordionActiveKey}>
                   {historicalData.map((data, index) => (
-                      <Accordion.Item eventKey={`${index}`} key={index}>
+                      <Accordion.Item eventKey={`${index}`}>
                         <Accordion.Header>{`Historical Route ${index +1}` }</Accordion.Header>
                         <Accordion.Body>
                           <div key={index}>

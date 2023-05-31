@@ -102,7 +102,7 @@ export default function RouteMapBox({
                 mapInstance.current = null;
             }
         };
-    },[coordinates]);
+    },[coordinates,historicalCoordinates]);
 
     return (
         <>

@@ -110,10 +110,8 @@ const CreateRoute = () => {
 
   useEffect(() => {
     console.log(`coordinates: ${JSON.stringify(coordinates)}`);
-  }, [coordinates]);
-  useEffect(() => {
     console.log(`historicalCoordinates: ${JSON.stringify(historicalCoordinates)}`);
-  }, [historicalCoordinates]);
+  }, [coordinates,historicalCoordinates]);
 
   useEffect(() => {
     console.log(`historicalData: ${JSON.stringify(historicalData)}`);
@@ -350,64 +348,6 @@ const CreateRoute = () => {
     setCoordinatesData(newRows);
   };
 
-  const updateStartEndPosition = useCallback(
-      (startPos, endPos) => {
-        setStartingPoint(startPos);
-        setEndingPoint(endPos);
-        if (directionsData == null) {
-          const origin = `${startPos.lat}, ${startPos.lng}`;
-          const destination = `${endPos.lat}, ${endPos.lng}`;
-          const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${GOOGLE_KEY}`;
-          const corsAnywhereUrl = `https://cors.appscorridor.com/${url}`;
-          axios.get(corsAnywhereUrl)
-              .then(response => {
-                if (response.data.status === "ZERO_RESULTS") {
-                  setMarkers([])
-                  setTimeout(() => {
-                    setMarkers([])
-                  }, 1000);
-                  updateCustomRouteKey('addedToMap', false)
-                  setValidRouteFlag(false)
-                  swal("Error", 'Invalid Route Entered', "error");
-                }else {
-                  setValidRouteFlag(true)
-                  setDirectionsData(response.data);
-                }
-
-              })
-              .catch(error => console.error(error));
-        }
-      },
-      [startingPoint, endingPoint]
-  );
-
-  const addMarker = useCallback(
-      (lat, lng, rang='') => {
-        let color;
-        if (markers.length === 0) {
-          color = "black";
-        } else if (markers.length === 1) {
-          color = "red";
-        } else {
-          color = "yellow";
-        }
-        if (rang){
-          color = rang;
-        }
-        setMarkers((prevMarkers) => [
-          ...prevMarkers,
-          {
-            position: {
-              lat: parseFloat(lat),
-              lng: parseFloat(lng),
-            },
-            color,
-          },
-        ]);
-      },
-      [markers]
-  );
-
   const handleAddRow = useCallback(
       (position = 0) => {
         setHistoricalData([
@@ -450,10 +390,18 @@ const CreateRoute = () => {
 
   const addRouteToMap = () => {
     const dataCoordinates = [];
-    coordinatesData.map((data, index) => (
-        dataCoordinates.push([parseFloat(data.lng),parseFloat(data.lat)])
-    ))
-    setCoordinates(dataCoordinates);
+    const isDataValid = coordinatesData.every(obj => {
+      return Object.values(obj).every(value => {
+        return value !== null && value !== '';
+      });
+    });
+    if (isDataValid) {
+      coordinatesData.map((data, index) => (
+          dataCoordinates.push([parseFloat(data.lng),parseFloat(data.lat)])
+      ))
+      setCoordinates(dataCoordinates);
+    }
+
   }
   const addHistoricalToMap = () => {
     const dataCoordinates = [];
@@ -462,16 +410,6 @@ const CreateRoute = () => {
     ))
     setHistoricalCoordinates(dataCoordinates);
   }
-  // const addHistoricalToMap = (index) => {
-  //   const latitude = historicalData[index].latitude;
-  //   const longitude = historicalData[index].longitude;
-  //   if (latitude && longitude){
-  //     addMarker(latitude, longitude, 'yellow')
-  //   }
-  //   if (!historicalData[index].addedToMap && latitude && longitude) {
-  //     updateHistoricalRouteKey(index,'addedToMap', true)
-  //   }
-  // }
   const updateHistoricalRouteKey = (index, key, value) => {
     const newRows = [...historicalData];
     newRows[index][key] = value;
