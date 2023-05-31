@@ -216,6 +216,11 @@ const EditRoute = (props) => {
       let mileDistance = meterDistance * 0.00062137;
       const estimatedTime = mileDistance / averageHikingSpeedMilesPerHour;
       const encodedPolylines = polyline.encode(coordinates,6);
+      const reverseCoordinates = [];
+      coordinates.forEach(point => {
+        reverseCoordinates.push([point[1],point[0]])
+      })
+      const aPolyline = polyline.encode(reverseCoordinates,6);
       const routeData = {
         title: customRoutesData.title,
         description: customRoutesData.description,
@@ -223,6 +228,7 @@ const EditRoute = (props) => {
         distance_meters: Math.ceil(meterDistance),
         estimate_time: Math.ceil(estimatedTime*60),
         route_path: encodedPolylines,
+        polyline: aPolyline,
         startLocation: "-",
         endLocation: "-",
         start: {
