@@ -130,8 +130,8 @@ const RouteList = () => {
               </th>
               <th>Name</th>
               <th>Date created</th>
-              <th>Starting point Long / Lat</th>
-              <th>End point Long / Lat</th>
+              <th>Starting point Lat / Long</th>
+              <th>End point Lat / Long</th>
               <th></th>
             </tr>
           </thead>
