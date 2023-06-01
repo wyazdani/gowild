@@ -156,32 +156,13 @@ const CreateRoute = () => {
       }
     }
   }, [historicalData, accordionActiveKey]);
-
-  function isValidCoordinate(value) {
-    return /^-?([1-8]?[0-9]\.{1}\d{1,6}|90\.{1}0{1,6})$/.test(value);
-  }
   const submitForm = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
-    const errors = coordinatesData.map((coordinate) => {
-      const latValid = isValidCoordinate(coordinate.lat);
-      const lngValid = isValidCoordinate(coordinate.lng);
-
-      if (latValid && lngValid) {
-        return '';
-      } else {
-        return 'error';
-      }
-
-    });
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
       setValidated(true);
-    }else if(errors.includes('error')) {
-      swal("Error", 'Invalid Route Entered', "error");
-    }else if(coordinates.length===0) {
-      swal("Error", 'Please generate route', "error");
     }
     else {
       const payloadHistorical = [];
@@ -417,11 +398,7 @@ const CreateRoute = () => {
     const dataCoordinates = [];
     const isDataValid = coordinatesData.every(obj => {
       return Object.values(obj).every(value => {
-        if (isValidCoordinate(value)) {
-
-          return value
-        }
-        //return value !== null && value !== '';
+        return value !== null && value !== '';
       });
     });
     if (isDataValid) {
