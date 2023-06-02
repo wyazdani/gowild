@@ -417,13 +417,14 @@ const CreateRoute = () => {
     const dataCoordinates = [];
     const isDataValid = coordinatesData.every(obj => {
       return Object.values(obj).every(value => {
-        if (isValidCoordinate(value)) {
-
-          return value
-        }
-        //return value !== null && value !== '';
+        // if (isValidCoordinate(value)) {
+        //
+        //   return value
+        // }
+        return value !== null && value !== '';
       });
     });
+    console.log('isDataValid',isDataValid)
     if (isDataValid) {
       coordinatesData.map((data, index) => (
           dataCoordinates.push([parseFloat(data.lng),parseFloat(data.lat)])
