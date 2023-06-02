@@ -192,8 +192,8 @@ const EditRoute = (props) => {
       event.preventDefault();
       event.stopPropagation();
       setValidated(true);
-    }else if(errors.includes('error')) {
-      swal("Error", 'Invalid Route Entered', "error");
+    // }else if(errors.includes('error')) {
+    //   swal("Error", 'Invalid Route Entered', "error");
     }else if(coordinates.length===0) {
       swal("Error", 'Pls generate route', "error");
     }
