@@ -157,23 +157,31 @@ const CreateRoute = () => {
     }
   }, [historicalData, accordionActiveKey]);
 
-  function isValidCoordinate(value) {
-    return /^-?([1-8]?[0-9]\.{1}\d{1,6}|90\.{1}0{1,6})$/.test(value);
+  function isValidCoordinate(latitude, longitude) {
+
+    // Check if latitude is within valid range (-90 to 90)
+    if (typeof latitude !== 'number' || latitude < -90 || latitude > 90) {
+      return false;
+    }
+
+    // Check if longitude is within valid range (-180 to 180)
+    if (typeof longitude !== 'number' || longitude < -180 || longitude > 180) {
+      return false;
+    }
+
+    // Both latitude and longitude are valid
+    return true;
   }
   const submitForm = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
-    const errors = coordinatesData.map((coordinate) => {
-      const latValid = isValidCoordinate(coordinate.lat);
-      const lngValid = isValidCoordinate(coordinate.lng);
-
-      if (latValid && lngValid) {
-        return '';
-      } else {
-        return 'error';
+    let error = false;
+    for (const coordinate of coordinatesData) {
+      error = isValidCoordinate(parseFloat(coordinate.lat),parseFloat(coordinate.lng));
+      if (!error) {
+        break;
       }
-
-    });
+    }
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
@@ -182,6 +190,10 @@ const CreateRoute = () => {
     //   swal("Error", 'Invalid Route Entered', "error");
     }else if(coordinates.length===0) {
       swal("Error", 'Please generate route', "error");
+    }else if(!error) {
+      swal("Error", 'Invalid Route', "error");
+    }else if(!customRoutesData.picture) {
+      swal("Error", 'Please enter Route Image', "error");
     }
     else {
       const payloadHistorical = [];
@@ -415,21 +427,21 @@ const CreateRoute = () => {
 
   const addRouteToMap = () => {
     const dataCoordinates = [];
-    const isDataValid = coordinatesData.every(obj => {
-      return Object.values(obj).every(value => {
-        // if (isValidCoordinate(value)) {
-        //
-        //   return value
-        // }
-        return value !== null && value !== '';
-      });
-    });
-    console.log('isDataValid',isDataValid)
+    let isDataValid = false;
+    for (const dataValidKey of coordinatesData) {
+      isDataValid = isValidCoordinate(parseFloat(dataValidKey.lat),parseFloat(dataValidKey.lng));
+      if (!isDataValid) {
+        break;
+      }
+    }
     if (isDataValid) {
       coordinatesData.map((data, index) => (
           dataCoordinates.push([parseFloat(data.lng),parseFloat(data.lat)])
       ))
       setCoordinates(dataCoordinates);
+    } else {
+      setCoordinates([]);
+      swal("Error", 'Invalid Route', "error");
     }
 
   }

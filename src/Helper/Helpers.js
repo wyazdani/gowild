@@ -78,7 +78,7 @@ export function isNumericValue(value) {
     if (isNumeric(value.slice(0,-1))) {
       return value.slice(0,-1)
     } else {
-      return 'E'
+      return ''
     }
   }
 }
