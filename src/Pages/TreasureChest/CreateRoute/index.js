@@ -28,6 +28,8 @@ const CreateTreasure = () => {
     const [marker, setMarker] = useState([]);
     const [center, setCenter] = useState([0,0]);
     const [uploadFile, setUploadFile] = useState({});
+    const [validated, setValidated] = useState(false);
+    const [eventStartDate, setEventStartDate] = useState('');
     const [uploadFiles, setUploadFiles] = useState({});
     const [startingPoint, setStartingPoint] = useState({
         lat: 0,
@@ -91,22 +93,31 @@ const CreateTreasure = () => {
 
 
     const submitForm = async (event) => {
+
         event.preventDefault();
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+            setValidated(true);
+            // }else if(errors.includes('error')) {
+            //   swal("Error", 'Invalid Route Entered', "error");
+        }else{
             const eventDateTime = moment(`${formData.date} ${formData.time}`, "YYYY-MM-DD HH:mm:ss.SSS");
             const eventDateTimeUtc = eventDateTime.utc().format();
             // const eventDateTime = moment.utc(`${formData.date} ${formData.time}::11.111`).format("YYYY-MM-DD HH:mm:ss.SSS");
 
             const dataObj = {
-            "title": formData.title,
-            "description": formData.description,
-            "location": {
-            "latitude": JSON.parse(formData.latitude),
-            "longitude": JSON.parse(formData.longitude)
-            },
-            "eventDate": eventDateTimeUtc,
-            "eventTime": formData.time,
-            "no_of_participants": formData.number,
-            "picture": formData.picture
+                "title": formData.title,
+                "description": formData.description,
+                "location": {
+                    "latitude": JSON.parse(formData.latitude),
+                    "longitude": JSON.parse(formData.longitude)
+                },
+                "eventDate": eventDateTimeUtc,
+                "eventTime": formData.time,
+                "no_of_participants": formData.number,
+                "picture": formData.picture
             }
             await AuthService.postMethod(`${ENDPOINT.treasure_chests.listing}`, true, dataObj).then(async (res) => {
                 setId(res.data.id)
@@ -140,17 +151,19 @@ const CreateTreasure = () => {
                 swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
             });
 
-        toast.success('Form data submitted successfully', {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-        });
-        navigate('/treasure-chests-list');
+            toast.success('Form data submitted successfully', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+            navigate('/treasure-chests-list');
+        }
+
     };
     function uploadSingleFile(e) {
         setUploadFile({ uploadFile: e.target.files[0] })
@@ -193,7 +206,7 @@ const CreateTreasure = () => {
         <>
             <PageTitle title="Treasure Chest" />
             <section className={"section treasure_chests"}>
-                <Form onSubmit={submitForm}>
+                <Form onSubmit={submitForm} noValidate validated={validated}>
                     <Row>
                         <Col md={4}>
 

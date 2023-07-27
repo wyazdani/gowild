@@ -51,12 +51,21 @@ export default function RouteMapBox({
         });
 
         mapInstance.current.on('load', () => {
-            coordinates.map((coordinate) =>
 
-                new mapboxgl.Marker({color:'#fffff'})
-                    .setLngLat(coordinate)
-                    .addTo(mapInstance.current)
-            );
+            coordinates.map((coordinate,index) => {
+                const isLastElement= coordinates.length - 1;
+                if (isLastElement === index) {
+                    console.log('In Last Element',index,isLastElement)
+                    new mapboxgl.Marker({color:'#ff0000'})
+                        .setLngLat(coordinate)
+                        .addTo(mapInstance.current)
+                }else{
+                    new mapboxgl.Marker({color: '#fffff'})
+                        .setLngLat(coordinate)
+                        .addTo(mapInstance.current)
+                }
+
+            });
             historicalCoordinates.map((coordinate) =>
 
                 new mapboxgl.Marker({color:'#ffff80'})

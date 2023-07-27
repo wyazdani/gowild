@@ -1,26 +1,19 @@
-import {
-  React,
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  Fragment,
-} from "react";
+import {Fragment, React, useCallback, useEffect, useRef, useState,} from "react";
 import PageTitle from "../../../Components/Pagetitle";
-import { Button, Col, Form, Row } from "react-bootstrap";
-import { ENDPOINT, GOOGLE_KEY } from "config/constants";
+import {Button, Col, Form, Row} from "react-bootstrap";
+import {ENDPOINT} from "config/constants";
 import AuthService from "services/auth.service";
 import swal from "sweetalert";
-import { ToastContainer, toast } from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
-import RouteMap from "../RouteMap";
+import {useNavigate} from "react-router-dom";
 import Accordion from 'react-bootstrap/Accordion';
-import axios from "axios";
 import {object, string} from "yup";
 import RouteMapBox from "../MapBox";
 import polyline from '@mapbox/polyline';
-import {point as turfPoint, distance as turfDistance} from '@turf/turf';
+import {distance as turfDistance, point as turfPoint} from '@turf/turf';
+import {isNumericValue} from "../../../Helper/Helpers";
+
 const CreateRoute = () => {
 
   const addHistoryBtnRef = useRef(null);
@@ -241,6 +234,7 @@ const CreateRoute = () => {
       console.log(encodedPolylines,'encodedPolylines');
       console.log(mileDistance,'mileDistance');
       console.log(meterDistance,'meterDistance');
+      const lastObject = coordinates[coordinates.length - 1];
       const routeData = {
         title: customRoutesData.title,
         description: customRoutesData.description,
@@ -256,8 +250,8 @@ const CreateRoute = () => {
           longitude: parseFloat(coordinates[0][0]),
         },
         end: {
-          latitude: parseFloat(coordinates[1][1]),
-          longitude: parseFloat(coordinates[1][0]),
+          latitude: parseFloat(lastObject[1]),
+          longitude: parseFloat(lastObject[0]),
         },
         historical_route: payloadHistorical
       }
@@ -429,10 +423,17 @@ const CreateRoute = () => {
     const dataCoordinates = [];
     let isDataValid = false;
     for (const dataValidKey of coordinatesData) {
-      isDataValid = isValidCoordinate(parseFloat(dataValidKey.lat),parseFloat(dataValidKey.lng));
-      if (!isDataValid) {
+      if (parseFloat(dataValidKey.lat) && parseFloat(dataValidKey.lng)) {
+        isDataValid = isValidCoordinate(parseFloat(dataValidKey.lat),parseFloat(dataValidKey.lng));
+        if (!isDataValid) {
+          break;
+        }
+      } else {
+        isDataValid = false;
         break;
       }
+
+
     }
     if (isDataValid) {
       coordinatesData.map((data, index) => (
@@ -444,6 +445,11 @@ const CreateRoute = () => {
       swal("Error", 'Invalid Route', "error");
     }
 
+  }
+  const isNumericHandle = (event, index) => {
+    const newRows = [...coordinatesData];
+    newRows[index][event.target.name] = isNumericValue(event.target.value);
+    setCoordinatesData(newRows);
   }
   const addHistoricalToMap = () => {
     const dataCoordinates = [];
@@ -564,7 +570,7 @@ const CreateRoute = () => {
                                   required
                                   value={data.lat}
                                   onChange={(e) =>
-                                      handleCoordinates(e, index, "lat")
+                                      isNumericHandle(e, index, "lat")
                                   }
                                   placeholder="latitude"
                               />
@@ -582,7 +588,7 @@ const CreateRoute = () => {
                                   required
                                   value={data.lng}
                                   onChange={(e) =>
-                                      handleCoordinates(e, index, "lng")
+                                      isNumericHandle(e, index, "lng")
                                   }
                                   placeholder="longitude"
                               />

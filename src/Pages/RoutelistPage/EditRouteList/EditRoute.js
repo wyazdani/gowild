@@ -21,7 +21,7 @@ import {object, string} from "yup";
 import RouteMapBox from "../MapBox";
 import polyline from '@mapbox/polyline';
 import {point as turfPoint, distance as turfDistance} from '@turf/turf';
-import {imageUrl} from "../../../Helper/Helpers";
+import {imageUrl, isNumericValue} from "../../../Helper/Helpers";
 const EditRoute = (props) => {
 
   const addHistoryBtnRef = useRef(null);
@@ -249,6 +249,7 @@ const EditRoute = (props) => {
         reverseCoordinates.push([point[1],point[0]])
       })
       const aPolyline = polyline.encode(reverseCoordinates,6);
+      const lastObject = coordinates[coordinates.length - 1];
       const routeData = {
         title: customRoutesData.title,
         description: customRoutesData.description,
@@ -264,8 +265,8 @@ const EditRoute = (props) => {
           longitude: parseFloat(coordinates[0][0]),
         },
         end: {
-          latitude: parseFloat(coordinates[1][1]),
-          longitude: parseFloat(coordinates[1][0]),
+          latitude: parseFloat(lastObject[1]),
+          longitude: parseFloat(lastObject[0]),
         },
         historical_route: payloadHistorical
       };
@@ -515,6 +516,11 @@ const EditRoute = (props) => {
     }
 
   }
+  const isNumericHandle = (event, index) => {
+    const newRows = [...coordinatesData];
+    newRows[index][event.target.name] = isNumericValue(event.target.value);
+    setCoordinatesData(newRows);
+  }
   const addHistoricalToMap = () => {
     const dataCoordinates = [];
     historicalData.map((data, index) => (
@@ -644,7 +650,7 @@ const EditRoute = (props) => {
                                       required
                                       value={data.lat}
                                       onChange={(e) =>
-                                          handleCoordinates(e, index, "lat")
+                                          isNumericHandle(e, index, "lat")
                                       }
                                       placeholder="latitude"
                                   />
@@ -662,7 +668,7 @@ const EditRoute = (props) => {
                                       required
                                       value={data.lng}
                                       onChange={(e) =>
-                                          handleCoordinates(e, index, "lng")
+                                          isNumericHandle(e, index, "lng")
                                       }
                                       placeholder="longitude"
                                   />
