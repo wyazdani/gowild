@@ -20,11 +20,13 @@ import RouteMapBox from "../../RoutelistPage/MapBox";
 
 const CreateTreasure = () => {
 
+    const [isImageSelected, setIsImageSelected] = useState(false);
+
     const navigate = useNavigate();
     const [val, setVal] = useState([]);
 
     const [file, setFile] = useState([]);
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState({number: '0',  });
     const [marker, setMarker] = useState([]);
     const [center, setCenter] = useState([0,0]);
     const [uploadFile, setUploadFile] = useState({});
@@ -35,6 +37,23 @@ const CreateTreasure = () => {
         lat: 0,
         lng: 0,
     });
+
+
+
+
+
+// this is current date validation when current date is selected then previouse date is disable
+
+    const today = new Date();
+  const [selectedDate, setSelectedDate] = useState(today.toISOString().split('T')[0]);
+
+//   const handleDateChange = (event) => {
+//     const selectedDateString = event.target.value;
+//     setSelectedDate(selectedDateString);
+//   };
+
+// this is current date validation when current date is selected then previouse date is disable 
+
     const [markers, setMarkers] = useState([]);
     const [fields, setFields] = useState([{ sponsor: '', file: null, imgLink: '' }]);
     const [show, setShow] = useState(false);
@@ -65,6 +84,30 @@ const CreateTreasure = () => {
         console.log('fields', fields)
         console.log('id', id)
     },[fields, id]);
+
+   // ---validation condition if empty input feild taken bydeafault value 0 and showing error---
+
+    const handleNumberOfParticipantsChange = (event) => {
+        let value = event.target.value;
+    
+        // Check if the input is numeric, otherwise set it to 0
+        if (!isNumeric(value)) {
+            value = "";
+
+            setValidated(false);
+        }
+    
+        let name = event.target.name;
+        setFormData((prevalue) => {
+            return {
+                ...prevalue,
+                [name]: value
+            }
+        });
+    };
+   
+
+
     const handleChange = (event) => {
 
         let value = event.target.value;
@@ -102,9 +145,34 @@ const CreateTreasure = () => {
             setValidated(true);
             // }else if(errors.includes('error')) {
             //   swal("Error", 'Invalid Route Entered', "error");
-        }else{
+        }
+
+             //  image validation condition check ----3rd------
+        if (!isImageSelected) {
+            toast.error('Please select an image before submitting the form', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+            return; // Prevent form submission
+        }
+
+        // validation condition if empty input feild taken bydeafault value 0 and showing error
+            if (!isNumeric(formData.number)) {
+            formData.number = "0";
+        }
+        // validation condition if empty input feild taken bydeafault value 0 and showing error
+
+        else{
             const eventDateTime = moment(`${formData.date} ${formData.time}`, "YYYY-MM-DD HH:mm:ss.SSS");
+            console.log(eventDateTime,"this is eventdatetime")
             const eventDateTimeUtc = eventDateTime.utc().format();
+            console.log(eventDateTimeUtc,"this is eventdatetimeutc")
             // const eventDateTime = moment.utc(`${formData.date} ${formData.time}::11.111`).format("YYYY-MM-DD HH:mm:ss.SSS");
 
             const dataObj = {
@@ -120,12 +188,14 @@ const CreateTreasure = () => {
                 "picture": formData.picture
             }
             await AuthService.postMethod(`${ENDPOINT.treasure_chests.listing}`, true, dataObj).then(async (res) => {
-                setId(res.data.id)
+                console.log(res, "this is error in responce")
+                // setId(res.data.id)
                 const dataArray = new FormData();
                 dataArray.append("file", uploadFile.uploadFile);
                 await AuthService.postMethod(`${ENDPOINT.treasure_chests.update_picture}${res.data.id}/update-picture`, true, dataArray, false, true).then(async (res) => {
                 }).catch((err) => {
-                    swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+                    swal("Error 5", `${AuthService.errorMessageHandler(err)}`, "error");
+                    console.log("ERROR == ", err)
                 });
                 for (const sponsor of fields) {
                     const linkObj = {
@@ -139,16 +209,23 @@ const CreateTreasure = () => {
                             dataArray1.append("file", sponsor.imgLink);
                             await AuthService.postMethod(`${ENDPOINT.admin_sponsor.sponsor_img}${resData.data.id}/update-image`, true, dataArray1, false, true).then(async (res) => {
                             }).catch((err) => {
-                                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+                                console.log("Auth service console")
+                                swal("Error1", `${AuthService.errorMessageHandler(err)}`, "error");
+                                console.log('error1 showing' , err)
+                                return;
                             });
                         }
 
                     }).catch((err) => {
-                        swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+                        swal("Error2", `${AuthService.errorMessageHandler(err)}`, "error");
+                        console.log('error2 showing', err);
+                        return;
                     });
                 }
             }).catch((err) => {
-                swal("Error", `${AuthService.errorMessageHandler(err)}`, "error");
+                swal("Error3", `${AuthService.errorMessageHandler(err)}`, "error");
+                console.log('error3 showing',err);  
+                return;
             });
 
             toast.success('Form data submitted successfully', {
@@ -166,13 +243,16 @@ const CreateTreasure = () => {
 
     };
     function uploadSingleFile(e) {
-        setUploadFile({ uploadFile: e.target.files[0] })
+
+        setUploadFile({ uploadFile: e.target.files[0] });
         console.log("uploadFile", e.target.files[0])
 
         let ImagesArray = Object.entries(e.target.files).map((e) =>
             URL.createObjectURL(e[1])
         );
         setFile([...file, ...ImagesArray]);
+            //  image validation
+        setIsImageSelected(true); // Set the flag to true when an image is selected
     }
 
     //   add input field
@@ -323,10 +403,19 @@ const CreateTreasure = () => {
                                                         <Form.Label><b>Event Date</b></Form.Label>
                                                         <Form.Group>
                                                             <Form.Control type="date"
-                                                                name="date"
-                                                                value={formData.date}
-                                                                onChange={handleChange}
-                                                                className={"mb-1"}  style={{ textTransform: 'uppercase' }} />
+                                                                name="date"  
+                                                   // date validation previouse date is disable when current date is change
+                                                            id="dateInput"
+                                                            value={formData.date}
+                                                            onChange={handleChange}
+                                                            min={today.toISOString().split('T')[0]}
+
+                                                   // previus code is that of sir sir rizvan
+                                                                // value={formData.date}
+                                                                // onChange={handleChange}                                                            
+                                                                className={"mb-1"}  style={{ textTransform: 'uppercase' }} 
+                                                               
+                                                                />
                                                         </Form.Group>
                                                     </Form.Group>
                                                 </Col>
@@ -342,14 +431,15 @@ const CreateTreasure = () => {
                                                     </Form.Group>
                                                 </Col>
                                                 <Col md={12}>
-                                                    <Form.Group className="mt-3" style={{ width: "90%" }}>
+                                                    <Form.Group  onSubmit={submitForm} className="mt-3" style={{ width: "90%" }}>
                                                         <Form.Label><b>Number of participants</b></Form.Label>
                                                         <Form.Control type="number"
                                                             name="number"
-                                                            min="1"
-                                                            //  max="20"
+                                                            min="1"                                                                                                           
+                                                    // validation bydefault value 0 if input value is null                                                           
                                                             value={formData.number}
-                                                            onChange={handleChange}
+                                                            onChange={handleNumberOfParticipantsChange}
+                                                    // ----------------------
                                                             pattern="[0-9]*"
                                                              inputMode="numeric"
                                                             className={"mb-3"} placeholder="200" />
@@ -370,10 +460,14 @@ const CreateTreasure = () => {
                                                         <Form.Control
                                                             type="file"
                                                             name="file"
+                                                            required
                                                             id={"upload-photo"}
                                                             // value={formData.picture}
                                                             disabled={file.length === 1}
-                                                            className="mt-4"
+                                                             className={"mt-4"   + (!isImageSelected && validated ? " border-red" : "")}
+                                                            
+                                                            
+                                                              
                                                             // onChange={handleChange}
                                                             onChange={uploadSingleFile}
                                                         />
