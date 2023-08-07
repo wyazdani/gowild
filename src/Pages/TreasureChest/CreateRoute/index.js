@@ -272,7 +272,7 @@ const CreateTreasure = () => {
     };
 
     const handleChanges = (index, event) => {
-
+        event.preventDefault();
         const newFields = [...fields];
         if (event.target.name === 'file') {
             newFields[index][event.target.name] = URL.createObjectURL(event.target.files[0]);
@@ -344,7 +344,7 @@ const CreateTreasure = () => {
                                                         <Form.Label className="mt-1"><b>Sponsors</b></Form.Label>
                                                         <Form.Group className="mt-2">
 
-                                                            <div>
+                                                            <div>   
                                                                 {fields.map((formData, index) => (
                                                                     <div key={index}>
                                                                         <div className="d-flex">
@@ -363,14 +363,15 @@ const CreateTreasure = () => {
                                                                         </div>
                                                                         <div className="d-flex my-2">
                                                                             <p className="sponser">
-                                                                                <button>add <br /> image  <input
+                                                                                <button  >add <br /> image 
+                                                                                 <input
                                                                                     type="file"
                                                                                     className="fileCss"
                                                                                     name="file"
                                                                                     onChange={event => handleChanges(index, event)}
                                                                                 // style={{ display: 'none' }} ref={fileInputRef}
-                                                                                /></button>
-
+                                                                                />
+                                                                                </button>
                                                                             </p>
                                                                             <input
                                                                                 type="text"
