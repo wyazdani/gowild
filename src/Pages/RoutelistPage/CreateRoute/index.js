@@ -186,7 +186,7 @@ const CreateRoute = () => {
     }else if(!error) {
       swal("Error", 'Invalid Route', "error");
     }else if(!customRoutesData.picture) {
-      swal("Error", 'Please enter Route Image', "error");
+      swal("Error", 'Please update Route Image', "error");
     }
     else {
       const payloadHistorical = [];
