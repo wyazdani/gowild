@@ -21,6 +21,8 @@ import RouteMapBox from "../../RoutelistPage/MapBox";
 const CreateTreasure = () => {
 
     const [isImageSelected, setIsImageSelected] = useState(false);
+    const [isToastVisible, setIsToastVisible] = useState(false); // Add this state variable
+    
 
     const navigate = useNavigate();
     const [val, setVal] = useState([]);
@@ -28,7 +30,7 @@ const CreateTreasure = () => {
     const [file, setFile] = useState([]);
     const [formData, setFormData] = useState({number: '0',  });
     const [marker, setMarker] = useState([]);
-    const [center, setCenter] = useState([0,0]);
+    const [center, setCenter] = useState([0,0]);    
     const [uploadFile, setUploadFile] = useState({});
     const [validated, setValidated] = useState(false);
     const [eventStartDate, setEventStartDate] = useState('');
@@ -138,6 +140,26 @@ const CreateTreasure = () => {
     const submitForm = async (event) => {
 
         event.preventDefault();
+
+        if (!isImageSelected) {
+            // Display image validation toast message
+            if (!isToastVisible) {
+                setIsToastVisible(true);
+                toast.error('Please fill all required feild before submitting the form', {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                    onClose: () => setIsToastVisible(false), // Reset isToastVisible when toast is closed
+                });
+            }
+            return; // Prevent form submission
+        }
+
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
             event.preventDefault();
@@ -244,6 +266,26 @@ const CreateTreasure = () => {
     };
     function uploadSingleFile(e) {
 
+        const selectedFile = e.target.files[0];
+
+        // Check if the selected file's extension is in the allowed formats
+        const allowedFormats = ['.jpg', '.jpeg', '.png'];
+        const fileExtension = selectedFile.name.substring(selectedFile.name.lastIndexOf('.')).toLowerCase();
+    
+        if (!allowedFormats.includes(fileExtension)) {
+            toast.error('Unsupported file format', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+            return;
+        }
+
         setUploadFile({ uploadFile: e.target.files[0] });
         console.log("uploadFile", e.target.files[0])
 
@@ -275,6 +317,27 @@ const CreateTreasure = () => {
         event.preventDefault();
         const newFields = [...fields];
         if (event.target.name === 'file') {
+
+            const selectedFile = event.target.files[0];
+
+        // Check if the selected file's extension is in the allowed formats
+        const allowedFormats = ['.jpg', '.jpeg', '.png'];
+        const fileExtension = selectedFile.name.substring(selectedFile.name.lastIndexOf('.')).toLowerCase();
+
+        if (!allowedFormats.includes(fileExtension)) {
+            toast.error('Unsupported file format', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+            return;
+        }
+
             newFields[index][event.target.name] = URL.createObjectURL(event.target.files[0]);
             newFields[index]['imgLink'] = event.target.files[0];
         } else {
@@ -495,7 +558,8 @@ const CreateTreasure = () => {
                                 </Col>
                                 <Col md={12} className="d-flex justify-content-center">
                                     <Form.Group className="text-center" style={{ width: "58%" }}>
-                                        <Button type="submit" className={"w-50 my-4 m-auto text-center"}>Submit</Button>
+                                        <Button type="submit" className={"w-50 my-4 m-auto text-center"}>
+                                            Submit</Button>
                                     </Form.Group>
                                 </Col>
                             </Row>
